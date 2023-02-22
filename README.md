@@ -14,8 +14,6 @@ Add your own name (do not add the names for others!) to the section below.
 | Some picture                                                                                            | Sander Bakker  | s.a.bakker-4@student.tudelft.nl |
 | Another picture                                                                                         | Yurian Lagrand | Y.G.Lagrand@student.tudelft.nl  |
 
-Hello I'm changnig something
-
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
 <!-- - Mention your *student* email address -->
