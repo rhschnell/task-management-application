@@ -14,6 +14,7 @@ Add your own name (do not add the names for others!) to the section below.
 | Some picture                                                                                            | Sander Bakker  | s.a.bakker-4@student.tudelft.nl |
 | Another picture                                                                                         | Yurian Lagrand | Y.G.Lagrand@student.tudelft.nl  |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Filip-Andrei Cirtog| f.cirtog-1@student.tudelft.nl   |
+| ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Ruben Schnell  | r.h.schnell@student.tudelft.nl  |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
