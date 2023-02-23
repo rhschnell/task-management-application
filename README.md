@@ -13,7 +13,7 @@ Add your own name (do not add the names for others!) to the section below.
 
 | Profile Picture | Name | Email |
 |---|---|---|
-| ![](https://secure.gravatar.com/avatar/1d3ce3594077ebf31c0b743df197d9bb?s=50&d=identicon) | Rares Bites | R.Bites@student.tudelft.nl |
+| ![](https://secure.gravatar.com/avatar/1d3ce3594077ebf31c0b743df197d9bb?s=50&d=identicon) |Rares Bites | R.Bites@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
