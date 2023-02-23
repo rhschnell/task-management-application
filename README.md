@@ -11,14 +11,18 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## Group members
 
+<<<<<<< README.md
+
 | Profile Picture                                                                                         | Name                | Email                            |
 |---------------------------------------------------------------------------------------------------------|---------------------|----------------------------------|
-| ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here      | Y.NameHere@student.tudelft.nl    |
 | Some picture                                                                                            | Sander Bakker       | s.a.bakker-4@student.tudelft.nl  |
-| Another picture                                                                                         | Yurian Lagrand      | Y.G.Lagrand@student.tudelft.nl   |
+| ![](https://secure.gravatar.com/avatar/5d43da0605c1b110db18086636df4960?s=50&d=identicon)                                                                                         | Yurian Lagrand      | Y.G.Lagrand@student.tudelft.nl   |
 | Yet another picture                                                                                     | Tudor Tanasescu     | T.I.Tanasescu@student.tudelft.nl |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Filip-Andrei Cirtog | f.cirtog-1@student.tudelft.nl    |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Ruben Schnell       | r.h.schnell@student.tudelft.nl   |
+| ![](https://secure.gravatar.com/avatar/1d3ce3594077ebf31c0b743df197d9bb?s=50&d=identicon) |Rares Bites | R.Bites@student.tudelft.nl |
+
+>>>>>>> README.md
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
