@@ -15,28 +15,38 @@
  */
 package client.scenes;
 
-import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import client.utils.ServerUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
-public class LoginCtrl implements Initializable {
+import java.io.IOException;
+
+public class AddCardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    @FXML
+    private TextField cardTitle;
+
+    @FXML
+    private TextField cardOption;
+
+    @FXML
+    private TextArea cardDescription;
+
     @Inject
-    public LoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
+        this.server = server;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void cancel() throws IOException {
+       mainCtrl.showBoard();
     }
-    @FXML
-    public void openBoard() {
+    public void ok() throws IOException {
         mainCtrl.showBoard();
     }
 }
