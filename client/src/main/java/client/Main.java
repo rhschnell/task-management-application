@@ -17,6 +17,8 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
+import client.scenes.AddCardCtrl;
+import client.scenes.BoardCtrl;
 import client.scenes.LoginCtrl;
 import client.scenes.MainCtrl;
 import com.google.inject.Injector;
@@ -39,8 +41,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         var login = FXML.load(LoginCtrl.class, "client", "scenes", "Login.fxml");
-
+        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
+        var board = FXML.load(BoardCtrl.class, "client", "scenes", "BoardOverview.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login);
+        mainCtrl.initialize(primaryStage, login,addCard,board);
     }
 }
