@@ -17,17 +17,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Quote;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.*;
-import javafx.stage.*;
-
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
