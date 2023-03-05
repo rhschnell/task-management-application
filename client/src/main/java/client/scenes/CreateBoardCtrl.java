@@ -22,12 +22,12 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginCtrl implements Initializable {
+public class CreateBoardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @Inject
-    public LoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public CreateBoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -40,7 +40,7 @@ public class LoginCtrl implements Initializable {
         mainCtrl.showBoard();
     }
     @FXML
-    public void createBoard() {
-        mainCtrl.createBoard();
+    public void joinBoard() {
+        mainCtrl.showLogin();
     }
 }

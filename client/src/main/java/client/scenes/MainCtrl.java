@@ -15,8 +15,10 @@ public class MainCtrl {
     private BoardCtrl boardCt;
     private Scene board;
     private LoginCtrl loginCtrl;
+    private Scene createBoard;
+    private CreateBoardCtrl createBoardCt;
 
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene, Pair<AddCardCtrl,Parent> addCard,Pair<BoardCtrl,Parent> board) {
+    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene, Pair<AddCardCtrl,Parent> addCard,Pair<BoardCtrl,Parent> board,Pair<CreateBoardCtrl,Parent> createBoard) {
         this.primaryStage = primaryStage;
 
         this.loginCtrl = scene.getKey();
@@ -27,6 +29,9 @@ public class MainCtrl {
 
         this.boardCt = board.getKey();
         this.board = new Scene(board.getValue());
+
+        this.createBoardCt = createBoard.getKey();
+        this.createBoard = new Scene(createBoard.getValue());
 
         showLogin();
         primaryStage.show();
@@ -43,6 +48,10 @@ public class MainCtrl {
     public void showCard() {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(addCard);
+    }
+    public void createBoard() {
+        primaryStage.setTitle("Talio");
+        primaryStage.setScene(createBoard);
     }
 
 }
