@@ -17,6 +17,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.fxml.FXML;
+
 public class BoardCtrl {
 
     private final ServerUtils server;
@@ -28,5 +30,10 @@ public class BoardCtrl {
     }
     public void addCard(){
         mainCtrl.showCard();
+    }
+
+    @FXML
+    public void escapeBoard() {
+        mainCtrl.showLogin();
     }
 }

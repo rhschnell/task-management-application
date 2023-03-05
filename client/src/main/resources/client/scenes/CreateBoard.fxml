@@ -44,7 +44,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LoginCtrl">
+<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -90,8 +90,8 @@
             <AnchorPane layoutX="423.0" layoutY="159.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
                <children>
                   <TextField layoutX="37.0" layoutY="73.0" prefHeight="26.0" prefWidth="126.0" promptText="Key" />
-                  <Button layoutX="38.0" layoutY="112.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Open Board" textAlignment="CENTER" />
-                  <Button layoutX="39.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#createBoard" text="Create a new board" textAlignment="CENTER" />
+                  <Button layoutX="38.0" layoutY="112.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Create Board" textAlignment="CENTER" />
+                  <Button layoutX="31.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#joinBoard" text="Open a board  instead" textAlignment="CENTER" />
                   <Label layoutX="59.0" layoutY="17.0" text="Welcome!" textAlignment="CENTER">
                      <font>
                         <Font name="Helvetica Neue" size="18.0" />
