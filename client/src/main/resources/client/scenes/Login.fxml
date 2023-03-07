@@ -87,7 +87,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-image: url( &quot;@../../client/images/Background.jpeg&quot;);" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-image: url(/client/images/Background.jpeg);" VBox.vgrow="ALWAYS">
          <children>
             <AnchorPane layoutX="423.0" layoutY="159.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
                <children>
@@ -109,7 +109,7 @@
             </Label>
             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../client/images/Logo.png" />
+                  <Image url="/client/images/Logo.png"/>
                </image>
             </ImageView>
          </children>
