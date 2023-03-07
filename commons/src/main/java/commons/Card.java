@@ -7,61 +7,104 @@ public class Card {
     private String description;
     private String backgorundColour;
     private ArrayList<String> tags;
-    private ArrayList<String> tasks;
+    private ArrayList<Task> subTasks;
 
+    /**
+     * Basic constructor for Card class, does not require any parameters
+     */
     public Card()
     {
         title = "New Card";
         description = "Empty description";
         backgorundColour = "White"; // we can change the default later
         tags = new ArrayList<>();
-        tasks = new ArrayList<>();
+        subTasks = new ArrayList<>();
     }
 
-    public Card(String title, String description, String backgorundColour, ArrayList<String> tags, ArrayList<String> tasks)
+    /**
+     * Constructor for Card class with parameters
+     * @param title Title parameter
+     * @param description Description of the task
+     * @param backgorundColour Background colour of the Card
+     * @param tags Tags assigned to the Card
+     * @param subTasks ArrayList of subtasks to give more context about a card
+     */
+    public Card(String title, String description, String backgorundColour, ArrayList<String> tags, ArrayList<Task> subTasks)
     {
         this.title = title;
         this.description = description;
         this.backgorundColour = backgorundColour;
         this.tags = tags;
-        this.tasks = tasks;
+        this.subTasks = subTasks;
     }
 
+    /**
+     * Setter for title parameter
+     * @param title New title
+     */
     public void setTitle(String title)
     {
         this.title = title;
     }
 
+    /**
+     * Setter for description parameter
+     * @param description New description
+     */
     public void setDescription(String description)
     {
         this.description = description;
     }
 
+    /**
+     * Setter for background colour
+     * @param backgorundColour New background colour
+     */
     public void setBackgorundColour(String backgorundColour)
     {
         this.backgorundColour = backgorundColour;
     }
 
+    /**
+     * Setter for tags ArrayList
+     * @param tags New tags list
+     */
     public void setTags(ArrayList<String> tags)
     {
         this.tags = tags;
     }
 
-    public void setTasks(ArrayList<String> tasks)
+    /**
+     * Setter for tasks list
+     * @param tasks New tasks list
+     */
+    public void setSubTasks(ArrayList<Task> tasks)
     {
-        this.tasks = tasks;
+        this.subTasks = tasks;
     }
 
+    /**
+     * Add new tag to tag list
+     * @param newTag New tag
+     */
     public void addTags(String newTag)
     {
         this.tags.add(newTag);
     }
 
-    public void addTask(String newTask)
+    /**
+     * Add new sub task to the list
+     * @param newTask New sub task
+     */
+    public void addSubTask(Task newTask)
     {
-        this.tasks.add(newTask);
+        this.subTasks.add(newTask);
     }
 
+    /**
+     * Delete tag by index
+     * @param index Index of the tag to be deleted
+     */
     public void deleteTag(int index)
     {
         if(this.tags.size() > index)
@@ -70,6 +113,10 @@ public class Card {
         }
     }
 
+    /**
+     * Delete tag by name
+     * @param tag Name of the tag to be deleted
+     */
     public void deleteTag(String tag)
     {
         if(this.tags.contains(tag))
@@ -78,19 +125,27 @@ public class Card {
         }
     }
 
-    public void deleteTask(int index)
+    /**
+     * Delete sub task by index
+     * @param index Index of the sub task to be deleted
+     */
+    public void deleteSubTask(int index)
     {
-        if(this.tasks.size() > index)
+        if(this.subTasks.size() > index)
         {
-            this.tasks.remove(index);
+            this.subTasks.remove(index);
         }
     }
 
-    public void deleteTask(String task)
+    /**
+     * Delete sub task by object
+     * @param task Object to be deleted from list
+     */
+    public void deleteSubTask(Task task)
     {
-        if(this.tasks.contains(task))
+        if(this.subTasks.contains(task))
         {
-            this.tasks.remove(task);
+            this.subTasks.remove(task);
         }
     }
 }
