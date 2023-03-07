@@ -18,6 +18,15 @@ public class Card {
         tasks = new ArrayList<>();
     }
 
+    public Card(String title, String description, String backgorundColour, ArrayList<String> tags, ArrayList<String> tasks)
+    {
+        this.title = title;
+        this.description = description;
+        this.backgorundColour = backgorundColour;
+        this.tags = tags;
+        this.tasks = tasks;
+    }
+
     public void setTitle(String title)
     {
         this.title = title;
@@ -31,6 +40,16 @@ public class Card {
     public void setBackgorundColour(String backgorundColour)
     {
         this.backgorundColour = backgorundColour;
+    }
+
+    public void setTags(ArrayList<String> tags)
+    {
+        this.tags = tags;
+    }
+
+    public void setTasks(ArrayList<String> tasks)
+    {
+        this.tasks = tasks;
     }
 
     public void addTags(String newTag)
