@@ -89,11 +89,10 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-image: url(/client/images/Background.jpeg);" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane layoutX="423.0" layoutY="159.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
+            <AnchorPane layoutX="425.0" layoutY="196.0" prefHeight="135.0" prefWidth="198.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
                <children>
-                  <TextField layoutX="37.0" layoutY="73.0" prefHeight="26.0" prefWidth="126.0" promptText="Key" />
-                  <Button layoutX="38.0" layoutY="112.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Open Board" textAlignment="CENTER" />
-                  <Button layoutX="39.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#createBoard" text="Create a new board" textAlignment="CENTER" />
+                  <TextField layoutX="50.0" layoutY="48.0" prefHeight="26.0" prefWidth="98.0" promptText="Server address" />
+                  <Button layoutX="37.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Connect" textAlignment="CENTER" />
                   <Label layoutX="59.0" layoutY="17.0" text="Welcome!" textAlignment="CENTER">
                      <font>
                         <Font name="Helvetica Neue" size="18.0" />
@@ -109,7 +108,12 @@
             </Label>
             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="/client/images/Logo.png"/>
+            
+               </image>
+            </ImageView>
+            <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Logo.png" />
                </image>
             </ImageView>
          </children>
