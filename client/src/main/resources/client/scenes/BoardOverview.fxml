@@ -38,138 +38,159 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
+<VBox prefHeight="548.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
   <children>
-    <MenuBar useSystemMenuBar="true" VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-      <BorderPane prefHeight="555.0" prefWidth="1034.0">
+      <MenuBar useSystemMenuBar="true">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <BorderPane prefHeight="2000.0" prefWidth="2000.0">
          <left>
-            <VBox prefHeight="549.0" prefWidth="194.0" style="-fx-background-color: #B3D1C5;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="576.0" prefWidth="200.0" style="-fx-effect: dropshadow( three-pass-box , black , 2, 0.0 , 0.5, 1.5);">
                <children>
-                  <VBox prefHeight="520.0" prefWidth="222.0" style="-fx-background-color: #B3D1C5;">
+                  <VBox prefHeight="1000.0" prefWidth="200.0" style="-fx-background-color: #B3D1C5;" AnchorPane.bottomAnchor="128.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <children>
-                        <Label prefHeight="42.0" prefWidth="211.0" text="Workspace" textAlignment="CENTER">
+                        <Label prefHeight="45.0" prefWidth="200.0" text="My workspace" textAlignment="CENTER">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Arial" size="18.0" />
                            </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
                            <padding>
-                              <Insets left="20.0" />
+                              <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <Line endX="150.0" strokeWidth="0.5">
+                        <Line endX="170.0" strokeWidth="0.5">
                            <VBox.margin>
-                              <Insets left="20.0" />
+                              <Insets left="15.0" />
                            </VBox.margin>
                         </Line>
-                        <Label prefHeight="42.0" prefWidth="211.0" text="Boards" textAlignment="CENTER">
+                        <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="42.0" prefWidth="211.0" text="Boards" textAlignment="CENTER">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="Arial Bold" size="16.0" />
                            </font>
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <padding>
-                              <Insets left="20.0" />
+                              <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <Button mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="210.0" text="Board 1" />
+                        <Button maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: none;" text="Board 1">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets right="90.0" />
+                           </padding>
+                        </Button>
                      </children>
                   </VBox>
-                  <Button mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="210.0" text="Return to menu" />
+                  <VBox alignment="BOTTOM_CENTER" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="200.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="310.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <children>
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="177.0" style="-fx-background-color: #64B594; -fx-text-fill: white; -fx-background-radius: 10;" text="Create/join a board">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="15.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="177.0" style="-fx-background-color: #64B594; -fx-text-fill: white; -fx-background-radius: 10;" text="Disconnect">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </VBox>
+            </AnchorPane>
          </left>
          <center>
-            <VBox prefHeight="549.0" prefWidth="745.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="713.0" prefWidth="1026.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" blendMode="DARKEN" prefHeight="40.0" prefWidth="830.0" style="-fx-background-color: #B3D1C5;">
+                  <HBox blendMode="DARKEN" layoutY="47.0" prefHeight="1980.0" prefWidth="1118.0" style="-fx-background-color: #DEEDE7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <HBox alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="500.0" prefHeight="47.0" prefWidth="869.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="268.0">
                      <children>
-                        <Label prefHeight="40.0" prefWidth="501.0" text="Board 1" textAlignment="RIGHT">
+                        <Label maxHeight="-Infinity" minHeight="-Infinity" minWidth="200.0" prefHeight="34.0" prefWidth="544.0" text="Board 1" textAlignment="RIGHT">
                            <font>
-                              <Font name="System Bold" size="24.0" />
+                              <Font name="Arial Bold" size="18.0" />
                            </font>
                            <padding>
                               <Insets left="20.0" />
                            </padding>
                         </Label>
-                        <Line endY="30.0" strokeWidth="0.5">
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Line endY="20.0" strokeWidth="0.25">
                            <HBox.margin>
-                              <Insets />
+                              <Insets right="15.0" />
                            </HBox.margin>
                         </Line>
-                        <Button mnemonicParsing="false" onMouseClicked="#addCard" text="Add card">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addCard" prefWidth="70.0" style="-fx-background-color: #64B594; -fx-text-fill: white; -fx-background-radius: 10;" text="Rename">
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets right="15.0" />
                            </HBox.margin>
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font>
                         </Button>
-                        <Button mnemonicParsing="false" onMouseClicked="#addCard" text="Rename">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addCard" prefWidth="70.0" style="-fx-background-color: #64B594; -fx-text-fill: white; -fx-background-radius: 10;" text="Add list">
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Line endY="20.0" strokeWidth="0.25">
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets left="15.0" right="15.0" />
                            </HBox.margin>
-                        </Button>
-                        <Button mnemonicParsing="false" onMouseClicked="#addCard" text="Delete">
+                        </Line>
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addCard" prefWidth="70.0" style="-fx-background-color: #FF968D; -fx-text-fill: white; -fx-background-radius: 10;" text="Delete">
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font>
                            <HBox.margin>
-                              <Insets left="10.0" />
+                              <Insets right="15.0" />
                            </HBox.margin>
                         </Button>
                      </children>
                   </HBox>
-                  <HBox blendMode="DARKEN" prefHeight="522.0" prefWidth="830.0" style="-fx-background-color: #DEEDE7;" />
                </children>
-            </VBox>
+            </AnchorPane>
          </center>
       </BorderPane>
   </children>

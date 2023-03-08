@@ -33,6 +33,8 @@ public class MainCtrl {
         this.createBoardCt = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue());
 
+        primaryStage.setMinHeight(576);
+        primaryStage.setMinWidth(1024);
         showLogin();
         primaryStage.show();
     }

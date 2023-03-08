@@ -42,11 +42,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LoginCtrl">
+<VBox prefHeight="548" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LoginCtrl">
   <children>
     <MenuBar useSystemMenuBar="true" VBox.vgrow="NEVER">
       <menus>
@@ -87,23 +88,33 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-image: url(/client/images/Background.jpeg);" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" prefHeight="548.5" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane layoutX="425.0" layoutY="196.0" prefHeight="135.0" prefWidth="198.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
+            <HBox alignment="CENTER" layoutX="-77.0" layoutY="203.0" prefHeight="143.0" prefWidth="759.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField layoutX="50.0" layoutY="48.0" prefHeight="26.0" prefWidth="98.0" promptText="Server address" />
-                  <Button layoutX="37.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Connect" textAlignment="CENTER" />
-                  <Label layoutX="59.0" layoutY="17.0" text="Welcome!" textAlignment="CENTER">
-                     <font>
-                        <Font name="Helvetica Neue" size="18.0" />
-                     </font>
-                  </Label>
+                  <AnchorPane maxHeight="-Infinity" prefHeight="143.0" prefWidth="198.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
+                     <children>
+                        <TextField layoutX="39.0" layoutY="48.0" prefHeight="26.0" prefWidth="121.0" promptText="Server address">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font></TextField>
+                        <Button layoutX="37.0" layoutY="88.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Connect" textAlignment="CENTER">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font></Button>
+                        <Label layoutX="59.0" layoutY="17.0" text="Welcome!" textAlignment="CENTER">
+                           <font>
+                              <Font name="Arial Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
                </children>
-            </AnchorPane>
-            <Line endX="10.19305419921875" endY="20.5" layoutX="150.0" layoutY="18.0" startX="10.193061828613281" startY="3.814697265625E-6" strokeWidth="2.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="180.0" layoutY="18.0" style="-fx-font-weight: bold;" text="Your personal task list organizer" textAlignment="CENTER">
+            </HBox>
+            <Line endX="10.19305419921875" endY="20.5" layoutX="160.0" layoutY="18.0" startX="10.193061828613281" startY="3.814697265625E-6" strokeWidth="2.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="190.0" layoutY="18.0" style="-fx-font-weight: bold;" text="Your personal task list organizer" textAlignment="CENTER">
                <font>
-                  <Font name="Helvetica Neue" size="18.0" />
+                  <Font name="Arial" size="18.0" />
                </font>
             </Label>
             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
