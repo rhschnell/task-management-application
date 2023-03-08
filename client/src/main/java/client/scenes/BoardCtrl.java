@@ -15,19 +15,34 @@
  */
 package client.scenes;
 
+import client.MyListCell;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 
-public class BoardCtrl {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class BoardCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    @FXML
+    private ListView<String> CardList;
+
+    ObservableList<String> items = FXCollections.observableArrayList("Item1","Item2","Item3");
+
     @Inject
     public BoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+    @FXML
     public void addCard(){
         mainCtrl.showCard();
     }
@@ -35,5 +50,12 @@ public class BoardCtrl {
     @FXML
     public void escapeBoard() {
         mainCtrl.showLogin();
+    }
+    public void initialize(URL location,ResourceBundle resources)
+    {
+
+        CardList.setCellFactory(param -> new MyListCell());
+        //CardList.setItems(items);
+        CardList.getItems().addAll("Item 1", "Item 2", "Item 3","Item 4","Item 5","Item 6","Item 7");
     }
 }

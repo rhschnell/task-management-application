@@ -35,6 +35,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -141,7 +142,10 @@
          <center>
             <AnchorPane prefHeight="713.0" prefWidth="1026.0">
                <children>
-                  <HBox blendMode="DARKEN" layoutY="47.0" prefHeight="1980.0" prefWidth="1118.0" style="-fx-background-color: #DEEDE7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <HBox blendMode="DARKEN" layoutY="47.0" prefHeight="502.0" prefWidth="824.0" style="-fx-background-color: #DEEDE7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+                     <children>
+                        <ListView fx:id="CardList" editable="true" prefHeight="345.0" prefWidth="200.0" />
+                     </children></HBox>
                   <HBox alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="500.0" prefHeight="47.0" prefWidth="869.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="268.0">
                      <children>
                         <Label maxHeight="-Infinity" minHeight="-Infinity" minWidth="200.0" prefHeight="34.0" prefWidth="544.0" text="Board 1" textAlignment="RIGHT">
