@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Card {
     private String title;
     private String description;
-    private String backgorundColour;
+    private String backgroundColour;
     private ArrayList<String> tags;
     private ArrayList<Task> subTasks;
 
@@ -16,7 +16,7 @@ public class Card {
     {
         title = "New Card";
         description = "Empty description";
-        backgorundColour = "White"; // we can change the default later
+        backgroundColour = "White"; // we can change the default later
         tags = new ArrayList<>();
         subTasks = new ArrayList<>();
     }
@@ -25,15 +25,15 @@ public class Card {
      * Constructor for Card class with parameters
      * @param title Title parameter
      * @param description Description of the task
-     * @param backgorundColour Background colour of the Card
+     * @param backgroundColour Background colour of the Card
      * @param tags Tags assigned to the Card
      * @param subTasks ArrayList of subtasks to give more context about a card
      */
-    public Card(String title, String description, String backgorundColour, ArrayList<String> tags, ArrayList<Task> subTasks)
+    public Card(String title, String description, String backgroundColour, ArrayList<String> tags, ArrayList<Task> subTasks)
     {
         this.title = title;
         this.description = description;
-        this.backgorundColour = backgorundColour;
+        this.backgroundColour = backgroundColour;
         this.tags = tags;
         this.subTasks = subTasks;
     }
@@ -58,11 +58,11 @@ public class Card {
 
     /**
      * Setter for background colour
-     * @param backgorundColour New background colour
+     * @param backgroundColour New background colour
      */
-    public void setBackgorundColour(String backgorundColour)
+    public void setBackgroundColour(String backgroundColour)
     {
-        this.backgorundColour = backgorundColour;
+        this.backgroundColour = backgroundColour;
     }
 
     /**
