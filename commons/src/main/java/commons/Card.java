@@ -1,13 +1,23 @@
 package commons;
-
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class Card {
     private String title;
     private String description;
     private String backgorundColour;
-    private ArrayList<String> tags;
-    private ArrayList<Task> subTasks;
+
+    @ManyToMany
+    private List<Tag> tags;
+
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Task> subTasks;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     /**
      * Basic constructor for Card class, does not require any parameters
@@ -29,7 +39,8 @@ public class Card {
      * @param tags Tags assigned to the Card
      * @param subTasks ArrayList of subtasks to give more context about a card
      */
-    public Card(String title, String description, String backgorundColour, ArrayList<String> tags, ArrayList<Task> subTasks)
+    public Card(String title, String description, String backgorundColour, ArrayList<Tag> tags,
+                ArrayList<Task> subTasks)
     {
         this.title = title;
         this.description = description;
@@ -69,7 +80,7 @@ public class Card {
      * Setter for tags ArrayList
      * @param tags New tags list
      */
-    public void setTags(ArrayList<String> tags)
+    public void setTags(ArrayList<Tag> tags)
     {
         this.tags = tags;
     }
@@ -87,7 +98,7 @@ public class Card {
      * Add new tag to tag list
      * @param newTag New tag
      */
-    public void addTags(String newTag)
+    public void addTags(Tag newTag)
     {
         this.tags.add(newTag);
     }
