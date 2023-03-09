@@ -6,9 +6,9 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-    Stage primaryStage;
+    private Stage primaryStage;
 
-    Scene login;
+    private Scene login;
 
     private AddCardCtrl addCardCt;
     private Scene addCard;
@@ -18,7 +18,8 @@ public class MainCtrl {
     private Scene createBoard;
     private CreateBoardCtrl createBoardCt;
 
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene, Pair<AddCardCtrl,Parent> addCard,Pair<BoardCtrl,Parent> board,Pair<CreateBoardCtrl,Parent> createBoard) {
+    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene, Pair<AddCardCtrl,Parent> addCard,
+                           Pair<BoardCtrl,Parent> board,Pair<CreateBoardCtrl,Parent> createBoard) {
         this.primaryStage = primaryStage;
 
         this.loginCtrl = scene.getKey();
@@ -56,4 +57,20 @@ public class MainCtrl {
         primaryStage.setScene(createBoard);
     }
 
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public LoginCtrl getLoginCtrl() {
+        return loginCtrl;
+    }
+
+    public void setLoginCtrl(LoginCtrl loginCtrl) {
+        this.loginCtrl = loginCtrl;
+    }
 }

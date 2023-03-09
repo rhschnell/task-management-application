@@ -33,9 +33,9 @@ public class BoardCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     @FXML
-    private ListView<String> CardList;
+    private ListView<String> cardList;
 
-    ObservableList<String> items = FXCollections.observableArrayList("Item1","Item2","Item3");
+    private ObservableList<String> items = FXCollections.observableArrayList("Item1","Item2","Item3");
 
     @Inject
     public BoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -54,8 +54,16 @@ public class BoardCtrl implements Initializable {
     public void initialize(URL location,ResourceBundle resources)
     {
 
-        CardList.setCellFactory(param -> new MyListCell());
+        cardList.setCellFactory(param -> new MyListCell());
         //CardList.setItems(items);
-        CardList.getItems().addAll("Item 1", "Item 2", "Item 3","Item 4","Item 5","Item 6","Item 7");
+        cardList.getItems().addAll("Item 1", "Item 2", "Item 3","Item 4","Item 5","Item 6","Item 7");
+    }
+
+    public ObservableList<String> getItems() {
+        return items;
+    }
+
+    public void setItems(ObservableList<String> items) {
+        this.items = items;
     }
 }
