@@ -8,8 +8,16 @@ public class Card {
     private String title;
     private String description;
     private String backgroundColour;
-    private ArrayList<String> tags;
-    private ArrayList<Task> subTasks;
+
+    @ManyToMany
+    private List<Tag> tags;
+
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Task> subTasks;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     /**
      * Basic constructor for Card class, does not require any parameters
@@ -31,7 +39,7 @@ public class Card {
      * @param tags Tags assigned to the Card
      * @param subTasks ArrayList of subtasks to give more context about a card
      */
-    public Card(String title, String description, String backgroundColour, ArrayList<String> tags, ArrayList<Task> subTasks)
+    public Card(String title, String description, String backgroundColour, List<Tag> tags, List<Task> subTasks)
     {
         this.title = title;
         this.description = description;
