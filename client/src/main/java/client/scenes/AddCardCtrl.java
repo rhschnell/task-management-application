@@ -44,7 +44,7 @@ public class AddCardCtrl {
     }
 
     public void cancel() throws IOException {
-       mainCtrl.showBoard();
+        mainCtrl.showBoard();
     }
     public void ok() throws IOException {
         mainCtrl.showBoard();
