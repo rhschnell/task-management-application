@@ -76,4 +76,10 @@ class TagTest {
         Tag tag2 = generateTag();
         assertEquals(tag1.hashCode(), tag2.hashCode());
     }
+
+    @Test
+    void testToString(){
+        Tag tag = generateTag();
+        assertEquals("Tag{name='Frontend', color='Blue'}", tag.toString());
+    }
 }

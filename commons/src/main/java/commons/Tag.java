@@ -95,4 +95,16 @@ public class Tag {
     public int hashCode() {
         return Objects.hash(name, color, id);
     }
+
+    /**
+     * Generates a human-readable format of this tag
+     * @return Readable description of this tag
+     */
+    @Override
+    public String toString() {
+        return "Tag{" +
+               "name='" + name + '\'' +
+               ", color='" + color + '\'' +
+               '}';
+    }
 }
