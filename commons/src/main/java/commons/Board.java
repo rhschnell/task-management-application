@@ -1,10 +1,20 @@
 package commons;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class Board {
     private String title;
-    private ArrayList<CardList> cardLists;
+
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<CardList> cardLists; // Use a list here to make the annotation work
+
+    @Id
     private String key;
 
     /**
@@ -18,6 +28,7 @@ public class Board {
     Constructor for the class Board
     @param title Title of the board
     @param key Key of the board
+     @param cardLists The lists of cards in this board
      */
     public Board(String title, String key, ArrayList<CardList> cardLists){
         this.title = title;
@@ -61,7 +72,7 @@ public class Board {
      * Getter for the card-lists in the board
      * @return The arraylist containing the card-lists of the board
      */
-    public ArrayList<CardList> getCardLists() {
+    public List<CardList> getCardLists() {
         return cardLists;
     }
 

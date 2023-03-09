@@ -1,10 +1,21 @@
 package commons;
 
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class CardList {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+
     private String listTitle;
-    private ArrayList<Card> cards;
+
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Card> cards;
 
     /**
      * Empty constructor for Spring Boot
@@ -130,7 +141,7 @@ public class CardList {
      * Getter for the card list
      * @return The list of cards
      */
-    public ArrayList<Card> getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 }

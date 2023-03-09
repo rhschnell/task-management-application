@@ -1,7 +1,9 @@
 package commons;
-
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class Card {
     private String title;
     private String description;
@@ -69,7 +71,7 @@ public class Card {
      * Setter for tags ArrayList
      * @param tags New tags list
      */
-    public void setTags(ArrayList<String> tags)
+    public void setTags(ArrayList<Tag> tags)
     {
         this.tags = tags;
     }
@@ -87,7 +89,7 @@ public class Card {
      * Add new tag to tag list
      * @param newTag New tag
      */
-    public void addTags(String newTag)
+    public void addTags(Tag newTag)
     {
         this.tags.add(newTag);
     }

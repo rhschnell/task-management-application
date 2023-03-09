@@ -1,6 +1,16 @@
 package commons;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Task {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private boolean status;
     private String title;
 
@@ -15,7 +25,8 @@ public class Task {
 
     /**
      * Constructor for Task class with parameters
-     * @param status The status of the task (whether it is done or not, false = not done, true = done)
+     * @param status The status of the task (whether it is done or not,
+     *               false = not done, true = done)
      * @param title The title of the task
      */
     public Task(boolean status, String title)
