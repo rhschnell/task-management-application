@@ -47,7 +47,7 @@ public class CardListHelper {
         deleteButton.setStyle("-fx-background-color: #64B594; -fx-text-fill: white; -fx-background-radius:10;");
         deleteButton.setOnAction(event -> {
             // Call the function here
-               System.out.println(systemCardList.getListTitle());
+            System.out.println(systemCardList.getListTitle());
         });
 
         //The Label that is in the top of the page
