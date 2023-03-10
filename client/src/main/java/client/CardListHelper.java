@@ -11,7 +11,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
-public class cardListHelper {
+public class CardListHelper {
     static private DataFormat cardFormat = new DataFormat("Card");
 
     /**

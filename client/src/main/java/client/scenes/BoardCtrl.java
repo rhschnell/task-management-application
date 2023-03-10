@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package client.scenes;
-import client.cardListHelper;
+import client.CardListHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -90,8 +90,8 @@ public class BoardCtrl implements Initializable {
     {
         for(int i=0;i<myBoard.getCardLists().size();i++)
         {
-            myField.getChildren().add(cardListHelper.newSeparator());
-            myField.getChildren().add(cardListHelper.createCard(myBoard.getCardLists().get(i)));
+            myField.getChildren().add(CardListHelper.newSeparator());
+            myField.getChildren().add(CardListHelper.createCard(myBoard.getCardLists().get(i)));
         }
     }
     public Board testWithoutDb(String boardName)
