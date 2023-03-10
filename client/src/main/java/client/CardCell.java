@@ -30,6 +30,7 @@ public class CardCell extends ListCell<Card> {
         } else {
             controller.setText(item.getTitle());
             controller.setOnButtonClick(event -> {
+                System.out.println(item.getTitle());
                 // Handle button click
             });
             setGraphic(loader.getRoot());

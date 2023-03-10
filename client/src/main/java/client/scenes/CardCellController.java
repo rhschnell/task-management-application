@@ -9,7 +9,8 @@ import javafx.scene.control.Label;
 public class CardCellController {
     @FXML
     private Label label;
-    @FXML private Button button;
+    @FXML
+    private Button deleteButton;
 
     /**
      * Sets the text of the CardCell ( Card name )
@@ -20,7 +21,7 @@ public class CardCellController {
     }
 
     public void setOnButtonClick(EventHandler<ActionEvent> handler) {
-        button.setOnAction(handler);
+        deleteButton.setOnAction(handler);
     }
 }
 
