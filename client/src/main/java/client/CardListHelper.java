@@ -2,10 +2,7 @@ package client;
 import commons.Card;
 import commons.CardList;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -22,8 +19,19 @@ public class CardListHelper {
     public static VBox createCard(CardList systemCardList)
     {
         ListView<Card> cardListView = new ListView<Card>();
-        cardListView.setCellFactory(param -> new CardCell());
+        cardListView.setCellFactory(param -> {
+            ListCell<Card> cell = new CardCell();
+            cell.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    // Double-clicked the cell, handle the event here
+                    Card selectedCard = cell.getItem();
+                    System.out.println("Selected card: " + selectedCard);
+                }
+            });
+            return cell;
+        });
         cardListView.getItems().addAll(systemCardList.getCards());
+
 
         //Make the content draggable
         //TODO FILIP - NEED TO CREATE A SEPARATE COMMIT FOR THIS ISSUE
