@@ -1,10 +1,12 @@
 package commons;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class Card {
+public class Card implements Serializable {
     private String title;
     private String description;
     private String backgroundColour;
@@ -157,5 +159,36 @@ public class Card {
         {
             this.subTasks.remove(task);
         }
+    }
+    public String getTitle()
+    {
+        return this.title;
+    }
+
+    /**
+     *
+     * @param o
+     * @return if the Object is of type Card end equal to the Card
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        //Line was too long for checkstyle
+        Boolean first;
+        Boolean second;
+        first =id==card.id && Objects.equals(title, card.title) && Objects.equals(description, card.description);
+        second = Objects.equals(backgroundColour, card.backgroundColour) && Objects.equals(tags, card.tags) ;
+        return first && second && Objects.equals(subTasks, card.subTasks);
+    }
+
+    /**
+     * Return the hashcode of the object
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, backgroundColour, tags, subTasks, id);
     }
 }

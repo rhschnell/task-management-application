@@ -6,11 +6,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class MyListCellController {
+public class CardCellController {
     @FXML
     private Label label;
     @FXML private Button button;
 
+    /**
+     * Sets the text of the CardCell ( Card name )
+     * @param text
+     */
     public void setText(String text) {
         label.setText(text);
     }
@@ -19,3 +23,4 @@ public class MyListCellController {
         button.setOnAction(handler);
     }
 }
+
