@@ -35,7 +35,7 @@ public class CardListHelper {
 
         //Make the content draggable
         //TODO FILIP - NEED TO CREATE A SEPARATE COMMIT FOR THIS ISSUE
-       // makeDraggable(cardListView);
+        makeDraggable(cardListView);
 
         //The Vbox for the List
         VBox cardListBox = new VBox();
@@ -45,7 +45,11 @@ public class CardListHelper {
         Button deleteButton = new Button();
         deleteButton.setText("x");
         deleteButton.setStyle("-fx-background-color: #64B594; -fx-text-fill: white; -fx-background-radius:10;");
-        //deleteButton.setOnAction(event -> {// Call the function here});
+        deleteButton.setOnAction(event -> {
+            // Call the function here
+               System.out.println(systemCardList.getListTitle());
+        });
+
         //The Label that is in the top of the page
         Label listTitle = new Label();
         listTitle.setText(systemCardList.getListTitle());
