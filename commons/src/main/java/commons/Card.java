@@ -164,6 +164,10 @@ public class Card implements Serializable {
     {
         return this.title;
     }
+    public String getDescription()
+    {
+        return this.description;
+    }
 
     /**
      *
