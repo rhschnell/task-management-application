@@ -54,7 +54,7 @@ public class ListCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
         listTitle = new Label();
-        cardListView = new ListView();
+        cardListView = new ListView<>();
     }
 
     public void addCards(CardList cardList) {
@@ -97,13 +97,4 @@ public class ListCtrl {
             ioe.printStackTrace();
         }
     }
-
-    public static Separator newSeparator()
-    {
-        Separator separator = new Separator();
-        separator.setPrefWidth(20);
-        separator.setVisible(false);
-        return separator;
-    }
-
 }
