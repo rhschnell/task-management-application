@@ -23,8 +23,6 @@ import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
@@ -35,10 +33,8 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-
+    public void start(Stage primaryStage) {
         var login = FXML.load(LoginCtrl.class, "client", "scenes", "Login.fxml");
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
         var board = FXML.load(BoardCtrl.class, "client", "scenes", "BoardOverview.fxml");
         var createBoard = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
