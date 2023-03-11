@@ -1,0 +1,64 @@
+.root{
+    -fx-font-family: "Arial";
+    -fx-text-background-color: #1A1A1A;
+}
+
+.blue-button {
+ -fx-background-color: #73BFF9;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.blue-button:hover {
+ -fx-background-color: #8fccfa;
+}
+.blue-button:pressed {
+ -fx-background-color: #abd9fb;
+}
+
+.red-button {
+ -fx-background-color: #F19B91;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.red-button:hover {
+ -fx-background-color: #f4afa7;
+}
+.red-button:pressed {
+ -fx-background-color: #f7c3bd;
+}
+
+.light-gray-button {
+ -fx-background-color: #D3D3D3;
+ -fx-background-radius: 10;
+}
+.light-gray-button:hover {
+ -fx-background-color: #a9a9a9;
+}
+.light-gray-button:pressed {
+ -fx-background-color: #7f7f7f;
+}
+
+.gray-button {
+ -fx-background-color:  #929292;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.gray-button:hover {
+ -fx-background-color: #a8a8a8;
+}
+.gray-button:pressed {
+ -fx-background-color: #bebebe;
+}
+
+.green-button {
+ -fx-background-color:  #64B594;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.green-button:hover {
+ -fx-background-color: #83c4a9;
+}
+.green-button:pressed {
+ -fx-background-color: #a2d3bf;
+}
+
