@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 package client.scenes;
-
-import client.MyListCell;
+import client.CardListHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import commons.Board;
+import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.DataFormat;
+import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class BoardCtrl implements Initializable {
@@ -33,37 +37,93 @@ public class BoardCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     @FXML
-    private ListView<String> cardList;
+    private Label boardName;
 
-    private ObservableList<String> items = FXCollections.observableArrayList("Item1","Item2","Item3");
+    @FXML
+    private Button secondBoardNameButton;
 
+    @FXML
+    private HBox myField;
     @Inject
     public BoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+
+    /**
+     * TODO Calls the function addCard when the button is pressed and adds a new Card to the First List
+     */
     @FXML
     public void addCard(){
         mainCtrl.showCard();
     }
 
+    /**
+     * Return's to the main screen
+     */
     @FXML
     public void escapeBoard() {
         mainCtrl.showLogin();
     }
+
+    /**
+     * Initialize the board
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     public void initialize(URL location,ResourceBundle resources)
     {
-
-        cardList.setCellFactory(param -> new MyListCell());
-        //CardList.setItems(items);
-        cardList.getItems().addAll("Item 1", "Item 2", "Item 3","Item 4","Item 5","Item 6","Item 7");
+        Board systemBoard = testWithoutDb("First Board");
+        boardName.setText(systemBoard.getTitle());
+        secondBoardNameButton.setText(systemBoard.getTitle());
+        createBoard(systemBoard);
     }
 
-    public ObservableList<String> getItems() {
-        return items;
+    /**
+     * TODO Get the information from the database but for testing reasons created
+     * @param myBoard
+     */
+    public void createBoard(Board myBoard)
+    {
+        DataFormat cardFormat = new DataFormat("Card");
+        for(int i=0;i<myBoard.getCardLists().size();i++)
+        {
+            CardListHelper clh = new CardListHelper(cardFormat);
+            myField.getChildren().add(clh.newSeparator());
+            myField.getChildren().add(clh.createCard(myBoard.getCardLists().get(i)));
+        }
+    }
+    public Board testWithoutDb(String boardName)
+    {
+        ArrayList<CardList> systemCardList= new ArrayList<>();
+        systemCardList.add(testWithoutDatabase("TODO"));
+        systemCardList.add(testWithoutDatabase("DONE"));
+        systemCardList.add(testWithoutDatabase("TRASH"));
+        Board myBoard = new Board(boardName,"nokey",systemCardList);
+        return myBoard;
+    }
+    public CardList testWithoutDatabase(String cardListTitle)
+    {
+        Card p1 = new Card("Cleaning","To clean the floor","white",new ArrayList<>(),new ArrayList<>());
+        Card p2 = new Card("Working","To work for the company","gray",new ArrayList<>(),new ArrayList<>());
+        Card p3 = new Card("Washing","De wash the clothes","white",new ArrayList<>(),new ArrayList<>());
+        Card p4 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.add(p1);
+        cards.add(p2);
+        cards.add(p3);
+        cards.add(p4);
+        CardList systemCard = new CardList(cardListTitle,cards);
+        return systemCard;
+    }
+    public void refresh()
+    {
+        myField.getChildren().remove(0);
     }
 
-    public void setItems(ObservableList<String> items) {
-        this.items = items;
-    }
 }

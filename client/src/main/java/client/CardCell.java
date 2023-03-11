@@ -1,16 +1,17 @@
 package client;
-import client.scenes.MyListCellController;
+import client.scenes.CardCellController;
+import commons.Card;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 
 import java.io.IOException;
 
-public class MyListCell extends ListCell<String> {
+public class CardCell extends ListCell<Card> {
     private FXMLLoader loader;
-    private MyListCellController controller;
+    private CardCellController controller;
 
-    public MyListCell() {
-        loader = new FXMLLoader(getClass().getResource("/client/scenes/MyListCell.fxml"));
+    public CardCell() {
+        loader = new FXMLLoader(getClass().getResource("/client/scenes/CardCell.fxml"));
         try {
             loader.load();
             controller = loader.getController();
@@ -20,15 +21,16 @@ public class MyListCell extends ListCell<String> {
     }
 
     @Override
-    protected void updateItem(String item, boolean empty) {
+    protected void updateItem(Card item, boolean empty) {
         super.updateItem(item, empty);
 
         if (empty || item == null) {
             setText(null);
             setGraphic(null);
         } else {
-            controller.setText(item);
+            controller.setText(item.getTitle());
             controller.setOnButtonClick(event -> {
+                System.out.println(item.getTitle());
                 // Handle button click
             });
             setGraphic(loader.getRoot());
