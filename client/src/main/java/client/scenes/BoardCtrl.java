@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package client.scenes;
-import client.CardListHelper;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -29,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -98,12 +98,19 @@ public class BoardCtrl implements Initializable {
      */
     public void createBoard(Board myBoard)
     {
-        DataFormat cardFormat = new DataFormat("Card");
-        for(int i=0;i<myBoard.getCardLists().size();i++)
+        for(int i = 0; i < myBoard.getCardLists().size(); i++)
         {
-            CardListHelper clh = new CardListHelper(cardFormat);
-            myField.getChildren().add(clh.newSeparator());
-            myField.getChildren().add(clh.createCard(myBoard.getCardLists().get(i)));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/List.fxml"));
+            try {
+                VBox list = loader.load();
+                ListCtrl ctrl = loader.getController();
+                ctrl.addCards(myBoard.getCardLists().get(i));
+                myField.getChildren().add(ctrl.newSeparator());
+                myField.getChildren().add(list);
+
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            }
         }
     }
     public Board testWithoutDb(String boardName)
@@ -121,11 +128,15 @@ public class BoardCtrl implements Initializable {
         Card p2 = new Card("Working","To work for the company","gray",new ArrayList<>(),new ArrayList<>());
         Card p3 = new Card("Washing","De wash the clothes","white",new ArrayList<>(),new ArrayList<>());
         Card p4 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
+        Card p5 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
+        Card p6 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
         ArrayList<Card> cards = new ArrayList<>();
         cards.add(p1);
         cards.add(p2);
         cards.add(p3);
         cards.add(p4);
+        cards.add(p5);
+        cards.add(p6);
         CardList systemCard = new CardList(cardListTitle,cards);
         return systemCard;
     }
