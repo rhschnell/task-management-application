@@ -24,7 +24,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.HBox;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -88,10 +90,12 @@ public class BoardCtrl implements Initializable {
      */
     public void createBoard(Board myBoard)
     {
+        DataFormat cardFormat = new DataFormat("Card");
         for(int i=0;i<myBoard.getCardLists().size();i++)
         {
-            myField.getChildren().add(CardListHelper.newSeparator());
-            myField.getChildren().add(CardListHelper.createCard(myBoard.getCardLists().get(i)));
+            CardListHelper clh = new CardListHelper(cardFormat);
+            myField.getChildren().add(clh.newSeparator());
+            myField.getChildren().add(clh.createCard(myBoard.getCardLists().get(i)));
         }
     }
     public Board testWithoutDb(String boardName)
