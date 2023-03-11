@@ -25,9 +25,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.DataFormat;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -49,7 +46,7 @@ public class ListCtrl {
         this.mainCtrl = new MainCtrl();
         this.server = new ServerUtils();
         listTitle = new Label();
-        cardListView = new ListView<Card>();
+        cardListView = new ListView<>();
     }
 
     @Inject
@@ -57,7 +54,7 @@ public class ListCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
         listTitle = new Label();
-        cardListView = new ListView<Card>();
+        cardListView = new ListView();
     }
 
     public void addCards(CardList cardList) {
