@@ -18,8 +18,10 @@ package client.scenes;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -32,10 +34,19 @@ public class AddCardCtrl {
     private TextField cardTitle;
 
     @FXML
-    private TextField cardOption;
+    private TextArea cardDescription;
 
     @FXML
-    private TextArea cardDescription;
+    private Button cancelButton;
+
+    @FXML
+    private Button saveButton;
+
+
+    public AddCardCtrl() {
+        this.mainCtrl = new MainCtrl();
+        this.server = new ServerUtils();
+    }
 
     @Inject
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -44,9 +55,10 @@ public class AddCardCtrl {
     }
 
     public void cancel() throws IOException {
-        mainCtrl.showBoard();
+        ((Stage)cancelButton.getScene().getWindow()).close();
     }
-    public void ok() throws IOException {
-        mainCtrl.showBoard();
+    public void save() throws IOException {
+        ((Stage)saveButton.getScene().getWindow()).close();
     }
+
 }

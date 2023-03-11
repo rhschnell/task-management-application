@@ -21,12 +21,16 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -54,8 +58,12 @@ public class BoardCtrl implements Initializable {
      * TODO Calls the function addCard when the button is pressed and adds a new Card to the First List
      */
     @FXML
-    public void addCard(){
-        mainCtrl.showCard();
+    public void addCard() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/AddCard.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        String title = "Create Card";
+        mainCtrl.popUp(scene, title);
     }
 
     /**
@@ -121,6 +129,7 @@ public class BoardCtrl implements Initializable {
         CardList systemCard = new CardList(cardListTitle,cards);
         return systemCard;
     }
+
     public void refresh()
     {
         myField.getChildren().remove(0);

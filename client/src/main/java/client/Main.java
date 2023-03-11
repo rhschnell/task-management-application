@@ -42,6 +42,6 @@ public class Main extends Application {
         var board = FXML.load(BoardCtrl.class, "client", "scenes", "BoardOverview.fxml");
         var createBoard = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login,addCard,board,createBoard);
+        mainCtrl.initialize(primaryStage, login, board,createBoard);
     }
 }
