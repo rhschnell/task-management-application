@@ -83,7 +83,7 @@ public class BoardCtrl implements Initializable {
      * The resources used to localize the root object, or {@code null} if
      * the root object was not localized.
      */
-    public void initialize(URL location,ResourceBundle resources)
+    public void initialize(URL location, ResourceBundle resources)
     {
         Board systemBoard = testWithoutDb("First Board");
         boardName.setText(systemBoard.getTitle());
@@ -104,7 +104,6 @@ public class BoardCtrl implements Initializable {
                 VBox list = loader.load();
                 ListCtrl ctrl = loader.getController();
                 ctrl.addCards(myBoard.getCardLists().get(i));
-                myField.getChildren().add(ctrl.newSeparator());
                 myField.getChildren().add(list);
 
             } catch(IOException ioe) {
@@ -118,7 +117,7 @@ public class BoardCtrl implements Initializable {
         systemCardList.add(testWithoutDatabase("TODO"));
         systemCardList.add(testWithoutDatabase("DONE"));
         systemCardList.add(testWithoutDatabase("TRASH"));
-        Board myBoard = new Board(boardName,"nokey",systemCardList);
+        Board myBoard = new Board(boardName, "no-key", systemCardList);
         return myBoard;
     }
     public CardList testWithoutDatabase(String cardListTitle)
@@ -135,6 +134,9 @@ public class BoardCtrl implements Initializable {
         cards.add(p3);
         cards.add(p4);
         cards.add(p5);
+        cards.add(p6);
+        cards.add(p6);
+        cards.add(p6);
         cards.add(p6);
         CardList systemCard = new CardList(cardListTitle,cards);
         return systemCard;
