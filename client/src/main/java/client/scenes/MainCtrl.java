@@ -1,6 +1,5 @@
 package client.scenes;
 
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -8,9 +7,9 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-    Stage primaryStage;
+    private Stage primaryStage;
 
-    Scene login;
+    private Scene login;
 
     private AddCardCtrl addCardCt;
     private Scene addCard;
@@ -25,7 +24,8 @@ public class MainCtrl {
         return boardCt;
     }
 
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene,Pair<BoardCtrl,Parent> board,Pair<CreateBoardCtrl,Parent> createBoard) {
+    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene,Pair<BoardCtrl,Parent> board,
+                           Pair<CreateBoardCtrl,Parent> createBoard) {
         this.primaryStage = primaryStage;
 
         this.loginCtrl = scene.getKey();
