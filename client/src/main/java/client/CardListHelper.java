@@ -1,4 +1,5 @@
 package client;
+import client.scenes.ViewCardCtrl;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
@@ -34,8 +35,8 @@ public class CardListHelper {
             cell.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
                     // Double-clicked the cell, handle the event here
-                    Card selectedCard = cell.getItem();
-                    viewCard();
+                    //Card selectedCard = cell.getItem();
+                    viewCard(cell.getItem());
                 }
             });
             return cell;
@@ -81,13 +82,15 @@ public class CardListHelper {
     }
 
     @FXML
-    public void viewCard() {
+    public void viewCard(Card cell) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ViewCard.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             String title = "View Card";
-
+            ViewCardCtrl controller = loader.getController();
+            controller.setCardTitle(cell.getTitle());
+            controller.setCardDescription(cell.getDescription());
             Stage popUp = new Stage();
             popUp.setScene(scene);
             popUp.initModality(Modality.APPLICATION_MODAL);
@@ -95,6 +98,7 @@ public class CardListHelper {
             popUp.setResizable(false);
             popUp.setResizable(false);
             popUp.showAndWait();
+
         } catch(IOException ioe) {
             ioe.printStackTrace();
         }

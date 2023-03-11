@@ -55,5 +55,13 @@ public class ViewCardCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+    public void setCardTitle(String title)
+    {
+        cardTitle.setText(title);
+    }
+    public void setCardDescription(String description)
+    {
+        cardDescription.setText(description);
+    }
 
 }
