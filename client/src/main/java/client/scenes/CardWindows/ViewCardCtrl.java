@@ -40,21 +40,38 @@ public class ViewCardCtrl {
     @FXML
     private Button editButton;
 
-
+    /**
+     * Constructor with no parameters for ViewCardCtrl
+     */
     public ViewCardCtrl() {
         this.mainCtrl = new MainCtrl();
         this.server = new ServerUtils();
     }
 
+    /**
+     * Constructor for ViewCardCtrl
+     * @param server a server util
+     * @param mainCtrl a main controller
+     */
     @Inject
     public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    /**
+     * A setter for the card title shown in the View Card window
+     * @param title the card title
+     */
     public void setCardTitle(String title)
     {
         cardTitle.setText(title);
     }
+
+    /**
+     * A setter for the card description shown in the View Card window
+     * @param description the card description
+     */
     public void setCardDescription(String description)
     {
         cardDescription.setText(description);

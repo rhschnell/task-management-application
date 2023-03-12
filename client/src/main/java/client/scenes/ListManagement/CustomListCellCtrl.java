@@ -13,13 +13,17 @@ public class CustomListCellCtrl {
     private Button deleteButton;
 
     /**
-     * Sets the text of the CardCell ( Card name )
+     * Sets the title of the card shown in the overview of the list
      * @param text
      */
-    public void setText(String text) {
+    public void setCardTitle(String text) {
         cardTitle.setText(text);
     }
 
+    /**
+     * Sets the event to happen when interacting with the delete button
+     * @param handler the event to happen
+     */
     public void setOnButtonClick(EventHandler<ActionEvent> handler) {
         deleteButton.setOnAction(handler);
     }

@@ -38,7 +38,7 @@ public class CustomListCell extends ListCell<Card> {
             setText(null);
             setGraphic(null);
         } else {
-            controller.setText(item.getTitle());
+            controller.setCardTitle(item.getTitle());
             controller.setOnButtonClick(event -> {
                 System.out.println(item.getTitle());
                 // Handle button click
