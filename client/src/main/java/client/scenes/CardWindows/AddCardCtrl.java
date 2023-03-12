@@ -42,21 +42,35 @@ public class AddCardCtrl {
     @FXML
     private Button saveButton;
 
-
+    /**
+     * Constructor with no parameters for AddCardCtrl
+     */
     public AddCardCtrl() {
         this.mainCtrl = new MainCtrl();
         this.server = new ServerUtils();
     }
 
+    /**
+     * Constructor for AddCardCtrl
+     * @param server a server util
+     * @param mainCtrl a main controller
+     */
     @Inject
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     * This method cancels adding the created card to the list
+     */
     public void cancel() {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
+
+    /**
+     * This method saves the created card to the list
+     */
     public void save() {
         ((Stage)saveButton.getScene().getWindow()).close();
     }
