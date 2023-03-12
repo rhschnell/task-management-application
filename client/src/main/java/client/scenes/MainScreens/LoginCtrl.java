@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.MainScreens;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,12 +35,8 @@ public class LoginCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
-    @FXML
-    public void openBoard() {
-        mainCtrl.showBoard();
-    }
-    @FXML
-    public void createBoard() {
-        mainCtrl.createBoard();
+
+    public void showWorkspace() {
+        mainCtrl.setBoardOverview();
     }
 }

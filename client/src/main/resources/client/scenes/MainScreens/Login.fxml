@@ -47,7 +47,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="548" prefWidth="1024.0" stylesheets="@../style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LoginCtrl">
+<VBox prefHeight="548" prefWidth="1024.0" stylesheets="@../../style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.LoginCtrl">
   <children>
     <MenuBar useSystemMenuBar="true" VBox.vgrow="NEVER">
       <menus>
@@ -98,7 +98,7 @@
                            <font>
                               <Font name="Arial" size="12.0" />
                            </font></TextField>
-                        <Button layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="164.0" styleClass="green-button" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="16.0">
+                        <Button layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#showWorkspace" onMouseClicked="#showWorkspace" prefHeight="26.0" prefWidth="164.0" styleClass="green-button" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="16.0">
                            <font>
                               <Font name="Arial Bold" size="12.0" />
                            </font></Button>
@@ -124,7 +124,7 @@
             </ImageView>
             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="25.0" layoutY="14.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/Logo.png" />
+                  <Image url="@../../images/Logo.png" />
                </image>
             </ImageView>
          </children>

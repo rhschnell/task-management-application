@@ -16,6 +16,8 @@
 package client;
 
 import client.scenes.*;
+import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.LoginCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -26,8 +28,6 @@ public class MyModule implements Module {
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(LoginCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(BoardCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(CreateBoardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
     }
 }

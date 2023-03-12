@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.ListManagement;
 
-import client.CardCell;
+import client.CustomListCell;
+import client.scenes.MainCtrl;
+import client.scenes.CardWindows.ViewCardCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -25,8 +27,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -53,17 +53,16 @@ public class ListCtrl {
     public ListCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        listTitle = new Label();
         cardListView = new ListView<>();
+        listTitle = new Label();
+
     }
 
     public void addCards(CardList cardList) {
         cardListView.setCellFactory(param -> {
-            ListCell<Card> cell = new CardCell();
+            ListCell<Card> cell = new CustomListCell();
             cell.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
-                    // Double-clicked the cell, handle the event here
-                    //Card selectedCard = cell.getItem();
                     viewCard(cell.getItem());
                 }
             });
@@ -71,30 +70,28 @@ public class ListCtrl {
         });
         cardListView.getItems().addAll(cardList.getCards());
     }
+    public void setListTitle(String title) {
+        listTitle.setText(title);
+    }
 
-    @FXML
     public void viewCard(Card cell) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ViewCard.fxml"));
+            String path = "/client/scenes/CardWindows/ViewCard.fxml";
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
 
             Parent root = loader.load();
             Scene scene = new Scene(root);
-            String title = "View Card";
 
             ViewCardCtrl controller = loader.getController();
             controller.setCardTitle(cell.getTitle());
             controller.setCardDescription(cell.getDescription());
 
-            Stage popUp = new Stage();
-            popUp.setScene(scene);
-            popUp.initModality(Modality.APPLICATION_MODAL);
-            popUp.setTitle(title);
-            popUp.setResizable(false);
-            popUp.setResizable(false);
-            popUp.showAndWait();
+            String title = "View Card";
+            mainCtrl.popUp(scene, title);
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
+
 }

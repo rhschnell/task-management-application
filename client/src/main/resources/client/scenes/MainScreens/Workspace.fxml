@@ -46,7 +46,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="548.0" prefWidth="1024.0" stylesheets="@../style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardCtrl">
+<VBox prefHeight="548.0" prefWidth="1024.0" stylesheets="@../../style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.WorkspaceCtrl">
   <children>
       <MenuBar useSystemMenuBar="true">
         <menus>
@@ -100,7 +100,7 @@
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <Button fx:id="secondBoardNameButton" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: none;" text="Board 1">
+                        <Button fx:id="boardNameButton" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: none;" text="Board 1">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -118,7 +118,7 @@
                         <Insets />
                      </opaqueInsets>
                      <children>
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="177.0" styleClass="green-button" text="Create/join a board">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="177.0" styleClass="green-button" text="Create/join a board">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -126,7 +126,7 @@
                               <Insets bottom="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#escapeBoard" prefHeight="30.0" prefWidth="177.0" styleClass="green-button" text="Disconnect">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="177.0" styleClass="green-button" text="Disconnect">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>
@@ -191,7 +191,7 @@
                   </HBox>
                   <ScrollPane layoutY="45.0" prefHeight="502.0" prefWidth="822.0" style="-fx-background: F8FEFB;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
                      <content>
-                        <HBox fx:id="myField" prefHeight="450.0" prefWidth="820.0" spacing="30.0" style="-fx-background-color: F8FEFB;">
+                        <HBox fx:id="listContainer" prefHeight="450.0" prefWidth="820.0" spacing="30.0" style="-fx-background-color: F8FEFB;">
                            <padding>
                               <Insets left="20.0" right="20.0" top="20.0" />
                            </padding></HBox>

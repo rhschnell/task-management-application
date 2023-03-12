@@ -88,3 +88,10 @@
 .card:pressed {
     -fx-background-color:  derive(-light_green, -20.0%);
 }
+.list-view{
+    -fx-padding :0px;
+}
+.list-cell{
+    -fx-padding: 6px;
+    -fx-background-insets: 0px, 2px;
+}

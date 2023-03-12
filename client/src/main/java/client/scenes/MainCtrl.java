@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.LoginCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -8,59 +10,36 @@ import javafx.util.Pair;
 
 public class MainCtrl {
     private Stage primaryStage;
-
     private Scene login;
-
-    private AddCardCtrl addCardCt;
-    private Scene addCard;
-
-    private BoardCtrl boardCt;
-    private Scene board;
+    private Scene workspace;
     private LoginCtrl loginCtrl;
-    private Scene createBoard;
-    private CreateBoardCtrl createBoardCt;
+    private WorkspaceCtrl workspaceCtrl;
 
-    public BoardCtrl getBoardCt() {
-        return boardCt;
+    public void initialize(Stage primary, Pair<LoginCtrl, Parent> login,Pair<WorkspaceCtrl,Parent> workspace) {
+        this.primaryStage = primary;
+
+        this.loginCtrl = login.getKey();
+        this.login = new Scene(login.getValue());
+
+        this.workspaceCtrl = workspace.getKey();
+        this.workspace = new Scene(workspace.getValue());
+
+        primary.setMinHeight(576);
+        primary.setMinWidth(1024);
+        setLogin();
+        primary.show();
     }
 
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene,Pair<BoardCtrl,Parent> board,
-                           Pair<CreateBoardCtrl,Parent> createBoard) {
-        this.primaryStage = primaryStage;
-
-        this.loginCtrl = scene.getKey();
-        this.login = new Scene(scene.getValue());
-
-        this.boardCt = board.getKey();
-        this.board = new Scene(board.getValue());
-
-        this.createBoardCt = createBoard.getKey();
-        this.createBoard = new Scene(createBoard.getValue());
-
-        primaryStage.setMinHeight(576);
-        primaryStage.setMinWidth(1024);
-        showLogin();
-        primaryStage.show();
-    }
-
-    public void showLogin() {
+    public void setLogin() {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(login);
     }
-    public void showBoard() {
+    public void setBoardOverview() {
         primaryStage.setTitle("Talio");
-        primaryStage.setScene(board);
-    }
-    public void showCard() {
-        primaryStage.setTitle("Talio");
-        primaryStage.setScene(addCard);
-    }
-    public void createBoard() {
-        primaryStage.setTitle("Talio");
-        primaryStage.setScene(createBoard);
+        primaryStage.setScene(workspace);
     }
 
-    public static Stage popUp(Scene scene, String title) {
+    public Stage popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
         popUp.initModality(Modality.APPLICATION_MODAL);
