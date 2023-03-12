@@ -15,6 +15,12 @@ public class MainCtrl {
     private LoginCtrl loginCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
+    /**
+     * Initializes the Stages that needs to be switched within the app.
+     * @param primary represents the primary stage
+     * @param login represents the pair of login scene, and it's controller.
+     * @param workspace represents the pair of the workspace scene, and it's controller.
+     */
     public void initialize(Stage primary, Pair<LoginCtrl, Parent> login,Pair<WorkspaceCtrl,Parent> workspace) {
         this.primaryStage = primary;
 
@@ -30,15 +36,28 @@ public class MainCtrl {
         primary.show();
     }
 
+    /**
+     * Switches the actual scene to the login scene.
+     */
     public void setLogin() {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(login);
     }
-    public void setBoardOverview() {
+
+    /**
+     * Switches the actual scene to the workspace scene.
+     */
+    public void setWorkspace() {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(workspace);
     }
 
+    /**
+     * Displays a new window(popup) consisting of a scene and with a custom title.
+     * @param scene represents the scene that needs to be shown in the popup.
+     * @param title represents the popup's title.
+     * @return
+     */
     public Stage popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
