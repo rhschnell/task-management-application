@@ -10,6 +10,9 @@ public class CustomListCell extends ListCell<Card> {
     private FXMLLoader loader;
     private CustomListCellCtrl controller;
 
+    /**
+     * Creates the cell that will be displayed within list.
+     */
     public CustomListCell() {
         loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/CustomListCell.fxml"));
         try {
@@ -20,6 +23,13 @@ public class CustomListCell extends ListCell<Card> {
         }
     }
 
+    /**
+     * Updates the list of Cards with a new object.
+     * @param item The new item for the cell.
+     * @param empty whether or not this cell represents data from the list. If it
+     *        is empty, then it does not represent any domain data, but is a cell
+     *        being used to render an "empty" row.
+     */
     @Override
     protected void updateItem(Card item, boolean empty) {
         super.updateItem(item, empty);

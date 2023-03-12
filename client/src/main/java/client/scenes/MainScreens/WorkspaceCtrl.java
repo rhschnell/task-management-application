@@ -47,6 +47,13 @@ public class WorkspaceCtrl implements Initializable {
 
     @FXML
     private HBox listContainer;
+
+    /**
+     *
+     * Constructor for WorkspaceCtrl
+     * @param server a server util
+     * @param mainCtrl a main controller
+     */
     @Inject
     public WorkspaceCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -54,7 +61,8 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * TODO Calls the function addCard when the button is pressed and adds a new Card to the First List
+     * Displays the AddCard FXML into a new window (Popup).
+     * @throws IOException
      */
     @FXML
     public void addCard() throws IOException {
@@ -74,7 +82,8 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Initialize the board
+     * Initialize the board by getting a board object. Afterwords, it calls the displays
+     * the board by calling the function displayBoard which adds the lists to the Vbox;
      * @param location
      * The location used to resolve relative paths for the root object, or
      * {@code null} if the location is not known.
@@ -89,14 +98,15 @@ public class WorkspaceCtrl implements Initializable {
         Board systemBoard = test.createBoardObject("My First Board");
         boardName.setText(systemBoard.getTitle());
         boardNameButton.setText(systemBoard.getTitle());
-        createBoard(systemBoard,listContainer);
+        displayBoard(systemBoard,listContainer);
     }
 
     /**
-     * TODO Get the information from the database but for testing reasons created
-     * @param board
+     * Adds children (Lists) to the HBOX resulting in the creation of the board.
+     * @param board The board that needs to be displayed.
+     * @param resultedBoard the Hbox in which the board needs to be displyed.
      */
-    public void createBoard(Board board,HBox resultedBoard)
+    public void displayBoard(Board board, HBox resultedBoard)
     {
         for(int i = 0; i < board.getCardLists().size(); i++)
         {
