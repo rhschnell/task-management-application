@@ -13,52 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.CardWindows;
 
-import com.google.inject.Inject;
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 
-import java.io.IOException;
-
-public class AddCardCtrl {
+public class ViewCardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     @FXML
-    private TextField cardTitle;
+    private Label cardTitle;
 
     @FXML
-    private TextArea cardDescription;
+    private Text cardDescription;
 
     @FXML
-    private Button cancelButton;
+    private Button deleteButton;
 
     @FXML
-    private Button saveButton;
+    private Button editButton;
 
 
-    public AddCardCtrl() {
+    public ViewCardCtrl() {
         this.mainCtrl = new MainCtrl();
         this.server = new ServerUtils();
     }
 
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
-
-    public void cancel() throws IOException {
-        ((Stage)cancelButton.getScene().getWindow()).close();
+    public void setCardTitle(String title)
+    {
+        cardTitle.setText(title);
     }
-    public void save() throws IOException {
-        ((Stage)saveButton.getScene().getWindow()).close();
+    public void setCardDescription(String description)
+    {
+        cardDescription.setText(description);
     }
 
 }

@@ -46,7 +46,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
+<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.CreateBoardCtrl">
   <children>
     <MenuBar useSystemMenuBar="true" VBox.vgrow="NEVER">
       <menus>
@@ -109,7 +109,7 @@
              </Label>
              <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                  <image>
-                     <Image url="@../../client/images/Logo.png" />
+                     <Image url="@../../images/Logo.png" />
                  </image>
              </ImageView>
          </children>

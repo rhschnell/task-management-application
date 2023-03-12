@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.MainScreens;
+import client.TestingClass;
+import client.scenes.ListManagement.ListCtrl;
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,10 +32,9 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class BoardCtrl implements Initializable {
+public class WorkspaceCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -43,12 +43,12 @@ public class BoardCtrl implements Initializable {
     private Label boardName;
 
     @FXML
-    private Button secondBoardNameButton;
+    private Button boardNameButton;
 
     @FXML
-    private HBox myField;
+    private HBox listContainer;
     @Inject
-    public BoardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public WorkspaceCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -58,7 +58,7 @@ public class BoardCtrl implements Initializable {
      */
     @FXML
     public void addCard() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/AddCard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/CardWindows/AddCard.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         String title = "Create Card";
@@ -69,8 +69,8 @@ public class BoardCtrl implements Initializable {
      * Return's to the main screen
      */
     @FXML
-    public void escapeBoard() {
-        mainCtrl.showLogin();
+    public void disconnect() {
+        mainCtrl.setLogin();
     }
 
     /**
@@ -85,66 +85,31 @@ public class BoardCtrl implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources)
     {
-        Board systemBoard = testWithoutDb("First Board");
+        TestingClass test = new TestingClass();
+        Board systemBoard = test.createBoardObject("My First Board");
         boardName.setText(systemBoard.getTitle());
-        secondBoardNameButton.setText(systemBoard.getTitle());
-        createBoard(systemBoard);
+        boardNameButton.setText(systemBoard.getTitle());
+        createBoard(systemBoard,listContainer);
     }
 
     /**
      * TODO Get the information from the database but for testing reasons created
-     * @param myBoard
+     * @param board
      */
-    public void createBoard(Board myBoard)
+    public void createBoard(Board board,HBox resultedBoard)
     {
-        for(int i = 0; i < myBoard.getCardLists().size(); i++)
+        for(int i = 0; i < board.getCardLists().size(); i++)
         {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/List.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));
             try {
                 VBox list = loader.load();
                 ListCtrl ctrl = loader.getController();
-                ctrl.addCards(myBoard.getCardLists().get(i));
-                myField.getChildren().add(list);
-
+                ctrl.addCards(board.getCardLists().get(i));
+                ctrl.setListTitle(board.getCardLists().get(i).getListTitle());
+                resultedBoard.getChildren().add(list);
             } catch(IOException ioe) {
                 ioe.printStackTrace();
             }
         }
     }
-    public Board testWithoutDb(String boardName)
-    {
-        ArrayList<CardList> systemCardList= new ArrayList<>();
-        systemCardList.add(testWithoutDatabase("TODO"));
-        systemCardList.add(testWithoutDatabase("DONE"));
-        systemCardList.add(testWithoutDatabase("TRASH"));
-        Board myBoard = new Board(boardName, "no-key", systemCardList);
-        return myBoard;
-    }
-    public CardList testWithoutDatabase(String cardListTitle)
-    {
-        Card p1 = new Card("Cleaning","To clean the floor","white",new ArrayList<>(),new ArrayList<>());
-        Card p2 = new Card("Working","To work for the company","gray",new ArrayList<>(),new ArrayList<>());
-        Card p3 = new Card("Washing","De wash the clothes","white",new ArrayList<>(),new ArrayList<>());
-        Card p4 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
-        Card p5 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
-        Card p6 = new Card("Dishes","Wash the dishes","blue",new ArrayList<>(),new ArrayList<>());
-        ArrayList<Card> cards = new ArrayList<>();
-        cards.add(p1);
-        cards.add(p2);
-        cards.add(p3);
-        cards.add(p4);
-        cards.add(p5);
-        cards.add(p6);
-        cards.add(p6);
-        cards.add(p6);
-        cards.add(p6);
-        CardList systemCard = new CardList(cardListTitle,cards);
-        return systemCard;
-    }
-
-    public void refresh()
-    {
-        myField.getChildren().remove(0);
-    }
-
 }
