@@ -3,10 +3,14 @@ package commons;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card implements Serializable {
     private String title;
     private String description;
@@ -29,15 +33,21 @@ public class Card implements Serializable {
      * @param newTag New tag
      */
     public void addTag(Tag newTag) {
+        if (this.tags == null) {
+            this.tags = new ArrayList<>();
+        }
         this.tags.add(newTag);
     }
 
     /**
-     * Add new sub task to the list
+     * Add new subtask to the list
      *
-     * @param newTask New sub task
+     * @param newTask New subtask
      */
     public void addSubTask(Task newTask) {
+        if (this.subTasks == null) {
+            this.subTasks = new ArrayList<>();
+        }
         this.subTasks.add(newTask);
     }
 
@@ -55,18 +65,24 @@ public class Card implements Serializable {
     /**
      * Delete tag by name
      *
-     * @param tag Name of the tag to be deleted
+     * @param tagName Name of the tag to be deleted
      */
-    public void deleteTag(String tag) {
-        if (this.tags.contains(tag)) {
-            this.tags.remove(tag);
+    public void deleteTag(String tagName) {
+        // This approach avoids concurrent modifications
+        Tag toRemove = null;
+        for (Tag tag : tags) {
+            if (tag.getName().equals(tagName)) {
+                toRemove = tag;
+                break;
+            }
         }
+        tags.remove(toRemove);
     }
 
     /**
-     * Delete sub task by index
+     * Delete subtask by index
      *
-     * @param index Index of the sub task to be deleted
+     * @param index Index of the subtask to be deleted
      */
     public void deleteSubTask(int index) {
         if (this.subTasks.size() > index) {
@@ -75,48 +91,11 @@ public class Card implements Serializable {
     }
 
     /**
-     * Delete sub task by object
+     * Delete subtask by object
      *
-     * @param task Object to be deleted from list
+     * @param task Task to be deleted from list
      */
     public void deleteSubTask(Task task) {
-        if (this.subTasks.contains(task)) {
-            this.subTasks.remove(task);
-        }
-    }
-    public String getTitle()
-    {
-        return this.title;
-    }
-    public String getDescription()
-    {
-        return this.description;
-    }
-
-    /**
-     *
-     * @param o
-     * @return if the Object is of type Card end equal to the Card
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Card card = (Card) o;
-        //Line was too long for checkstyle
-        Boolean first;
-        Boolean second;
-        first =id==card.id && Objects.equals(title, card.title) && Objects.equals(description, card.description);
-        second = Objects.equals(backgroundColour, card.backgroundColour) && Objects.equals(tags, card.tags) ;
-        return first && second && Objects.equals(subTasks, card.subTasks);
-    }
-
-    /**
-     * Return the hashcode of the object
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, description, backgroundColour, tags, subTasks, id);
+        this.subTasks.remove(task);
     }
 }
