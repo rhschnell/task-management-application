@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.MainScreens;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,21 +26,36 @@ public class LoginCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    /**
+     * Constructor for LoginCtrl
+     * @param server a server util
+     * @param mainCtrl a main controller
+     */
     @Inject
     public LoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
-    @FXML
-    public void openBoard() {
-        mainCtrl.showBoard();
-    }
-    @FXML
-    public void createBoard() {
-        mainCtrl.createBoard();
+
+    /**
+     * When called, it switches back to the board overview, disconnecting the user from the workspace.
+     */
+    public void showWorkspace() {
+        mainCtrl.setWorkspace();
     }
 }
