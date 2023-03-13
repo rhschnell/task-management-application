@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes;
+package client.scenes.CardWindows;
 
+import client.scenes.MainCtrl;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
-import java.io.IOException;
 
 public class AddCardCtrl {
 
@@ -32,21 +34,45 @@ public class AddCardCtrl {
     private TextField cardTitle;
 
     @FXML
-    private TextField cardOption;
-
-    @FXML
     private TextArea cardDescription;
 
+    @FXML
+    private Button cancelButton;
+
+    @FXML
+    private Button saveButton;
+
+    /**
+     * Constructor with no parameters for AddCardCtrl
+     */
+    public AddCardCtrl() {
+        this.mainCtrl = new MainCtrl();
+        this.server = new ServerUtils();
+    }
+
+    /**
+     * Constructor for AddCardCtrl
+     * @param server a server util
+     * @param mainCtrl a main controller
+     */
     @Inject
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
-    public void cancel() throws IOException {
-       mainCtrl.showBoard();
+    /**
+     * This method cancels adding the created card to the list
+     */
+    public void cancel() {
+        ((Stage)cancelButton.getScene().getWindow()).close();
     }
-    public void ok() throws IOException {
-        mainCtrl.showBoard();
+
+    /**
+     * This method saves the created card to the list
+     */
+    public void save() {
+        ((Stage)saveButton.getScene().getWindow()).close();
     }
+
 }

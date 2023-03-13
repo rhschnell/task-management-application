@@ -1,0 +1,97 @@
+.root{
+    -fx-font-family: "Arial";
+    -fx-text-background-color: #1A1A1A;
+    -light_green: #DEEDE7;
+    -light_blue: #73BFF9;
+    -light_red: #F19B91;
+    -light-gray: #D3D3D3;
+    -gray: #929292;
+    -green: #64B594;
+}
+
+.blue-button {
+ -fx-background-color: -light_blue;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.blue-button:hover {
+ -fx-background-color: derive(-light_blue, -10%);
+}
+.blue-button:pressed {
+ -fx-background-color: derive(-light_blue, -20%);
+}
+
+.red-button {
+ -fx-background-color: #F19B91;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.red-button:hover {
+ -fx-background-color: derive(-light_red, -10%);
+}
+.red-button:pressed {
+ -fx-background-color: derive(-light_red, -20%);
+}
+
+.light-gray-button {
+ -fx-background-color: -light_gray;
+ -fx-background-radius: 10;
+}
+.light-gray-button:hover {
+ -fx-background-color: derive(-light_gray, -10%);
+}
+.light-gray-button:pressed {
+ -fx-background-color: derive(-light_gray, -10%);
+}
+
+.gray-button {
+ -fx-background-color:  -gray;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.gray-button:hover {
+ -fx-background-color: derive(-gray, -10%);
+}
+.gray-button:pressed {
+ -fx-background-color: derive(-gray, -20%);
+}
+
+.green-button {
+ -fx-background-color:  -green;
+ -fx-text-fill: #FFFFFF;
+ -fx-background-radius: 10;
+}
+.green-button:hover {
+ -fx-background-color: derive(-green, -10%);
+}
+.green-button:pressed {
+ -fx-background-color: derive(-green, -20%);
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+}
+.list-view {
+    -fx-background-color: transparent;
+}
+
+.card {
+    -fx-background-color:  -light_green;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);
+}
+
+.card:hover {
+    -fx-background-color:  derive(-light_green, -10.0%);
+}
+
+.card:pressed {
+    -fx-background-color:  derive(-light_green, -20.0%);
+}
+.list-view{
+    -fx-padding :0px;
+}
+.list-cell{
+    -fx-padding: 6px;
+    -fx-background-insets: 0px, 2px;
+}

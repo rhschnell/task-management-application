@@ -42,11 +42,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardCtrl">
+<VBox prefHeight="548" prefWidth="1024.0" stylesheets="@../../style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.LoginCtrl">
   <children>
     <MenuBar useSystemMenuBar="true" VBox.vgrow="NEVER">
       <menus>
@@ -87,31 +88,45 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-image: url( &quot;@../../client/images/Background.jpeg&quot;);" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" prefHeight="548.5" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane layoutX="423.0" layoutY="159.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
+            <HBox alignment="CENTER" layoutX="-77.0" layoutY="203.0" prefHeight="143.0" prefWidth="759.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField layoutX="37.0" layoutY="73.0" prefHeight="26.0" prefWidth="126.0" promptText="Key" />
-                  <Button layoutX="38.0" layoutY="112.0" mnemonicParsing="false" onAction="#openBoard" onMouseClicked="#openBoard" prefHeight="26.0" prefWidth="124.0" text="Create Board" textAlignment="CENTER" />
-                  <Button layoutX="31.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#joinBoard" text="Open a board  instead" textAlignment="CENTER" />
-                  <Label layoutX="59.0" layoutY="17.0" text="Welcome!" textAlignment="CENTER">
-                     <font>
-                        <Font name="Helvetica Neue" size="18.0" />
-                     </font>
-                  </Label>
+                  <AnchorPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="198.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
+                     <children>
+                        <TextField layoutX="17.0" layoutY="57.0" prefHeight="26.0" prefWidth="164.0" promptText="Server address" style="-fx-background-radius: 10;" AnchorPane.bottomAnchor="56.0">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font></TextField>
+                        <Button layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#showWorkspace" onMouseClicked="#showWorkspace" prefHeight="26.0" prefWidth="164.0" styleClass="green-button" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="16.0">
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font></Button>
+                        <Label layoutX="55.0" layoutY="13.0" text="Welcome!" textAlignment="CENTER" AnchorPane.topAnchor="16.0">
+                           <font>
+                              <Font name="Arial Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
                </children>
-            </AnchorPane>
-             <Line endX="10.19305419921875" endY="20.5" layoutX="150.0" layoutY="18.0" startX="10.193061828613281" startY="3.814697265625E-6" strokeWidth="2.0" />
-             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="180.0" layoutY="18.0" style="-fx-font-weight: bold;" text="Your personal task list organizer" textAlignment="CENTER">
-                 <font>
-                     <Font name="Helvetica Neue" size="18.0" />
-                 </font>
-             </Label>
-             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                 <image>
-                     <Image url="@../../client/images/Logo.png" />
-                 </image>
-             </ImageView>
+            </HBox>
+            <Line endX="10.19305419921875" endY="20.5" layoutX="160.0" layoutY="18.0" startX="10.193061828613281" startY="3.814697265625E-6" stroke="#1a1a1a" strokeWidth="2.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="190.0" layoutY="18.0" style="-fx-font-weight: bold;" text="Your personal task list organizer" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial" size="18.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+            
+               </image>
+            </ImageView>
+            <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="25.0" layoutY="14.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/Logo.png" />
+               </image>
+            </ImageView>
          </children>
     </AnchorPane>
   </children>
