@@ -18,12 +18,12 @@ package client;
 import static com.google.inject.Guice.createInjector;
 
 import client.scenes.*;
+import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.LoginCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class Main extends Application {
 
@@ -34,14 +34,18 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
     @Override
-    public void start(Stage primaryStage) throws IOException {
-
-        var login = FXML.load(LoginCtrl.class, "client", "scenes", "Login.fxml");
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-        var board = FXML.load(BoardCtrl.class, "client", "scenes", "BoardOverview.fxml");
-        var createBoard = FXML.load(CreateBoardCtrl.class, "client", "scenes", "CreateBoard.fxml");
+    public void start(Stage primaryStage) {
+        var login = FXML.load(LoginCtrl.class, "client", "scenes", "MainScreens", "Login.fxml");
+        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login,addCard,board,createBoard);
+        mainCtrl.initialize(primaryStage, login, workspace);
     }
 }

@@ -5,5 +5,5 @@ dependencies {
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4'
 
 	implementation 'org.projectlombok:lombok:1.18.22'
-	annotationProcessor 'org.projectlombok:lombok:1.18.22'com
+	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }

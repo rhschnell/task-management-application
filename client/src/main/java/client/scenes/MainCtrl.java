@@ -1,57 +1,73 @@
 package client.scenes;
 
+import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.LoginCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-    Stage primaryStage;
-
-    Scene login;
-
-    private AddCardCtrl addCardCt;
-    private Scene addCard;
-    private BoardCtrl boardCt;
-    private Scene board;
+    private Stage primaryStage;
+    private Scene login;
+    private Scene workspace;
     private LoginCtrl loginCtrl;
-    private Scene createBoard;
-    private CreateBoardCtrl createBoardCt;
+    private WorkspaceCtrl workspaceCtrl;
 
-    public void initialize(Stage primaryStage, Pair<LoginCtrl, Parent> scene, Pair<AddCardCtrl,Parent> addCard,Pair<BoardCtrl,Parent> board,Pair<CreateBoardCtrl,Parent> createBoard) {
-        this.primaryStage = primaryStage;
+    /**
+     * Initializes the Stages that needs to be switched within the app.
+     * @param primary represents the primary stage
+     * @param login represents the pair of login scene, and it's controller.
+     * @param workspace represents the pair of the workspace scene, and it's controller.
+     */
+    public void initialize(Stage primary, Pair<LoginCtrl, Parent> login,Pair<WorkspaceCtrl,Parent> workspace) {
+        this.primaryStage = primary;
 
-        this.loginCtrl = scene.getKey();
-        this.login = new Scene(scene.getValue());
+        this.loginCtrl = login.getKey();
+        this.login = new Scene(login.getValue());
 
-        this.addCardCt = addCard.getKey();
-        this.addCard = new Scene(addCard.getValue());
+        this.workspaceCtrl = workspace.getKey();
+        this.workspace = new Scene(workspace.getValue());
 
-        this.boardCt = board.getKey();
-        this.board = new Scene(board.getValue());
-
-        this.createBoardCt = createBoard.getKey();
-        this.createBoard = new Scene(createBoard.getValue());
-
-        showLogin();
-        primaryStage.show();
+        primary.setMinHeight(576);
+        primary.setMinWidth(1024);
+        setLogin();
+        primary.show();
     }
 
-    public void showLogin() {
+    /**
+     * Switches the actual scene to the login scene.
+     */
+    public void setLogin() {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(login);
     }
-    public void showBoard() {
+
+    /**
+     * Switches the actual scene to the workspace scene.
+     */
+    public void setWorkspace() {
         primaryStage.setTitle("Talio");
-        primaryStage.setScene(board);
+        primaryStage.setScene(workspace);
     }
-    public void showCard() {
-        primaryStage.setTitle("Talio");
-        primaryStage.setScene(addCard);
-    }
-    public void createBoard() {
-        primaryStage.setTitle("Talio");
-        primaryStage.setScene(createBoard);
+
+    /**
+     * Displays a new window(popup) consisting of a scene and with a custom title.
+     * @param scene represents the scene that needs to be shown in the popup.
+     * @param title represents the popup's title.
+     * @return
+     */
+    public Stage popUp(Scene scene, String title) {
+        Stage popUp = new Stage();
+        popUp.setScene(scene);
+        popUp.initModality(Modality.APPLICATION_MODAL);
+        popUp.setTitle(title);
+        popUp.setResizable(false);
+        popUp.setResizable(false);
+        popUp.showAndWait();
+
+        return popUp;
     }
 
 }
