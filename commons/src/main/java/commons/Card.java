@@ -1,11 +1,18 @@
 package commons;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card implements Serializable {
     private String title;
     private String description;
@@ -14,7 +21,7 @@ public class Card implements Serializable {
     @ManyToMany
     private List<Tag> tags;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Task> subTasks;
 
     @Id
@@ -22,28 +29,18 @@ public class Card implements Serializable {
     private long id;
 
     /**
-     * Basic constructor for Card class, does not require any parameters
+     * Custom constructor for all parameters without ID (auto-generated)
+     * Creates a new Card
+     *
+     * @param title Title of the card
+     * @param description Description of the card
+     * @param backgroundColour Background colour of the card
+     * @param tags Tags associated with this card
+     * @param subTasks Subtasks for this card
      */
-    public Card()
-    {
-        title = "New Card";
-        description = "Empty description";
-        backgroundColour = "White"; // we can change the default later
-        tags = new ArrayList<>();
-        subTasks = new ArrayList<>();
-    }
-
-    /**
-     * Constructor for Card class with parameters
-     * @param title Title parameter
-     * @param description Description of the task
-     * @param backgroundColour Background colour of the Card
-     * @param tags Tags assigned to the Card
-     * @param subTasks ArrayList of subtasks to give more context about a card
-     */
-    public Card(String title, String description, String backgroundColour, List<Tag> tags, List<Task> subTasks)
-    {
-        this.title = title;
+    public Card(String title, String description, String backgroundColour, List<Tag> tags,
+                List<Task> subTasks){
+        this.title =title;
         this.description = description;
         this.backgroundColour = backgroundColour;
         this.tags = tags;
@@ -51,148 +48,74 @@ public class Card implements Serializable {
     }
 
     /**
-     * Setter for title parameter
-     * @param title New title
-     */
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
-    /**
-     * Setter for description parameter
-     * @param description New description
-     */
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    /**
-     * Setter for background colour
-     * @param backgroundColour New background colour
-     */
-    public void setBackgroundColour(String backgroundColour)
-    {
-        this.backgroundColour = backgroundColour;
-    }
-
-    /**
-     * Setter for tags ArrayList
-     * @param tags New tags list
-     */
-    public void setTags(ArrayList<Tag> tags)
-    {
-        this.tags = tags;
-    }
-
-    /**
-     * Setter for tasks list
-     * @param tasks New tasks list
-     */
-    public void setSubTasks(ArrayList<Task> tasks)
-    {
-        this.subTasks = tasks;
-    }
-
-    /**
      * Add new tag to tag list
+     *
      * @param newTag New tag
      */
-    public void addTags(Tag newTag)
-    {
+    public void addTag(Tag newTag) {
+        if (this.tags == null) {
+            this.tags = new ArrayList<>();
+        }
         this.tags.add(newTag);
     }
 
     /**
-     * Add new sub task to the list
-     * @param newTask New sub task
+     * Add new subtask to the list
+     *
+     * @param newTask New subtask
      */
-    public void addSubTask(Task newTask)
-    {
+    public void addSubTask(Task newTask) {
+        if (this.subTasks == null) {
+            this.subTasks = new ArrayList<>();
+        }
         this.subTasks.add(newTask);
     }
 
     /**
      * Delete tag by index
+     *
      * @param index Index of the tag to be deleted
      */
-    public void deleteTag(int index)
-    {
-        if(this.tags.size() > index)
-        {
+    public void deleteTag(int index) {
+        if (this.tags.size() > index) {
             this.tags.remove(index);
         }
     }
 
     /**
      * Delete tag by name
-     * @param tag Name of the tag to be deleted
+     *
+     * @param tagName Name of the tag to be deleted
      */
-    public void deleteTag(String tag)
-    {
-        if(this.tags.contains(tag))
-        {
-            this.tags.remove(tag);
+    public void deleteTag(String tagName) {
+        // This approach avoids concurrent modifications
+        Tag toRemove = null;
+        for (Tag tag : tags) {
+            if (tag.getName().equals(tagName)) {
+                toRemove = tag;
+                break;
+            }
         }
+        tags.remove(toRemove);
     }
 
     /**
-     * Delete sub task by index
-     * @param index Index of the sub task to be deleted
+     * Delete subtask by index
+     *
+     * @param index Index of the subtask to be deleted
      */
-    public void deleteSubTask(int index)
-    {
-        if(this.subTasks.size() > index)
-        {
+    public void deleteSubTask(int index) {
+        if (this.subTasks.size() > index) {
             this.subTasks.remove(index);
         }
     }
 
     /**
-     * Delete sub task by object
-     * @param task Object to be deleted from list
-     */
-    public void deleteSubTask(Task task)
-    {
-        if(this.subTasks.contains(task))
-        {
-            this.subTasks.remove(task);
-        }
-    }
-    public String getTitle()
-    {
-        return this.title;
-    }
-    public String getDescription()
-    {
-        return this.description;
-    }
-
-    /**
+     * Delete subtask by object
      *
-     * @param o
-     * @return if the Object is of type Card end equal to the Card
+     * @param task Task to be deleted from list
      */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Card card = (Card) o;
-        //Line was too long for checkstyle
-        Boolean first;
-        Boolean second;
-        first =id==card.id && Objects.equals(title, card.title) && Objects.equals(description, card.description);
-        second = Objects.equals(backgroundColour, card.backgroundColour) && Objects.equals(tags, card.tags) ;
-        return first && second && Objects.equals(subTasks, card.subTasks);
-    }
-
-    /**
-     * Return the hashcode of the object
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, description, backgroundColour, tags, subTasks, id);
+    public void deleteSubTask(Task task) {
+        this.subTasks.remove(task);
     }
 }
