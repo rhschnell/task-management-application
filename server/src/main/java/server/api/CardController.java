@@ -60,7 +60,7 @@ public class CardController {
         if (id < 0 || !cards.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(cards.findById(id).get());
+        return ResponseEntity.ok(cards.getById(id));
     }
 
 

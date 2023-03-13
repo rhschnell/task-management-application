@@ -15,8 +15,16 @@ import java.util.function.Function;
 
 public class TestCardRepository implements CardRepository {
 
-    public final List<Card> cards = new ArrayList<>();
-    public final List<String> calledMethods = new ArrayList<>();
+    private final List<Card> cards = new ArrayList<>();
+    private final List<String> calledMethods = new ArrayList<>();
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public List<String> getCalledMethods() {
+        return calledMethods;
+    }
 
     private void call(String name) {
         calledMethods.add(name);
@@ -196,7 +204,8 @@ public class TestCardRepository implements CardRepository {
     }
 
     @Override
-    public <S extends Card, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Card, R> R findBy(Example<S> example,
+                                        Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         // TODO Auto-generated method stub
         return null;
     }

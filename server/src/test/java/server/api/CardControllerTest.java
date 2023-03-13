@@ -27,7 +27,7 @@ class CardControllerTest {
                 null, null, 3);
 
         ResponseEntity<Card> added = sut.add(toAdd);
-        assert repo.calledMethods.contains("save");
+        assert repo.getCalledMethods().contains("save");
         assertEquals(toAdd, added.getBody());
     }
 
@@ -45,7 +45,7 @@ class CardControllerTest {
         sut.add(card3);
 
         List<Card> actual = sut.findAll();
-        assert repo.calledMethods.contains("findAll");
+        assert repo.getCalledMethods().contains("findAll");
 
         List<Card> expected = List.of(card1, card2, card3);
         assertEquals(expected, actual);
@@ -59,11 +59,8 @@ class CardControllerTest {
         long assignedId = saved.getId();
 
         Card foundById = sut.getById(assignedId).getBody();
-        assert repo.calledMethods.contains("findById");
+        assert repo.getCalledMethods().contains("getById");
         assertEquals(card1, foundById);
-
-
-
     }
 
     @Test
