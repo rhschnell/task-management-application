@@ -1,11 +1,18 @@
 package commons;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
 
     @Id
@@ -13,15 +20,6 @@ public class Task {
     private long id;
     private boolean status;
     private String title;
-
-    /**
-     * Basic constructor for Task class
-     */
-    public Task()
-    {
-        this.status = false;
-        this.title = "";
-    }
 
     /**
      * Constructor for Task class with parameters
@@ -34,41 +32,4 @@ public class Task {
         this.status = status;
         this.title = title;
     }
-
-    /**
-     * Setter for the status
-     * @param status Updated status
-     */
-    public void setStatus(boolean status)
-    {
-        this.status = status;
-    }
-
-    /**
-     * Setter for the title
-     * @param title New title
-     */
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
-    /**
-     * Getter for the status
-     * @return Status of the task
-     */
-    public boolean getStatus()
-    {
-        return this.status;
-    }
-
-    /**
-     * Getter for the title
-     * @return Title of the task
-     */
-    public String getTitle()
-    {
-        return this.title;
-    }
-
 }

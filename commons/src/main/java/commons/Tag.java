@@ -1,5 +1,9 @@
 package commons;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +11,9 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tag {
     private String name;
 
@@ -18,12 +25,6 @@ public class Tag {
     private long id;
 
     /**
-     * Default constructor
-     */
-    public Tag() {
-    }
-
-    /**
      * Creates a new tag
      *
      * @param name The name of the tag
@@ -32,43 +33,6 @@ public class Tag {
 
     public Tag(String name, String color) {
         this.name = name;
-        this.color = color;
-    }
-
-
-    /**
-     * Returns the name of the tag
-     *
-     * @return The tag's name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the name of the tag
-     *
-     * @param name The new tag name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Gets the color of this tag
-     *
-     * @return This tag's color
-     */
-    public String getColor() {
-        return color;
-    }
-
-    /**
-     * Sets the color of this tag
-     *
-     * @param color The new color for this tag
-     */
-    public void setColor(String color) {
         this.color = color;
     }
 
