@@ -29,7 +29,7 @@ public class Task {
      */
     public Task(boolean status, String title)
     {
-        this.status = status;
+        this.completed = status;
         this.title = title;
     }
 }
