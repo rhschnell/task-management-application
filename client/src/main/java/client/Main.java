@@ -44,8 +44,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         var login = FXML.load(LoginCtrl.class, "client", "scenes", "MainScreens", "Login.fxml");
-        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
+//        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login, workspace);
+        mainCtrl.initialize(primaryStage, login, FXML);
     }
 }

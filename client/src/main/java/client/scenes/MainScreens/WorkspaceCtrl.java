@@ -17,7 +17,8 @@ package client.scenes.MainScreens;
 import client.TestingClass;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
-import client.utils.ServerUtils;
+import client.utils.BoardUtils;
+import client.utils.ControllerCommunicater;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
@@ -32,11 +33,12 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class WorkspaceCtrl implements Initializable {
 
-    private final ServerUtils server;
+    private final BoardUtils server;
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -55,7 +57,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param mainCtrl a main controller
      */
     @Inject
-    public WorkspaceCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -95,7 +97,22 @@ public class WorkspaceCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources)
     {
         TestingClass test = new TestingClass();
-        Board systemBoard = test.createBoardObject("My First Board");
+
+        // Load a board from the server
+        String targetKey = ControllerCommunicater.getKey();
+        System.out.println(targetKey);
+        List<Board> allBoards = server.getBoards();
+        Board systemBoard = null;
+        for (Board b : allBoards) {
+            if (b.getKey().equals(targetKey)) {
+                systemBoard = b;
+            }
+        }
+        if (systemBoard == null) {
+            // This should later be replaced with a text on the connection screen
+            systemBoard = test.createBoardObject("Failure");
+        }
+
         boardName.setText(systemBoard.getTitle());
         boardNameButton.setText(systemBoard.getTitle());
         displayBoard(systemBoard,listContainer);
