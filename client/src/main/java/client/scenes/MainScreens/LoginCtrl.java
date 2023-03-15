@@ -18,12 +18,18 @@ package client.scenes.MainScreens;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
+
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginCtrl implements Initializable {
 
+    @FXML
+    private TextField serverAddress;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -50,6 +56,27 @@ public class LoginCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+
+    /**
+     * Middleware that tries to connect to the user specified server. If successful, redirects
+     * the user to the workspace. Otherwise, shows an error message.
+     */
+    public void connect(){
+        server.setServer(serverAddress.getText());
+        if (server.pingServer()){
+            showWorkspace();
+        } else {
+            showErrorMessage();
+        }
+    }
+
+    /**
+     * Shows a message to the user indicating that the connection to the server could not be made.
+     */
+    private void showErrorMessage() {
+        System.out.println("Could not connect to the server");
     }
 
     /**

@@ -94,11 +94,13 @@
                <children>
                   <AnchorPane maxHeight="-Infinity" prefHeight="140.0" prefWidth="198.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
                      <children>
-                        <TextField layoutX="17.0" layoutY="57.0" prefHeight="26.0" prefWidth="164.0" promptText="Server address" style="-fx-background-radius: 10;" AnchorPane.bottomAnchor="56.0">
+                        <TextField fx:id="serverAddress" layoutX="17.0" layoutY="57.0" prefHeight="26.0" prefWidth="164.0" promptText="Server address" style="-fx-background-radius: 10;" AnchorPane.bottomAnchor="56.0">
                            <font>
                               <Font name="Arial" size="12.0" />
                            </font></TextField>
-                        <Button layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#showWorkspace" onMouseClicked="#showWorkspace" prefHeight="26.0" prefWidth="164.0" styleClass="green-button" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="16.0">
+                        <Button layoutX="17.0" layoutY="101.0" mnemonicParsing="false"
+                                onAction="#connect" onMouseClicked="#connect" prefHeight="26.0"
+                                prefWidth="164.0" styleClass="green-button" text="Connect" textAlignment="CENTER" AnchorPane.bottomAnchor="16.0">
                            <font>
                               <Font name="Arial Bold" size="12.0" />
                            </font></Button>
@@ -119,7 +121,7 @@
             </Label>
             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
-            
+
                </image>
             </ImageView>
             <ImageView fitHeight="28.0" fitWidth="150.0" layoutX="25.0" layoutY="14.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
