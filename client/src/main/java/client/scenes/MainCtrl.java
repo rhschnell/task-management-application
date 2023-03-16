@@ -22,7 +22,7 @@ public class MainCtrl {
      * Initializes the Stages that needs to be switched within the app.
      * @param primary represents the primary stage
      * @param login represents the pair of login scene, and it's controller.
-     * @param FXML used for reinitializing the workspace
+     * @param myFXML used for reinitializing the workspace
      */
     public void initialize(Stage primary,
                            Pair<LoginCtrl,Parent> login,
