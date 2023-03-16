@@ -72,7 +72,7 @@ public class Board {
      * Method to get the amount of card-lists on the board
      * @return The amount of card-lists that are on the board
      */
-    public int getSize(){
+    public int getAmountList(){
         return this.cardLists.size();
     }
 
