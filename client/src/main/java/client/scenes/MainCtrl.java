@@ -3,11 +3,8 @@ package client.scenes;
 import client.MyFXML;
 import client.scenes.MainScreens.WorkspaceCtrl;
 import client.scenes.MainScreens.LoginCtrl;
-import client.utils.ControllerCommunicater;
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -17,7 +14,7 @@ public class MainCtrl {
     private Stage primaryStage;
     private Scene login;
     private Scene workspace;
-    private MyFXML FXML;
+    private MyFXML myFXML;
     private LoginCtrl loginCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
@@ -29,13 +26,13 @@ public class MainCtrl {
      */
     public void initialize(Stage primary,
                            Pair<LoginCtrl,Parent> login,
-                           MyFXML FXML) {
+                           MyFXML myFXML) {
         this.primaryStage = primary;
 
         this.loginCtrl = login.getKey();
         this.login = new Scene(login.getValue());
 
-        this.FXML = FXML;
+        this.myFXML = myFXML;
 
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
@@ -56,7 +53,7 @@ public class MainCtrl {
      */
     public void setWorkspace() {
         primaryStage.setTitle("Talio");
-        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
+        var workspace = myFXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
         primaryStage.setScene(new Scene(workspace.getValue()));
     }
 
