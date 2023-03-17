@@ -100,7 +100,7 @@ public class WorkspaceCtrl implements Initializable {
 
         // Load a board from the server
         String targetKey = ControllerCommunicater.getKey();
-        System.out.println(targetKey);
+//        System.out.println(targetKey);
         List<Board> allBoards = server.getBoards();
         Board systemBoard = null;
         for (Board b : allBoards) {

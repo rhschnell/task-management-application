@@ -31,6 +31,8 @@ public class LoginCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
+    private TextField serverAddress;
+    @FXML
     private TextField keyField;
 
     /**
@@ -64,7 +66,7 @@ public class LoginCtrl implements Initializable {
      * the user to the workspace. Otherwise, shows an error message.
      */
     public void connect(){
-        server.setServer(keyField.getText());
+        server.setServer(serverAddress.getText());
         if (server.pingServer()){
             showWorkspace();
         } else {
