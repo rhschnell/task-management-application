@@ -20,7 +20,7 @@ public class BoardUtils {
     public Board addBoard(Board board)
     {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(ServerUtils.SERVER).path(Route.BOARD)
+                .target(ServerUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -33,7 +33,7 @@ public class BoardUtils {
     public List<Board> getBoards()
     {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(ServerUtils.SERVER).path(Route.BOARD) //
+                .target(ServerUtils.getServer()).path(Route.BOARD) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Board>>() {});

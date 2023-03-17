@@ -28,8 +28,6 @@ import java.util.ResourceBundle;
 
 public class LoginCtrl implements Initializable {
 
-    @FXML
-    private TextField keyField;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
@@ -66,7 +64,7 @@ public class LoginCtrl implements Initializable {
      * the user to the workspace. Otherwise, shows an error message.
      */
     public void connect(){
-        server.setServer(serverAddress.getText());
+        server.setServer(keyField.getText());
         if (server.pingServer()){
             showWorkspace();
         } else {
