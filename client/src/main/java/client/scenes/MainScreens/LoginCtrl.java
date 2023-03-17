@@ -58,6 +58,27 @@ public class LoginCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+
+    /**
+     * Middleware that tries to connect to the user specified server. If successful, redirects
+     * the user to the workspace. Otherwise, shows an error message.
+     */
+    public void connect(){
+        server.setServer(keyField.getText());
+        if (server.pingServer()){
+            showWorkspace();
+        } else {
+            showErrorMessage();
+        }
+    }
+
+    /**
+     * Shows a message to the user indicating that the connection to the server could not be made.
+     */
+    private void showErrorMessage() {
+        System.out.println("Could not connect to the server");
+    }
+
     /**
      * When called, it switches back to the board overview, disconnecting the user from the workspace.
      */

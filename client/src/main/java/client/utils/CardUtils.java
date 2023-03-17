@@ -7,11 +7,23 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class CardUtils {
+
+    private final ServerUtils serverUtils;
+
+    /**
+     * Creates a new CardUtils object
+     * @param serverUtils The ServerUtils object (injected) to use in requests.
+     */
+    @Inject
+    public CardUtils(ServerUtils serverUtils){
+        this.serverUtils = serverUtils;
+    }
 
     /**
      * Sends a post request to the server to add a Card to the database
@@ -20,7 +32,7 @@ public class CardUtils {
      */
     public Card addCard(Card card){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(ServerUtils.SERVER).path(Route.CARD)
+                .target(serverUtils.getServer()).path(Route.CARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
@@ -33,7 +45,7 @@ public class CardUtils {
      */
     public List<Card> getCards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(ServerUtils.SERVER).path(Route.CARD) //
+                .target(serverUtils.getServer()).path(Route.CARD) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
