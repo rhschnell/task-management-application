@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 public class LoginCtrl implements Initializable {
 
     @FXML
-    private TextField serverAddress;
+    private TextField keyField;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
