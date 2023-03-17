@@ -24,6 +24,8 @@ public class Board {
     @Id
     private String key;
 
+    private int amountList; // Unused but needed to prevent errors
+
     /**
     Constructor for the class Board
      * @param title Title of the board
