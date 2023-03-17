@@ -16,12 +16,12 @@
 package client.scenes.MainScreens;
 
 import client.scenes.MainCtrl;
+import client.utils.ControllerCommunicater;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,6 +32,8 @@ public class LoginCtrl implements Initializable {
     private TextField keyField;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    private TextField keyField;
 
     /**
      * Constructor for LoginCtrl
@@ -83,6 +85,7 @@ public class LoginCtrl implements Initializable {
      * When called, it switches back to the board overview, disconnecting the user from the workspace.
      */
     public void showWorkspace() {
+        ControllerCommunicater.setKey(keyField.getText());
         mainCtrl.setWorkspace();
     }
 }

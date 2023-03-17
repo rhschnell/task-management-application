@@ -1,5 +1,9 @@
 package commons;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Board {
     private String title;
 
@@ -18,17 +25,10 @@ public class Board {
     private String key;
 
     /**
-     * Empty constructor for Spring Boot
-     */
-    public Board(){
-
-    }
-
-    /**
     Constructor for the class Board
-    @param title Title of the board
-    @param key Key of the board
-     @param cardLists The lists of cards in this board
+     * @param title Title of the board
+     * @param key Key of the board
+     * @param cardLists The lists of cards in this board
      */
     public Board(String title, String key, ArrayList<CardList> cardLists){
         this.title = title;
@@ -37,10 +37,18 @@ public class Board {
     }
 
     /**
-     * Adds a new card-list to the board
+     * Adds a new clean card-list to the board
      */
     public void addList(){
         CardList list = new CardList();
+        this.cardLists.add(list);
+    }
+
+    /**
+     * Adds a new card-list to the board
+     * @param list Card-list to be added to the board
+     */
+    public void addList(CardList list){
         this.cardLists.add(list);
     }
 
@@ -53,50 +61,19 @@ public class Board {
     }
 
     /**
-    * Getter for the title
-    * @return The title of the board
-    */
-    public String getTitle() {
-        return title;
+     * Removes the card-list with the given index from the board
+     * @param index Index of the card-list to be removed
+     */
+    public void removeListByIndex(int index){
+        this.cardLists.remove(index);
     }
 
     /**
-     * Setter for the title of the board
-     * @param title The new title of the board
+     * Method to get the amount of card-lists on the board
+     * @return The amount of card-lists that are on the board
      */
-    public void setTitle(String title) {
-        this.title = title;
+    public int getAmountList(){
+        return this.cardLists.size();
     }
 
-    /**
-     * Getter for the card-lists in the board
-     * @return The arraylist containing the card-lists of the board
-     */
-    public List<CardList> getCardLists() {
-        return cardLists;
-    }
-
-    /**
-     * Setter for the lists in the board
-     * @param cardLists The new lists for the board
-     */
-    public void setCardLists(ArrayList<CardList> cardLists) {
-        this.cardLists = cardLists;
-    }
-
-    /**
-     * Getter for the key of the board
-     * @return The key of the board
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Setter for the key
-     * @param key The new key of the board
-     */
-    public void setKey(String key) {
-        this.key = key;
-    }
 }

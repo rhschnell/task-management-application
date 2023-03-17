@@ -1,71 +1,71 @@
 .root{
     -fx-font-family: "Arial";
     -fx-text-background-color: #1A1A1A;
-    -light_green: #DEEDE7;
-    -light_blue: #73BFF9;
-    -light_red: #F19B91;
-    -light-gray: #D3D3D3;
-    -gray: #929292;
-    -green: #64B594;
+    -light_green_color: #DEEDE7;
+    -light_blue_color: #73BFF9;
+    -light_red_color: #F19B91;
+    -light_gray_color: #D3D3D3;
+    -gray_color: #929292;
+    -green_color: #64B594;
 }
 
 .blue-button {
- -fx-background-color: -light_blue;
+ -fx-background-color: -light_blue_color;
  -fx-text-fill: #FFFFFF;
  -fx-background-radius: 10;
 }
 .blue-button:hover {
- -fx-background-color: derive(-light_blue, -10%);
+ -fx-background-color: derive(-light_blue_color, -10%);
 }
 .blue-button:pressed {
- -fx-background-color: derive(-light_blue, -20%);
+ -fx-background-color: derive(-light_blue_color, -20%);
 }
 
 .red-button {
- -fx-background-color: #F19B91;
+ -fx-background-color: -light_red_color;
  -fx-text-fill: #FFFFFF;
  -fx-background-radius: 10;
 }
 .red-button:hover {
- -fx-background-color: derive(-light_red, -10%);
+ -fx-background-color: derive(-light_red_color, -10%);
 }
 .red-button:pressed {
- -fx-background-color: derive(-light_red, -20%);
+ -fx-background-color: derive(-light_red_color, -20%);
 }
 
 .light-gray-button {
- -fx-background-color: -light_gray;
+ -fx-background-color: -light_gray_color;
  -fx-background-radius: 10;
 }
 .light-gray-button:hover {
- -fx-background-color: derive(-light_gray, -10%);
+ -fx-background-color: derive(-light_gray_color, -10%);
 }
 .light-gray-button:pressed {
- -fx-background-color: derive(-light_gray, -10%);
+ -fx-background-color: derive(-light_gray_color, -20%);
 }
 
 .gray-button {
- -fx-background-color:  -gray;
+ -fx-background-color:  -gray_color;
  -fx-text-fill: #FFFFFF;
  -fx-background-radius: 10;
 }
 .gray-button:hover {
- -fx-background-color: derive(-gray, -10%);
+ -fx-background-color: derive(-gray_color, -10%);
 }
 .gray-button:pressed {
- -fx-background-color: derive(-gray, -20%);
+ -fx-background-color: derive(-gray_color, -20%);
 }
 
 .green-button {
- -fx-background-color:  -green;
+ -fx-background-color:  -green_color;
  -fx-text-fill: #FFFFFF;
  -fx-background-radius: 10;
 }
 .green-button:hover {
- -fx-background-color: derive(-green, -10%);
+ -fx-background-color: derive(-green_color, -10%);
 }
 .green-button:pressed {
- -fx-background-color: derive(-green, -20%);
+ -fx-background-color: derive(-green_color, -20%);
 }
 
 .list-cell {
@@ -76,17 +76,17 @@
 }
 
 .card {
-    -fx-background-color:  -light_green;
+    -fx-background-color:  -light_green_color;
     -fx-background-radius: 10;
     -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);
 }
 
 .card:hover {
-    -fx-background-color:  derive(-light_green, -10.0%);
+    -fx-background-color:  derive(-light_green_color, -10.0%);
 }
 
 .card:pressed {
-    -fx-background-color:  derive(-light_green, -20.0%);
+    -fx-background-color:  derive(-light_green_color, -20.0%);
 }
 .list-view{
     -fx-padding :0px;

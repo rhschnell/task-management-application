@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.MyFXML;
 import client.scenes.MainScreens.WorkspaceCtrl;
 import client.scenes.MainScreens.LoginCtrl;
 import javafx.scene.Parent;
@@ -8,10 +9,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+
 public class MainCtrl {
     private Stage primaryStage;
     private Scene login;
     private Scene workspace;
+    private MyFXML myFXML;
     private LoginCtrl loginCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
@@ -19,16 +22,17 @@ public class MainCtrl {
      * Initializes the Stages that needs to be switched within the app.
      * @param primary represents the primary stage
      * @param login represents the pair of login scene, and it's controller.
-     * @param workspace represents the pair of the workspace scene, and it's controller.
+     * @param myFXML used for reinitializing the workspace
      */
-    public void initialize(Stage primary, Pair<LoginCtrl, Parent> login,Pair<WorkspaceCtrl,Parent> workspace) {
+    public void initialize(Stage primary,
+                           Pair<LoginCtrl,Parent> login,
+                           MyFXML myFXML) {
         this.primaryStage = primary;
 
         this.loginCtrl = login.getKey();
         this.login = new Scene(login.getValue());
 
-        this.workspaceCtrl = workspace.getKey();
-        this.workspace = new Scene(workspace.getValue());
+        this.myFXML = myFXML;
 
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
@@ -49,7 +53,8 @@ public class MainCtrl {
      */
     public void setWorkspace() {
         primaryStage.setTitle("Talio");
-        primaryStage.setScene(workspace);
+        var workspace = myFXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
+        primaryStage.setScene(new Scene(workspace.getValue()));
     }
 
     /**
@@ -69,5 +74,4 @@ public class MainCtrl {
 
         return popUp;
     }
-
 }

@@ -1,10 +1,17 @@
 package commons;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CardList {
 
     @Id
@@ -16,14 +23,6 @@ public class CardList {
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<Card> cards;
-
-    /**
-     * Empty constructor for Spring Boot
-     */
-    public CardList() {
-
-    }
-
     /**
      * Constructor for Tests
      * @param listTitle Title of the list
@@ -103,45 +102,5 @@ public class CardList {
     public void moveCard(int from, int to) {
         Card c = getCard(from);
         moveCard(c, to);
-    }
-
-    /**
-     * Setter for the title of the list
-     * @param listTitle New title of the list
-     */
-    public void setListTitle(String listTitle) {
-        this.listTitle = listTitle;
-    }
-
-    /**
-     * Same as setListTitle(String) but with different name for ease of use.
-     * @param listTitle New title of the list
-     */
-    public void rename(String listTitle) {
-        setListTitle(listTitle);
-    }
-
-    /**
-     * Setter for the cards PQ of the board. Mainly because Spring Boot needs it.
-     * @param cards The new PQ of cards this list will contain.
-     */
-    public void setCards(ArrayList<Card> cards) {
-        this.cards = cards;
-    }
-
-    /**
-     * Getter for title of the list
-     * @return The title of the list
-     */
-    public String getListTitle() {
-        return listTitle;
-    }
-
-    /**
-     * Getter for the card list
-     * @return The list of cards
-     */
-    public List<Card> getCards() {
-        return cards;
     }
 }
