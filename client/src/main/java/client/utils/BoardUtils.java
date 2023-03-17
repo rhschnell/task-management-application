@@ -19,7 +19,7 @@ public class BoardUtils {
      * @param serverUtils The ServerUtils object (injected) to use in requests.
      */
     @Inject
-    public CardUtils(ServerUtils serverUtils){
+    public BoardUtils(ServerUtils serverUtils){
         this.serverUtils = serverUtils;
     }
 
