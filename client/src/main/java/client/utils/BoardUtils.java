@@ -12,6 +12,17 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class BoardUtils {
+    private ServerUtils serverUtils;
+
+    /**
+     * Creates a new BoardUtils object
+     * @param serverUtils The ServerUtils object (injected) to use in requests.
+     */
+    @Inject
+    public CardUtils(ServerUtils serverUtils){
+        this.serverUtils = serverUtils;
+    }
+
     /**
      * Sends a post request to the server to add a board to the database
      * @param board The board to add
@@ -20,7 +31,7 @@ public class BoardUtils {
     public Board addBoard(Board board)
     {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(ServerUtils.getServer()).path(Route.BOARD)
+                .target(serverUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -33,7 +44,7 @@ public class BoardUtils {
     public List<Board> getBoards()
     {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(ServerUtils.getServer()).path(Route.BOARD) //
+                .target(serverUtils.getServer()).path(Route.BOARD) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Board>>() {});
