@@ -16,7 +16,6 @@
 package client.scenes.MainScreens;
 
 import client.scenes.MainCtrl;
-import client.utils.ControllerCommunicater;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
@@ -32,8 +31,6 @@ public class LoginCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     @FXML
     private TextField serverAddress;
-    @FXML
-    private TextField keyField;
 
     /**
      * Constructor for LoginCtrl
@@ -85,7 +82,6 @@ public class LoginCtrl implements Initializable {
      * When called, it switches back to the board overview, disconnecting the user from the workspace.
      */
     public void showWorkspace() {
-        ControllerCommunicater.setKey(keyField.getText());
         mainCtrl.setWorkspace();
     }
 }

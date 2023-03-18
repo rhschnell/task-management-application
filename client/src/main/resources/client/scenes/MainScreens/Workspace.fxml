@@ -118,7 +118,7 @@
                         <Insets />
                      </opaqueInsets>
                      <children>
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="177.0" styleClass="green-button" text="Create/join a board">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#joinPopUp" prefHeight="30.0" prefWidth="177.0" styleClass="green-button" text="Create/join a board">
                            <font>
                               <Font name="Arial Bold" size="14.0" />
                            </font>

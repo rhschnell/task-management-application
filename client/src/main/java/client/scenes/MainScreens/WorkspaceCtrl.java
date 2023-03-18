@@ -19,6 +19,7 @@ import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
 import client.utils.BoardUtils;
 import client.utils.ControllerCommunicater;
+import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
@@ -30,6 +31,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +54,17 @@ public class WorkspaceCtrl implements Initializable {
     private HBox listContainer;
 
     /**
-     *
+     * Blank constructor for WorkspaceCtrl
+     */
+    public WorkspaceCtrl() {
+        this.server = new BoardUtils(new ServerUtils());
+        this.mainCtrl = new MainCtrl();
+        boardName = new Label();
+        boardNameButton = new Button();
+        listContainer = new HBox();
+    }
+
+    /**
      * Constructor for WorkspaceCtrl
      * @param server a server util
      * @param mainCtrl a main controller
@@ -60,19 +73,46 @@ public class WorkspaceCtrl implements Initializable {
     public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        boardName = new Label();
+        boardNameButton = new Button();
+        listContainer = new HBox();
     }
 
     /**
      * Displays the AddCard FXML into a new window (Popup).
      * @throws IOException
      */
-    @FXML
     public void addCard() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/CardWindows/AddCard.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         String title = "Create Card";
         mainCtrl.popUp(scene, title);
+    }
+
+    /**
+     * Displays the Board Join FXML into a new window (Popup).
+     * @throws IOException
+     */
+    public void joinPopUp() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/MainScreens/BoardJoin.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        BoardJoinCtrl boardJoinCtrl = loader.getController();
+        String title = "Join/Create a board";
+        popUp(scene, title, boardJoinCtrl);
+    }
+
+    public Stage popUp(Scene scene, String title, BoardJoinCtrl boardJoinCtrl) {
+        boardJoinCtrl.setWorkspaceCtrl(this);
+        Stage popUp = new Stage();
+        popUp.setScene(scene);
+        popUp.initModality(Modality.APPLICATION_MODAL);
+        popUp.setTitle(title);
+        popUp.setResizable(false);
+        popUp.setResizable(false);
+        popUp.showAndWait();
+        return popUp;
     }
 
     /**
@@ -94,13 +134,12 @@ public class WorkspaceCtrl implements Initializable {
      * The resources used to localize the root object, or {@code null} if
      * the root object was not localized.
      */
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void initialize(URL location, ResourceBundle resources) {
         TestingClass test = new TestingClass();
 
         // Load a board from the server
         String targetKey = ControllerCommunicater.getKey();
-//        System.out.println(targetKey);
+        // System.out.println(targetKey);
         List<Board> allBoards = server.getBoards();
         Board systemBoard = null;
         for (Board b : allBoards) {
@@ -118,6 +157,29 @@ public class WorkspaceCtrl implements Initializable {
         displayBoard(systemBoard,listContainer);
     }
 
+    public void loadBoard() {
+        TestingClass test = new TestingClass();
+
+        // Load a board from the server
+        String targetKey = ControllerCommunicater.getKey();
+        // System.out.println(targetKey);
+        List<Board> allBoards = server.getBoards();
+        Board systemBoard = null;
+        for (Board b : allBoards) {
+            if (b.getKey().equals(targetKey)) {
+                systemBoard = b;
+            }
+        }
+        if (systemBoard == null) {
+            // This should later be replaced with a text on the connection screen
+            systemBoard = test.createBoardObject("Failure");
+        }
+
+        boardName.setText(systemBoard.getTitle());
+        boardNameButton.setText(systemBoard.getTitle());
+        displayBoard(systemBoard, listContainer);
+    }
+
     /**
      * Adds children (Lists) to the HBOX resulting in the creation of the board.
      * @param board The board that needs to be displayed.
@@ -125,6 +187,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void displayBoard(Board board, HBox resultedBoard)
     {
+        resultedBoard.getChildren().clear();
         for(int i = 0; i < board.getCardLists().size(); i++)
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));

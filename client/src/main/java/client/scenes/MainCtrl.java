@@ -55,6 +55,7 @@ public class MainCtrl {
         primaryStage.setTitle("Talio");
         var workspace = myFXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
         primaryStage.setScene(new Scene(workspace.getValue()));
+        workspaceCtrl = workspace.getKey();
     }
 
     /**
