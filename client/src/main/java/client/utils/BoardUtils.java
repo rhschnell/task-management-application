@@ -4,7 +4,9 @@ import commons.Board;
 import commons.Route;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.inject.Inject;
@@ -44,10 +46,35 @@ public class BoardUtils {
      */
     public List<Board> getBoards()
     {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(serverUtils.getServer()).path(Route.BOARD) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Board>>() {});
+    }
+
+    /**
+     * Sends a request to the server to retrieve a certain board from the database
+     * @return the desired board
+     */
+    public Board getBoard(long id)
+    {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD + "/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Board.class);
+    }
+
+    /**
+     * Sends a request to the server to delete a certain board from the database
+     */
+    public void deleteBoard(long id)
+    {
+        ClientBuilder.newClient(new ClientConfig())
+            .target(serverUtils.getServer()).path(Route.BOARD + "/" + id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete(Response.class);
     }
 }
