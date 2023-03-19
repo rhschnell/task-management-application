@@ -15,20 +15,26 @@
  */
 package client.scenes.CardWindows;
 
+import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
+import client.utils.CardUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
+import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 
 public class AddCardCtrl {
 
-    private final ServerUtils server;
+    private final CardUtils server;
     private final MainCtrl mainCtrl;
+    private ListCtrl listCtrl;
 
     @FXML
     private TextField cardTitle;
@@ -47,7 +53,7 @@ public class AddCardCtrl {
      */
     public AddCardCtrl() {
         this.mainCtrl = new MainCtrl();
-        this.server = new ServerUtils();
+        this.server = new CardUtils(new ServerUtils());
     }
 
     /**
@@ -56,10 +62,19 @@ public class AddCardCtrl {
      * @param mainCtrl a main controller
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddCardCtrl(CardUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    /**
+     * Setter for the list controller
+     * @param listCtrl the list controller
+     */
+    public void setListCtrl(ListCtrl listCtrl) {
+        this.listCtrl = listCtrl;
+    }
+
 
     /**
      * This method cancels adding the created card to the list
@@ -69,10 +84,19 @@ public class AddCardCtrl {
     }
 
     /**
-     * This method saves the created card to the list
+     * This method adds the created card to the list
      */
     public void save() {
+        Card card = new Card(
+                cardTitle.getText(),
+                cardDescription.getText(),
+                "white",
+                new ArrayList<>(),
+                new ArrayList<>());
+        card.setCardList(listCtrl.getCardList());
+        server.addCard(card);
         ((Stage)saveButton.getScene().getWindow()).close();
     }
+
 
 }

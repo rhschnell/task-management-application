@@ -70,7 +70,7 @@ public class CardController {
      * @param id The id of the card to delete
      * @return The deleted card if it existed, otherwise a bad request response
      */
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public Object delete(@PathVariable("id") long id) throws JsonProcessingException {
         if (id < 0) {

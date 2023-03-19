@@ -28,6 +28,32 @@ public class Card implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name="CARD_LIST_ID", nullable=false)
+    private CardList cardList;
+
+
+    /**
+     * Custom constructor for all parameters without ID (auto-generated)
+     * Creates a new Card
+     *
+     * @param title Title of the card
+     * @param description Description of the card
+     * @param backgroundColour Background colour of the card
+     * @param tags Tags associated with this card
+     * @param subTasks Subtasks for this card
+     *
+     */
+    public Card(String title, String description, String backgroundColour, List<Tag> tags,
+                List<Task> subTasks, long id){
+        this.title =title;
+        this.description = description;
+        this.backgroundColour = backgroundColour;
+        this.tags = tags;
+        this.subTasks = subTasks;
+        this.id = id;
+    }
+
     /**
      * Custom constructor for all parameters without ID (auto-generated)
      * Creates a new Card
