@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package client.scenes.MainScreens;
-import client.TestingClass;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
 import client.utils.BoardUtils;
@@ -27,7 +26,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,7 +34,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class WorkspaceCtrl implements Initializable {

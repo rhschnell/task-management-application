@@ -1,6 +1,5 @@
 package client.scenes.MainScreens;
 
-import client.utils.BoardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
