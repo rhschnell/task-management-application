@@ -100,7 +100,7 @@
                               <Insets left="15.0" />
                            </padding>
                         </Label>
-                        <Button fx:id="boardNameButton" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: none;" text="Board 1">
+                        <Button fx:id="boardNameButton" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: none;">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -144,7 +144,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="500.0" prefHeight="47.0" prefWidth="869.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="268.0">
                      <children>
-                        <Label fx:id="boardName" maxHeight="-Infinity" minHeight="-Infinity" minWidth="200.0" prefHeight="34.0" prefWidth="544.0" text="Board 1" textAlignment="RIGHT">
+                        <Label fx:id="boardName" maxHeight="-Infinity" minHeight="-Infinity" minWidth="200.0" prefHeight="34.0" prefWidth="544.0" textAlignment="RIGHT">
                            <font>
                               <Font name="Arial Bold" size="18.0" />
                            </font>
@@ -179,7 +179,7 @@
                               <Insets left="15.0" right="15.0" />
                            </HBox.margin>
                         </Line>
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addCard" prefWidth="70.0" styleClass="red-button" text="Delete">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteBoard" onMouseClicked="#addCard" prefWidth="70.0" styleClass="red-button" text="Delete">
                            <font>
                               <Font name="Arial Bold" size="12.0" />
                            </font>

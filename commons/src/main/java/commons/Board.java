@@ -4,11 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -16,27 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    private long key;
+
     private String title;
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<CardList> cardLists; // Use a list here to make the annotation work
-
-    @Id
-    private String key;
-
-    private int amountList; // Unused but needed to prevent errors
-
-    /**
-    Constructor for the class Board
-     * @param title Title of the board
-     * @param key Key of the board
-     * @param cardLists The lists of cards in this board
-     */
-    public Board(String title, String key, ArrayList<CardList> cardLists){
-        this.title = title;
-        this.key = key;
-        this.cardLists = cardLists;
-    }
 
     /**
      * Adds a new clean card-list to the board
@@ -68,14 +51,6 @@ public class Board {
      */
     public void removeListByIndex(int index){
         this.cardLists.remove(index);
-    }
-
-    /**
-     * Method to get the amount of card-lists on the board
-     * @return The amount of card-lists that are on the board
-     */
-    public int getAmountList(){
-        return this.cardLists.size();
     }
 
 }

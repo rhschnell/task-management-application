@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 package client.scenes.MainScreens;
-import client.TestingClass;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
 import client.utils.BoardUtils;
-import client.utils.ControllerCommunicater;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -36,13 +34,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class WorkspaceCtrl implements Initializable {
 
     private final BoardUtils server;
     private final MainCtrl mainCtrl;
+
+    private Board shownBoard;
 
     @FXML
     private Label boardName;
@@ -62,6 +61,7 @@ public class WorkspaceCtrl implements Initializable {
         boardName = new Label();
         boardNameButton = new Button();
         listContainer = new HBox();
+        shownBoard = new Board();
     }
 
     /**
@@ -76,6 +76,7 @@ public class WorkspaceCtrl implements Initializable {
         boardName = new Label();
         boardNameButton = new Button();
         listContainer = new HBox();
+        shownBoard = new Board();
     }
 
     /**
@@ -97,14 +98,9 @@ public class WorkspaceCtrl implements Initializable {
     public void joinPopUp() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/MainScreens/BoardJoin.fxml"));
         Parent root = loader.load();
-        Scene scene = new Scene(root);
-        BoardJoinCtrl boardJoinCtrl = loader.getController();
         String title = "Join/Create a board";
-        popUp(scene, title, boardJoinCtrl);
-    }
-
-    public Stage popUp(Scene scene, String title, BoardJoinCtrl boardJoinCtrl) {
-        boardJoinCtrl.setWorkspaceCtrl(this);
+        ((BoardJoinCtrl) loader.getController()).setWorkspaceCtrl(this);
+        Scene scene = new Scene(root);
         Stage popUp = new Stage();
         popUp.setScene(scene);
         popUp.initModality(Modality.APPLICATION_MODAL);
@@ -112,7 +108,6 @@ public class WorkspaceCtrl implements Initializable {
         popUp.setResizable(false);
         popUp.setResizable(false);
         popUp.showAndWait();
-        return popUp;
     }
 
     /**
@@ -135,71 +130,47 @@ public class WorkspaceCtrl implements Initializable {
      * the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-        TestingClass test = new TestingClass();
-
-        // Load a board from the server
-        String targetKey = ControllerCommunicater.getKey();
-        // System.out.println(targetKey);
-        List<Board> allBoards = server.getBoards();
-        Board systemBoard = null;
-        for (Board b : allBoards) {
-            if (b.getKey().equals(targetKey)) {
-                systemBoard = b;
-            }
-        }
-        if (systemBoard == null) {
-            // This should later be replaced with a text on the connection screen
-            systemBoard = test.createBoardObject("Failure");
-        }
-
-        boardName.setText(systemBoard.getTitle());
-        boardNameButton.setText(systemBoard.getTitle());
-        displayBoard(systemBoard,listContainer);
     }
 
-    public void loadBoard() {
-        TestingClass test = new TestingClass();
-
-        // Load a board from the server
-        String targetKey = ControllerCommunicater.getKey();
-        // System.out.println(targetKey);
-        List<Board> allBoards = server.getBoards();
-        Board systemBoard = null;
-        for (Board b : allBoards) {
-            if (b.getKey().equals(targetKey)) {
-                systemBoard = b;
-            }
+    public void loadBoard(long id) {
+        shownBoard = server.getBoard(id);
+        if (shownBoard != null) {
+            boardName.setText(shownBoard.getTitle());
+            boardNameButton.setText(shownBoard.getTitle());
+            boardName.setVisible(true);
+            boardNameButton.setVisible(true);
+            displayBoard(listContainer);
+        } else {
+            boardName.setVisible(false);
+            boardNameButton.setVisible(false);
         }
-        if (systemBoard == null) {
-            // This should later be replaced with a text on the connection screen
-            systemBoard = test.createBoardObject("Failure");
-        }
-
-        boardName.setText(systemBoard.getTitle());
-        boardNameButton.setText(systemBoard.getTitle());
-        displayBoard(systemBoard, listContainer);
     }
 
     /**
      * Adds children (Lists) to the HBOX resulting in the creation of the board.
-     * @param board The board that needs to be displayed.
      * @param resultedBoard the Hbox in which the board needs to be displyed.
      */
-    public void displayBoard(Board board, HBox resultedBoard)
+    public void displayBoard(HBox resultedBoard)
     {
         resultedBoard.getChildren().clear();
-        for(int i = 0; i < board.getCardLists().size(); i++)
+        for(int i = 0; i < shownBoard.getCardLists().size(); i++)
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));
             try {
                 VBox list = loader.load();
                 ListCtrl ctrl = loader.getController();
-                ctrl.addCards(board.getCardLists().get(i));
-                ctrl.setListTitle(board.getCardLists().get(i).getListTitle());
+                ctrl.addCards(shownBoard.getCardLists().get(i));
+                ctrl.setListTitle(shownBoard.getCardLists().get(i).getListTitle());
                 resultedBoard.getChildren().add(list);
             } catch(IOException ioe) {
                 ioe.printStackTrace();
             }
         }
+    }
+
+    public void deleteBoard() {
+        server.deleteBoard(shownBoard.getKey());
+        shownBoard = new Board();
+        displayBoard(listContainer);
     }
 }

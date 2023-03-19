@@ -41,14 +41,14 @@ public class BoardController {
      * @return List of all boards in the database
      */
     @GetMapping(path = {"", "/"})
-    public List<Board> findAll()
+    public List<Board> getAll()
     {
         return boards.findAll();
     }
 
     /**
      * Gets a specific board from the database
-     * @param id Id of the board
+     * @param id ID of the board
      * @return If the board was not found, status code 400, else status code 200 and data in the body
      */
     @GetMapping("/{id}")
@@ -58,7 +58,7 @@ public class BoardController {
         {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(boards.getById(id));
+        return ResponseEntity.ok(boards.findById(id).get());
     }
 
     /**
@@ -66,9 +66,9 @@ public class BoardController {
      * @param id The id of the board to delete
      * @return The deleted board if it was found, otherwise a bad request response
      */
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     @ResponseBody
-    public Object delete(@PathVariable("id") long id) throws JsonProcessingException
+    public ResponseEntity delete(@PathVariable("id") long id) throws JsonProcessingException
     {
         if (id < 0)
         {

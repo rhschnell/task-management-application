@@ -1,6 +1,5 @@
 package client.scenes.MainScreens;
 
-import client.utils.ControllerCommunicater;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
@@ -10,6 +9,7 @@ import javafx.stage.Stage;
 public class BoardJoinCtrl {
 
     private final ServerUtils server;
+
     private WorkspaceCtrl workspaceCtrl;
 
     @FXML
@@ -36,9 +36,12 @@ public class BoardJoinCtrl {
     }
 
     public void join() {
-        ControllerCommunicater.setKey(keyField.getText());
-        workspaceCtrl.loadBoard();
+        workspaceCtrl.loadBoard(Long.parseLong(keyField.getText()));
         ((Stage)keyField.getScene().getWindow()).close();
+    }
+
+    public WorkspaceCtrl getWorkspaceCtrl() {
+        return workspaceCtrl;
     }
 
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
