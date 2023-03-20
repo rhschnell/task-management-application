@@ -17,8 +17,8 @@ public class CardListController {
     private CardListRepository cardLists;
 
     /**
-     * Creates a new BoardController
-     * @param cardLists Instance of board repository
+     * Creates a new CardListController
+     * @param cardLists Instance of cardList repository
      */
     public CardListController (CardListRepository cardLists)
     {
@@ -26,9 +26,9 @@ public class CardListController {
     }
 
     /**
-     * Adds a board to the database
-     * @param cardList The board to add
-     * @return The added board
+     * Adds a cardList to the database
+     * @param cardList The cardList to add
+     * @return The added cardList
      */
     @PostMapping(path = {"", "/"})
     public ResponseEntity<CardList> add(@RequestBody CardList cardList)
@@ -37,8 +37,8 @@ public class CardListController {
     }
 
     /**
-     * Gets all boards from the database
-     * @return List of all boards in the database
+     * Gets all cardList from the database
+     * @return List of all cardList in the database
      */
     @GetMapping(path = {"", "/"})
     public List<CardList> getAll()
@@ -47,9 +47,9 @@ public class CardListController {
     }
 
     /**
-     * Gets a specific board from the database
-     * @param id ID of the board
-     * @return If the board was not found, status code 400, else status code 200 and data in the body
+     * Gets a specific cardList from the database
+     * @param id ID of the cardList
+     * @return If the cardList was not found, status code 400, else status code 200 and data in the body
      */
     @GetMapping("/{id}")
     public ResponseEntity<CardList> getById(@PathVariable("id") long id)
@@ -62,9 +62,9 @@ public class CardListController {
     }
 
     /**
-     * Deletes a board from the database
-     * @param id The id of the board to delete
-     * @return The deleted board if it was found, otherwise a bad request response
+     * Deletes a cardList from the database
+     * @param id The id of the cardList to delete
+     * @return The deleted cardList if it was found, otherwise a bad request response
      */
     @DeleteMapping("/{id}")
     @ResponseBody
