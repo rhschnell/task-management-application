@@ -169,7 +169,7 @@
                               <Font name="Arial Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="70.0" styleClass="green-button" text="Add list">
+                        <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addListPopup" prefWidth="70.0" styleClass="green-button" text="Add list">
                            <font>
                               <Font name="Arial Bold" size="12.0" />
                            </font>

@@ -80,4 +80,5 @@ public class BoardUtils {
             .accept(APPLICATION_JSON)
             .delete(Response.class);
     }
+
 }

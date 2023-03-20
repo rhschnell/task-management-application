@@ -18,8 +18,10 @@ public class Board {
 
     private String title;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "key")
     private List<CardList> cardLists; // Use a list here to make the annotation work
+
 
     /**
      * Constructor for board class
@@ -75,5 +77,6 @@ public class Board {
     public int getAmountList() {
         return this.cardLists.size();
     }
+
 
 }
