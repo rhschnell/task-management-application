@@ -137,3 +137,6 @@ join card c on c.card_list_id=cl_id [42122-200]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.base/java.lang.Thread.run(Thread.java:1589)
+2023-03-20 17:50:41 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO CARD_LIST VALUES(0, 'SHITTY LIST')[*]';"; SQL statement:
+INSERT INTO CARD_LIST VALUES(0, 'SHITTY LIST')'; [42000-200]

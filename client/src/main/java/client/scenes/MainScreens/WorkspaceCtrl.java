@@ -96,7 +96,10 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard = new Board(targetKey, targetKey, null);
             server.addBoard(shownBoard);
         }
+        boardName.setText(shownBoard.getTitle());
+        boardNameButton.setText(shownBoard.getTitle());
         mainCtrl.setWorkspace();
+        displayBoard();
     }
 
     public void joinPopUp() {
@@ -105,11 +108,10 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Adds children (Lists) to the HBOX resulting in the creation of the board.
-     * @param resultedBoard the Hbox in which the board needs to be displyed.
      */
-    public void displayBoard(HBox resultedBoard)
+    public void displayBoard()
     {
-        resultedBoard.getChildren().clear();
+        listContainer.getChildren().clear();
         for(int i = 0; i < shownBoard.getCardLists().size(); i++)
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));
@@ -120,7 +122,7 @@ public class WorkspaceCtrl implements Initializable {
                 ctrl.setCardList(cardList);
                 ctrl.addCards(cardList);
                 ctrl.setListTitle(cardList.getListTitle());
-                resultedBoard.getChildren().add(list);
+                listContainer.getChildren().add(list);
             } catch(IOException ioe) {
                 ioe.printStackTrace();
             }
@@ -130,6 +132,6 @@ public class WorkspaceCtrl implements Initializable {
     public void deleteBoard() {
         server.deleteBoard(shownBoard.getKey());
         shownBoard = new Board();
-        displayBoard(listContainer);
+        displayBoard();
     }
 }
