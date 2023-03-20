@@ -17,7 +17,6 @@ package client.scenes.ListManagement;
 
 import client.CustomListCell;
 import client.scenes.CardWindows.AddCardCtrl;
-import client.scenes.MainCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;
 import client.utils.ServerUtils;
@@ -37,7 +36,7 @@ import java.io.IOException;
 public class ListCtrl {
 
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final client.scenes.MainCtrl mainCtrl;
 
     private CardList cardList;
 
@@ -53,7 +52,7 @@ public class ListCtrl {
      * Constructor with no parameters for ListCtrl
      */
     public ListCtrl() {
-        this.mainCtrl = new MainCtrl();
+        this.mainCtrl = new client.scenes.MainCtrl();
         this.server = new ServerUtils();
         listTitle = new Label();
         cardListView = new ListView<>();
@@ -66,7 +65,7 @@ public class ListCtrl {
      * @param mainCtrl a main controller
      */
     @Inject
-    public ListCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ListCtrl(ServerUtils server, client.scenes.MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         cardListView = new ListView<>();

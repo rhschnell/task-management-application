@@ -19,7 +19,7 @@ public class TestingClass {
         systemCardList.add(createCardListObject("TODO"));
         systemCardList.add(createCardListObject("DONE"));
         systemCardList.add(createCardListObject("TRASH"));
-        return new Board(-1, boardName, systemCardList);
+        return new Board("-1", boardName, systemCardList);
     }
 
     /**

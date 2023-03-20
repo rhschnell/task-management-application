@@ -52,10 +52,8 @@ public class BoardController {
      * @return If the board was not found, status code 400, else status code 200 and data in the body
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Board> getById(@PathVariable("id") long id)
-    {
-        if(id < 0 || !boards.existsById(id))
-        {
+    public ResponseEntity<Board> getById(@PathVariable("id") String id) {
+        if(!boards.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(boards.findById(id).get());
@@ -68,9 +66,9 @@ public class BoardController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity delete(@PathVariable("id") long id) throws JsonProcessingException
+    public ResponseEntity delete(@PathVariable("id") String id) throws JsonProcessingException
     {
-        if (id < 0)
+        if (!boards.existsById(id))
         {
             return ResponseEntity.badRequest().build();
         }

@@ -1,8 +1,8 @@
 package client.scenes;
 
-import client.MyFXML;
-import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.BoardJoinCtrl;
 import client.scenes.MainScreens.LoginCtrl;
+import client.scenes.MainScreens.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -14,25 +14,31 @@ public class MainCtrl {
     private Stage primaryStage;
     private Scene login;
     private Scene workspace;
-    private MyFXML myFXML;
+    private Scene boardJoin;
     private LoginCtrl loginCtrl;
     private WorkspaceCtrl workspaceCtrl;
+    private BoardJoinCtrl boardJoinCtrl;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
      * @param primary represents the primary stage
      * @param login represents the pair of login scene, and it's controller.
-     * @param myFXML used for reinitializing the workspace
+     * @param workspace represents the pair of workspace scene, and its controller
      */
     public void initialize(Stage primary,
-                           Pair<LoginCtrl,Parent> login,
-                           MyFXML myFXML) {
+                           Pair<LoginCtrl, Parent> login,
+                           Pair<WorkspaceCtrl, Parent> workspace,
+                           Pair<BoardJoinCtrl, Parent> boardJoin) {
         this.primaryStage = primary;
 
         this.loginCtrl = login.getKey();
         this.login = new Scene(login.getValue());
 
-        this.myFXML = myFXML;
+        this.workspaceCtrl = workspace.getKey();
+        this.workspace = new Scene(workspace.getValue());
+
+        this.boardJoinCtrl = boardJoin.getKey();
+        this.boardJoin = new Scene(boardJoin.getValue());
 
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
@@ -53,9 +59,23 @@ public class MainCtrl {
      */
     public void setWorkspace() {
         primaryStage.setTitle("Talio");
-        var workspace = myFXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
-        primaryStage.setScene(new Scene(workspace.getValue()));
-        workspaceCtrl = workspace.getKey();
+        primaryStage.setScene(workspace);
+    }
+
+    public LoginCtrl getLoginCtrl() {
+        return loginCtrl;
+    }
+
+    public WorkspaceCtrl getWorkspaceCtrl() {
+        return workspaceCtrl;
+    }
+
+    public BoardJoinCtrl getBoardJoinCtrl() {
+        return boardJoinCtrl;
+    }
+
+    public Scene getBoardJoin() {
+        return boardJoin;
     }
 
     /**
@@ -64,7 +84,7 @@ public class MainCtrl {
      * @param title represents the popup's title.
      * @return
      */
-    public Stage popUp(Scene scene, String title) {
+    public void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
         popUp.initModality(Modality.APPLICATION_MODAL);
@@ -72,7 +92,5 @@ public class MainCtrl {
         popUp.setResizable(false);
         popUp.setResizable(false);
         popUp.showAndWait();
-
-        return popUp;
     }
 }
