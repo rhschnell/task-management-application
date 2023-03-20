@@ -32,7 +32,7 @@
       <Group>
          <children>
             <Line endX="300.0" endY="-0.707122802734375" startY="-0.707122802734375" stroke="#808080" />
-            <Button layoutX="101.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="23.0" prefWidth="72.0" styleClass="blue-button" text="Add card">
+            <Button layoutX="101.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addCardScreen" prefHeight="23.0" prefWidth="72.0" styleClass="blue-button" text="Add card">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>

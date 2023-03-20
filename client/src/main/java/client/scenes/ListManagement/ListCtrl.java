@@ -16,8 +16,10 @@
 package client.scenes.ListManagement;
 
 import client.CustomListCell;
+import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
+import client.scenes.MainScreens.WorkspaceCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -27,6 +29,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -34,6 +38,10 @@ public class ListCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private CardList cardList;
+
+    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private Label listTitle;
@@ -49,6 +57,7 @@ public class ListCtrl {
         this.server = new ServerUtils();
         listTitle = new Label();
         cardListView = new ListView<>();
+        cardList = new CardList();
     }
 
     /**
@@ -62,8 +71,28 @@ public class ListCtrl {
         this.server = server;
         cardListView = new ListView<>();
         listTitle = new Label();
-
+        cardList = new CardList();
     }
+
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
+    }
+
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    public WorkspaceCtrl getWorkspaceCtrl() {
+        return workspaceCtrl;
+    }
+
+    /**
+     * Getter for the card list
+     */
+    public CardList getCardList() {
+        return cardList;
+    }
+
 
     /**
      * Setter for the list title
@@ -114,4 +143,22 @@ public class ListCtrl {
         }
     }
 
+    /**
+     * Displays the AddCard FXML into a new window (Popup).
+     * @throws IOException
+     */
+    public void addCardScreen() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/CardWindows/AddCard.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        String title = "Create Card";
+        ((AddCardCtrl) loader.getController()).setListCtrl(this);
+        Stage popUp = new Stage();
+        popUp.setScene(scene);
+        popUp.initModality(Modality.APPLICATION_MODAL);
+        popUp.setTitle(title);
+        popUp.setResizable(false);
+        popUp.setResizable(false);
+        popUp.showAndWait();
+    }
 }

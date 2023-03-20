@@ -21,7 +21,7 @@ public class CardList {
 
     private String listTitle;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "cardList", cascade = {CascadeType.ALL})
     private List<Card> cards;
     /**
      * Constructor for Tests

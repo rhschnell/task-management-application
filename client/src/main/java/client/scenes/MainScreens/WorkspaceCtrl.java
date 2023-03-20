@@ -20,6 +20,7 @@ import client.utils.BoardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -79,16 +80,8 @@ public class WorkspaceCtrl implements Initializable {
         shownBoard = new Board();
     }
 
-    /**
-     * Displays the AddCard FXML into a new window (Popup).
-     * @throws IOException
-     */
-    public void addCard() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/CardWindows/AddCard.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        String title = "Create Card";
-        mainCtrl.popUp(scene, title);
+    public Board getShownBoard() {
+        return shownBoard;
     }
 
     /**
@@ -157,10 +150,12 @@ public class WorkspaceCtrl implements Initializable {
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));
             try {
+                CardList cardList = shownBoard.getCardLists().get(i);
                 VBox list = loader.load();
                 ListCtrl ctrl = loader.getController();
-                ctrl.addCards(shownBoard.getCardLists().get(i));
-                ctrl.setListTitle(shownBoard.getCardLists().get(i).getListTitle());
+                ctrl.setCardList(cardList);
+                ctrl.addCards(cardList);
+                ctrl.setListTitle(cardList.getListTitle());
                 resultedBoard.getChildren().add(list);
             } catch(IOException ioe) {
                 ioe.printStackTrace();
