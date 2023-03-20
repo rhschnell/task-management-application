@@ -49,7 +49,8 @@ public class BoardController {
     /**
      * Gets a specific board from the database
      * @param id ID of the board
-     * @return If the board was not found, status code 400, else status code 200 and data in the body
+     * @return If the board was not found, status code 400,
+     * else status code 200 and data in the body
      */
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") String id) {

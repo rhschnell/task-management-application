@@ -30,15 +30,31 @@ public class BoardJoinCtrl implements Initializable {
         this.server = server;
     }
 
+    /**
+     * Join and call load
+     */
     public void join() {
         mainCtrl.getWorkspaceCtrl().loadBoard();
         ((Stage)keyField.getScene().getWindow()).close();
     }
 
+    /**
+     * Getter for keyField
+     * @return keyField
+     */
     public TextField getKeyField() {
         return keyField;
     }
 
+    /**
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

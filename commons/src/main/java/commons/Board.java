@@ -21,6 +21,12 @@ public class Board {
     @OneToMany(cascade = {CascadeType.ALL})
     private List<CardList> cardLists; // Use a list here to make the annotation work
 
+    /**
+     * Constructor for board class
+     * @param key key
+     * @param title title
+     * @param cardLists null
+     */
     public Board(String key, String title, List<CardList> cardLists) {
         this.key = key;
         this.title = title;
@@ -62,6 +68,10 @@ public class Board {
         this.cardLists.remove(index);
     }
 
+    /**
+     * Getter
+     * @return amount of lists
+     */
     public int getAmountList() {
         return this.cardLists.size();
     }
