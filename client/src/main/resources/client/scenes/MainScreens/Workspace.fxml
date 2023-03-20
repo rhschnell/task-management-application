@@ -154,7 +154,7 @@
                         </Label>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.rightAnchor="0.0">
+                  <HBox fx:id="boardControls" alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Line endY="20.0" strokeWidth="0.25">
                            <HBox.margin>

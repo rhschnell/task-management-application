@@ -15,6 +15,10 @@
  */
 package client;
 
+import client.scenes.CardWindows.AddCardCtrl;
+import client.scenes.CardWindows.ViewCardCtrl;
+import client.scenes.ListManagement.CustomListCellCtrl;
+import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;
 import client.scenes.MainScreens.LoginCtrl;
 import com.google.inject.Binder;
@@ -28,5 +32,9 @@ public class MyModule implements Module {
         binder.bind(client.scenes.MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(LoginCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CustomListCellCtrl.class).in(Scopes.SINGLETON);
     }
 }

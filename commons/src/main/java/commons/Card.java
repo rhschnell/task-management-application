@@ -1,9 +1,7 @@
 package commons;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Card implements Serializable {
     private String title;
     private String description;
@@ -27,11 +24,6 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @ManyToOne
-    @JoinColumn(name="CARD_LIST_ID", nullable=false)
-    private CardList cardList;
-
 
     /**
      * Custom constructor for all parameters without ID (auto-generated)

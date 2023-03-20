@@ -21,8 +21,9 @@ public class MainCtrl {
 
     /**
      * Initializes the Stages that needs to be switched within the app.
-     * @param primary represents the primary stage
-     * @param login represents the pair of login scene, and it's controller.
+     *
+     * @param primary   represents the primary stage
+     * @param login     represents the pair of login scene, and its controller.
      * @param workspace represents the pair of workspace scene, and its controller
      */
     public void initialize(Stage primary,

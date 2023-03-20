@@ -16,7 +16,6 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
-
 import client.scenes.MainScreens.BoardJoinCtrl;
 import client.scenes.MainScreens.LoginCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;
@@ -26,7 +25,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
@@ -48,5 +46,13 @@ public class Main extends Application {
         var boardJoin = FXML.load(BoardJoinCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
         var mainCtrl = INJECTOR.getInstance(client.scenes.MainCtrl.class);
         mainCtrl.initialize(primaryStage, login, workspace, boardJoin);
+    }
+
+    public static Injector getINJECTOR() {
+        return INJECTOR;
+    }
+
+    public static MyFXML getFXML() {
+        return FXML;
     }
 }

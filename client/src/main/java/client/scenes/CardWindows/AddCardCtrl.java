@@ -16,25 +16,26 @@
 package client.scenes.CardWindows;
 
 import client.scenes.ListManagement.ListCtrl;
-import client.scenes.MainCtrl;
-import client.utils.CardUtils;
+import client.utils.CardListUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
-public class AddCardCtrl {
+public class AddCardCtrl implements Initializable {
 
-    private final CardUtils server;
-    private final MainCtrl mainCtrl;
-    private ListCtrl listCtrl;
+    private final CardListUtils server;
+    private final ListCtrl listCtrl;
 
     @FXML
     private TextField cardTitle;
@@ -49,30 +50,14 @@ public class AddCardCtrl {
     private Button saveButton;
 
     /**
-     * Constructor with no parameters for AddCardCtrl
-     */
-    public AddCardCtrl() {
-        this.mainCtrl = new MainCtrl();
-        this.server = new CardUtils(new ServerUtils());
-    }
-
-    /**
      * Constructor for AddCardCtrl
      * @param server a server util
-     * @param mainCtrl a main controller
+     * @param listCtrl a main controller
      */
     @Inject
-    public AddCardCtrl(CardUtils server, MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-    }
-
-    /**
-     * Setter for the list controller
-     * @param listCtrl the list controller
-     */
-    public void setListCtrl(ListCtrl listCtrl) {
+    public AddCardCtrl(ServerUtils server, client.scenes.ListManagement.ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
+        this.server = new CardListUtils(server);
     }
 
 
@@ -87,16 +72,30 @@ public class AddCardCtrl {
      * This method adds the created card to the list
      */
     public void save() {
+        ((Stage)saveButton.getScene().getWindow()).close();
         Card card = new Card(
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
                 new ArrayList<>(),
                 new ArrayList<>());
-        card.setCardList(listCtrl.getCardList());
-        server.addCard(card);
-        ((Stage)saveButton.getScene().getWindow()).close();
+        listCtrl.getCardList().addCard(card);
+        server.addCardList(listCtrl.getCardList());
+        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
+    /**
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
+    }
 }
