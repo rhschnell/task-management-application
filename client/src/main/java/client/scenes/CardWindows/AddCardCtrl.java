@@ -22,15 +22,18 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
-public class AddCardCtrl {
+public class AddCardCtrl implements Initializable {
 
     private final CardUtils server;
     private final MainCtrl mainCtrl;
@@ -49,20 +52,12 @@ public class AddCardCtrl {
     private Button saveButton;
 
     /**
-     * Constructor with no parameters for AddCardCtrl
-     */
-    public AddCardCtrl() {
-        this.mainCtrl = new MainCtrl();
-        this.server = new CardUtils(new ServerUtils());
-    }
-
-    /**
      * Constructor for AddCardCtrl
      * @param server a server util
      * @param mainCtrl a main controller
      */
     @Inject
-    public AddCardCtrl(CardUtils server, MainCtrl mainCtrl) {
+    public AddCardCtrl(CardUtils server, client.scenes.MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -95,8 +90,22 @@ public class AddCardCtrl {
                 new ArrayList<>());
         card.setCardList(listCtrl.getCardList());
         server.addCard(card);
+        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 
+    /**
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
+    }
 }

@@ -23,6 +23,7 @@ import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -47,6 +48,9 @@ public class WorkspaceCtrl implements Initializable {
 
     @FXML
     private HBox listContainer;
+
+    @FXML
+    private HBox boardControls;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -96,8 +100,6 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard = new Board(targetKey, targetKey, null);
             server.addBoard(shownBoard);
         }
-        boardName.setText(shownBoard.getTitle());
-        boardNameButton.setText(shownBoard.getTitle());
         mainCtrl.setWorkspace();
         displayBoard();
     }
@@ -109,11 +111,11 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Adds children (Lists) to the HBOX resulting in the creation of the board.
      */
-    public void displayBoard()
-    {
+    public void displayBoard() {
         listContainer.getChildren().clear();
-        for(int i = 0; i < shownBoard.getCardLists().size(); i++)
-        {
+        boardName.setText(shownBoard.getTitle());
+        boardNameButton.setText(shownBoard.getTitle());
+        for(int i = 0; i < shownBoard.getCardLists().size(); i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));
             try {
                 CardList cardList = shownBoard.getCardLists().get(i);
@@ -127,11 +129,45 @@ public class WorkspaceCtrl implements Initializable {
                 ioe.printStackTrace();
             }
         }
+        for(Node child : boardControls.getChildren())
+            if(!child.isVisible())
+                child.setVisible(true);
+        if(!boardName.isVisible())
+            boardName.setVisible(true);
+        if(!boardNameButton.isVisible())
+            boardNameButton.setVisible(true);
+        if(!listContainer.isVisible())
+            listContainer.setVisible(true);
     }
 
+    /**
+     * Method to refresh the workspace
+     */
+    public void refreshWorkspace() {
+        shownBoard = server.getBoard(shownBoard.getKey());
+        displayBoard();
+    }
+
+    /**
+     * Method to clear the workspace
+     */
+    public void clearWorkspace() {
+        shownBoard = null;
+        boardName.setText("");
+        boardNameButton.setText("");
+        listContainer.getChildren().clear();
+        boardName.setVisible(false);
+        boardNameButton.setVisible(false);
+        listContainer.setVisible(false);
+        for(Node child : boardControls.getChildren())
+            child.setVisible(false);
+    }
+
+    /**
+     * Method to delete the shown board from the database
+     */
     public void deleteBoard() {
         server.deleteBoard(shownBoard.getKey());
-        shownBoard = new Board();
-        displayBoard();
+        clearWorkspace();
     }
 }

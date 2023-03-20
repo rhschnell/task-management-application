@@ -144,20 +144,9 @@ public class ListCtrl {
 
     /**
      * Displays the AddCard FXML into a new window (Popup).
-     * @throws IOException
      */
-    public void addCardScreen() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/CardWindows/AddCard.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        String title = "Create Card";
-        ((AddCardCtrl) loader.getController()).setListCtrl(this);
-        Stage popUp = new Stage();
-        popUp.setScene(scene);
-        popUp.initModality(Modality.APPLICATION_MODAL);
-        popUp.setTitle(title);
-        popUp.setResizable(false);
-        popUp.setResizable(false);
-        popUp.showAndWait();
+    public void addCardScreen() {
+        String title = "Create a card";
+        mainCtrl.popUp(mainCtrl.getAddCard(), title);
     }
 }
