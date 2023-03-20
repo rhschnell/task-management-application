@@ -14,7 +14,8 @@ public class CustomListCell extends ListCell<Card> {
      * Creates the cell that will be displayed within list.
      */
     public CustomListCell() {
-        loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/CustomListCell.fxml"));
+        loader = new FXMLLoader(getClass().
+                                getResource("/client/scenes/ListManagement/CustomListCell.fxml"));
         try {
             loader.load();
             controller = loader.getController();

@@ -15,23 +15,18 @@
  */
 package client.scenes.MainScreens;
 import client.scenes.ListManagement.ListCtrl;
-import client.scenes.MainCtrl;
 import client.utils.BoardUtils;
-import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +35,7 @@ import java.util.ResourceBundle;
 public class WorkspaceCtrl implements Initializable {
 
     private final BoardUtils server;
-    private final MainCtrl mainCtrl;
+    private final client.scenes.MainCtrl mainCtrl;
 
     private Board shownBoard;
 
@@ -54,53 +49,21 @@ public class WorkspaceCtrl implements Initializable {
     private HBox listContainer;
 
     /**
-     * Blank constructor for WorkspaceCtrl
-     */
-    public WorkspaceCtrl() {
-        this.server = new BoardUtils(new ServerUtils());
-        this.mainCtrl = new MainCtrl();
-        boardName = new Label();
-        boardNameButton = new Button();
-        listContainer = new HBox();
-        shownBoard = new Board();
-    }
-
-    /**
      * Constructor for WorkspaceCtrl
      * @param server a server util
      * @param mainCtrl a main controller
      */
     @Inject
-    public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl) {
+    public WorkspaceCtrl(BoardUtils server, client.scenes.MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         boardName = new Label();
         boardNameButton = new Button();
         listContainer = new HBox();
-        shownBoard = new Board();
     }
 
     public Board getShownBoard() {
         return shownBoard;
-    }
-
-    /**
-     * Displays the Board Join FXML into a new window (Popup).
-     * @throws IOException
-     */
-    public void joinPopUp() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/MainScreens/BoardJoin.fxml"));
-        Parent root = loader.load();
-        String title = "Join/Create a board";
-        ((BoardJoinCtrl) loader.getController()).setWorkspaceCtrl(this);
-        Scene scene = new Scene(root);
-        Stage popUp = new Stage();
-        popUp.setScene(scene);
-        popUp.initModality(Modality.APPLICATION_MODAL);
-        popUp.setTitle(title);
-        popUp.setResizable(false);
-        popUp.setResizable(false);
-        popUp.showAndWait();
     }
 
     /**
@@ -125,18 +88,19 @@ public class WorkspaceCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void loadBoard(long id) {
-        shownBoard = server.getBoard(id);
-        if (shownBoard != null) {
-            boardName.setText(shownBoard.getTitle());
-            boardNameButton.setText(shownBoard.getTitle());
-            boardName.setVisible(true);
-            boardNameButton.setVisible(true);
-            displayBoard(listContainer);
-        } else {
-            boardName.setVisible(false);
-            boardNameButton.setVisible(false);
+    public void loadBoard() {
+        String targetKey = mainCtrl.getBoardJoinCtrl().getKeyField().getText();
+        try {
+            shownBoard = server.getBoard(targetKey);
+        } catch (BadRequestException e) {
+            shownBoard = new Board(targetKey, targetKey, null);
+            server.addBoard(shownBoard);
         }
+        mainCtrl.setWorkspace();
+    }
+
+    public void joinPopUp() {
+        mainCtrl.getLoginCtrl().joinPopUp();
     }
 
     /**

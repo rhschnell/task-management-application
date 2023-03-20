@@ -54,12 +54,15 @@ public class BoardUtils {
 
     /**
      * Sends a request to the server to retrieve a certain board from the database
+     * @param key the key of the board to find
      * @return the desired board
      */
-    public Board getBoard(long id)
-    {
+    public Board getBoard(String key) {
+        if (key.equals("")) {
+            throw new IllegalArgumentException();
+        }
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD + "/" + id)
+                .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Board.class);
@@ -67,11 +70,12 @@ public class BoardUtils {
 
     /**
      * Sends a request to the server to delete a certain board from the database
+     * @param key of board to delete
      */
-    public void deleteBoard(long id)
+    public void deleteBoard(String key)
     {
         ClientBuilder.newClient(new ClientConfig())
-            .target(serverUtils.getServer()).path(Route.BOARD + "/" + id)
+            .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .delete(Response.class);

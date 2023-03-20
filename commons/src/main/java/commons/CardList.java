@@ -18,7 +18,6 @@ public class CardList {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-
     private String listTitle;
 
     @OneToMany(mappedBy = "cardList", cascade = {CascadeType.ALL})

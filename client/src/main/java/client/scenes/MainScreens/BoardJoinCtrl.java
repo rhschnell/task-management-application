@@ -1,50 +1,62 @@
 package client.scenes.MainScreens;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class BoardJoinCtrl {
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    private final ServerUtils server;
+public class BoardJoinCtrl implements Initializable {
 
-    private WorkspaceCtrl workspaceCtrl;
+    private ServerUtils server;
+    private MainCtrl mainCtrl;
 
     @FXML
     private TextField keyField;
 
-
     /**
-     * Constructor with no parameters for AddCardCtrl
-     */
-    public BoardJoinCtrl() {
-        this.workspaceCtrl = new WorkspaceCtrl();
-        this.server = new ServerUtils();
-    }
-
-    /**
-     * Constructor for AddCardCtrl
+     * Constructor for BoardJoin
      * @param server a server util
      * @param mainCtrl a main controller
      */
     @Inject
-    public BoardJoinCtrl(ServerUtils server, WorkspaceCtrl mainCtrl) {
-        this.workspaceCtrl = mainCtrl;
+    public BoardJoinCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     * Join and call load
+     */
     public void join() {
-        workspaceCtrl.loadBoard(Long.parseLong(keyField.getText()));
+        mainCtrl.getWorkspaceCtrl().loadBoard();
         ((Stage)keyField.getScene().getWindow()).close();
     }
 
-    public WorkspaceCtrl getWorkspaceCtrl() {
-        return workspaceCtrl;
+    /**
+     * Getter for keyField
+     * @return keyField
+     */
+    public TextField getKeyField() {
+        return keyField;
     }
 
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
+    /**
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 }
