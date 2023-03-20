@@ -1,25 +1,40 @@
 package commons;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Board {
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private long key;
+    private String key;
 
     private String title;
 
     @OneToMany(cascade = {CascadeType.ALL})
     private List<CardList> cardLists; // Use a list here to make the annotation work
+
+    /**
+     * Constructor for board class
+     * @param key key
+     * @param title title
+     * @param cardLists null
+     */
+    public Board(String key, String title, List<CardList> cardLists) {
+        this.key = key;
+        this.title = title;
+        this.cardLists = cardLists;
+        if (cardLists == null) {
+            this.cardLists = new ArrayList<>();
+        }
+    }
 
     /**
      * Adds a new clean card-list to the board
@@ -51,6 +66,14 @@ public class Board {
      */
     public void removeListByIndex(int index){
         this.cardLists.remove(index);
+    }
+
+    /**
+     * Getter
+     * @return amount of lists
+     */
+    public int getAmountList() {
+        return this.cardLists.size();
     }
 
 }

@@ -21,7 +21,6 @@ import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,6 +54,7 @@ public class LoginCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.serverAddress.setText("http://localhost:8080");
     }
 
 
@@ -65,7 +65,7 @@ public class LoginCtrl implements Initializable {
     public void connect(){
         server.setServer(serverAddress.getText());
         if (server.pingServer()){
-            showWorkspace();
+            joinPopUp();
         } else {
             showErrorMessage();
         }
@@ -83,5 +83,14 @@ public class LoginCtrl implements Initializable {
      */
     public void showWorkspace() {
         mainCtrl.setWorkspace();
+    }
+
+    /**
+     * Displays the Board Join FXML into a new window (Popup).
+     *
+     */
+    public void joinPopUp() {
+        String title = "Join/Create a board";
+        mainCtrl.popUp(mainCtrl.getBoardJoin(), title);
     }
 }

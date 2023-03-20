@@ -42,7 +42,7 @@ public class Card implements Serializable {
      * @param backgroundColour Background colour of the card
      * @param tags Tags associated with this card
      * @param subTasks Subtasks for this card
-     *
+     * @param id id
      */
     public Card(String title, String description, String backgroundColour, List<Tag> tags,
                 List<Task> subTasks, long id){
