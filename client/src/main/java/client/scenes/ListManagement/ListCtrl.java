@@ -17,15 +17,11 @@ package client.scenes.ListManagement;
 
 import client.CustomListCell;
 import client.Main;
-import client.MyFXML;
-import client.MyModule;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainCtrl;
-import client.scenes.MainScreens.WorkspaceCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
@@ -37,8 +33,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
-import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
 

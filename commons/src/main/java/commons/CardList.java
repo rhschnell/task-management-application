@@ -21,7 +21,7 @@ public class CardList {
     private String listTitle;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pc_fid", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private List<Card> cards = new ArrayList<>();
     /**
      * Constructor for Tests

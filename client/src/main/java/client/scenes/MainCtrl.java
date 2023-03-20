@@ -1,7 +1,5 @@
 package client.scenes;
 
-import client.scenes.CardWindows.AddCardCtrl;
-import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainScreens.BoardJoinCtrl;
 import client.scenes.MainScreens.LoginCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;

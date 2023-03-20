@@ -16,9 +16,7 @@
 package client.scenes.CardWindows;
 
 import client.scenes.ListManagement.ListCtrl;
-import client.scenes.MainCtrl;
 import client.utils.CardListUtils;
-import client.utils.CardUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
@@ -28,7 +26,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.C;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -75,6 +72,7 @@ public class AddCardCtrl implements Initializable {
      * This method adds the created card to the list
      */
     public void save() {
+        ((Stage)saveButton.getScene().getWindow()).close();
         Card card = new Card(
                 cardTitle.getText(),
                 cardDescription.getText(),
@@ -83,7 +81,7 @@ public class AddCardCtrl implements Initializable {
                 new ArrayList<>());
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
-        ((Stage)saveButton.getScene().getWindow()).close();
+        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
     /**

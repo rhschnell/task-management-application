@@ -15,30 +15,20 @@
  */
 package client.scenes.MainScreens;
 import client.Main;
-import client.MyFXML;
-import client.MyModule;
 import client.scenes.ListManagement.ListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
 
@@ -132,9 +122,9 @@ public class WorkspaceCtrl implements Initializable {
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
-        for(Node child : boardControls.getChildren())
+/*        for(Node child : boardControls.getChildren())
             if(!child.isVisible())
-                child.setVisible(true);
+                child.setVisible(true);*/
         if(!boardName.isVisible())
             boardName.setVisible(true);
         if(!boardNameButton.isVisible())
@@ -162,8 +152,8 @@ public class WorkspaceCtrl implements Initializable {
         boardName.setVisible(false);
         boardNameButton.setVisible(false);
         listContainer.setVisible(false);
-        for(Node child : boardControls.getChildren())
-            child.setVisible(false);
+/*        for(Node child : boardControls.getChildren())
+            child.setVisible(false);*/
     }
 
     /**

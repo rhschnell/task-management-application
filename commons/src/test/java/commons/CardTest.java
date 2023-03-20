@@ -211,6 +211,6 @@ class CardTest {
     @Test
     void testToString() {
         assertEquals("Card(title=Some card, description=This is a card, " +
-                     "backgroundColour=White, tags=null, subTasks=null, id=0, cardList=null)", card.toString());
+                     "backgroundColour=White, tags=null, subTasks=null, id=0)", card.toString());
     }
 }
