@@ -17,6 +17,7 @@ package client.scenes.CardWindows;
 
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
+import client.utils.CardListUtils;
 import client.utils.CardUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
@@ -36,7 +37,7 @@ import java.util.ResourceBundle;
 
 public class AddCardCtrl implements Initializable {
 
-    private final CardUtils server;
+    private final CardListUtils server;
     private final ListCtrl listCtrl;
 
     @FXML
@@ -59,7 +60,7 @@ public class AddCardCtrl implements Initializable {
     @Inject
     public AddCardCtrl(ServerUtils server, client.scenes.ListManagement.ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
-        this.server = new CardUtils(server);
+        this.server = new CardListUtils(server);
     }
 
 
@@ -80,9 +81,8 @@ public class AddCardCtrl implements Initializable {
                 "white",
                 new ArrayList<>(),
                 new ArrayList<>());
-        card.setCardList(listCtrl.getCardList());
-        server.addCard(card);
-        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+        listCtrl.getCardList().addCard(card);
+        server.addCardList(listCtrl.getCardList());
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 

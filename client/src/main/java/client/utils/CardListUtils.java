@@ -1,0 +1,85 @@
+package client.utils;
+
+import commons.Board;
+import commons.CardList;
+import commons.Route;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import org.checkerframework.checker.units.qual.C;
+import org.glassfish.jersey.client.ClientConfig;
+
+import javax.inject.Inject;
+import java.util.List;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
+public class CardListUtils {
+    private ServerUtils serverUtils;
+
+    /**
+     * Creates a new BoardUtils object
+     * @param serverUtils The ServerUtils object (injected) to use in requests.
+     */
+    @Inject
+    public CardListUtils(ServerUtils serverUtils){
+        this.serverUtils = serverUtils;
+    }
+
+    /**
+     * Sends a post request to the server to add a board to the database
+     * @param cardList The board to add
+     * @return The added board
+     */
+    public CardList addCardList(CardList cardList)
+    {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.CARD_LIST)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+    /**
+     * Sends a request to the server to get all boards from the database
+     * @return List of all boards in the database
+     */
+    public List<Board> getBoards()
+    {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Board>>() {});
+    }
+
+    /**
+     * Sends a request to the server to retrieve a certain board from the database
+     * @param key the key of the board to find
+     * @return the desired board
+     */
+    public Board getBoard(String key) {
+        if (key.equals("")) {
+            throw new IllegalArgumentException();
+        }
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Board.class);
+    }
+
+    /**
+     * Sends a request to the server to delete a certain board from the database
+     * @param key of board to delete
+     */
+    public void deleteBoard(String key)
+    {
+        ClientBuilder.newClient(new ClientConfig())
+            .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete(Response.class);
+    }
+}

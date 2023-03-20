@@ -20,8 +20,9 @@ public class CardList {
 
     private String listTitle;
 
-    @OneToMany(mappedBy = "cardList", cascade = {CascadeType.ALL})
-    private List<Card> cards;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pc_fid", referencedColumnName = "id")
+    private List<Card> cards = new ArrayList<>();
     /**
      * Constructor for Tests
      * @param listTitle Title of the list
