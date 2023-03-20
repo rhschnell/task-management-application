@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.scenes.CardWindows.AddCardCtrl;
+import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainScreens.BoardJoinCtrl;
 import client.scenes.MainScreens.LoginCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;
@@ -16,12 +17,9 @@ public class MainCtrl {
     private Scene login;
     private Scene workspace;
     private Scene boardJoin;
-    private Scene addCard;
     private LoginCtrl loginCtrl;
     private WorkspaceCtrl workspaceCtrl;
     private BoardJoinCtrl boardJoinCtrl;
-
-    private AddCardCtrl addCardCtrl;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
@@ -29,12 +27,11 @@ public class MainCtrl {
      * @param primary   represents the primary stage
      * @param login     represents the pair of login scene, and its controller.
      * @param workspace represents the pair of workspace scene, and its controller
-     * @param addCard represents the pair of addCard scene, and its controller
      */
     public void initialize(Stage primary,
                            Pair<LoginCtrl, Parent> login,
                            Pair<WorkspaceCtrl, Parent> workspace,
-                           Pair<BoardJoinCtrl, Parent> boardJoin, Pair<AddCardCtrl, Parent> addCard) {
+                           Pair<BoardJoinCtrl, Parent> boardJoin) {
         this.primaryStage = primary;
 
         this.loginCtrl = login.getKey();
@@ -45,9 +42,6 @@ public class MainCtrl {
 
         this.boardJoinCtrl = boardJoin.getKey();
         this.boardJoin = new Scene(boardJoin.getValue());
-
-        this.addCardCtrl = addCard.getKey();
-        this.addCard = new Scene(addCard.getValue());
 
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
@@ -85,10 +79,6 @@ public class MainCtrl {
 
     public Scene getBoardJoin() {
         return boardJoin;
-    }
-
-    public Scene getAddCard() {
-        return addCard;
     }
 
     /**

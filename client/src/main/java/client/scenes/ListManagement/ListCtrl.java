@@ -16,11 +16,16 @@
 package client.scenes.ListManagement;
 
 import client.CustomListCell;
+import client.Main;
+import client.MyFXML;
+import client.MyModule;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
+import client.scenes.MainCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
@@ -33,31 +38,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static com.google.inject.Guice.createInjector;
+
 public class ListCtrl {
 
-    private final ServerUtils server;
-    private final client.scenes.MainCtrl mainCtrl;
+    private ServerUtils server;
+    private client.scenes.MainCtrl mainCtrl;
 
     private CardList cardList;
-
-    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private Label listTitle;
 
     @FXML
     private ListView<Card> cardListView;
-
-    /**
-     * Constructor with no parameters for ListCtrl
-     */
-    public ListCtrl() {
-        this.mainCtrl = new client.scenes.MainCtrl();
-        this.server = new ServerUtils();
-        listTitle = new Label();
-        cardListView = new ListView<>();
-        cardList = new CardList();
-    }
 
     /**
      * Constructor for ListCtrl
@@ -73,16 +67,12 @@ public class ListCtrl {
         cardList = new CardList();
     }
 
+    public MainCtrl getMainCtrl() {
+        return mainCtrl;
+    }
+
     public void setCardList(CardList cardList) {
         this.cardList = cardList;
-    }
-
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
-    }
-
-    public WorkspaceCtrl getWorkspaceCtrl() {
-        return workspaceCtrl;
     }
 
     /**
@@ -145,8 +135,20 @@ public class ListCtrl {
     /**
      * Displays the AddCard FXML into a new window (Popup).
      */
-    public void addCardScreen() {
+    public void addCardScreen() throws IOException {
+        String path = "/client/scenes/CardWindows/AddCard.fxml";
+        var loader = Main.getFXML().load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
         String title = "Create a card";
-        mainCtrl.popUp(mainCtrl.getAddCard(), title);
+        Stage popUp = new Stage();
+        popUp.setScene(scene);
+        popUp.initModality(Modality.APPLICATION_MODAL);
+        popUp.setTitle(title);
+        popUp.setResizable(false);
+        popUp.setResizable(false);
+        popUp.showAndWait();
     }
 }

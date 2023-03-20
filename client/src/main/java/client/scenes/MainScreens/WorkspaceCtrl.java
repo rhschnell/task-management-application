@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 package client.scenes.MainScreens;
+import client.Main;
+import client.MyFXML;
+import client.MyModule;
 import client.scenes.ListManagement.ListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
@@ -32,6 +36,8 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
 
@@ -116,18 +122,14 @@ public class WorkspaceCtrl implements Initializable {
         boardName.setText(shownBoard.getTitle());
         boardNameButton.setText(shownBoard.getTitle());
         for(int i = 0; i < shownBoard.getCardLists().size(); i++) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/scenes/ListManagement/List.fxml"));
-            try {
-                CardList cardList = shownBoard.getCardLists().get(i);
-                VBox list = loader.load();
-                ListCtrl ctrl = loader.getController();
-                ctrl.setCardList(cardList);
-                ctrl.addCards(cardList);
-                ctrl.setListTitle(cardList.getListTitle());
-                listContainer.getChildren().add(list);
-            } catch(IOException ioe) {
-                ioe.printStackTrace();
-            }
+            var loader = Main.getFXML().load(ListCtrl.class, "client", "scenes", "ListManagement", "List.fxml");
+            CardList cardList = shownBoard.getCardLists().get(i);
+            VBox list = (VBox) loader.getValue();
+            ListCtrl ctrl = loader.getKey();
+            ctrl.setCardList(cardList);
+            ctrl.addCards(cardList);
+            ctrl.setListTitle(cardList.getListTitle());
+            listContainer.getChildren().add(list);
         }
         for(Node child : boardControls.getChildren())
             if(!child.isVisible())

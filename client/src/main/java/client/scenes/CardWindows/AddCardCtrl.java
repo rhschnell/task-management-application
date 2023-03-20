@@ -27,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.checkerframework.checker.units.qual.C;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,8 +37,7 @@ import java.util.ResourceBundle;
 public class AddCardCtrl implements Initializable {
 
     private final CardUtils server;
-    private final MainCtrl mainCtrl;
-    private ListCtrl listCtrl;
+    private final ListCtrl listCtrl;
 
     @FXML
     private TextField cardTitle;
@@ -54,20 +54,12 @@ public class AddCardCtrl implements Initializable {
     /**
      * Constructor for AddCardCtrl
      * @param server a server util
-     * @param mainCtrl a main controller
+     * @param listCtrl a main controller
      */
     @Inject
-    public AddCardCtrl(CardUtils server, client.scenes.MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-    }
-
-    /**
-     * Setter for the list controller
-     * @param listCtrl the list controller
-     */
-    public void setListCtrl(ListCtrl listCtrl) {
+    public AddCardCtrl(ServerUtils server, client.scenes.ListManagement.ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
+        this.server = new CardUtils(server);
     }
 
 
@@ -90,7 +82,7 @@ public class AddCardCtrl implements Initializable {
                 new ArrayList<>());
         card.setCardList(listCtrl.getCardList());
         server.addCard(card);
-        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
+        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 
