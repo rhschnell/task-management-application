@@ -5,6 +5,7 @@ import commons.Route;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.inject.Inject;
@@ -49,5 +50,18 @@ public class CardUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
+    }
+
+    /**
+     * Sends a request to the server to delete a certain card from the database
+     * @param id the id of the card to delete
+     */
+    public void deleteCard(long id)
+    {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.CARD + "/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(Card.class);
     }
 }

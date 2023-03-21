@@ -22,7 +22,7 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 
-class MyModule implements Module {
+class MainModules implements Module {
 
     @Override
     public void configure(Binder binder) {

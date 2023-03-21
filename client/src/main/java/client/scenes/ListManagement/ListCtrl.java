@@ -101,15 +101,13 @@ public class ListCtrl {
      * @param cell the card to be viewed
      */
     public void viewCard(Card cell) {
-        String path = "/client/scenes/CardWindows/ViewCard.fxml";
         var loader = myFXML.load(ViewCardCtrl.class, "client", "scenes", "CardWindows", "ViewCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
         ViewCardCtrl controller = loader.getKey();
-        controller.setCardTitle(cell.getTitle());
-        controller.setCardDescription(cell.getDescription());
+        controller.setCard(cell);
 
         String title = "View Card";
         mainCtrl.popUp(scene, title);
