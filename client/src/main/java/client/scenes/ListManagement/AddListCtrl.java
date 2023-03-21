@@ -63,6 +63,7 @@ public class AddListCtrl {
 
     /**
      * This method saves the created card to the list
+     *
      */
     public void setBoardId(String boardId)
     {

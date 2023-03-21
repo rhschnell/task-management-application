@@ -15,8 +15,7 @@
  */
 package client.scenes.ListManagement;
 
-import client.CustomListCell;
-import client.Main;
+import client.*;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainCtrl;
@@ -29,16 +28,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class ListCtrl {
 
     private ServerUtils server;
-    private client.scenes.MainCtrl mainCtrl;
-
+    private MainCtrl mainCtrl;
+    private final MyFXML myFXML;
     private CardList cardList;
 
     @FXML
@@ -50,15 +47,15 @@ public class ListCtrl {
     /**
      * Constructor for ListCtrl
      * @param server a server util
-     * @param mainCtrl a main controller
      */
     @Inject
-    public ListCtrl(ServerUtils server, client.scenes.MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
+    public ListCtrl(ServerUtils server, MyFXML myFXML) {
+        this.mainCtrl = Main.getINJECTOR().getInstance(MainCtrl.class);
         this.server = server;
         cardListView = new ListView<>();
         listTitle = new Label();
         cardList = new CardList();
+        this.myFXML = myFXML;
     }
 
     public MainCtrl getMainCtrl() {
@@ -130,18 +127,12 @@ public class ListCtrl {
      * Displays the AddCard FXML into a new window (Popup).
      */
     public void addCardScreen() {
-        var loader = Main.getFXML().load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
+        var loader = myFXML.load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
         String title = "Create a card";
-        Stage popUp = new Stage();
-        popUp.setScene(scene);
-        popUp.initModality(Modality.APPLICATION_MODAL);
-        popUp.setTitle(title);
-        popUp.setResizable(false);
-        popUp.setResizable(false);
-        popUp.showAndWait();
+        mainCtrl.popUp(scene, title);
     }
 }

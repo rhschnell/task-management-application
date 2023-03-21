@@ -15,19 +15,21 @@
  */
 package client;
 
-import client.scenes.MainCtrl;
-import client.scenes.MainScreens.WorkspaceCtrl;
-import client.scenes.MainScreens.LoginCtrl;
+import client.scenes.CardWindows.AddCardCtrl;
+import client.scenes.CardWindows.ViewCardCtrl;
+import client.scenes.ListManagement.CustomListCellCtrl;
+import client.scenes.ListManagement.ListCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 
-class MyModule implements Module {
+public class ListModules implements Module {
 
     @Override
     public void configure(Binder binder) {
-        binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(LoginCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CustomListCellCtrl.class).in(Scopes.SINGLETON);
     }
 }
