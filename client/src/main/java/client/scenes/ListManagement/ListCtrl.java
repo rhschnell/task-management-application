@@ -17,6 +17,8 @@ package client.scenes.ListManagement;
 
 import client.CustomListCell;
 import client.Main;
+import client.MyFXML;
+import client.MyModule;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainCtrl;
@@ -34,11 +36,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static com.google.inject.Guice.createInjector;
+
 public class ListCtrl {
 
     private ServerUtils server;
     private client.scenes.MainCtrl mainCtrl;
-
+    private MyFXML FXML;
     private CardList cardList;
 
     @FXML
@@ -53,12 +57,13 @@ public class ListCtrl {
      * @param mainCtrl a main controller
      */
     @Inject
-    public ListCtrl(ServerUtils server, client.scenes.MainCtrl mainCtrl) {
+    public ListCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         cardListView = new ListView<>();
         listTitle = new Label();
         cardList = new CardList();
+        this.FXML = new MyFXML(createInjector(new MyModule()));
     }
 
     public MainCtrl getMainCtrl() {
@@ -130,18 +135,12 @@ public class ListCtrl {
      * Displays the AddCard FXML into a new window (Popup).
      */
     public void addCardScreen() {
-        var loader = Main.getFXML().load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
+        var loader = FXML.load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
         String title = "Create a card";
-        Stage popUp = new Stage();
-        popUp.setScene(scene);
-        popUp.initModality(Modality.APPLICATION_MODAL);
-        popUp.setTitle(title);
-        popUp.setResizable(false);
-        popUp.setResizable(false);
-        popUp.showAndWait();
+        mainCtrl.popUp(scene, title);
     }
 }
