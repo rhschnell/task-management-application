@@ -15,6 +15,7 @@
  */
 package client.scenes.MainScreens;
 import client.Main;
+import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.ListManagement.ListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
@@ -23,10 +24,15 @@ import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -132,6 +138,22 @@ public class WorkspaceCtrl implements Initializable {
         if(!listContainer.isVisible())
             listContainer.setVisible(true);
     }
+    public void addListPopup() {
+        var loader = Main.getFXML().load(AddCardCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Create a list";
+        Stage popUp = new Stage();
+        popUp.setScene(scene);
+        popUp.initModality(Modality.APPLICATION_MODAL);
+        popUp.setTitle(title);
+        popUp.setResizable(false);
+        popUp.setResizable(false);
+        popUp.showAndWait();
+    }
+
 
     /**
      * Method to refresh the workspace
@@ -155,6 +177,7 @@ public class WorkspaceCtrl implements Initializable {
 /*        for(Node child : boardControls.getChildren())
             child.setVisible(false);*/
     }
+
 
     /**
      * Method to delete the shown board from the database

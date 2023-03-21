@@ -129,8 +129,7 @@ public class ListCtrl {
     /**
      * Displays the AddCard FXML into a new window (Popup).
      */
-    public void addCardScreen() throws IOException {
-        String path = "/client/scenes/CardWindows/AddCard.fxml";
+    public void addCardScreen() {
         var loader = Main.getFXML().load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
 
         Parent root = loader.getValue();
