@@ -16,6 +16,8 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
+
+import client.scenes.MainCtrl;
 import client.scenes.MainScreens.BoardJoinCtrl;
 import client.scenes.MainScreens.LoginCtrl;
 import client.scenes.MainScreens.WorkspaceCtrl;
@@ -44,7 +46,7 @@ public class Main extends Application {
         var login = FXML.load(LoginCtrl.class, "client", "scenes", "MainScreens", "Login.fxml");
         var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
         var boardJoin = FXML.load(BoardJoinCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
-        var mainCtrl = INJECTOR.getInstance(client.scenes.MainCtrl.class);
+        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, login, workspace, boardJoin);
     }
 

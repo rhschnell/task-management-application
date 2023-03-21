@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 package client.scenes.MainScreens;
+import client.ListModules;
 import client.Main;
-import client.scenes.CardWindows.AddCardCtrl;
+import client.MyFXML;
+import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
@@ -24,17 +26,18 @@ import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
 
@@ -119,7 +122,8 @@ public class WorkspaceCtrl implements Initializable {
         boardName.setText(shownBoard.getTitle());
         boardNameButton.setText(shownBoard.getTitle());
         for(int i = 0; i < shownBoard.getCardLists().size(); i++) {
-            var loader = Main.getFXML().load(ListCtrl.class, "client", "scenes", "ListManagement", "List.fxml");
+            var loader = new MyFXML(createInjector(new ListModules()))
+                    .load(ListCtrl.class, "client", "scenes", "ListManagement", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
@@ -128,9 +132,9 @@ public class WorkspaceCtrl implements Initializable {
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
-/*        for(Node child : boardControls.getChildren())
+        for(Node child : boardControls.getChildren())
             if(!child.isVisible())
-                child.setVisible(true);*/
+                child.setVisible(true);
         if(!boardName.isVisible())
             boardName.setVisible(true);
         if(!boardNameButton.isVisible())
@@ -138,20 +142,15 @@ public class WorkspaceCtrl implements Initializable {
         if(!listContainer.isVisible())
             listContainer.setVisible(true);
     }
+
     public void addListPopup() {
-        var loader = Main.getFXML().load(AddCardCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
+        var loader = Main.getFXML().load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
         String title = "Create a list";
-        Stage popUp = new Stage();
-        popUp.setScene(scene);
-        popUp.initModality(Modality.APPLICATION_MODAL);
-        popUp.setTitle(title);
-        popUp.setResizable(false);
-        popUp.setResizable(false);
-        popUp.showAndWait();
+        mainCtrl.popUp(scene, title);
     }
 
 

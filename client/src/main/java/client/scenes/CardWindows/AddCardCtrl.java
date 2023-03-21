@@ -55,7 +55,7 @@ public class AddCardCtrl implements Initializable {
      * @param listCtrl a main controller
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, client.scenes.ListManagement.ListCtrl listCtrl) {
+    public AddCardCtrl(ServerUtils server, ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
         this.server = new CardListUtils(server);
     }
