@@ -1,14 +1,12 @@
 package server.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Card;
 import commons.Route;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -32,6 +30,7 @@ public class CardController {
      * @return The added card
      */
     @PostMapping(path = {"", "/"})
+    @Transactional
     public ResponseEntity<Card> add(@RequestBody Card card) {
         return ResponseEntity.ok(cards.save(card));
     }
@@ -53,12 +52,12 @@ public class CardController {
      *
      * @param id The id of the card
      * @return HTTP response with code 200 (ok) if the card was found, with the card data in the
-     * body. If the card was not found, contains status code 400 (bad request) and no body.
+     * body. If the card was not found, contains status code 404 (not found) and no body.
      */
     @GetMapping("/{id}")
     public ResponseEntity<Card> getById(@PathVariable("id") long id) {
         if (id < 0 || !cards.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(cards.getById(id));
     }
@@ -68,27 +67,15 @@ public class CardController {
      * Deletes a card from the database
      *
      * @param id The id of the card to delete
-     * @return The deleted card if it existed, otherwise a bad request response
+     * @return A successful response message if the card was found, otherwise a 404 not found
+     * response
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Object delete(@PathVariable("id") long id) throws JsonProcessingException {
-        if (id < 0) {
-            return ResponseEntity.badRequest().build();
-        }
-        ResponseEntity<Card> response = getById(id);
-
-        if (response.getStatusCode() != HttpStatus.OK) {
-            // Card does not exist; bad request
-            return response;
-        }
-
-        Card deleted = response.getBody();
-
-        // Delete the card from the database and return it
-        cards.delete(deleted);
-
-        if (deleted == null) throw new IllegalStateException("Why is this null?");
-        return ResponseEntity.ok(new ObjectMapper().writeValueAsString(deleted));
+    @Transactional
+    public ResponseEntity<String> delete(@PathVariable("id") long id) {
+        if (!cards.existsById(id)) return ResponseEntity.notFound().build();
+        cards.deleteById(id);
+        return ResponseEntity.ok(String.format("Successfully deleted the card with id %d", id));
     }
 }
