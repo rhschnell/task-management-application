@@ -25,10 +25,8 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.concurrent.ScheduledService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -39,21 +37,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.net.URL;
-import java.sql.Time;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import static com.google.inject.Guice.createInjector;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class WorkspaceCtrl implements Initializable {
 
@@ -115,9 +103,9 @@ public class WorkspaceCtrl implements Initializable {
         tl.setCycleCount(-1);
         KeyFrame kf = new KeyFrame(Duration.millis(800),
                 event -> {
-            try {
-                refreshWorkspace();
-            } catch (Exception ignored) {}
+                    try {
+                        refreshWorkspace();
+                    } catch (Exception ignored) {}
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
