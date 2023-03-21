@@ -1,7 +1,9 @@
 package client.utils;
 
 import commons.Board;
+import commons.Card;
 import commons.Route;
+import commons.Tag;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -80,5 +82,7 @@ public class BoardUtils {
             .accept(APPLICATION_JSON)
             .delete(Response.class);
     }
+
+
 
 }

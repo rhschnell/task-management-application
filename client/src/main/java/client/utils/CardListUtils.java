@@ -2,6 +2,7 @@ package client.utils;
 
 import commons.CardList;
 import commons.Route;
+import commons.Tag;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -76,5 +77,15 @@ public class CardListUtils {
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .delete(Response.class);
+    }
+    public Tag addTagToCard(Tag tag, long cardId)
+    {
+        //System.out.println(cardId);
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path("api/tagToCard")
+                .queryParam("cardId",cardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tag,APPLICATION_JSON),Tag.class);
     }
 }

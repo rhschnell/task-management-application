@@ -15,13 +15,18 @@
  */
 package client.scenes.CardWindows;
 
+import client.Main;
 import client.scenes.ListManagement.ListCtrl;
+import client.scenes.TagManagement.TagListCtrl;
 import client.utils.CardListUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -29,6 +34,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -49,6 +55,8 @@ public class AddCardCtrl implements Initializable {
     @FXML
     private Button saveButton;
 
+    private List<Tag> chosenTags;
+
     /**
      * Constructor for AddCardCtrl
      * @param server a server util
@@ -58,6 +66,7 @@ public class AddCardCtrl implements Initializable {
     public AddCardCtrl(ServerUtils server, ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
         this.server = new CardListUtils(server);
+        chosenTags = new ArrayList<>();
     }
 
 
@@ -77,11 +86,27 @@ public class AddCardCtrl implements Initializable {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                new ArrayList<>(),
+                chosenTags,
                 new ArrayList<>());
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+    }
+    public void choseTag(Tag tag)
+    {
+        chosenTags.add(tag);
+    }
+    public void addTagPopup() {
+        var loader = Main.getFXML().load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+        TagListCtrl ctrl = loader.getKey();
+        List<Tag> passedList;
+        passedList = listCtrl.getMainCtrl().getWorkspaceCtrl().getBoardTags();
+        passedList.removeAll(chosenTags);
+        ctrl.addTags(passedList);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Create a list";
+        listCtrl.getMainCtrl().popUp(scene, title);
     }
 
     /**

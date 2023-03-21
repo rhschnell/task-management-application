@@ -70,5 +70,6 @@
             <Circle fill="DODGERBLUE" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
          </children>
       </HBox>
+      <Button layoutX="120.0" layoutY="89.0" mnemonicParsing="false" onAction="#addTagPopup" prefHeight="26.0" prefWidth="37.0" text="+" />
     </children>
 </AnchorPane>

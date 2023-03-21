@@ -19,10 +19,12 @@ import client.Main;
 import client.MyFXML;
 import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
+import client.scenes.TagManagement.TagListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,6 +37,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -58,6 +62,7 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private HBox boardControls;
 
+    private List<Tag> boardTags;
     /**
      * Constructor for WorkspaceCtrl
      * @param server a server util
@@ -70,6 +75,13 @@ public class WorkspaceCtrl implements Initializable {
         boardName = new Label();
         boardNameButton = new Button();
         listContainer = new HBox();
+        boardTags = new ArrayList<>();
+        boardTags.add(new Tag("Filip","alb"));
+    }
+
+    public List<Tag> getBoardTags()
+    {
+        return boardTags;
     }
 
     public Board getShownBoard() {
@@ -124,6 +136,7 @@ public class WorkspaceCtrl implements Initializable {
         for(int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new ListModules()))
                     .load(ListCtrl.class, "client", "scenes", "ListManagement", "List.fxml");
+
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
@@ -145,10 +158,8 @@ public class WorkspaceCtrl implements Initializable {
 
     public void addListPopup() {
         var loader = Main.getFXML().load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
-
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-
         String title = "Create a list";
         mainCtrl.popUp(scene, title);
     }
