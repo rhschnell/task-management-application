@@ -16,7 +16,6 @@
 package client.scenes.CardWindows;
 
 import client.scenes.MainCtrl;
-import client.utils.CardListUtils;
 import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -26,8 +25,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
 
 public class ViewCardCtrl {
 
