@@ -1,5 +1,8 @@
 package client.scenes.ListManagement;
 
+import client.scenes.TagManagement.TagListCtrl;
+import client.utils.ServerUtils;
+import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,6 +14,8 @@ public class CustomListCellCtrl {
     private Label cardTitle;
     @FXML
     private Button deleteButton;
+
+    private TagListCtrl tagListCtrl;
 
     /**
      * Sets the title of the card shown in the overview of the list

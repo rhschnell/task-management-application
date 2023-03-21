@@ -19,6 +19,7 @@ import client.Main;
 import client.MyFXML;
 import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
+import client.scenes.MainCtrl;
 import client.scenes.TagManagement.TagListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
@@ -69,7 +70,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param mainCtrl a main controller
      */
     @Inject
-    public WorkspaceCtrl(BoardUtils server, client.scenes.MainCtrl mainCtrl) {
+    public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         boardName = new Label();

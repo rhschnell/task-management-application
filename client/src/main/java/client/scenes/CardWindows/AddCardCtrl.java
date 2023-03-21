@@ -15,7 +15,9 @@
  */
 package client.scenes.CardWindows;
 
+import client.ListModules;
 import client.Main;
+import client.MyFXML;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.TagListCtrl;
 import client.utils.CardListUtils;
@@ -36,6 +38,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 
 public class AddCardCtrl implements Initializable {
@@ -97,16 +101,23 @@ public class AddCardCtrl implements Initializable {
         chosenTags.add(tag);
     }
     public void addTagPopup() {
-        var loader = Main.getFXML().load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+        var loader =  new MyFXML(createInjector(new ListModules())).load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
+        System.out.println(chosenTags);
         List<Tag> passedList;
         passedList = listCtrl.getMainCtrl().getWorkspaceCtrl().getBoardTags();
         passedList.removeAll(chosenTags);
         ctrl.addTags(passedList);
+        ctrl.setCtrl(this);
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-        String title = "Create a list";
+        String title = "Add tag";
         listCtrl.getMainCtrl().popUp(scene, title);
+    }
+
+    public void x()
+    {
+        System.out.println(listCtrl.getMainCtrl());
     }
 
     /**

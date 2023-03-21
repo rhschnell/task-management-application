@@ -27,7 +27,7 @@
                <Insets right="5.0" />
             </HBox.margin>
          </Label>
-         <Button fx:id="deleteButton" mnemonicParsing="false" text="+" />
+         <Button mnemonicParsing="false" onAction="#choose" text="+" />
         </HBox>
    </children>
 </AnchorPane>

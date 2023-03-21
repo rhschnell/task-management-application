@@ -1,31 +1,34 @@
 package client.scenes.TagManagement;
 
+import client.Main;
+import client.MyFXML;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
-import jakarta.inject.Inject;
+import com.google.inject.Inject;
+import commons.CardList;
+import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 
 public class CustomTagCellCtrl {
     @FXML
-    private Label cellTitle;
+    private Label cardTitle;
     @FXML
     private Button deleteButton;
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private ServerUtils server;
+    private TagListCtrl tagListCtrl;
 
+    private Tag tag;
 
     @Inject
-    public CustomTagCellCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
-    }
+    public CustomTagCellCtrl(ServerUtils server, TagListCtrl tagListCtrl) {
+        //this.server = server;
+        this.tagListCtrl = tagListCtrl;
 
-    public MainCtrl getMainCtrl() {
-        return mainCtrl;
     }
 
     /**
@@ -33,17 +36,22 @@ public class CustomTagCellCtrl {
      * @param text
      */
     public void setTagTitle(String text) {
-        cellTitle.setText(text);
+        cardTitle.setText(text);
     }
 
+    public void setCtrl(TagListCtrl tagListCtrl)
+    {
+        this.tagListCtrl=tagListCtrl;
+    }
+    public void setTag(Tag tag){this.tag = tag;}
     /**
      * Sets the event to happen when interacting with the delete button
      * @param handler the event to happen
      */
-    public void setOnButtonClick(EventHandler<ActionEvent> handler) {
-        deleteButton.setOnAction(handler);
-        mainCtrl.getWorkspaceCtrl().getBoardTags();
-        //here i need the addcard controll i got opened by
+    public void choose() {
+       tagListCtrl.getCardCtrl().choseTag(tag);
+       System.out.println(tagListCtrl+"TagCell");
+        tagListCtrl.cancel();
     }
 }
 

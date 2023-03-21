@@ -15,12 +15,13 @@
  */
 package client.scenes.TagManagement;
 
-import client.CustomListCell;
-import client.CustomTagCell;
-import client.Main;
+import client.*;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
+import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
+import client.utils.CardListUtils;
+import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -34,16 +35,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 public class TagListCtrl {
 
-    private ServerUtils server;
-    private MainCtrl mainCtrl;
+    private CardUtils server;
+    private AddCardCtrl addCardCtrl;
 
     private CardList tagList;
 
@@ -54,55 +61,46 @@ public class TagListCtrl {
     private Button cancelButton;
 
     @FXML
-    private ListView<Tag> tagListView;
+    private VBox tagListBox;
 
     /**
      * Constructor for ListCtrl
      * @param server a server util
-     * @param mainCtrl a main controller
+     * @param addCardCtrl a main controller
      */
     @Inject
-    public TagListCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
-        tagListView = new ListView<>();
+    public TagListCtrl(ServerUtils server, AddCardCtrl addCardCtrl) {
+        this.addCardCtrl = addCardCtrl;
         tagListTitle = new Label();
         tagList = new CardList();
+        tagListBox=new VBox();
     }
 
-    public MainCtrl getMainCtrl() {
-        return mainCtrl;
+    public void setCtrl(AddCardCtrl addCardCtrl)
+    {
+        this.addCardCtrl=addCardCtrl;
     }
-
-   /* public void setCardList(CardList cardList) {
-        this.tagList = cardList;
+    public void addTags(List<Tag> tagList)
+    {
+        System.out.println(this+"TagList");
+        for(int i=0; i<tagList.size(); i++) {
+            var loader = new MyFXML(createInjector(new ListModules()))
+                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+            CustomTagCellCtrl ctrl = loader.getKey();
+            ctrl.setTagTitle(tagList.get(i).getName());
+            ctrl.setTag(tagList.get(i));
+            ctrl.setCtrl(this);
+            tagListBox.getChildren().add(loader.getValue());
+        }
     }
-
-    */
-
-
-
-  /*  public CardList getCardList() {
-        return tagList;
-    }*/
-
+    public AddCardCtrl getCardCtrl() {
+        return addCardCtrl;
+    }
 
     public void setListTitle(String title) {
         tagListTitle.setText(title);
     }
 
-    public void addTags(List<Tag> boardTagLists) {
-        tagListView.setCellFactory(param -> {
-            ListCell<Tag> tagCell = new CustomTagCell();
-            tagCell.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2) {
-
-                }
-            });
-            return tagCell;
-        });
-        tagListView.getItems().addAll(boardTagLists);
-    }
     public void cancel() {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
