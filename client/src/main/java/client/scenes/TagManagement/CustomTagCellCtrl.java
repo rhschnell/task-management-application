@@ -14,6 +14,19 @@ public class CustomTagCellCtrl {
     private Label cellTitle;
     @FXML
     private Button deleteButton;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+
+
+    @Inject
+    public CustomTagCellCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.server = server;
+        this.mainCtrl = mainCtrl;
+    }
+
+    public MainCtrl getMainCtrl() {
+        return mainCtrl;
+    }
 
     /**
      * Sets the title of the card shown in the overview of the list
@@ -29,6 +42,7 @@ public class CustomTagCellCtrl {
      */
     public void setOnButtonClick(EventHandler<ActionEvent> handler) {
         deleteButton.setOnAction(handler);
+        mainCtrl.getWorkspaceCtrl().getBoardTags();
         //here i need the addcard controll i got opened by
     }
 }

@@ -1,29 +1,27 @@
 package client;
+import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.ListManagement.CustomListCellCtrl;
 import client.scenes.TagManagement.CustomTagCellCtrl;
 import commons.Card;
 import commons.Tag;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
+import javafx.util.Pair;
 
 import java.io.IOException;
 
 public class CustomTagCell extends ListCell<Tag> {
-    private FXMLLoader loader;
     private CustomTagCellCtrl controller;
+
+    private Pair<CustomTagCellCtrl,Parent> loader;
 
     /**
      * Creates the cell that will be displayed within list.
      */
     public CustomTagCell() {
-        loader = new FXMLLoader(getClass().
-                                getResource("/client/scenes/TagManagement/CustomTagCell.fxml"));
-        try {
-            loader.load();
-            controller = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+           loader = Main.getFXML().load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
     }
 
     /**
@@ -41,14 +39,10 @@ public class CustomTagCell extends ListCell<Tag> {
             setText(null);
             setGraphic(null);
         } else {
-           // controller.setTagTitle(item.getName());
-            controller.setOnButtonClick(event -> {
+            loader.getKey().setOnButtonClick(event -> {
                 System.out.println(item.getColor());
-                // Handle button click
-                //controller.
-                //here i can pass the control i come from if i known
             });
-            setGraphic(loader.getRoot());
+            setGraphic(loader.getValue());
         }
     }
 }
