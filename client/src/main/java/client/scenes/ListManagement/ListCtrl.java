@@ -24,12 +24,9 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
-import java.io.IOException;
 
 public class ListCtrl {
 
@@ -104,23 +101,18 @@ public class ListCtrl {
      * @param cell the card to be viewed
      */
     public void viewCard(Card cell) {
-        try {
-            String path = "/client/scenes/CardWindows/ViewCard.fxml";
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+        String path = "/client/scenes/CardWindows/ViewCard.fxml";
+        var loader = myFXML.load(ViewCardCtrl.class, "client", "scenes", "CardWindows", "ViewCard.fxml");
 
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
 
-            ViewCardCtrl controller = loader.getController();
-            controller.setCardTitle(cell.getTitle());
-            controller.setCardDescription(cell.getDescription());
+        ViewCardCtrl controller = loader.getKey();
+        controller.setCardTitle(cell.getTitle());
+        controller.setCardDescription(cell.getDescription());
 
-            String title = "View Card";
-            mainCtrl.popUp(scene, title);
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        String title = "View Card";
+        mainCtrl.popUp(scene, title);
     }
 
     /**

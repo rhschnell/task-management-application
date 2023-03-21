@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package client.scenes.MainScreens;
+
 import client.ListModules;
 import client.Main;
 import client.MyFXML;
@@ -24,6 +25,8 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -33,6 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,7 +64,8 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Constructor for WorkspaceCtrl
-     * @param server a server util
+     *
+     * @param server   a server util
      * @param mainCtrl a main controller
      */
     @Inject
@@ -87,15 +92,23 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Initialize the board by getting a board object. Afterwords, it calls the displays
      * the board by calling the function displayBoard which adds the lists to the Vbox;
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
+        Timeline tl = new Timeline();
+        tl.setCycleCount(-1);
+        KeyFrame kf = new KeyFrame(Duration.millis(800),
+                event -> {
+                    try {
+                        refreshWorkspace();
+                    } catch (Exception ignored) {}
+                });
+        tl.getKeyFrames().add(kf);
+        tl.play();
     }
 
     public void loadBoard() {
@@ -121,7 +134,7 @@ public class WorkspaceCtrl implements Initializable {
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
         boardNameButton.setText(shownBoard.getTitle());
-        for(int i = 0; i < shownBoard.getCardLists().size(); i++) {
+        for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new ListModules()))
                     .load(ListCtrl.class, "client", "scenes", "ListManagement", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
@@ -132,14 +145,14 @@ public class WorkspaceCtrl implements Initializable {
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
-        for(Node child : boardControls.getChildren())
-            if(!child.isVisible())
+        for (Node child : boardControls.getChildren())
+            if (!child.isVisible())
                 child.setVisible(true);
-        if(!boardName.isVisible())
+        if (!boardName.isVisible())
             boardName.setVisible(true);
-        if(!boardNameButton.isVisible())
+        if (!boardNameButton.isVisible())
             boardNameButton.setVisible(true);
-        if(!listContainer.isVisible())
+        if (!listContainer.isVisible())
             listContainer.setVisible(true);
     }
 
@@ -173,8 +186,8 @@ public class WorkspaceCtrl implements Initializable {
         boardName.setVisible(false);
         boardNameButton.setVisible(false);
         listContainer.setVisible(false);
-/*        for(Node child : boardControls.getChildren())
-            child.setVisible(false);*/
+        for (Node child : boardControls.getChildren())
+            child.setVisible(false);
     }
 
 
