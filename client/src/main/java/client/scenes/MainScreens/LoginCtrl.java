@@ -44,6 +44,14 @@ public class LoginCtrl implements Initializable {
     }
 
     /**
+     * Getter for server address
+     * @return the server address
+     */
+    public TextField getServerAddress() {
+        return serverAddress;
+    }
+
+    /**
      *
      * @param location
      * The location used to resolve relative paths for the root object, or

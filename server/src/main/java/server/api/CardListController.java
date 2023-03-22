@@ -40,7 +40,7 @@ public class CardListController {
      * @return List of all cardList in the database
      */
     @GetMapping(path = {"", "/"})
-    public List<CardList> getAll() {
+    public List<CardList> findAll() {
         return cardLists.findAll();
     }
 
@@ -53,9 +53,9 @@ public class CardListController {
     @GetMapping("/{id}")
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         if (id < 0 || !cardLists.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(cardLists.findById(id).get());
+        return ResponseEntity.ok(cardLists.getById(id));
     }
 
     /**
