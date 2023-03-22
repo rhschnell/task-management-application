@@ -11,12 +11,12 @@
 <AnchorPane prefHeight="35.0" prefWidth="113.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagManagement.CustomTagCellCtrl">
    <children>
         <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="89.0" prefHeight="40.0" prefWidth="113.0" style="-fx-border-radius: 10; -fx-border-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <Circle fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+         <Circle fx:id="tagColor" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
             <HBox.margin>
                <Insets left="5.0" right="6.0" />
             </HBox.margin>
          </Circle>
-             <Label fx:id="cardTitle" contentDisplay="TOP" prefHeight="40.0" prefWidth="48.0" text="Urgent" wrapText="true">
+             <Label fx:id="tagTitle" contentDisplay="TOP" prefHeight="40.0" prefWidth="48.0" text="Urgent" wrapText="true">
             <font>
                <Font name="Arial Bold" size="13.0" />
             </font>
@@ -27,7 +27,7 @@
                <Insets right="5.0" />
             </HBox.margin>
          </Label>
-         <Button mnemonicParsing="false" onAction="#choose" text="+" />
+         <Button mnemonicParsing="false" onAction="#chooseAndClose" text="+" />
         </HBox>
    </children>
 </AnchorPane>

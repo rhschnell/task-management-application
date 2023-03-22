@@ -15,15 +15,12 @@
  */
 package client.scenes.CardWindows;
 
-import client.ListModules;
-import client.MyFXML;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.TagListCtrl;
 import client.utils.CardListUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
-import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,15 +30,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.C;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static com.google.inject.Guice.createInjector;
-
 
 public class AddCardCtrl implements Initializable {
 
@@ -74,6 +67,9 @@ public class AddCardCtrl implements Initializable {
         chosenTags = new ArrayList<>();
     }
 
+    public ListCtrl getListCtrl() {
+        return listCtrl;
+    }
 
     /**
      * This method cancels adding the created card to the list
@@ -91,12 +87,9 @@ public class AddCardCtrl implements Initializable {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                new ArrayList<>(),
+                chosenTags,
                 new ArrayList<>());
-        card.setTags(server.getTags());
-      //  List<Tag> debtag = server.getTags();
-      //  List<CardList> debcard = server.getCardLists();
-        //chosenTags = new ArrayList<>();
+        chosenTags = new ArrayList<>();
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
@@ -106,17 +99,12 @@ public class AddCardCtrl implements Initializable {
         chosenTags.add(tag);
     }
     public void addTagPopup() {
-        var loader =  new MyFXML(createInjector(new ListModules())).
+        List<Tag> availableTags = server.getTags();
+        availableTags.removeAll(chosenTags);
+        var loader =  listCtrl.getMyFXML().
                 load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
-        System.out.println(chosenTags);
-        //List<Tag> passedList;
-        //passedList = listCtrl.getMainCtrl().getWorkspaceCtrl().getBoardTags();
-        List<Tag> debtag = server.getTags();
-        List<CardList> debcard = server.getCardLists();
-        //passedList.removeAll(chosenTags);
-        ctrl.addTags(server.getTags());
-        ctrl.setCtrl(this);
+        ctrl.setAvailableTags(availableTags);
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
@@ -136,4 +124,5 @@ public class AddCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
 }

@@ -15,64 +15,40 @@
  */
 package client.scenes.TagManagement;
 
-import client.*;
 import client.scenes.CardWindows.AddCardCtrl;;
-import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.List;
 
-import static com.google.inject.Guice.createInjector;
 
 public class TagListCtrl {
 
-    private CardUtils server;
+    private ServerUtils server;
     private AddCardCtrl addCardCtrl;
-
-    private CardList tagList;
-
-    @FXML
-    private Label tagListTitle;
-
     @FXML
     private Button cancelButton;
 
     @FXML
     private VBox tagListBox;
 
-    /**
-     * Constructor for ListCtrl
-     * @param server a server util
-     * @param addCardCtrl a main controller
-     */
     @Inject
     public TagListCtrl(ServerUtils server, AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
-        tagListTitle = new Label();
-        tagList = new CardList();
+        this.server = server;
         tagListBox=new VBox();
     }
-
-    public void setCtrl(AddCardCtrl addCardCtrl)
+    public void setAvailableTags(List<Tag> tagList)
     {
-        this.addCardCtrl=addCardCtrl;
-    }
-    public void addTags(List<Tag> tagList)
-    {
-        System.out.println(this+"TagList");
         for(int i=0; i<tagList.size(); i++) {
-            var loader = new MyFXML(createInjector(new ListModules()))
+            var loader = addCardCtrl.getListCtrl().getMyFXML()
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagTitle(tagList.get(i).getName());
-            ctrl.setTag(tagList.get(i));
+            ctrl.setTagObject(tagList.get(i));
             ctrl.setCtrl(this);
             tagListBox.getChildren().add(loader.getValue());
         }
@@ -81,11 +57,7 @@ public class TagListCtrl {
         return addCardCtrl;
     }
 
-    public void setListTitle(String title) {
-        tagListTitle.setText(title);
-    }
-
-    public void cancel() {
+    public void escapeWindow() {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
 

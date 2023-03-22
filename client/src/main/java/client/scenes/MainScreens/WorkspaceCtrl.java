@@ -24,7 +24,6 @@ import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
-import commons.Tag;
 import jakarta.ws.rs.BadRequestException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,8 +36,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -62,7 +59,6 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private HBox boardControls;
 
-    private List<Tag> boardTags;
     /**
      * Constructor for WorkspaceCtrl
      * @param server a server util
@@ -75,14 +71,10 @@ public class WorkspaceCtrl implements Initializable {
         boardName = new Label();
         boardNameButton = new Button();
         listContainer = new HBox();
-        boardTags = new ArrayList<>();
-        boardTags.add(new Tag("Filip","alb"));
+
     }
 
-    public List<Tag> getBoardTags()
-    {
-        return boardTags;
-    }
+
 
     public Board getShownBoard() {
         return shownBoard;
