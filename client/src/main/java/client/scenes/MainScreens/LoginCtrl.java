@@ -79,7 +79,7 @@ public class LoginCtrl implements Initializable {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Connection error");
-        alert.setContentText("Please try a new server");
+        alert.setContentText("The server you entered does not exist or is turned off. Please try a new server");
 
         alert.showAndWait();
     }
