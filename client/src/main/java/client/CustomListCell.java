@@ -1,5 +1,5 @@
 package client;
-import client.scenes.ListManagement.CustomListCellCtrl;
+import client.scenes.ListManagement.ListCellCtrl;
 import commons.Card;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class CustomListCell extends ListCell<Card> {
     private FXMLLoader loader;
-    private CustomListCellCtrl controller;
+    private ListCellCtrl controller;
 
     /**
      * Creates the cell that will be displayed within list.
