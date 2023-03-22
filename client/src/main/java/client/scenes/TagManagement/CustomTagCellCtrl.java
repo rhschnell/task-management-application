@@ -1,18 +1,12 @@
 package client.scenes.TagManagement;
 
-import client.Main;
-import client.MyFXML;
-import client.scenes.MainCtrl;
+
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.CardList;
 import commons.Tag;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 
 public class CustomTagCellCtrl {
     @FXML
@@ -49,8 +43,8 @@ public class CustomTagCellCtrl {
      * @param handler the event to happen
      */
     public void choose() {
-       tagListCtrl.getCardCtrl().choseTag(tag);
-       System.out.println(tagListCtrl+"TagCell");
+        tagListCtrl.getCardCtrl().choseTag(tag);
+        //System.out.println(tagListCtrl+"TagCell");
         tagListCtrl.cancel();
     }
 }

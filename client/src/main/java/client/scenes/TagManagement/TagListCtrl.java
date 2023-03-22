@@ -16,34 +16,18 @@
 package client.scenes.TagManagement;
 
 import client.*;
-import client.scenes.CardWindows.AddCardCtrl;
-import client.scenes.CardWindows.ViewCardCtrl;
-import client.scenes.ListManagement.ListCtrl;
-import client.scenes.MainCtrl;
-import client.utils.CardListUtils;
+import client.scenes.CardWindows.AddCardCtrl;;
 import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Card;
 import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 

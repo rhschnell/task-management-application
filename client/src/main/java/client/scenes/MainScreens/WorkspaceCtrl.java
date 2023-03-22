@@ -20,7 +20,6 @@ import client.MyFXML;
 import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
-import client.scenes.TagManagement.TagListCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;

@@ -16,7 +16,6 @@
 package client.scenes.CardWindows;
 
 import client.ListModules;
-import client.Main;
 import client.MyFXML;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.TagListCtrl;
@@ -104,7 +103,8 @@ public class AddCardCtrl implements Initializable {
         chosenTags.add(tag);
     }
     public void addTagPopup() {
-        var loader =  new MyFXML(createInjector(new ListModules())).load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+        var loader =  new MyFXML(createInjector(new ListModules())).
+                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         System.out.println(chosenTags);
         List<Tag> passedList;

@@ -26,10 +26,10 @@ public class Card implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "Card_Tag",
             joinColumns = {
-            @JoinColumn(name = "card_id",referencedColumnName = "id")
-    },
+                @JoinColumn(name = "card_id",referencedColumnName = "id")
+            },
             inverseJoinColumns = {
-            @JoinColumn(name="tag_id",referencedColumnName = "id")
+                @JoinColumn(name="tag_id",referencedColumnName = "id")
             })
     private List<Tag> tags;
 

@@ -1,8 +1,6 @@
 package client.scenes.ListManagement;
 
 import client.scenes.TagManagement.TagListCtrl;
-import client.utils.ServerUtils;
-import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

@@ -15,12 +15,8 @@
  */
 package client.utils;
 
-import commons.Tag;
 import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
 import org.glassfish.jersey.client.ClientConfig;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 
 public class ServerUtils {
