@@ -88,4 +88,12 @@ public class CardListUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tag,APPLICATION_JSON),Tag.class);
     }
+    public List<Tag> getTags()
+    {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.TAG)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>() {});
+    }
 }

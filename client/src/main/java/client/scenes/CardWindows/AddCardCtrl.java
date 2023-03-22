@@ -23,6 +23,7 @@ import client.utils.CardListUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,6 +33,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.checkerframework.checker.units.qual.C;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -84,16 +86,17 @@ public class AddCardCtrl implements Initializable {
      * This method adds the created card to the list
      */
     public void save() {
-        List<Tag> tags = new ArrayList<>();
-        //chosenTags
-        tags.add(new Tag("Filip","Tag"));
         ((Stage)saveButton.getScene().getWindow()).close();
         Card card = new Card(
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                tags,
+                new ArrayList<>(),
                 new ArrayList<>());
+        card.setTags(server.getTags());
+      //  List<Tag> debtag = server.getTags();
+      //  List<CardList> debcard = server.getCardLists();
+        //chosenTags = new ArrayList<>();
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
@@ -107,22 +110,18 @@ public class AddCardCtrl implements Initializable {
                 load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         System.out.println(chosenTags);
-        List<Tag> passedList;
-        passedList = listCtrl.getMainCtrl().getWorkspaceCtrl().getBoardTags();
-        passedList.removeAll(chosenTags);
-        ctrl.addTags(passedList);
+        //List<Tag> passedList;
+        //passedList = listCtrl.getMainCtrl().getWorkspaceCtrl().getBoardTags();
+        List<Tag> debtag = server.getTags();
+        List<CardList> debcard = server.getCardLists();
+        //passedList.removeAll(chosenTags);
+        ctrl.addTags(server.getTags());
         ctrl.setCtrl(this);
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
         listCtrl.getMainCtrl().popUp(scene, title);
     }
-
-    public void x()
-    {
-        System.out.println(listCtrl.getMainCtrl());
-    }
-
     /**
      *
      * @param location

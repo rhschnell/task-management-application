@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.TagRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -31,9 +32,14 @@ public class TagController {
      * @param tag The card to add
      * @return The added card
      */
+    @Transactional
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Tag> add(@RequestBody Tag tag) {
-        return ResponseEntity.ok(tags.save(tag));
+
+        if(tags.findAll().contains(tag) || tags.existsById(tag.getId()))
+            return ResponseEntity.ok(tag);
+        else
+            return ResponseEntity.ok(tags.save(tag));
     }
 
 
@@ -42,6 +48,7 @@ public class TagController {
      *
      * @return All tags in the database
      */
+    @Transactional
     @GetMapping(path = {"", "/"})
     public List<Tag> findAll() {
         return tags.findAll();

@@ -24,7 +24,7 @@ public class Tag {
     private long id;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.REMOVE},mappedBy = "tags", fetch = FetchType.EAGER)
     private List<Card> cards;
 
 
