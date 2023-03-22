@@ -85,14 +85,16 @@ public class AddCardCtrl implements Initializable {
      * This method adds the created card to the list
      */
     public void save() {
+        List<Tag> tags = new ArrayList<>();
+        //chosenTags
+        tags.add(new Tag("Filip","Tag"));
         ((Stage)saveButton.getScene().getWindow()).close();
         Card card = new Card(
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                chosenTags,
+                tags,
                 new ArrayList<>());
-        System.out.println(card);
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
