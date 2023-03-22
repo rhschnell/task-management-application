@@ -17,11 +17,11 @@ import java.util.Objects;
 public class Tag {
     private String name;
 
-
     private String color;
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     /**

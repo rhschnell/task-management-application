@@ -92,6 +92,7 @@ public class AddCardCtrl implements Initializable {
                 "white",
                 chosenTags,
                 new ArrayList<>());
+        System.out.println(card);
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
