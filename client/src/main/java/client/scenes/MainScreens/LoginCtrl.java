@@ -20,6 +20,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -75,7 +76,12 @@ public class LoginCtrl implements Initializable {
      * Shows a message to the user indicating that the connection to the server could not be made.
      */
     private void showErrorMessage() {
-        System.out.println("Could not connect to the server");
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Connection error");
+        alert.setContentText("Please try a new server");
+
+        alert.showAndWait();
     }
 
     /**
