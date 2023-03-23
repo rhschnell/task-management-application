@@ -23,7 +23,7 @@ public class CustomTagCellCtrl {
     @FXML
     private Circle tagColor;
 
-    private boolean type;
+    private boolean isAddType;
 
     private Tag tag;
 
@@ -37,22 +37,25 @@ public class CustomTagCellCtrl {
         this.tag = tag;
         tagTitle.setText(tag.getName());
         tagColor.setFill(Color.web(tag.getColor()));
-        this.type=type;
+        this.isAddType=type;
         if(type)
-        {actionButton.setText("Add");actionButton.getStyleClass().add("blue-button");}
+        {
+            actionButton.setText("Add");actionButton.getStyleClass().add("blue-button");
+        }
         else
-        {actionButton.setText("Remove");actionButton.getStyleClass().add("red-button");}
+        {
+            actionButton.setText("Remove");actionButton.getStyleClass().add("red-button");
+        }
     }
     public void chooseAndClose() {
-        if(type) {
+        if(isAddType) {
             tagListCtrl.getCardCtrl().applyTag(tag);
-            tagListCtrl.escapeWindow();
         }
         else
         {
             tagListCtrl.getCardCtrl().removeAppliedTag(tag);
-            tagListCtrl.escapeWindow();
         }
+        tagListCtrl.escapeWindow();
     }
 }
 
