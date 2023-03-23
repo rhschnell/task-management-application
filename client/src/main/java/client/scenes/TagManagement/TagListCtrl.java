@@ -34,13 +34,17 @@ public class TagListCtrl {
     private Button cancelButton;
 
     @FXML
-    private VBox tagListBox;
+    private VBox appliedTagsBox;
+    @FXML
+    private VBox availableTagsBox;
+
 
     @Inject
     public TagListCtrl(ServerUtils server, AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
         this.server = server;
-        tagListBox=new VBox();
+        availableTagsBox=new VBox();
+        appliedTagsBox=new VBox();
     }
     public void setAvailableTags(List<Tag> tagList)
     {
@@ -48,9 +52,20 @@ public class TagListCtrl {
             var loader = addCardCtrl.getListCtrl().getMyFXML()
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(tagList.get(i));
-            ctrl.setCtrl(this);
-            tagListBox.getChildren().add(loader.getValue());
+            ctrl.setTagObject(tagList.get(i),true);
+            //ctrl.setCtrl(this);
+            availableTagsBox.getChildren().add(loader.getValue());
+        }
+    }
+    public void setAppliedTags(List<Tag> tagList)
+    {
+        for(int i=0; i<tagList.size(); i++) {
+            var loader = addCardCtrl.getListCtrl().getMyFXML()
+                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+            CustomTagCellCtrl ctrl = loader.getKey();
+            ctrl.setTagObject(tagList.get(i),false);
+            //ctrl.setCtrl(this);
+            appliedTagsBox.getChildren().add(loader.getValue());
         }
     }
     public AddCardCtrl getCardCtrl() {

@@ -53,7 +53,7 @@ public class AddCardCtrl implements Initializable {
     @FXML
     private Button saveButton;
 
-    private List<Tag> chosenTags;
+    private List<Tag> appliedTags;
 
     /**
      * Constructor for AddCardCtrl
@@ -64,7 +64,7 @@ public class AddCardCtrl implements Initializable {
     public AddCardCtrl(ServerUtils server, ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
         this.server = new CardListUtils(server);
-        chosenTags = new ArrayList<>();
+        appliedTags = new ArrayList<>();
     }
 
     public ListCtrl getListCtrl() {
@@ -87,24 +87,29 @@ public class AddCardCtrl implements Initializable {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                chosenTags,
+                appliedTags,
                 new ArrayList<>());
-        chosenTags = new ArrayList<>();
+        appliedTags = new ArrayList<>();
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
-    public void choseTag(Tag tag)
+    public void applyTag(Tag tag)
     {
-        chosenTags.add(tag);
+        appliedTags.add(tag);
+    }
+    public void removeAppliedTag(Tag tag)
+    {
+        appliedTags.remove(tag);
     }
     public void addTagPopup() {
         List<Tag> availableTags = server.getTags();
-        availableTags.removeAll(chosenTags);
+        availableTags.removeAll(appliedTags);
         var loader =  listCtrl.getMyFXML().
                 load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         ctrl.setAvailableTags(availableTags);
+        ctrl.setAppliedTags(appliedTags);
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
