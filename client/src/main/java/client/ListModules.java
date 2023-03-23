@@ -17,7 +17,7 @@ package client;
 
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
-import client.scenes.ListManagement.CustomListCellCtrl;
+import client.scenes.ListManagement.ListCellCtrl;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.CustomTagCellCtrl;
 import client.scenes.TagManagement.TagListCtrl;
@@ -32,7 +32,7 @@ public class ListModules implements Module {
         binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(CustomListCellCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCellCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CustomTagCellCtrl.class).in(Scopes.SINGLETON);
     }
