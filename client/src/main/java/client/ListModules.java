@@ -35,6 +35,5 @@ public class ListModules implements Module {
         binder.bind(CustomListCellCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CustomTagCellCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ListCellCtrl.class).in(Scopes.SINGLETON);
     }
 }
