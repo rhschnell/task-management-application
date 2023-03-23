@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -115,7 +116,7 @@ public class WorkspaceCtrl implements Initializable {
         String targetKey = mainCtrl.getBoardJoinCtrl().getKeyField().getText();
         try {
             shownBoard = server.getBoard(targetKey);
-        } catch (BadRequestException e) {
+        } catch (NotFoundException | BadRequestException e) {
             shownBoard = new Board(targetKey, targetKey, null);
             server.addBoard(shownBoard);
         }
