@@ -41,7 +41,7 @@ public class BoardController {
      * @return List of all boards in the database
      */
     @GetMapping(path = {"", "/"})
-    public List<Board> getAll() {
+    public List<Board> findAll() {
         return boards.findAll();
     }
 
