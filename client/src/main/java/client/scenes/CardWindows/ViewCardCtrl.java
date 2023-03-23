@@ -15,15 +15,18 @@
  */
 package client.scenes.CardWindows;
 
+import client.MyFXML;
 import client.scenes.MainCtrl;
 import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ViewCardCtrl {
@@ -31,6 +34,7 @@ public class ViewCardCtrl {
     private CardUtils server;
 
     private MainCtrl mainCtrl;
+    private MyFXML myFXML;
     private Card card;
 
     @FXML
@@ -50,9 +54,10 @@ public class ViewCardCtrl {
      * @param server a server util
      */
     @Inject
-    public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl, MyFXML myFXML) {
         this.server = new CardUtils(server);
         this.mainCtrl = mainCtrl;
+        this.myFXML = myFXML;
     }
 
     /**
@@ -91,4 +96,15 @@ public class ViewCardCtrl {
         mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 
+    public void edit()
+    {
+        var loader = myFXML.load(EditCardCtrl.class, "client", "scenes", "CardWindows", "EditCard.fxml");
+        loader.getKey().setServer(server);
+        loader.getKey().setCard(card);
+        loader.getKey().setViewCardScene(cardDescription.getScene());
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.getValue()));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
 }
