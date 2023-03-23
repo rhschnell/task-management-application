@@ -17,7 +17,7 @@ package client;
 
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
-import client.scenes.ListManagement.ListCellCtrl;
+import client.scenes.ListManagement.CustomListCellCtrl;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.CustomTagCellCtrl;
 import client.scenes.TagManagement.TagListCtrl;
