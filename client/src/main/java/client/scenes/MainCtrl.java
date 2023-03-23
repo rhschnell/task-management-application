@@ -63,6 +63,10 @@ public class MainCtrl {
         primaryStage.setScene(workspace);
     }
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     public LoginCtrl getLoginCtrl() {
         return loginCtrl;
     }

@@ -23,6 +23,17 @@ class CardTest {
         );
     }
 
+    @Test
+    void constructorWithoutID() {
+        card = new Card(
+                "My card",
+                "Fancy description",
+                "White",
+                null,
+                null
+        );
+        assertNotNull(card);
+    }
 
 
     @Test
