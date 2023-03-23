@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes.MainScreens;
+package client.scenes.UserWorkspace;
 
 import client.ListModules;
 import client.Main;
@@ -87,7 +87,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        mainCtrl.setLogin();
+        mainCtrl.setUserLogin();
     }
 
     /**
@@ -125,7 +125,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void joinPopUp() {
-        mainCtrl.getLoginCtrl().joinPopUp();
+        mainCtrl.getAdminLoginCtrl().joinPopUp();
     }
 
     /**

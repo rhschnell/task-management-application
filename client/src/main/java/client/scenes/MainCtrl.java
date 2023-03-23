@@ -1,8 +1,7 @@
 package client.scenes;
 
-import client.scenes.MainScreens.BoardJoinCtrl;
-import client.scenes.MainScreens.LoginCtrl;
-import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.*;
+import client.scenes.UserWorkspace.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -12,28 +11,37 @@ import javafx.util.Pair;
 
 public class MainCtrl {
     private Stage primaryStage;
-    private Scene login;
+    private Scene startUp;
+    private Scene userLogin;
+    private Scene adminLogin;
     private Scene workspace;
     private Scene boardJoin;
-    private LoginCtrl loginCtrl;
+    private StartUpCtrl startUpCtrl;
+    private UserLoginCtrl userLoginCtrl;
+    private AdminLoginCtrl adminLoginCtrl;
     private WorkspaceCtrl workspaceCtrl;
     private BoardJoinCtrl boardJoinCtrl;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
      *
-     * @param primary   represents the primary stage
-     * @param login     represents the pair of login scene, and its controller.
-     * @param workspace represents the pair of workspace scene, and its controller
+     * @param primary       represents the primary stage
+     * @param adminLogin    represents the pair of login scene, and its controller.
+     * @param workspace     represents the pair of workspace scene, and its controller
      */
     public void initialize(Stage primary,
-                           Pair<LoginCtrl, Parent> login,
+                           Pair<StartUpCtrl, Parent> startUp,
+                           Pair<UserLoginCtrl, Parent> userLogin,
+                           Pair<AdminLoginCtrl, Parent> adminLogin,
                            Pair<WorkspaceCtrl, Parent> workspace,
                            Pair<BoardJoinCtrl, Parent> boardJoin) {
         this.primaryStage = primary;
 
-        this.loginCtrl = login.getKey();
-        this.login = new Scene(login.getValue());
+        this.startUpCtrl = startUp.getKey();
+        this.startUp = new Scene(startUp.getValue());
+
+        this.adminLoginCtrl = adminLogin.getKey();
+        this.adminLogin = new Scene(adminLogin.getValue());
 
         this.workspaceCtrl = workspace.getKey();
         this.workspace = new Scene(workspace.getValue());
@@ -41,34 +49,46 @@ public class MainCtrl {
         this.boardJoinCtrl = boardJoin.getKey();
         this.boardJoin = new Scene(boardJoin.getValue());
 
+        this.userLoginCtrl = userLogin.getKey();
+        this.userLogin = new Scene(userLogin.getValue());
+
+        primary.setTitle("Talio");
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
-        setLogin();
+        setStartUp();
         primary.show();
     }
 
     /**
-     * Switches the actual scene to the login scene.
+     * Switches the actual scene to the start-up scene.
      */
-    public void setLogin() {
-        primaryStage.setTitle("Talio");
-        primaryStage.setScene(login);
+    public void setStartUp() {
+        primaryStage.setScene(startUp);
+    }
+
+    /**
+     * Switches the actual scene to the admin login scene.
+     */
+    public void setAdminLogin() {
+        primaryStage.setScene(adminLogin);
+    }
+
+    /**
+     * Switches the actual scene to the user login scene.
+     */
+    public void setUserLogin() {
+        primaryStage.setScene(userLogin);
     }
 
     /**
      * Switches the actual scene to the workspace scene.
      */
     public void setWorkspace() {
-        primaryStage.setTitle("Talio");
         primaryStage.setScene(workspace);
     }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    public LoginCtrl getLoginCtrl() {
-        return loginCtrl;
+    public AdminLoginCtrl getAdminLoginCtrl() {
+        return adminLoginCtrl;
     }
 
     public WorkspaceCtrl getWorkspaceCtrl() {

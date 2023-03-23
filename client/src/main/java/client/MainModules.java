@@ -16,8 +16,6 @@
 package client;
 
 import client.scenes.MainCtrl;
-import client.scenes.MainScreens.WorkspaceCtrl;
-import client.scenes.MainScreens.LoginCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -27,7 +25,5 @@ class MainModules implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(LoginCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
     }
 }
