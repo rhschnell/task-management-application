@@ -26,8 +26,9 @@ import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
-    private static final Injector INJECTOR = createInjector(new MyModule());
+    private static final Injector INJECTOR = createInjector(new MainModules());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     public static void main(String[] args) {

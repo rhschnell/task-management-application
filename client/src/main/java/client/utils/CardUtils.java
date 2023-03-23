@@ -50,4 +50,17 @@ public class CardUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
     }
+
+    /**
+     * Sends a request to the server to delete a certain card from the database
+     * @param id the id of the card to delete
+     */
+    public void deleteCard(long id)
+    {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.CARD + "/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(Card.class);
+    }
 }

@@ -16,17 +16,22 @@
 package client.scenes.CardWindows;
 
 import client.scenes.MainCtrl;
+import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class ViewCardCtrl {
 
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private CardUtils server;
+
+    private MainCtrl mainCtrl;
+    private Card card;
 
     @FXML
     private Label cardTitle;
@@ -41,30 +46,30 @@ public class ViewCardCtrl {
     private Button editButton;
 
     /**
-     * Constructor with no parameters for ViewCardCtrl
-     */
-    public ViewCardCtrl() {
-        this.mainCtrl = new MainCtrl();
-        this.server = new ServerUtils();
-    }
-
-    /**
      * Constructor for ViewCardCtrl
      * @param server a server util
-     * @param mainCtrl a main controller
      */
     @Inject
     public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.server = new CardUtils(server);
         this.mainCtrl = mainCtrl;
-        this.server = server;
+    }
+
+    /**
+     * A setter for the card shown in the View Card window
+     * @param card the card
+     */
+    public void setCard(Card card) {
+        this.card = card;
+        setCardTitle(card.getTitle());
+        setCardDescription(card.getDescription());
     }
 
     /**
      * A setter for the card title shown in the View Card window
      * @param title the card title
      */
-    public void setCardTitle(String title)
-    {
+    public void setCardTitle(String title) {
         cardTitle.setText(title);
     }
 
@@ -72,9 +77,18 @@ public class ViewCardCtrl {
      * A setter for the card description shown in the View Card window
      * @param description the card description
      */
-    public void setCardDescription(String description)
-    {
+    public void setCardDescription(String description) {
         cardDescription.setText(description);
+    }
+
+    /**
+     * Method to delete the current card
+     */
+    public void delete() {
+        ((Stage)deleteButton.getScene().getWindow()).close();
+        Card removed = card;
+        server.deleteCard(card.getId());
+        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 
 }
