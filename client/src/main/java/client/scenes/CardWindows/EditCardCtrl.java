@@ -71,9 +71,9 @@ public class EditCardCtrl implements Initializable {
     public void save()
     {
         String title=cardTitle.getText();
-        String sorin=cardDescription.getText();
+        String description=cardDescription.getText();
         card.setTitle(title);
-        card.setDescription(sorin);
+        card.setDescription(description);
         server.addCard(card);
         ((Stage)saveButton.getScene().getWindow()).close();
         ((Stage)viewCardScene.getWindow()).close();
