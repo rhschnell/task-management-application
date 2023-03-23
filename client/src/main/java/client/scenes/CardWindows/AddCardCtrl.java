@@ -16,6 +16,7 @@
 package client.scenes.CardWindows;
 
 import client.scenes.ListManagement.ListCtrl;
+import client.scenes.TagManagement.CustomTagCellCtrl;
 import client.scenes.TagManagement.TagListCtrl;
 import client.utils.CardListUtils;
 import com.google.inject.Inject;
@@ -29,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -53,6 +55,9 @@ public class AddCardCtrl implements Initializable {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private VBox appliedTagsVbox;
+
     private List<Tag> appliedTags;
 
     /**
@@ -65,6 +70,7 @@ public class AddCardCtrl implements Initializable {
         this.listCtrl = listCtrl;
         this.server = new CardListUtils(server);
         appliedTags = new ArrayList<>();
+        appliedTagsVbox = new VBox();
     }
 
     public ListCtrl getListCtrl() {
@@ -97,10 +103,25 @@ public class AddCardCtrl implements Initializable {
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
+        var loader = getListCtrl().getMyFXML()
+                .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+        CustomTagCellCtrl ctrl = loader.getKey();
+        ctrl.setTagObject(tag,false);
+        appliedTagsVbox.getChildren().add(loader.getValue());
     }
     public void removeAppliedTag(Tag tag)
     {
         appliedTags.remove(tag);
+        appliedTagsVbox.getChildren().clear();
+
+        for(int i=0;i<appliedTags.size();i++)
+        {
+            var loader = getListCtrl().getMyFXML()
+                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+            CustomTagCellCtrl ctrl = loader.getKey();
+            ctrl.setTagObject(appliedTags.get(i),false);
+            appliedTagsVbox.getChildren().add(loader.getValue());
+        }
     }
     public void addTagPopup() {
         List<Tag> availableTags = server.getTags();

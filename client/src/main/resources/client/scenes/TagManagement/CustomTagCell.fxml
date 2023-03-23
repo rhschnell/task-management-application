@@ -8,15 +8,15 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="35.0" prefWidth="357.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagManagement.CustomTagCellCtrl">
+<AnchorPane prefHeight="40.0" prefWidth="357.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagManagement.CustomTagCellCtrl">
    <children>
-        <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="89.0" prefHeight="40.0" prefWidth="360.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="89.0" prefHeight="40.0" prefWidth="357.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <Circle fx:id="tagColor" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
             <HBox.margin>
                <Insets left="5.0" right="6.0" />
             </HBox.margin>
          </Circle>
-             <Label fx:id="tagTitle" contentDisplay="TOP" prefHeight="40.0" prefWidth="48.0" text="Urgent" wrapText="true">
+             <Label fx:id="tagTitle" contentDisplay="TOP" prefHeight="35.0" prefWidth="147.0" text="Urgent" wrapText="true">
             <font>
                <Font name="Arial Bold" size="13.0" />
             </font>
@@ -27,9 +27,9 @@
                <Insets right="5.0" />
             </HBox.margin>
          </Label>
-         <Button fx:id="actionButton" mnemonicParsing="false" onAction="#chooseAndClose" prefHeight="26.0" prefWidth="78.0" text="Add">
+         <Button fx:id="actionButton" mnemonicParsing="false" onAction="#chooseAndClose" prefHeight="26.0" prefWidth="164.0" text="Add">
             <HBox.margin>
-               <Insets left="200.0" right="5.0" />
+               <Insets left="130.0" right="15.0" />
             </HBox.margin>
          </Button>
         </HBox>
