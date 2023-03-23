@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class CustomListCellCtrl {
+public class ListCellCtrl {
     @FXML
     private Label cardTitle;
     @FXML

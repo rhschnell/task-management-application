@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class TestCardRepository implements CardRepository {
+class TestCardRepository implements CardRepository {
 
     private final List<Card> cards = new ArrayList<>();
     private final List<String> calledMethods = new ArrayList<>();
@@ -127,7 +127,7 @@ public class TestCardRepository implements CardRepository {
     @Override
     public <S extends Card> S save(S entity) {
         call("save");
-        entity.setId(cards.size());
+        entity.setId(cards.size() + 1);
         cards.add(entity);
         return entity;
     }
@@ -152,7 +152,8 @@ public class TestCardRepository implements CardRepository {
     @Override
     public void deleteById(Long id) {
         // TODO Auto-generated method stub
-
+        call("deleteById");
+        cards.removeIf(card -> card.getId() == id);
     }
 
     @Override

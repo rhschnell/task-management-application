@@ -67,7 +67,7 @@ public class CardListUtils {
     }
 
     /**
-     * Sends a request to the server to delete a certain board from the database
+     * Sends a request to the server to delete a certain card list from the database
      * @param id of card list delete
      */
     public void deleteCardList(int id)

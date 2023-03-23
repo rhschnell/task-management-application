@@ -53,9 +53,13 @@ public class CardListController {
     @GetMapping("/{id}")
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         if (id < 0 || !cardLists.existsById(id)) {
+<<<<<<< server/src/main/java/server/api/CardListController.java
             return ResponseEntity.badRequest().build();
+=======
+            return ResponseEntity.notFound().build();
+>>>>>>> server/src/main/java/server/api/CardListController.java
         }
-        return ResponseEntity.ok(cardLists.findById(id).get());
+        return ResponseEntity.ok(cardLists.getById(id));
     }
 
     /**

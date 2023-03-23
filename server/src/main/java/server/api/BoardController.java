@@ -48,16 +48,16 @@ public class BoardController {
     /**
      * Gets a specific board from the database
      *
-     * @param id ID of the board
+     * @param key The key of the board
      * @return If the board was not found, status code 400,
      * else status code 200 and data in the body
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<Board> getById(@PathVariable("id") String id) {
-        if (!boards.existsById(id)) {
-            return ResponseEntity.badRequest().build();
+    @GetMapping("/{key}")
+    public ResponseEntity<Board> getById(@PathVariable("key") String key) {
+        if (!boards.existsById(key)) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(boards.findById(id).get());
+        return ResponseEntity.ok(boards.getById(key));
     }
 
     /**
