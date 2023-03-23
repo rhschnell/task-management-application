@@ -40,7 +40,7 @@ public class CardListController {
      * @return List of all cardList in the database
      */
     @GetMapping(path = {"", "/"})
-    public List<CardList> getAll() {
+    public List<CardList> findAll() {
         return cardLists.findAll();
     }
 
