@@ -15,6 +15,8 @@
  */
 package client.scenes.TagManagement;
 
+import client.ListModules;
+import client.MyFXML;
 import client.scenes.CardWindows.AddCardCtrl;;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -24,6 +26,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.List;
+
+import static com.google.inject.Guice.createInjector;
 
 
 public class TagListCtrl {
@@ -49,22 +53,22 @@ public class TagListCtrl {
     public void setAvailableTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
-            var loader = addCardCtrl.getListCtrl().getMyFXML()
+            var loader =new MyFXML(createInjector(new ListModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(tagList.get(i),true);
-            //ctrl.setCtrl(this);
+            ctrl.setTagObject(tagList.get(i),"addFromTagList");
+            ctrl.setCtrl(this);
             availableTagsBox.getChildren().add(loader.getValue());
         }
     }
     public void setAppliedTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
-            var loader = addCardCtrl.getListCtrl().getMyFXML()
+            var loader = new MyFXML(createInjector(new ListModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(tagList.get(i),false);
-            //ctrl.setCtrl(this);
+            ctrl.setTagObject(tagList.get(i),"removeFromTagList");
+            ctrl.setCtrl(this);
             appliedTagsBox.getChildren().add(loader.getValue());
         }
     }

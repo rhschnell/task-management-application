@@ -15,6 +15,8 @@
  */
 package client.scenes.CardWindows;
 
+import client.ListModules;
+import client.MyFXML;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.CustomTagCellCtrl;
 import client.scenes.TagManagement.TagListCtrl;
@@ -37,6 +39,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 public class AddCardCtrl implements Initializable {
 
@@ -103,10 +107,11 @@ public class AddCardCtrl implements Initializable {
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
-        var loader = getListCtrl().getMyFXML()
+        var loader =  new MyFXML(createInjector(new ListModules()))
                 .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
-        ctrl.setTagObject(tag,false);
+        ctrl.setCtrl2(this);
+        ctrl.setTagObject(tag,"removeFromAddCard");
         appliedTagsVbox.getChildren().add(loader.getValue());
     }
     public void removeAppliedTag(Tag tag)
@@ -116,10 +121,11 @@ public class AddCardCtrl implements Initializable {
 
         for(int i=0;i<appliedTags.size();i++)
         {
-            var loader = getListCtrl().getMyFXML()
+            var loader =  new MyFXML(createInjector(new ListModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(appliedTags.get(i),false);
+            ctrl.setCtrl2(this);
+            ctrl.setTagObject(appliedTags.get(i),"removeFromAddCard");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
     }
