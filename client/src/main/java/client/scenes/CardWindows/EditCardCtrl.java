@@ -1,6 +1,6 @@
 package client.scenes.CardWindows;
 
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.utils.CardUtils;
 import commons.Card;
 import javafx.fxml.FXML;
@@ -76,7 +76,7 @@ public class EditCardCtrl implements Initializable {
         String description=cardDescription.getText();
         card.setTitle(title);
         card.setDescription(description);
-        server.addCard(card);
+        server.insertCard(card);
         ((Stage)saveButton.getScene().getWindow()).close();
         ((Stage)viewCardScene.getWindow()).close();
     }

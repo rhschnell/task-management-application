@@ -17,7 +17,7 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
-import client.scenes.MainCtrl;
+import client.modules.MainModules;
 import client.scenes.MainScreens.*;
 import client.scenes.UserWorkspace.WorkspaceCtrl;
 import com.google.inject.Injector;

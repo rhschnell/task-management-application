@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client;
+package client.modules;
 
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.scenes.MainScreens.AdminLoginCtrl;
 import client.scenes.MainScreens.UserLoginCtrl;
 import client.scenes.UserWorkspace.WorkspaceCtrl;

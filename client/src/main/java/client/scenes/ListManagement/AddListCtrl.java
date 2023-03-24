@@ -15,7 +15,7 @@
  */
 package client.scenes.ListManagement;
 
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.CardList;
@@ -78,7 +78,7 @@ public class AddListCtrl {
                 listTitle.getText(),new ArrayList<>());
 
         mainCtrl.getWorkspaceCtrl().getShownBoard().addList(cardList);
-        server.addBoard(mainCtrl.getWorkspaceCtrl().getShownBoard());
+        server.insertBoard(mainCtrl.getWorkspaceCtrl().getShownBoard());
         mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 }

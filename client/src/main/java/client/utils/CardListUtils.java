@@ -15,7 +15,7 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class CardListUtils {
-    private ServerUtils serverUtils;
+    private final ServerUtils serverUtils;
 
     /**
      * Creates a new BoardUtils object
@@ -29,11 +29,9 @@ public class CardListUtils {
     /**
      * Sends a post request to the server to add a card list to the database
      * @param cardList The card list to add
-     * @return The added card list
      */
-    public CardList addCardList(CardList cardList)
-    {
-        return ClientBuilder.newClient(new ClientConfig())
+    public void insertCardList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.CARD_LIST)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -41,16 +39,15 @@ public class CardListUtils {
     }
 
     /**
-     * Sends a request to the server to get all card lists from the database
-     * @return List of all card lists in the database
+     * Sends a request to the server to delete a certain card list from the database
+     * @param id of card list delete
      */
-    public List<CardList> getCardLists()
-    {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.CARD_LIST)
+    public void deleteCardList(int id) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.CARD_LIST + "/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {});
+                .delete(Response.class);
     }
 
     /**
@@ -67,33 +64,14 @@ public class CardListUtils {
     }
 
     /**
-     * Sends a request to the server to delete a certain card list from the database
-     * @param id of card list delete
+     * Sends a request to the server to get all card lists from the database
+     * @return List of all card lists in the database
      */
-    public void deleteCardList(int id)
-    {
-        ClientBuilder.newClient(new ClientConfig())
-            .target(serverUtils.getServer()).path(Route.CARD_LIST + "/" + id)
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .delete(Response.class);
-    }
-    public Tag addTagToCard(Tag tag, long cardId)
-    {
-        //System.out.println(cardId);
+    public List<CardList> getCardLists() {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path("api/tagToCard")
-                .queryParam("cardId",cardId)
+                .target(serverUtils.getServer()).path(Route.CARD_LIST)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(tag,APPLICATION_JSON),Tag.class);
-    }
-    public List<Tag> getTags()
-    {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.TAG)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Tag>>() {});
+                .get(new GenericType<>() {});
     }
 }

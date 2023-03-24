@@ -15,12 +15,12 @@
  */
 package client.scenes.UserWorkspace;
 
-import client.ListModules;
+import client.modules.ListModules;
 import client.Main;
 import client.MyFXML;
 import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -73,7 +73,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param mainCtrl a main controller
      */
     @Inject
-    public WorkspaceCtrl(BoardUtils server, client.scenes.MainCtrl mainCtrl) {
+    public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         boardName = new Label();
@@ -126,7 +126,7 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard = server.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
             shownBoard = new Board(targetKey, targetKey, null);
-            server.addBoard(shownBoard);
+            server.insertBoard(shownBoard);
         }
         mainCtrl.setWorkspace();
         displayBoard();

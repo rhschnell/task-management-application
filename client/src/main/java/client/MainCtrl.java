@@ -1,4 +1,4 @@
-package client.scenes;
+package client;
 
 import client.scenes.MainScreens.*;
 import client.scenes.UserWorkspace.WorkspaceCtrl;
@@ -54,6 +54,11 @@ public class MainCtrl {
         primary.show();
     }
 
+    public void switchScene() {
+
+    }
+
+
     /**
      * Switches the actual scene to the start-up scene.
      */
@@ -98,7 +103,6 @@ public class MainCtrl {
      */
     public void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
-        FXMLLoader loader = (FXMLLoader) scene.getUserData();
         popUp.setScene(scene);
         popUp.initModality(Modality.APPLICATION_MODAL);
         popUp.setTitle(title);

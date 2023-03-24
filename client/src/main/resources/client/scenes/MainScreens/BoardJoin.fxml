@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="198.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.BoardJoinCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0"
+            prefWidth="198.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.BoardJoinCtrl">
    <children>
       <TextField fx:id="keyField" layoutX="17.0" layoutY="57.0" prefHeight="26.0" prefWidth="164.0" promptText="Key" style="-fx-background-radius: 10;" AnchorPane.bottomAnchor="57.0">
          <font>

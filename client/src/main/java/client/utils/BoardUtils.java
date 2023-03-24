@@ -14,7 +14,7 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class BoardUtils {
-    private ServerUtils serverUtils;
+    private final ServerUtils serverUtils;
 
     /**
      * Creates a new BoardUtils object
@@ -28,11 +28,9 @@ public class BoardUtils {
     /**
      * Sends a post request to the server to add a board to the database
      * @param board The board to add
-     * @return The added board
      */
-    public Board addBoard(Board board)
-    {
-        return ClientBuilder.newClient(new ClientConfig())
+    public void insertBoard(Board board) {
+        ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -40,16 +38,15 @@ public class BoardUtils {
     }
 
     /**
-     * Sends a request to the server to get all boards from the database
-     * @return List of all boards in the database
+     * Sends a request to the server to delete a certain board from the database
+     * @param key of board to delete
      */
-    public List<Board> getBoards()
-    {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD)
+    public void deleteBoard(String key) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Board>>() {});
+                .delete(Response.class);
     }
 
     /**
@@ -58,9 +55,6 @@ public class BoardUtils {
      * @return the desired board
      */
     public Board getBoard(String key) {
-        if (key.equals("")) {
-            throw new IllegalArgumentException();
-        }
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
                 .request(APPLICATION_JSON)
@@ -69,16 +63,14 @@ public class BoardUtils {
     }
 
     /**
-     * Sends a request to the server to delete a certain board from the database
-     * @param key of board to delete
+     * Sends a request to the server to get all boards from the database
+     * @return List of all boards in the database
      */
-    public void deleteBoard(String key)
-    {
-        ClientBuilder.newClient(new ClientConfig())
-            .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .delete(Response.class);
+    public List<Board> getBoards() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Board>>() {});
     }
-
 }
