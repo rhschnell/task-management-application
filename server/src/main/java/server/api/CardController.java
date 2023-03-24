@@ -79,4 +79,3 @@ public class CardController {
         return ResponseEntity.ok(String.format("Successfully deleted the card with id %d", id));
     }
 }
-

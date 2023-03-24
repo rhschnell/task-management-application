@@ -81,6 +81,4 @@ public class BoardUtils {
             .delete(Response.class);
     }
 
-
-
 }
