@@ -36,11 +36,9 @@ public class EditCardCtrl implements Initializable {
         this.viewCardScene = viewCardScene;
     }
    
-@Inject
+    @Inject
     public EditCardCtrl(CardUtils server) {
-
         this.server = server;
-
 }
 
     /**
