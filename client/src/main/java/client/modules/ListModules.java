@@ -15,10 +15,10 @@
  */
 package client.modules;
 
-import client.scenes.CardWindows.AddCardCtrl;
-import client.scenes.CardWindows.ViewCardCtrl;
-import client.scenes.ListManagement.ListCtrl;
-import client.scenes.TagManagement.TagListCtrl;
+import client.windows.cards.addCard.AddCardCtrl;
+import client.windows.cards.ViewCardCtrl;
+import client.windows.lists.ListCtrl;
+import client.windows.tags.TagListCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;

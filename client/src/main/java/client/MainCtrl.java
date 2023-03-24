@@ -1,8 +1,7 @@
 package client;
 
-import client.scenes.MainScreens.*;
-import client.scenes.UserWorkspace.WorkspaceCtrl;
-import javafx.fxml.FXMLLoader;
+import client.windows.login.*;
+import client.windows.workspace.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;

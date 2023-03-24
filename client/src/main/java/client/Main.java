@@ -18,8 +18,8 @@ package client;
 import static com.google.inject.Guice.createInjector;
 
 import client.modules.MainModules;
-import client.scenes.MainScreens.*;
-import client.scenes.UserWorkspace.WorkspaceCtrl;
+import client.windows.login.*;
+import client.windows.workspace.WorkspaceCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -43,19 +43,11 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        var startUp = FXML.load(StartUpCtrl.class, "client", "scenes", "MainScreens", "StartUp.fxml");
-        var userLogin = FXML.load(UserLoginCtrl.class, "client", "scenes", "MainScreens", "UserLogin.fxml");
-        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "MainScreens", "AdminLogin.fxml");
-        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","UserWorkspace","Workspace.fxml");
+        var startUp = FXML.load(StartUpCtrl.class, "client", "windows", "login", "StartUp.fxml");
+        var userLogin = FXML.load(UserLoginCtrl.class, "client", "windows", "login", "UserLogin.fxml");
+        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "windows", "login", "AdminLogin.fxml");
+        var workspace = FXML.load(WorkspaceCtrl.class, "client", "windows","workspace","Workspace.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, workspace);
-    }
-
-    public static Injector getINJECTOR() {
-        return INJECTOR;
-    }
-
-    public static MyFXML getFXML() {
-        return FXML;
     }
 }
