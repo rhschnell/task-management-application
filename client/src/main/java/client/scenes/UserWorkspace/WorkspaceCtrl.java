@@ -85,6 +85,10 @@ public class WorkspaceCtrl implements Initializable {
         return shownBoard;
     }
 
+    public void setPassedKey(String passedKey) {
+        this.passedKey = passedKey;
+    }
+
     /**
      * Return's to the main screen
      */
