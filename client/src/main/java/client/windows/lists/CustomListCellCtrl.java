@@ -14,7 +14,7 @@ public class CustomListCellCtrl extends ListCell<Card> {
      */
     public CustomListCellCtrl() {
         loader = new FXMLLoader(getClass().
-                                getResource("/client/scenes/ListManagement/ListCell.fxml"));
+                                getResource("/client/windows/lists/ListCell.fxml"));
         try {
             loader.load();
             controller = loader.getController();

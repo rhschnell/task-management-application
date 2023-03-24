@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.login;
+package client.windows.login.user;
 
 import client.MainCtrl;
 import client.utils.ServerUtils;
@@ -26,7 +26,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AdminLoginCtrl implements Initializable {
+public class UserLoginCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -39,7 +39,7 @@ public class AdminLoginCtrl implements Initializable {
      * @param mainCtrl a main controller
      */
     @Inject
-    public AdminLoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public UserLoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -75,7 +75,7 @@ public class AdminLoginCtrl implements Initializable {
     public void connect(){
         server.setServer(serverAddress.getText());
         if (server.pingServer()){
-            //TODO
+            showWorkspace();
         } else {
             showErrorMessage();
         }
@@ -94,7 +94,7 @@ public class AdminLoginCtrl implements Initializable {
     }
 
     /**
-     * When called, it switches back to the board overview, disconnecting the user from the workspace.
+     * When called, it switches back to the workspace scene.
      */
     public void showWorkspace() {
         mainCtrl.setWorkspace();

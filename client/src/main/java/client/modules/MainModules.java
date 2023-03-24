@@ -16,8 +16,8 @@
 package client.modules;
 
 import client.MainCtrl;
-import client.windows.login.AdminLoginCtrl;
-import client.windows.login.UserLoginCtrl;
+import client.windows.login.admin.AdminLoginCtrl;
+import client.windows.login.user.UserLoginCtrl;
 import client.windows.workspace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;

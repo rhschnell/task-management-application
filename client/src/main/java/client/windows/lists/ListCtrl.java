@@ -17,7 +17,7 @@ package client.windows.lists;
 
 import client.*;
 import client.windows.cards.addCard.AddCardCtrl;
-import client.windows.cards.ViewCardCtrl;
+import client.windows.cards.viewCard.ViewCardCtrl;
 import client.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;

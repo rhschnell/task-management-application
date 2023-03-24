@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.cards;
+package client.windows.cards.viewCard;
 
 import client.modules.ListModules;
 import client.MyFXML;

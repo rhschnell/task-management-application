@@ -135,13 +135,13 @@ public class WorkspaceCtrl implements Initializable {
     //TODO Remove this pop up and integrate board join to the workspace directly,
     // as suggested by the heuristic evaluation
     public void joinPopUp() {
-//        var loader = Main.getFXML().
-//                load(ListCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
-//        Parent root = loader.getValue();
-//        Scene boardJoin = new Scene(root);
-//        String title = "Join/Create a board";
-//        mainCtrl.popUp(boardJoin, title);
-//        loadBoard();
+        var loader = Main.getFXML().
+                load(ListCtrl.class, "client", "windows", "login", "BoardJoin.fxml");
+        Parent root = loader.getValue();
+        Scene boardJoin = new Scene(root);
+        String title = "Join/Create a board";
+        mainCtrl.popUp(boardJoin, title);
+        loadBoard();
     }
 
     /**
@@ -153,7 +153,7 @@ public class WorkspaceCtrl implements Initializable {
         boardNameButton.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new ListModules()))
-                    .load(ListCtrl.class, "client", "scenes", "ListManagement", "List.fxml");
+                    .load(ListCtrl.class, "client", "window", "lists", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
@@ -175,7 +175,7 @@ public class WorkspaceCtrl implements Initializable {
 
     public void addListPopup() {
         var loader = Main.getFXML().
-                load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
+                load(AddListCtrl.class, "client", "windows", "lists", "addList", "AddList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);

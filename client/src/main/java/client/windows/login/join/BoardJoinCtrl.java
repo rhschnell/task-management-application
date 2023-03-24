@@ -1,4 +1,4 @@
-package client.windows.login;
+package client.windows.login.join;
 
 import client.MainCtrl;
 import client.utils.ServerUtils;
