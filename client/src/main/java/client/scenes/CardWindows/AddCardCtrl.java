@@ -89,7 +89,7 @@ public class AddCardCtrl implements Initializable {
     }
 
     /**
-     * This method adds the created card to the list
+     * This method adds the created card to the list and closes the pop-up. Moreover, it refreshed the workspace.
      */
     public void save() {
         ((Stage)saveButton.getScene().getWindow()).close();
@@ -104,6 +104,11 @@ public class AddCardCtrl implements Initializable {
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
+
+    /**
+     * Adds the tag to the card, adds the added tag to the VBOX.
+     * @param tag The tag that is added and needs to be displayed in the appliedTagsVbox on the AddCard
+     */
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
@@ -114,6 +119,12 @@ public class AddCardCtrl implements Initializable {
         ctrl.setTagObject(tag,"removeFromAddCard");
         appliedTagsVbox.getChildren().add(loader.getValue());
     }
+
+    /**
+     * Removes the tag from the list of applied tags that will be later sent to the server, and refreshes
+     * the AppliedTagsVbox by clearing it and adding again all the applied tags.
+     * @param tag the tag that needs to be removed from the list of the applied tags
+     */
     public void removeAppliedTag(Tag tag)
     {
         appliedTags.remove(tag);
@@ -129,6 +140,10 @@ public class AddCardCtrl implements Initializable {
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
     }
+
+    /**
+     * Displays the pop-up (TagList) in order to choose and add a tag.
+     */
     public void addTagPopup() {
         List<Tag> availableTags = server.getTags();
         availableTags.removeAll(appliedTags);

@@ -36,6 +36,14 @@ public class CustomTagCellCtrl {
         this.addCardCtrl=addCardCtrl;
         this.server = server;
     }
+
+    /**
+     * The tag Type is Set so that when the FXML is created we know which button to display,
+     * moreover,the tag is set so that when we send the add/remove information we know which
+     * tag was pressed.
+     * @param tag the has that needs to be later added/deleted
+     * @param type the type of the TagCell FXML we need to display
+     */
     public void setTagObject(Tag tag, String type){
         this.tag = tag;
         tagTitle.setText(tag.getName());
@@ -50,6 +58,12 @@ public class CustomTagCellCtrl {
             actionButton.setText("Remove");actionButton.getStyleClass().add("red-button");
         }
     }
+
+    /**
+     * The action of Removing/Adding is removed by sending
+     * the information to the controller it came and
+     * the pop-up window is closed
+     */
     public void chooseAndClose() {
         if(type.equals("addFromTagList")) {
             tagListCtrl.getCardCtrl().applyTag(tag);

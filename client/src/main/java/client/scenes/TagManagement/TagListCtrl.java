@@ -43,6 +43,7 @@ public class TagListCtrl {
     private VBox availableTagsBox;
 
 
+
     @Inject
     public TagListCtrl(ServerUtils server, AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
@@ -50,6 +51,11 @@ public class TagListCtrl {
         availableTagsBox=new VBox();
         appliedTagsBox=new VBox();
     }
+
+    /**
+     * Sets the tagList VBOX contain all the tags that are available in the board
+     * @param tagList
+     */
     public void setAvailableTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
@@ -61,6 +67,11 @@ public class TagListCtrl {
             availableTagsBox.getChildren().add(loader.getValue());
         }
     }
+
+    /**
+     * sets the AppliedTags VBOX contian all the tags that are applied on the card
+     * @param tagList
+     */
     public void setAppliedTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
@@ -76,6 +87,9 @@ public class TagListCtrl {
         return addCardCtrl;
     }
 
+    /**
+     * Escapes the pop-up in which the AvailableCard and the AppliedTags are displayed
+     */
     public void escapeWindow() {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
