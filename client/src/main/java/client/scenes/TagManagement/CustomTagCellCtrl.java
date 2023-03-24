@@ -53,6 +53,10 @@ public class CustomTagCellCtrl {
         {
             actionButton.setText("Add");actionButton.getStyleClass().add("blue-button");
         }
+        if(type.equals("viewTag"))
+        {
+            actionButton.setVisible(false);
+        }
         if(type.equals("removeFromTagList") || type.equals("removeFromAddCard"))
         {
             actionButton.setText("Remove");actionButton.getStyleClass().add("red-button");
