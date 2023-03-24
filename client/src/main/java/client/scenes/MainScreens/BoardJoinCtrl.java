@@ -34,6 +34,7 @@ public class BoardJoinCtrl implements Initializable {
      * Join and call load
      */
     public void join() {
+        mainCtrl.getWorkspaceCtrl().setPassedKey(keyField.getText());
         mainCtrl.getWorkspaceCtrl().loadBoard();
         ((Stage)keyField.getScene().getWindow()).close();
     }

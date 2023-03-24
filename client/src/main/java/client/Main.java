@@ -47,9 +47,8 @@ public class Main extends Application {
         var userLogin = FXML.load(UserLoginCtrl.class, "client", "scenes", "MainScreens", "UserLogin.fxml");
         var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "MainScreens", "AdminLogin.fxml");
         var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","UserWorkspace","Workspace.fxml");
-        var boardJoin = FXML.load(BoardJoinCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, workspace, boardJoin);
+        mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, workspace);
     }
 
     public static Injector getINJECTOR() {

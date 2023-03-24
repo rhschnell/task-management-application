@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.scenes.MainScreens.*;
 import client.scenes.UserWorkspace.WorkspaceCtrl;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -15,12 +16,10 @@ public class MainCtrl {
     private Scene userLogin;
     private Scene adminLogin;
     private Scene workspace;
-    private Scene boardJoin;
     private StartUpCtrl startUpCtrl;
     private UserLoginCtrl userLoginCtrl;
     private AdminLoginCtrl adminLoginCtrl;
     private WorkspaceCtrl workspaceCtrl;
-    private BoardJoinCtrl boardJoinCtrl;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
@@ -33,8 +32,7 @@ public class MainCtrl {
                            Pair<StartUpCtrl, Parent> startUp,
                            Pair<UserLoginCtrl, Parent> userLogin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           Pair<WorkspaceCtrl, Parent> workspace,
-                           Pair<BoardJoinCtrl, Parent> boardJoin) {
+                           Pair<WorkspaceCtrl, Parent> workspace) {
         this.primaryStage = primary;
 
         this.startUpCtrl = startUp.getKey();
@@ -45,9 +43,6 @@ public class MainCtrl {
 
         this.workspaceCtrl = workspace.getKey();
         this.workspace = new Scene(workspace.getValue());
-
-        this.boardJoinCtrl = boardJoin.getKey();
-        this.boardJoin = new Scene(boardJoin.getValue());
 
         this.userLoginCtrl = userLogin.getKey();
         this.userLogin = new Scene(userLogin.getValue());
@@ -95,22 +90,15 @@ public class MainCtrl {
         return workspaceCtrl;
     }
 
-    public BoardJoinCtrl getBoardJoinCtrl() {
-        return boardJoinCtrl;
-    }
-
-    public Scene getBoardJoin() {
-        return boardJoin;
-    }
-
     /**
      * Displays a new window(popup) consisting of a scene and with a custom title.
      * @param scene represents the scene that needs to be shown in the popup.
      * @param title represents the popup's title.
-     * @return
+     * @return the controller of the popUp
      */
     public void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
+        FXMLLoader loader = (FXMLLoader) scene.getUserData();
         popUp.setScene(scene);
         popUp.initModality(Modality.APPLICATION_MODAL);
         popUp.setTitle(title);

@@ -75,7 +75,7 @@ public class AdminLoginCtrl implements Initializable {
     public void connect(){
         server.setServer(serverAddress.getText());
         if (server.pingServer()){
-            joinPopUp();
+            //TODO
         } else {
             showErrorMessage();
         }
@@ -98,15 +98,6 @@ public class AdminLoginCtrl implements Initializable {
      */
     public void showWorkspace() {
         mainCtrl.setWorkspace();
-    }
-
-    /**
-     * Displays the Board Join FXML into a new window (Popup).
-     *
-     */
-    public void joinPopUp() {
-        String title = "Join/Create a board";
-        mainCtrl.popUp(mainCtrl.getBoardJoin(), title);
     }
 
     /**

@@ -17,9 +17,12 @@ package client.scenes.UserWorkspace;
 
 import client.ListModules;
 import client.Main;
+import client.MainModules;
 import client.MyFXML;
 import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
+import client.scenes.MainCtrl;
+import client.scenes.MainScreens.BoardJoinCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -29,6 +32,7 @@ import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -39,6 +43,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -47,9 +52,11 @@ import static com.google.inject.Guice.createInjector;
 public class WorkspaceCtrl implements Initializable {
 
     private final BoardUtils server;
-    private final client.scenes.MainCtrl mainCtrl;
+    private final MainCtrl mainCtrl;
 
     private Board shownBoard;
+
+    private String passedKey;
 
     @FXML
     private Label boardName;
@@ -78,6 +85,10 @@ public class WorkspaceCtrl implements Initializable {
         listContainer = new HBox();
     }
 
+    public void setPassedKey(String passedKey) {
+        this.passedKey = passedKey;
+    }
+
     public Board getShownBoard() {
         return shownBoard;
     }
@@ -100,6 +111,7 @@ public class WorkspaceCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
+        clearWorkspace();
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
         KeyFrame kf = new KeyFrame(Duration.millis(800),
@@ -113,7 +125,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void loadBoard() {
-        String targetKey = mainCtrl.getBoardJoinCtrl().getKeyField().getText();
+        String targetKey = passedKey;
         try {
             shownBoard = server.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
@@ -124,8 +136,15 @@ public class WorkspaceCtrl implements Initializable {
         displayBoard();
     }
 
+    //TODO Remove this pop up and integrate board join to the workspace directly, as suggested by the heuristic evaluation
     public void joinPopUp() {
-        mainCtrl.getAdminLoginCtrl().joinPopUp();
+        var loader = Main.getFXML().load(ListCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
+        Parent root = loader.getValue();
+        Scene boardJoin = new Scene(root);
+        String title = "Join/Create a board";
+        mainCtrl.popUp(boardJoin, title);
+        loadBoard();
+
     }
 
     /**

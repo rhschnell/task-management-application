@@ -16,14 +16,20 @@
 package client;
 
 import client.scenes.MainCtrl;
+import client.scenes.MainScreens.AdminLoginCtrl;
+import client.scenes.MainScreens.UserLoginCtrl;
+import client.scenes.UserWorkspace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 
-class MainModules implements Module {
+public class MainModules implements Module {
 
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(UserLoginCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
     }
 }
