@@ -99,7 +99,6 @@ public class ViewCardCtrl {
     public void edit()
     {
         var loader = myFXML.load(EditCardCtrl.class, "client", "scenes", "CardWindows", "EditCard.fxml");
-        loader.getKey().setServer(server);
         loader.getKey().setCard(card);
         loader.getKey().setViewCardScene(cardDescription.getScene());
         Stage stage = new Stage();
