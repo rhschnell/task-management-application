@@ -44,6 +44,7 @@ public class CustomListCell extends ListCell<Card> {
                 System.out.println(item.getTitle());
                 // Handle button click
             });
+            controller.setDescriptionIconVisible(item.hasDescription());
             setGraphic(loader.getRoot());
         }
     }

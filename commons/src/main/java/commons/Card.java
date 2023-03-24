@@ -136,4 +136,13 @@ public class Card implements Serializable {
     public void deleteSubTask(Task task) {
         this.subTasks.remove(task);
     }
+
+    /**
+     * Check if this card has a description
+     *
+     * @return Whether this card has a description
+     */
+    public boolean hasDescription() {
+        return !this.description.isEmpty();
+    }
 }
