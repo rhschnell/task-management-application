@@ -15,8 +15,7 @@ public class Card implements Serializable {
     private String description;
     private String backgroundColour;
 
-    @ManyToMany
-    private List<Tag> tags;
+
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> subTasks;
@@ -24,6 +23,15 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "Card_Tag",
+            joinColumns = {
+                @JoinColumn(name = "card_id",referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                @JoinColumn(name="tag_id",referencedColumnName = "id")
+            })
+    private List<Tag> tags;
 
     /**
      * Custom constructor for all parameters without ID (auto-generated)

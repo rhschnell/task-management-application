@@ -55,6 +55,10 @@ public class ListCtrl {
         this.myFXML = myFXML;
     }
 
+    public MyFXML getMyFXML() {
+        return myFXML;
+    }
+
     public MainCtrl getMainCtrl() {
         return mainCtrl;
     }

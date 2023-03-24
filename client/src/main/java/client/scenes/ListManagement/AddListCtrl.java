@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -42,6 +43,7 @@ public class AddListCtrl {
     @FXML
     private Button saveButton;
 
+
     private String boardId;
     /**
      * Constructor for AddCardCtrl
@@ -52,6 +54,7 @@ public class AddListCtrl {
     public AddListCtrl(BoardUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        ScrollPane scrollPane ;
     }
 
     /**

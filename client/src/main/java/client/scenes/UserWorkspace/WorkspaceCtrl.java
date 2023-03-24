@@ -39,8 +39,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
@@ -79,12 +81,12 @@ public class WorkspaceCtrl implements Initializable {
         listContainer = new HBox();
     }
 
-    public void setPassedKey(String passedKey) {
-        this.passedKey = passedKey;
-    }
-
     public Board getShownBoard() {
         return shownBoard;
+    }
+
+    public void setPassedKey(String passedKey) {
+        this.passedKey = passedKey;
     }
 
     /**

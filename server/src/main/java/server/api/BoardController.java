@@ -29,6 +29,7 @@ public class BoardController {
      * @param board The board to add
      * @return The added board
      */
+    @Transactional
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Board> add(@RequestBody Board board) {
         return ResponseEntity.ok(boards.save(board));

@@ -15,8 +15,10 @@
  */
 package client.scenes.CardWindows;
 
+import client.ListModules;
 import client.MyFXML;
 import client.scenes.MainCtrl;
+import client.scenes.TagManagement.CustomTagCellCtrl;
 import client.utils.CardUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -25,9 +27,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import static com.google.inject.Guice.createInjector;
 
 public class ViewCardCtrl {
 
@@ -49,6 +54,9 @@ public class ViewCardCtrl {
     @FXML
     private Button editButton;
 
+    @FXML
+    private VBox appliedTagsVbox;
+
     /**
      * Constructor for ViewCardCtrl
      * @param server a server util
@@ -68,6 +76,21 @@ public class ViewCardCtrl {
         this.card = card;
         setCardTitle(card.getTitle());
         setCardDescription(card.getDescription());
+        applyTag();
+    }
+
+
+    public void applyTag()
+    {
+        if(card.getTags()!=null) {
+            for (int i = 0; i < card.getTags().size(); i++) {
+                var loader = new MyFXML(createInjector(new ListModules()))
+                        .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+                CustomTagCellCtrl ctrl = loader.getKey();
+                ctrl.setTagObject(card.getTags().get(i), "viewTag");
+                appliedTagsVbox.getChildren().add(loader.getValue());
+            }
+        }
     }
 
     /**
