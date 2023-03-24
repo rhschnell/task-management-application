@@ -1,5 +1,6 @@
 package client.scenes.ListManagement;
 
+import client.scenes.TagManagement.TagListCtrl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,6 +13,8 @@ public class ListCellCtrl {
     private Label cardTitle;
     @FXML
     private Button deleteButton;
+
+    private TagListCtrl tagListCtrl;
 
     @FXML
     private ImageView descriptionIcon;

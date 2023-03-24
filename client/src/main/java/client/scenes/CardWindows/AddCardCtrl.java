@@ -15,22 +15,32 @@
  */
 package client.scenes.CardWindows;
 
+import client.ListModules;
+import client.MyFXML;
 import client.scenes.ListManagement.ListCtrl;
+import client.scenes.TagManagement.CustomTagCellCtrl;
+import client.scenes.TagManagement.TagListCtrl;
 import client.utils.CardListUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import static com.google.inject.Guice.createInjector;
 
 public class AddCardCtrl implements Initializable {
 
@@ -49,6 +59,11 @@ public class AddCardCtrl implements Initializable {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private VBox appliedTagsVbox;
+
+    private List<Tag> appliedTags;
+
     /**
      * Constructor for AddCardCtrl
      * @param server a server util
@@ -58,8 +73,13 @@ public class AddCardCtrl implements Initializable {
     public AddCardCtrl(ServerUtils server, ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
         this.server = new CardListUtils(server);
+        appliedTags = new ArrayList<>();
+        appliedTagsVbox = new VBox();
     }
 
+    public ListCtrl getListCtrl() {
+        return listCtrl;
+    }
 
     /**
      * This method cancels adding the created card to the list
@@ -69,7 +89,7 @@ public class AddCardCtrl implements Initializable {
     }
 
     /**
-     * This method adds the created card to the list
+     * This method adds the created card to the list and closes the pop-up. Moreover, it refreshed the workspace.
      */
     public void save() {
         ((Stage)saveButton.getScene().getWindow()).close();
@@ -77,13 +97,66 @@ public class AddCardCtrl implements Initializable {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                new ArrayList<>(),
+                appliedTags,
                 new ArrayList<>());
+        appliedTags = new ArrayList<>();
         listCtrl.getCardList().addCard(card);
         server.addCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
+    /**
+     * Adds the tag to the card, adds the added tag to the VBOX.
+     * @param tag The tag that is added and needs to be displayed in the appliedTagsVbox on the AddCard
+     */
+    public void applyTag(Tag tag)
+    {
+        appliedTags.add(tag);
+        var loader =  new MyFXML(createInjector(new ListModules()))
+                .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+        CustomTagCellCtrl ctrl = loader.getKey();
+        ctrl.setCtrl2(this);
+        ctrl.setTagObject(tag,"removeFromAddCard");
+        appliedTagsVbox.getChildren().add(loader.getValue());
+    }
+
+    /**
+     * Removes the tag from the list of applied tags that will be later sent to the server, and refreshes
+     * the AppliedTagsVbox by clearing it and adding again all the applied tags.
+     * @param tag the tag that needs to be removed from the list of the applied tags
+     */
+    public void removeAppliedTag(Tag tag)
+    {
+        appliedTags.remove(tag);
+        appliedTagsVbox.getChildren().clear();
+
+        for(int i=0;i<appliedTags.size();i++)
+        {
+            var loader =  new MyFXML(createInjector(new ListModules()))
+                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+            CustomTagCellCtrl ctrl = loader.getKey();
+            ctrl.setCtrl2(this);
+            ctrl.setTagObject(appliedTags.get(i),"removeFromAddCard");
+            appliedTagsVbox.getChildren().add(loader.getValue());
+        }
+    }
+
+    /**
+     * Displays the pop-up (TagList) in order to choose and add a tag.
+     */
+    public void addTagPopup() {
+        List<Tag> availableTags = server.getTags();
+        availableTags.removeAll(appliedTags);
+        var loader =  listCtrl.getMyFXML().
+                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+        TagListCtrl ctrl = loader.getKey();
+        ctrl.setAvailableTags(availableTags);
+        ctrl.setAppliedTags(appliedTags);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Add tag";
+        listCtrl.getMainCtrl().popUp(scene, title);
+    }
     /**
      *
      * @param location
@@ -98,4 +171,5 @@ public class AddCardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+
 }
