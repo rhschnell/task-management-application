@@ -1,4 +1,4 @@
-package server.api;
+package server.features.cardlists;
 
 import commons.CardList;
 import org.springframework.data.domain.Example;
@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.features.cardlists.CardListRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,23 +13,13 @@ import java.util.function.Function;
 
 class TestCardListRepository implements CardListRepository {
     private final List<CardList> cardLists = new ArrayList<>();
-    private final List<String> calledMethods = new ArrayList<>();
 
     public List<CardList> getCardLists() {
         return cardLists;
     }
 
-    public List<String> getCalledMethods() {
-        return calledMethods;
-    }
-
-    private void call(String name) {
-        calledMethods.add(name);
-    }
-
     @Override
     public List<CardList> findAll() {
-        calledMethods.add("findAll");
         return cardLists;
     }
 
@@ -57,7 +45,6 @@ class TestCardListRepository implements CardListRepository {
 
     @Override
     public void deleteById(Long id) {
-        call("deleteById");
         cardLists.removeIf(entity -> entity.getId() == id);
     }
 
@@ -83,7 +70,6 @@ class TestCardListRepository implements CardListRepository {
 
     @Override
     public <S extends CardList> S save(S entity) {
-        call("save");
         entity.setId(cardLists.size() + 1);
         cardLists.add(entity);
         return entity;
@@ -101,7 +87,6 @@ class TestCardListRepository implements CardListRepository {
 
     @Override
     public boolean existsById(Long id) {
-        call("existsById");
         return find(id).isPresent();
     }
 
@@ -142,7 +127,6 @@ class TestCardListRepository implements CardListRepository {
 
     @Override
     public CardList getById(Long id) {
-        call("getById");
         return find(id).get();
     }
 

@@ -1,4 +1,4 @@
-package server.api;
+package server.features.boards;
 
 import commons.Board;
 import org.springframework.data.domain.Example;
@@ -15,23 +15,13 @@ import java.util.function.Function;
 
 class TestBoardRepository implements BoardRepository {
     private final List<Board> boards = new ArrayList<>();
-    private final List<String> calledMethods = new ArrayList<>();
 
     public List<Board> getBoards() {
         return boards;
     }
 
-    public List<String> getCalledMethods() {
-        return calledMethods;
-    }
-
-    private void call(String name) {
-        calledMethods.add(name);
-    }
-
     @Override
     public List<Board> findAll() {
-        calledMethods.add("findAll");
         return boards;
     }
 
@@ -57,7 +47,6 @@ class TestBoardRepository implements BoardRepository {
 
     @Override
     public void deleteById(String key) {
-        call("deleteById");
         boards.removeIf(board -> key.equals(board.getKey()));
     }
 
@@ -83,7 +72,6 @@ class TestBoardRepository implements BoardRepository {
 
     @Override
     public <S extends Board> S save(S entity) {
-        call("save");
         boards.add(entity);
         return entity;
     }
@@ -135,13 +123,11 @@ class TestBoardRepository implements BoardRepository {
 
     @Override
     public boolean existsById(String key) {
-        call("existsById");
         return find(key).isPresent();
     }
 
     @Override
     public Board getById(String key) {
-        call("getById");
         return find(key).get();
     }
 
