@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import com.google.inject.Inject;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,10 +35,13 @@ public class EditCardCtrl implements Initializable {
     public void setViewCardScene(Scene viewCardScene) {
         this.viewCardScene = viewCardScene;
     }
+   
+@Inject
+    public EditCardCtrl(CardUtils server) {
 
-    public void setServer(CardUtils server) {
         this.server = server;
-    }
+
+}
 
     /**
      *
