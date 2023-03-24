@@ -1,4 +1,4 @@
-package server.cardlists;
+package server.features.cardlists;
 
 import commons.CardList;
 import commons.Route;

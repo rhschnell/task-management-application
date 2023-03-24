@@ -1,10 +1,10 @@
-package server.boards;
+package server.features.boards;
 
 import commons.Board;
 import org.springframework.stereotype.Repository;
-import server.GetByIDRepo;
+import server.features.CustomRepository;
 
 
 @Repository
-public interface BoardRepository extends GetByIDRepo<Board, String> {
+public interface BoardRepository extends CustomRepository<Board, String> {
 }

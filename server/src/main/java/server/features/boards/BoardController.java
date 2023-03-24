@@ -1,17 +1,18 @@
-package server.boards;
+package server.features.boards;
 
 import commons.Board;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
 @RequestMapping(Route.BOARD)
 public class BoardController {
-    private BoardService service;
+    private final BoardService service;
 
     /**
      * Creates a new BoardController
@@ -22,56 +23,71 @@ public class BoardController {
         this.service = service;
     }
 
+
     /**
      * Adds a board to the database
      *
      * @param board The board to add
-     * @return The added board
+     * @return ResponseEntity with code 200 if successful or occurring error code
      */
     @Transactional
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Board> add(@RequestBody Board board) {
-        return ResponseEntity.ok(service.addBoard(board));
-    }
-
-    /**
-     * Gets all boards from the database
-     *
-     * @return List of all boards in the database
-     */
-    @GetMapping(path = {"", "/"})
-    public List<Board> findAll() {
-        return boards.findAll();
-    }
-
-    /**
-     * Gets a specific board from the database
-     *
-     * @param key The key of the board
-     * @return If the board was not found, status code 400,
-     * else status code 200 and data in the body
-     */
-    @GetMapping("/{key}")
-    public ResponseEntity<Board> getById(@PathVariable("key") String key) {
-        if (!boards.existsById(key)) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> insert(@RequestBody Board board) {
+        try {
+            service.insert(board);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(boards.getById(key));
     }
 
     /**
      * Deletes a board from the database
      *
      * @param key The key of the board to delete
-     * @return A successful response message if the board was found, otherwise a 404 not found
-     * response
+     * @return ResponseEntity with code 200 if successful or occurring error code
+     *
      */
     @DeleteMapping("/{key}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<String> delete(@PathVariable("key") String key) {
-        if (!boards.existsById(key)) return ResponseEntity.notFound().build();
-        boards.deleteById(key);
-        return ResponseEntity.ok(String.format("Successfully deleted the board with key %s", key));
+    public ResponseEntity<Void> delete(@PathVariable("key") String key) {
+        try {
+            service.delete(key);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Gets a specific board from the database
+     *
+     * @param key The key of the board
+     * @return ResponseEntity with code 200, containing the requested board, if successful or occurring error code
+     */
+    @GetMapping("/{key}")
+    public ResponseEntity<Board> getById(@PathVariable("key") String key) {
+        try {
+            Board returnBoard = service.getByID(key);
+            return ResponseEntity.ok(returnBoard);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    /**
+     * Gets all boards from the database
+     *
+     * @return ResponseEntity containing a list of all boards
+     */
+    @GetMapping(path = {"", "/"})
+    public ResponseEntity<List<Board>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 }

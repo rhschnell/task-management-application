@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.database.CardRepository;
+import server.features.cards.CardRepository;
 
 import java.util.ArrayList;
 import java.util.List;

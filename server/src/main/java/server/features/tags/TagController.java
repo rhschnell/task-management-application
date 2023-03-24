@@ -1,4 +1,4 @@
-package server.tags;
+package server.features.tags;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

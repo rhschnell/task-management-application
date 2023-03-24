@@ -1,4 +1,4 @@
-package server;
+package server.features;
 
 import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +8,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface GetByIDRepo<T, ID> extends JpaRepository<T, ID> {
+public interface CustomRepository<T, ID> extends JpaRepository<T, ID> {
     @Override
     default T getById(@NotNull ID key) {
         Optional<T> optionalBoard = this.findById(key);

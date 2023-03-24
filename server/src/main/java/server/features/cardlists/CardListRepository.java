@@ -1,9 +1,9 @@
-package server.cardlists;
+package server.features.cardlists;
 
 import commons.CardList;
 import org.springframework.stereotype.Repository;
-import server.GetByIDRepo;
+import server.features.CustomRepository;
 
 @Repository
-public interface CardListRepository extends GetByIDRepo<CardList, Long> {
+public interface CardListRepository extends CustomRepository<CardList, Long> {
 }

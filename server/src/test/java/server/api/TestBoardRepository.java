@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.database.BoardRepository;
+import server.features.boards.BoardRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,6 @@ class TestBoardRepository implements BoardRepository {
     @Override
     public <S extends Board> S save(S entity) {
         call("save");
-        entity.setKey(Integer.toString(boards.size() + 1));
         boards.add(entity);
         return entity;
     }
