@@ -16,9 +16,9 @@
 package client.modules;
 
 import client.MainCtrl;
-import client.scenes.MainScreens.AdminLoginCtrl;
-import client.scenes.MainScreens.UserLoginCtrl;
-import client.scenes.UserWorkspace.WorkspaceCtrl;
+import client.windows.login.AdminLoginCtrl;
+import client.windows.login.UserLoginCtrl;
+import client.windows.workspace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
