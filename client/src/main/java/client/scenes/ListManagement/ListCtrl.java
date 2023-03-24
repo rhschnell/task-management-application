@@ -125,4 +125,18 @@ public class ListCtrl {
         String title = "Create a card";
         mainCtrl.popUp(scene, title);
     }
+
+    /**
+     * Displays the DeleteList FXML into a new window (Popup).
+     */
+    public void deleteScreen() {
+        var loader = myFXML.load(DeleteListCtrl.class ,"client", "scenes", "ListManagement", "DeleteList.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Delete a list";
+        mainCtrl.popUp(scene, title);
+    }
+
 }
