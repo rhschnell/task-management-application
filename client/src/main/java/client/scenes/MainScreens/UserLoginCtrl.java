@@ -94,7 +94,7 @@ public class UserLoginCtrl implements Initializable {
     }
 
     /**
-     * When called, it switches back to the board overview, disconnecting the user from the workspace.
+     * When called, it switches back to the workspace scene.
      */
     public void showWorkspace() {
         mainCtrl.setWorkspace();
