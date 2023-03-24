@@ -23,7 +23,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StartUpCtrl implements Initializable {
-
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 

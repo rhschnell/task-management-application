@@ -89,7 +89,7 @@ public class ListCtrl {
      */
     public void addCards(CardList cardList) {
         cardListView.setCellFactory(param -> {
-            ListCell<Card> cell = new CustomListCell();
+            ListCell<Card> cell = new CustomListCellCtrl();
             cell.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
                     viewCard(cell.getItem());
