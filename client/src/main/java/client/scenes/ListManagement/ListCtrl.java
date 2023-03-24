@@ -18,7 +18,7 @@ package client.scenes.ListManagement;
 import client.*;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;

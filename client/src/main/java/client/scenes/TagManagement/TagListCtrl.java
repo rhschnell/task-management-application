@@ -15,7 +15,7 @@
  */
 package client.scenes.TagManagement;
 
-import client.ListModules;
+import client.modules.ListModules;
 import client.MyFXML;
 import client.scenes.CardWindows.AddCardCtrl;;
 import client.utils.ServerUtils;

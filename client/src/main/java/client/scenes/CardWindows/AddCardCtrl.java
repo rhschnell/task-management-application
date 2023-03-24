@@ -15,11 +15,10 @@
  */
 package client.scenes.CardWindows;
 
-import client.ListModules;
+import client.modules.ListModules;
 import client.MyFXML;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.TagManagement.CustomTagCellCtrl;
-import client.scenes.TagManagement.TagListCtrl;
 import client.utils.CardListUtils;
 import com.google.inject.Inject;
 import client.utils.ServerUtils;
@@ -27,8 +26,6 @@ import commons.Card;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -101,7 +98,7 @@ public class AddCardCtrl implements Initializable {
                 new ArrayList<>());
         appliedTags = new ArrayList<>();
         listCtrl.getCardList().addCard(card);
-        server.addCardList(listCtrl.getCardList());
+        server.insertCardList(listCtrl.getCardList());
         listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
@@ -141,22 +138,22 @@ public class AddCardCtrl implements Initializable {
         }
     }
 
-    /**
-     * Displays the pop-up (TagList) in order to choose and add a tag.
-     */
-    public void addTagPopup() {
-        List<Tag> availableTags = server.getTags();
-        availableTags.removeAll(appliedTags);
-        var loader =  listCtrl.getMyFXML().
-                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
-        TagListCtrl ctrl = loader.getKey();
-        ctrl.setAvailableTags(availableTags);
-        ctrl.setAppliedTags(appliedTags);
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-        String title = "Add tag";
-        listCtrl.getMainCtrl().popUp(scene, title);
-    }
+//    /**
+//     * Displays the pop-up (TagList) in order to choose and add a tag.
+//     */
+//    public void addTagPopup() {
+////        List<Tag> availableTags = server.getTags();
+//        availableTags.removeAll(appliedTags);
+//        var loader =  listCtrl.getMyFXML().
+//                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+//        TagListCtrl ctrl = loader.getKey();
+//        ctrl.setAvailableTags(availableTags);
+//        ctrl.setAppliedTags(appliedTags);
+//        Parent root = loader.getValue();
+//        Scene scene = new Scene(root);
+//        String title = "Add tag";
+//        listCtrl.getMainCtrl().popUp(scene, title);
+//    }
     /**
      *
      * @param location

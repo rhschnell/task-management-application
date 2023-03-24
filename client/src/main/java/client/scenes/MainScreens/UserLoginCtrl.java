@@ -15,7 +15,7 @@
  */
 package client.scenes.MainScreens;
 
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;

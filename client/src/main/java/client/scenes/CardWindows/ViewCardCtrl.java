@@ -15,9 +15,9 @@
  */
 package client.scenes.CardWindows;
 
-import client.ListModules;
+import client.modules.ListModules;
 import client.MyFXML;
-import client.scenes.MainCtrl;
+import client.MainCtrl;
 import client.scenes.TagManagement.CustomTagCellCtrl;
 import client.utils.CardUtils;
 import client.utils.ServerUtils;

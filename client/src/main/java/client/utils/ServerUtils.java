@@ -58,7 +58,7 @@ public class ServerUtils {
                     .get();
             return true;
         } catch (jakarta.ws.rs.ProcessingException e) {
-            System.out.println(e);
+            e.printStackTrace();
             return false;
         }
     }

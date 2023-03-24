@@ -12,7 +12,8 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="548" prefWidth="1024.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.AdminLoginCtrl">
+<VBox prefHeight="548" prefWidth="1024.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainScreens.AdminLoginCtrl">
     <AnchorPane prefHeight="548.5" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER" layoutX="-77.0" layoutY="203.0" prefHeight="143.0" prefWidth="759.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <AnchorPane maxHeight="-Infinity" prefHeight="274.0" prefWidth="308.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
