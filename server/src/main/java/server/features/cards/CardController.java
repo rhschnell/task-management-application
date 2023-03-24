@@ -1,10 +1,9 @@
-package server.api;
+package server.cards;
 
 import commons.Card;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.CardRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;

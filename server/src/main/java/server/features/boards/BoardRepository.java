@@ -1,7 +1,8 @@
-package server.database;
+package server.boards;
 
 import commons.Board;
 import org.springframework.stereotype.Repository;
+import server.GetByIDRepo;
 
 
 @Repository

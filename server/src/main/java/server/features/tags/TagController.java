@@ -1,4 +1,4 @@
-package server.api;
+package server.tags;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,6 @@ import commons.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.TagRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;

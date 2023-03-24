@@ -1,10 +1,9 @@
-package server.api;
+package server.boards;
 
 import commons.Board;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -12,15 +11,15 @@ import java.util.List;
 @RestController
 @RequestMapping(Route.BOARD)
 public class BoardController {
-    private BoardRepository boards;
+    private BoardService service;
 
     /**
      * Creates a new BoardController
      *
-     * @param boards Instance of board repository
+     * @param service Instance of board repository
      */
-    public BoardController(BoardRepository boards) {
-        this.boards = boards;
+    public BoardController(BoardService service) {
+        this.service = service;
     }
 
     /**
@@ -32,7 +31,7 @@ public class BoardController {
     @Transactional
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        return ResponseEntity.ok(boards.save(board));
+        return ResponseEntity.ok(service.addBoard(board));
     }
 
     /**

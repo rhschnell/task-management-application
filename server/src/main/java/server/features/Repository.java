@@ -1,4 +1,4 @@
-package server.database;
+package server;
 
 import com.sun.istack.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
