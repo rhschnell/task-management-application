@@ -39,7 +39,7 @@ public class EditCardCtrl implements Initializable {
     @Inject
     public EditCardCtrl(CardUtils server) {
         this.server = server;
-}
+    }
 
     /**
      *
