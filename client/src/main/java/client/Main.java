@@ -18,9 +18,8 @@ package client;
 import static com.google.inject.Guice.createInjector;
 
 import client.scenes.MainCtrl;
-import client.scenes.MainScreens.BoardJoinCtrl;
-import client.scenes.MainScreens.LoginCtrl;
-import client.scenes.MainScreens.WorkspaceCtrl;
+import client.scenes.MainScreens.*;
+import client.scenes.UserWorkspace.WorkspaceCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -44,11 +43,12 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        var login = FXML.load(LoginCtrl.class, "client", "scenes", "MainScreens", "Login.fxml");
-        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
-        var boardJoin = FXML.load(BoardJoinCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
+        var startUp = FXML.load(StartUpCtrl.class, "client", "scenes", "MainScreens", "StartUp.fxml");
+        var userLogin = FXML.load(UserLoginCtrl.class, "client", "scenes", "MainScreens", "UserLogin.fxml");
+        var adminLogin = FXML.load(AdminLoginCtrl.class, "client", "scenes", "MainScreens", "AdminLogin.fxml");
+        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","UserWorkspace","Workspace.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login, workspace, boardJoin);
+        mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, workspace);
     }
 
     public static Injector getINJECTOR() {

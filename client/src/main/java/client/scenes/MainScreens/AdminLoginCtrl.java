@@ -22,10 +22,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginCtrl implements Initializable {
+public class AdminLoginCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -33,12 +34,12 @@ public class LoginCtrl implements Initializable {
     private TextField serverAddress;
 
     /**
-     * Constructor for LoginCtrl
+     * Constructor for AdminLoginCtrl
      * @param server a server util
      * @param mainCtrl a main controller
      */
     @Inject
-    public LoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AdminLoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -74,7 +75,7 @@ public class LoginCtrl implements Initializable {
     public void connect(){
         server.setServer(serverAddress.getText());
         if (server.pingServer()){
-            joinPopUp();
+            //TODO
         } else {
             showErrorMessage();
         }
@@ -100,11 +101,10 @@ public class LoginCtrl implements Initializable {
     }
 
     /**
-     * Displays the Board Join FXML into a new window (Popup).
-     *
+     * Return's to the main screen
      */
-    public void joinPopUp() {
-        String title = "Join/Create a board";
-        mainCtrl.popUp(mainCtrl.getBoardJoin(), title);
+    @FXML
+    public void back() {
+        mainCtrl.setStartUp();
     }
 }
