@@ -17,12 +17,10 @@ package client.scenes.UserWorkspace;
 
 import client.ListModules;
 import client.Main;
-import client.MainModules;
 import client.MyFXML;
 import client.scenes.ListManagement.AddListCtrl;
 import client.scenes.ListManagement.ListCtrl;
 import client.scenes.MainCtrl;
-import client.scenes.MainScreens.BoardJoinCtrl;
 import client.utils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -32,7 +30,6 @@ import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -42,11 +39,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
@@ -136,9 +130,11 @@ public class WorkspaceCtrl implements Initializable {
         displayBoard();
     }
 
-    //TODO Remove this pop up and integrate board join to the workspace directly, as suggested by the heuristic evaluation
+    //TODO Remove this pop up and integrate board join to the workspace directly,
+    // as suggested by the heuristic evaluation
     public void joinPopUp() {
-        var loader = Main.getFXML().load(ListCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
+        var loader = Main.getFXML().
+                load(ListCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
         Parent root = loader.getValue();
         Scene boardJoin = new Scene(root);
         String title = "Join/Create a board";
@@ -177,7 +173,8 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void addListPopup() {
-        var loader = Main.getFXML().load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
+        var loader = Main.getFXML().
+                load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
