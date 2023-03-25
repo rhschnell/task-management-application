@@ -15,12 +15,10 @@
  */
 package client.windows.login.user;
 
-import client.MainCtrl;
-import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -33,21 +31,16 @@ public class UserLoginCtrl implements Initializable {
     @FXML
     private TextField serverAddress;
 
+    @FXML
+    private Label message;
+
     /**
-     * Constructor for AdminLoginCtrl
+     * Constructor for UserLoginCtrl
      * @param service corresponding service
      */
     @Inject
     public UserLoginCtrl(UserLoginService service) {
         this.service = service;
-    }
-
-    /**
-     * Getter for server address
-     * @return the server address
-     */
-    public TextField getServerAddress() {
-        return serverAddress;
     }
 
     /**
@@ -71,9 +64,26 @@ public class UserLoginCtrl implements Initializable {
      * the user to the workspace. Otherwise, shows an error message.
      */
     public void connect(){
-        service.connect(serverAddress.getText());
+        if (service.serverPing(serverAddress.getText())){
+            service.showWorkspace();
+        } else {
+            showServerIncorrect();
+        }
     }
 
+    /**
+     * Shows a welcome message to the user
+     */
+    private void showWelcome() {
+        message.setText("Enter the address and the password of the server.");
+    }
+
+    /**
+     * Shows a message to the user indicating that the connection to the server could not be made.
+     */
+    private void showServerIncorrect() {
+        message.setText("The server you entered does not exist or is turned off. Please try a new server");
+    }
 
     /**
      * Return's to the main screen

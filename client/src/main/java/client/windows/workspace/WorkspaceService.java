@@ -17,13 +17,13 @@ public class WorkspaceService {
     }
 
     public void loadBoard(String targetKey) {
-        try {
-            shownBoard = server.getBoard(targetKey);
-        } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null);
-            server.insertBoard(shownBoard);
-        }
-
-        displayBoard();
+//        try {
+//            shownBoard = server.getBoard(targetKey);
+//        } catch (NotFoundException | BadRequestException e) {
+//            shownBoard = new Board(targetKey, targetKey, null);
+//            server.insertBoard(shownBoard);
+//        }
+//
+//        displayBoard();
     }
 }

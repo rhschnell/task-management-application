@@ -1,32 +1,19 @@
-package client.windows.login.user;
+package client.windows.login.admin;
 
 import client.serverUtils.ServerUtils;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import com.google.inject.Inject;
 
-public class UserLoginService {
+public class AdminLoginService {
     private final ServerUtils server;
     private final HelperMethods hm;
 
     @Inject
-    public UserLoginService(ServerUtils server, HelperMethods hm) {
+    public AdminLoginService(ServerUtils server, HelperMethods hm) {
         this.server = server;
         this.hm = hm;
     }
-
-//    /**
-//     * Middleware that tries to connect to the user specified server. If successful, redirects
-//     * the user to the workspace. Otherwise, shows an error message.
-//     */
-//    public void connect(String serverAddress) {
-//        server.setServer(serverAddress);
-//        if (server.pingServer()){
-//            hm.setScene(Scenes.WORKSPACE);
-//        } else {
-//            showErrorMessage();
-//        }
-//    }
 
     /**
      * Switches to the workspace scene

@@ -15,31 +15,20 @@
  */
 package client.windows.workspace;
 
-import client.modules.ListModules;
 import client.MyFXML;
-import client.utils.HelperMethods;
-import client.windows.lists.addList.AddListCtrl;
+import client.modules.ListModules;
 import client.windows.lists.ListCtrl;
-import client.MainCtrl;
-import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;

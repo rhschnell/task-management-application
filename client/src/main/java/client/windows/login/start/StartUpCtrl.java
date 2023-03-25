@@ -15,11 +15,9 @@
  */
 package client.windows.login.start;
 
-import client.MainCtrl;
-import client.utils.HelperMethods;
-import client.utils.Scenes;
 import com.google.inject.Inject;
 import javafx.fxml.Initializable;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 

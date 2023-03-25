@@ -1,6 +1,5 @@
 package client.utils;
 
-import com.google.inject.Inject;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
