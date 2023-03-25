@@ -1,13 +1,23 @@
 package client.scenes.ListManagement;
 
+import client.ListModules;
+import client.MyFXML;
+import client.scenes.CardWindows.ViewCardCtrl;
+import client.scenes.MainCtrl;
 import client.scenes.TagManagement.TagListCtrl;
+import com.google.inject.Inject;
 import commons.Card;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+
+import static com.google.inject.Guice.createInjector;
 
 public class ListCellCtrl {
     @FXML
@@ -17,13 +27,25 @@ public class ListCellCtrl {
 
     private TagListCtrl tagListCtrl;
 
+    private Card card;
+
     @FXML
     private ImageView descriptionIcon;
+
+    @FXML
+    private AnchorPane pane;
+
+    private long lastClickTime;
+
+    private MainCtrl mainCtrl;
 
     /**
      * Creates a new instance of ListCellCtrl
      */
-    public ListCellCtrl(){}
+    @Inject
+    public ListCellCtrl(MainCtrl mainCtrl){
+        this.mainCtrl = mainCtrl;
+    }
 
     /**
      * Sets the title of the card shown in the overview of the list
@@ -32,7 +54,6 @@ public class ListCellCtrl {
     public void setCardTitle(String text) {
         cardTitle.setText(text);
     }
-
     /**
      * Sets the event to happen when interacting with the delete button
      * @param handler the event to happen
@@ -40,6 +61,29 @@ public class ListCellCtrl {
     public void setOnButtonClick(EventHandler<ActionEvent> handler) {
         deleteButton.setOnAction(handler);
     }
+    public void click()
+    {
+        long clickTime = System.currentTimeMillis();
+        if (clickTime - lastClickTime < 300) { // detect double-click
+            viewCard(card); // your method to open a file
+        }
+        lastClickTime = clickTime;
+    }
+
+    public void viewCard(Card cell) {
+        var loader = new MyFXML(createInjector(new ListModules()))
+                .load(ViewCardCtrl.class, "client", "scenes", "CardWindows", "ViewCard.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        ViewCardCtrl controller = loader.getKey();
+        controller.setCard(cell);
+
+        String title = "View Card";
+        mainCtrl.popUp(scene, title);
+    }
+
 
     /**
      * Sets the visibility of the icon that indicates that a card has a description
@@ -56,6 +100,7 @@ public class ListCellCtrl {
      */
 
     protected void updateItem(Card item) {
+        this.card = item;
         setCardTitle(item.getTitle());
         setOnButtonClick(event -> {
             System.out.println(item.getTitle());
