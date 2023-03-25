@@ -74,6 +74,14 @@ public class Card implements Serializable {
     }
 
     /**
+     * Create a card with just a title
+     * @param title Title of the card
+     */
+    public Card(String title){
+        this.title = title;
+    }
+
+    /**
      * Add new tag to tag list
      *
      * @param newTag New tag

@@ -15,10 +15,13 @@
  */
 package client.scenes.ListManagement;
 
-import client.*;
+import client.CustomListCell;
+import client.Main;
+import client.MyFXML;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainCtrl;
+import client.scenes.QuickAddCardCell;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -26,7 +29,9 @@ import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 public class ListCtrl {
 
@@ -39,7 +44,7 @@ public class ListCtrl {
     private Label listTitle;
 
     @FXML
-    private ListView<Card> cardListView;
+    private VBox cardVBox;
 
     /**
      * Constructor for ListCtrl
@@ -49,7 +54,6 @@ public class ListCtrl {
     public ListCtrl(ServerUtils server, MyFXML myFXML) {
         this.mainCtrl = Main.getINJECTOR().getInstance(MainCtrl.class);
         this.server = server;
-        cardListView = new ListView<>();
         listTitle = new Label();
         cardList = new CardList();
         this.myFXML = myFXML;
@@ -88,16 +92,14 @@ public class ListCtrl {
      * @param cardList the list of cards to be added
      */
     public void addCards(CardList cardList) {
-        cardListView.setCellFactory(param -> {
-            ListCell<Card> cell = new CustomListCell();
-            cell.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2) {
-                    viewCard(cell.getItem());
-                }
-            });
-            return cell;
-        });
-        cardListView.getItems().addAll(cardList.getCards());
+
+        for (Card card: cardList.getCards()) {
+            AnchorPane cardCell = new CustomListCell(card);
+            cardVBox.getChildren().add(cardCell);
+        }
+
+        AnchorPane quickAddCardCell = new QuickAddCardCell();
+        cardVBox.getChildren().add(quickAddCardCell);
     }
 
     /**

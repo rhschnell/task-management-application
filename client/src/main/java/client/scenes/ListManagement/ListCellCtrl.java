@@ -18,6 +18,12 @@ public class ListCellCtrl {
 
     @FXML
     private ImageView descriptionIcon;
+
+    /**
+     * Creates a new instance of ListCellCtrl
+     */
+    public ListCellCtrl(){}
+
     /**
      * Sets the title of the card shown in the overview of the list
      * @param text

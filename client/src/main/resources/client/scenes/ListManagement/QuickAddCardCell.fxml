@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="40.0" prefWidth="250.0" styleClass="card" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ListManagement.QuickAddCardCtrl">
+   <children>
+        <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="165.0" prefHeight="21.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <TextField fx:id="cardTitle" onMouseClicked="#setAddButtonVisible" prefHeight="50.0" prefWidth="226.0" promptText="+ Add new card" style="-fx-background-color: transparent;">
+            <font>
+               <Font name="System Italic" size="12.0" />
+            </font>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+         </TextField>
+            <Button fx:id="addButton" disable="true" mnemonicParsing="false" onMouseClicked="#addCard" prefHeight="26.0" prefWidth="81.0" style="-fx-background-color: transparent; -fx-text-fill: black; -fx-background-radius: 10;" text="Add" textAlignment="RIGHT" visible="false">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+            </Button>
+        </HBox>
+   </children>
+</AnchorPane>
