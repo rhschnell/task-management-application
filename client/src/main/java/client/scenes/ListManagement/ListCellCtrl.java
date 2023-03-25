@@ -1,6 +1,7 @@
 package client.scenes.ListManagement;
 
 import client.scenes.TagManagement.TagListCtrl;
+import commons.Card;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -46,6 +47,21 @@ public class ListCellCtrl {
      */
     public void setDescriptionIconVisible(boolean visible){
         descriptionIcon.setVisible(visible);
+    }
+
+    /**
+     * Updates the list of Cards with a new object.
+     *
+     * @param item The new item for the cell.
+     */
+
+    protected void updateItem(Card item) {
+        setCardTitle(item.getTitle());
+        setOnButtonClick(event -> {
+            System.out.println(item.getTitle());
+            // Handle button click
+        });
+        setDescriptionIconVisible(item.hasDescription());
     }
 }
 
