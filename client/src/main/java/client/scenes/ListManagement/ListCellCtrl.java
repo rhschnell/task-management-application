@@ -1,6 +1,5 @@
 package client.scenes.ListManagement;
 
-import client.scenes.TagManagement.TagListCtrl;
 import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -43,7 +42,7 @@ public class ListCellCtrl {
      * Sets the first 3 tags to be displayed on the board overview page on tge card
      * @param tags the list of tags that the card has
      */
-    public void SetDisplayTags(List <Tag> tags)
+    public void setDisplayTags(List <Tag> tags)
     {
         tagCircle1.setVisible(false);
         tagCircle2.setVisible(false);
