@@ -2,7 +2,7 @@ package client.windows.tags;
 
 
 import client.windows.cards.addCard.AddCardCtrl;
-import client.utils.ServerUtils;
+import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;

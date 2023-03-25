@@ -1,12 +1,13 @@
 package client;
 
+import client.utils.HelperMethods;
+import client.utils.Scenes;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.workspace.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -21,6 +22,7 @@ public class MainCtrl {
     private UserLoginCtrl userLoginCtrl;
     private AdminLoginCtrl adminLoginCtrl;
     private WorkspaceCtrl workspaceCtrl;
+    private HelperMethods hm;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
@@ -33,7 +35,8 @@ public class MainCtrl {
                            Pair<StartUpCtrl, Parent> startUp,
                            Pair<UserLoginCtrl, Parent> userLogin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           Pair<WorkspaceCtrl, Parent> workspace) {
+                           Pair<WorkspaceCtrl, Parent> workspace,
+                           HelperMethods hm) {
         this.primaryStage = primary;
 
         this.startUpCtrl = startUp.getKey();
@@ -51,64 +54,10 @@ public class MainCtrl {
         primary.setTitle("Talio");
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
-        setStartUp();
+        this.hm = hm;
+        hm.setScenes(this.startUp, this.adminLogin, this.workspace, this.userLogin);
+        hm.setPrimaryStage(primaryStage);
+        hm.setScene(Scenes.STARTUP);
         primary.show();
-    }
-
-    public void switchScene() {
-
-    }
-
-
-    /**
-     * Switches the actual scene to the start-up scene.
-     */
-    public void setStartUp() {
-        primaryStage.setScene(startUp);
-    }
-
-    /**
-     * Switches the actual scene to the admin login scene.
-     */
-    public void setAdminLogin() {
-        primaryStage.setScene(adminLogin);
-    }
-
-    /**
-     * Switches the actual scene to the user login scene.
-     */
-    public void setUserLogin() {
-        primaryStage.setScene(userLogin);
-    }
-
-    /**
-     * Switches the actual scene to the workspace scene.
-     */
-    public void setWorkspace() {
-        primaryStage.setScene(workspace);
-    }
-
-    public AdminLoginCtrl getAdminLoginCtrl() {
-        return adminLoginCtrl;
-    }
-
-    public WorkspaceCtrl getWorkspaceCtrl() {
-        return workspaceCtrl;
-    }
-
-    /**
-     * Displays a new window(popup) consisting of a scene and with a custom title.
-     * @param scene represents the scene that needs to be shown in the popup.
-     * @param title represents the popup's title.
-     * @return the controller of the popUp
-     */
-    public void popUp(Scene scene, String title) {
-        Stage popUp = new Stage();
-        popUp.setScene(scene);
-        popUp.initModality(Modality.APPLICATION_MODAL);
-        popUp.setTitle(title);
-        popUp.setResizable(false);
-        popUp.setResizable(false);
-        popUp.showAndWait();
     }
 }

@@ -16,7 +16,7 @@
 package client.windows.lists.addList;
 
 import client.MainCtrl;
-import client.utils.BoardUtils;
+import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.CardList;
 import javafx.fxml.FXML;
@@ -77,8 +77,8 @@ public class AddListCtrl {
         CardList cardList = new CardList(
                 listTitle.getText(),new ArrayList<>());
 
-        mainCtrl.getWorkspaceCtrl().getShownBoard().addList(cardList);
-        server.insertBoard(mainCtrl.getWorkspaceCtrl().getShownBoard());
-        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
+//        mainCtrl.getWorkspaceCtrl().getShownBoard().addList(cardList);
+//        server.insertBoard(mainCtrl.getWorkspaceCtrl().getShownBoard());
+//        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 }

@@ -20,7 +20,7 @@ public class ListCellCtrl {
     private ImageView descriptionIcon;
     /**
      * Sets the title of the card shown in the overview of the list
-     * @param text
+     * @param text text to set title to
      */
     public void setCardTitle(String text) {
         cardTitle.setText(text);

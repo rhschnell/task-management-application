@@ -16,7 +16,7 @@
 package client.windows.login.user;
 
 import client.MainCtrl;
-import client.utils.ServerUtils;
+import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,20 +28,18 @@ import java.util.ResourceBundle;
 
 public class UserLoginCtrl implements Initializable {
 
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final UserLoginService service;
+
     @FXML
     private TextField serverAddress;
 
     /**
      * Constructor for AdminLoginCtrl
-     * @param server a server util
-     * @param mainCtrl a main controller
+     * @param service corresponding service
      */
     @Inject
-    public UserLoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+    public UserLoginCtrl(UserLoginService service) {
+        this.service = service;
     }
 
     /**
@@ -73,38 +71,15 @@ public class UserLoginCtrl implements Initializable {
      * the user to the workspace. Otherwise, shows an error message.
      */
     public void connect(){
-        server.setServer(serverAddress.getText());
-        if (server.pingServer()){
-            showWorkspace();
-        } else {
-            showErrorMessage();
-        }
+        service.connect(serverAddress.getText());
     }
 
-    /**
-     * Shows a message to the user indicating that the connection to the server could not be made.
-     */
-    private void showErrorMessage() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Connection error");
-        alert.setContentText("The server you entered does not exist or is turned off. Please try a new server");
-
-        alert.showAndWait();
-    }
-
-    /**
-     * When called, it switches back to the workspace scene.
-     */
-    public void showWorkspace() {
-        mainCtrl.setWorkspace();
-    }
 
     /**
      * Return's to the main screen
      */
     @FXML
     public void back() {
-        mainCtrl.setStartUp();
+        service.back();
     }
 }

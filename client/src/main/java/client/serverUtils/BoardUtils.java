@@ -1,4 +1,4 @@
-package client.utils;
+package client.serverUtils;
 
 import commons.Board;
 import commons.Route;

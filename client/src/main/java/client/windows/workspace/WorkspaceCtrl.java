@@ -16,12 +16,12 @@
 package client.windows.workspace;
 
 import client.modules.ListModules;
-import client.Main;
 import client.MyFXML;
+import client.utils.HelperMethods;
 import client.windows.lists.addList.AddListCtrl;
 import client.windows.lists.ListCtrl;
 import client.MainCtrl;
-import client.utils.BoardUtils;
+import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -36,6 +36,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -47,12 +48,9 @@ import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
 
-    private final BoardUtils server;
-    private final MainCtrl mainCtrl;
+    private WorkspaceService service;
 
     private Board shownBoard;
-
-    private String passedKey;
 
     @FXML
     private Label boardName;
@@ -66,27 +64,16 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private HBox boardControls;
 
+    @FXML
+    private TextField keyField;
+
     /**
      * Constructor for WorkspaceCtrl
-     *
-     * @param server   a server util
-     * @param mainCtrl a main controller
+     * @param service corresponding service
      */
     @Inject
-    public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
-        boardName = new Label();
-        boardNameButton = new Button();
-        listContainer = new HBox();
-    }
-
-    public Board getShownBoard() {
-        return shownBoard;
-    }
-
-    public void setPassedKey(String passedKey) {
-        this.passedKey = passedKey;
+    public WorkspaceCtrl(WorkspaceService service) {
+        this.service = service;
     }
 
     /**
@@ -94,7 +81,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        mainCtrl.setUserLogin();
+        service.disconnect();
     }
 
     /**
@@ -107,42 +94,18 @@ public class WorkspaceCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-        clearWorkspace();
-        Timeline tl = new Timeline();
-        tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(800),
-                event -> {
-                    try {
-                        refreshWorkspace();
-                    } catch (Exception ignored) {}
-                });
-        tl.getKeyFrames().add(kf);
-        tl.play();
+        // TODO
+        // Check with server if update
+        // if update -> ask server for ids of update items
+        // update those locally
+
+
     }
 
-    public void loadBoard() {
-        String targetKey = passedKey;
-        try {
-            shownBoard = server.getBoard(targetKey);
-        } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null);
-            server.insertBoard(shownBoard);
-        }
-        mainCtrl.setWorkspace();
-        displayBoard();
+    public void connect() {
+        service.loadBoard(keyField.getText());
     }
 
-    //TODO Remove this pop up and integrate board join to the workspace directly,
-    // as suggested by the heuristic evaluation
-    public void joinPopUp() {
-        var loader = Main.getFXML().
-                load(ListCtrl.class, "client", "windows", "login", "BoardJoin.fxml");
-        Parent root = loader.getValue();
-        Scene boardJoin = new Scene(root);
-        String title = "Join/Create a board";
-        mainCtrl.popUp(boardJoin, title);
-        loadBoard();
-    }
 
     /**
      * Adds children (Lists) to the HBOX resulting in the creation of the board.
@@ -174,23 +137,23 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void addListPopup() {
-        var loader = Main.getFXML().
-                load(AddListCtrl.class, "client", "windows", "lists", "addList", "AddList.fxml");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        String title = "Create a list";
-        mainCtrl.popUp(scene, title);
-    }
-
-
-    /**
-     * Method to refresh the workspace
-     */
-    public void refreshWorkspace() {
-        shownBoard = server.getBoard(shownBoard.getKey());
-        displayBoard();
+//        var loader = FXML.
+//                load(AddListCtrl.class, "client", "windows", "lists", "addList", "AddList.fxml");
+//
+//        Parent root = loader.getValue();
+//        Scene scene = new Scene(root);
+//
+//        String title = "Create a list";
+//        HelperMethods.popUp(scene, title);
+//    }
+//
+//
+//    /**
+//     * Method to refresh the workspace
+//     */
+//    public void refreshWorkspace() {
+//        shownBoard = server.getBoard(shownBoard.getKey());
+//        displayBoard();
     }
 
     /**
@@ -213,7 +176,7 @@ public class WorkspaceCtrl implements Initializable {
      * Method to delete the shown board from the database
      */
     public void deleteBoard() {
-        server.deleteBoard(shownBoard.getKey());
+//        server.deleteBoard(shownBoard.getKey());
         clearWorkspace();
     }
 }

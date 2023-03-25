@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.utils;
+package client.serverUtils;
 
 import jakarta.ws.rs.client.ClientBuilder;
 import org.glassfish.jersey.client.ClientConfig;
+
+import java.net.ConnectException;
 
 
 public class ServerUtils {
@@ -58,7 +60,11 @@ public class ServerUtils {
                     .get();
             return true;
         } catch (jakarta.ws.rs.ProcessingException e) {
-            e.printStackTrace();
+            if (e.getCause() instanceof ConnectException) {
+                System.out.println("Turn on the server before trying to connect");
+            } else {
+                e.printStackTrace();
+            }
             return false;
         }
     }

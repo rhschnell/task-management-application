@@ -16,6 +16,7 @@
 package client.modules;
 
 import client.MainCtrl;
+import client.utils.HelperMethods;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.workspace.WorkspaceCtrl;
@@ -31,5 +32,6 @@ public class MainModules implements Module {
         binder.bind(UserLoginCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(HelperMethods.class).in(Scopes.SINGLETON);
     }
 }

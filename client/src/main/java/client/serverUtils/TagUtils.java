@@ -1,4 +1,4 @@
-package client.utils;
+package client.serverUtils;
 
 import com.google.inject.Inject;
 import commons.Route;

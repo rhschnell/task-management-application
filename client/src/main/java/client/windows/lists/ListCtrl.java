@@ -16,10 +16,11 @@
 package client.windows.lists;
 
 import client.*;
+import client.utils.HelperMethods;
 import client.windows.cards.addCard.AddCardCtrl;
 import client.windows.cards.viewCard.ViewCardCtrl;
 import client.MainCtrl;
-import client.utils.ServerUtils;
+import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -53,10 +54,6 @@ public class ListCtrl {
         listTitle = new Label();
         cardList = new CardList();
         this.myFXML = myFXML;
-    }
-
-    public MyFXML getMyFXML() {
-        return myFXML;
     }
 
     public MainCtrl getMainCtrl() {
@@ -114,7 +111,7 @@ public class ListCtrl {
         controller.setCard(cell);
 
         String title = "View Card";
-        mainCtrl.popUp(scene, title);
+        HelperMethods.popUp(scene, title);
     }
 
     /**
@@ -127,6 +124,6 @@ public class ListCtrl {
         Scene scene = new Scene(root);
 
         String title = "Create a card";
-        mainCtrl.popUp(scene, title);
+        HelperMethods.popUp(scene, title);
     }
 }

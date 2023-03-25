@@ -16,7 +16,7 @@
 package client.windows.login.admin;
 
 import client.MainCtrl;
-import client.utils.ServerUtils;
+import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -97,7 +97,7 @@ public class AdminLoginCtrl implements Initializable {
      * When called, it switches back to the board overview, disconnecting the user from the workspace.
      */
     public void showWorkspace() {
-        mainCtrl.setWorkspace();
+//        mainCtrl.setWorkspace();
     }
 
     /**
@@ -105,6 +105,6 @@ public class AdminLoginCtrl implements Initializable {
      */
     @FXML
     public void back() {
-        mainCtrl.setStartUp();
+//        mainCtrl.setStartUp();
     }
 }

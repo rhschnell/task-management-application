@@ -20,8 +20,8 @@ import client.MyFXML;
 import client.MainCtrl;
 import client.windows.cards.editCard.EditCardCtrl;
 import client.windows.tags.CustomTagCellCtrl;
-import client.utils.CardUtils;
-import client.utils.ServerUtils;
+import client.serverUtils.CardUtils;
+import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import javafx.fxml.FXML;
@@ -117,7 +117,7 @@ public class ViewCardCtrl {
         ((Stage)deleteButton.getScene().getWindow()).close();
         Card removed = card;
         server.deleteCard(card.getId());
-        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
+//        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 
     public void edit()

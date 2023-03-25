@@ -1,9 +1,9 @@
 package client.utils;
 
-public enum Scene {
+public enum Scenes {
     STARTUP,
     WORKSPACE,
     ADMIN,
     USER,
-    
+
 }

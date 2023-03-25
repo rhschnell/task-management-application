@@ -16,25 +16,23 @@
 package client.windows.login.start;
 
 import client.MainCtrl;
-import client.utils.ServerUtils;
+import client.utils.HelperMethods;
+import client.utils.Scenes;
 import com.google.inject.Inject;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StartUpCtrl implements Initializable {
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final StartUpService service;
 
     /**
      * Constructor for AdminLoginCtrl
-     * @param server a server util
-     * @param mainCtrl a main controller
+     * @param service a startUpService
      */
     @Inject
-    public StartUpCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
+    public StartUpCtrl(StartUpService service) {
+        this.service = service;
     }
 
     /**
@@ -49,20 +47,19 @@ public class StartUpCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     /**
      * When called, it switches to the admin log in scene.
      */
     public void showAdminLogin() {
-        mainCtrl.setAdminLogin();
+        service.showAdminLogin();
     }
 
     /**
      * When called, it switches to the user log in scene.
      */
     public void showUserLogIn() {
-        mainCtrl.setUserLogin();
+        service.showUserLogin();
     }
 }

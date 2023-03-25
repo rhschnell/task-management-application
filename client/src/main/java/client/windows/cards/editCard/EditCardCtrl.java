@@ -1,7 +1,7 @@
 package client.windows.cards.editCard;
 
 import client.MainCtrl;
-import client.utils.CardUtils;
+import client.serverUtils.CardUtils;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

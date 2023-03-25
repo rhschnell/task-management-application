@@ -19,9 +19,9 @@ import client.modules.ListModules;
 import client.MyFXML;
 import client.windows.lists.ListCtrl;
 import client.windows.tags.CustomTagCellCtrl;
-import client.utils.CardListUtils;
+import client.serverUtils.CardListUtils;
 import com.google.inject.Inject;
-import client.utils.ServerUtils;
+import client.serverUtils.ServerUtils;
 import commons.Card;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -99,7 +99,7 @@ public class AddCardCtrl implements Initializable {
         appliedTags = new ArrayList<>();
         listCtrl.getCardList().addCard(card);
         server.insertCardList(listCtrl.getCardList());
-        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
     /**
@@ -150,7 +150,7 @@ public class AddCardCtrl implements Initializable {
 //        ctrl.setAvailableTags(availableTags);
 //        ctrl.setAppliedTags(appliedTags);
 //        Parent root = loader.getValue();
-//        Scene scene = new Scene(root);
+//        Scenes scene = new Scenes(root);
 //        String title = "Add tag";
 //        listCtrl.getMainCtrl().popUp(scene, title);
 //    }

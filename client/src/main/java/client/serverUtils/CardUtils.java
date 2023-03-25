@@ -1,4 +1,4 @@
-package client.utils;
+package client.serverUtils;
 
 import commons.Card;
 import commons.Route;
