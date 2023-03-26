@@ -15,11 +15,15 @@
  */
 package client.windows.workspace;
 
+import client.Main;
 import client.MyFXML;
 import client.modules.ListModules;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.workspace.boardcell.BoardCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -27,6 +31,7 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,6 +40,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -45,7 +51,7 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Label boardName;
     @FXML
-    private Button boardNameButton;
+    private VBox boardList;
     @FXML
     private HBox listContainer;
     @FXML
@@ -55,6 +61,7 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button addListButton;
 
+    private List<String> joinedKeys;
     private Board shownBoard;
 
     /**
@@ -86,6 +93,7 @@ public class WorkspaceCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
+        joinedKeys = new ArrayList<>();
         // schedule service.refreshWorkspace();
         clearWorkspace(); // No board -> board controls
         //        Timeline tl = new Timeline();
@@ -102,6 +110,15 @@ public class WorkspaceCtrl implements Initializable {
 
     public void connect() {
         showBoard(keyField.getText());
+        if(!joinedKeys.contains(keyField.getText())) {
+            joinedKeys.add(keyField.getText());
+            var boardCell = new MyFXML(createInjector(new MainModules()))
+                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardcell", "BoardCell.fxml");
+            BoardCellCtrl controller = boardCell.getKey();
+            controller.setBoard(shownBoard);
+            boardCell.getValue().setCursor(Cursor.HAND);
+            boardList.getChildren().add(boardCell.getValue());
+        }
     }
 
     /**
@@ -110,14 +127,10 @@ public class WorkspaceCtrl implements Initializable {
     public void clearWorkspace() {
         shownBoard = null;
         boardName.setText("");
-        boardNameButton.setText("");
         listContainer.getChildren().clear();
         boardName.setVisible(false);
-        boardNameButton.setVisible(false);
         listContainer.setVisible(false);
-        for (Node child : boardControls.getChildren())
-            child.setVisible(false);
-        addListButton.setVisible(false);
+        boardControls.setVisible(false);
     }
 
     public void refreshWorkspace() {
@@ -142,7 +155,6 @@ public class WorkspaceCtrl implements Initializable {
 
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
-        boardNameButton.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new ListModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
@@ -154,13 +166,10 @@ public class WorkspaceCtrl implements Initializable {
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
-        for (Node child : boardControls.getChildren())
-            if (!child.isVisible())
-                child.setVisible(true);
+        if (!boardControls.isVisible())
+            boardControls.setVisible(true);
         if (!boardName.isVisible())
             boardName.setVisible(true);
-        if (!boardNameButton.isVisible())
-            boardNameButton.setVisible(true);
         if (!listContainer.isVisible())
             listContainer.setVisible(true);
     }

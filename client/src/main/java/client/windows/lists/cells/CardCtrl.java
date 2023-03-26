@@ -49,14 +49,12 @@ public class CardCtrl {
 
     private long lastClickTime;
 
-    private MainCtrl mainCtrl;
-
     /**
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public CardCtrl(MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
+    public CardCtrl() {
+
     }
 
     /**
