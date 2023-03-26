@@ -1,4 +1,4 @@
-package client.windows.workspace.boardspace;
+package client.windows.workspace.boardSpace;
 
 import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;

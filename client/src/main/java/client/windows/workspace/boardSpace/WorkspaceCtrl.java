@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.workspace.boardspace;
+package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
 import client.modules.ListModules;
@@ -21,7 +21,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
-import client.windows.workspace.boardcell.BoardCellCtrl;
+import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -101,7 +101,7 @@ public class WorkspaceCtrl implements Initializable {
 
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(800),
+        KeyFrame kf = new KeyFrame(Duration.millis(100),
                 event -> {
                     try {
                         refreshWorkspace();
@@ -113,6 +113,7 @@ public class WorkspaceCtrl implements Initializable {
 
     public void connect() {
         showBoard(keyField.getText());
+
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             var boardCell = new MyFXML(createInjector(new MainModules()))

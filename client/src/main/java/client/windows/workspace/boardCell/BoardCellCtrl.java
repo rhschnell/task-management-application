@@ -1,4 +1,4 @@
-package client.windows.workspace.boardcell;
+package client.windows.workspace.boardCell;
 
 import client.MainCtrl;
 import com.google.inject.Inject;
