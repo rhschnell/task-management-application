@@ -1,6 +1,5 @@
 package client.windows.lists.cells;
 
-import client.MainCtrl;
 import client.MyFXML;
 import client.modules.ListModules;
 import client.utils.HelperMethods;
@@ -49,14 +48,12 @@ public class CardCtrl {
 
     private long lastClickTime;
 
-    private MainCtrl mainCtrl;
-
     /**
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public CardCtrl(MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
+    public CardCtrl() {
+
     }
 
     /**
