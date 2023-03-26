@@ -41,7 +41,6 @@ public class QuickAddCardCtrl {
         cardUtils.insertCard(card);
         listCtrl.getCardList().addCard(card);
         server.insertCardList(listCtrl.getCardList());
-//        listCtrl.refresh();
     }
 
 

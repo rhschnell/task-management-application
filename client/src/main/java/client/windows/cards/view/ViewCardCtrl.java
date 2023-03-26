@@ -15,9 +15,10 @@
  */
 package client.windows.cards.view;
 
-import client.modules.ListModules;
+import client.modules.MainModules;
 import client.MyFXML;
 import client.MainCtrl;
+import client.modules.MainModules;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardUtils;
@@ -85,7 +86,7 @@ public class ViewCardCtrl {
     {
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
-                var loader = new MyFXML(createInjector(new ListModules()))
+                var loader = new MyFXML(createInjector(new MainModules()))
                         .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
                 CustomTagCellCtrl ctrl = loader.getKey();
                 ctrl.setTagObject(card.getTags().get(i), "viewTag");

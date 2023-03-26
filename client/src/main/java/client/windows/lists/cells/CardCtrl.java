@@ -1,7 +1,7 @@
 package client.windows.lists.cells;
 
 import client.MyFXML;
-import client.modules.ListModules;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
 import com.google.inject.Inject;
@@ -109,7 +109,7 @@ public class CardCtrl {
     }
 
     public void viewCard(Card cell) {
-        var loader = new MyFXML(createInjector(new ListModules()))
+        var loader = new MyFXML(createInjector(new MainModules()))
                 .load(ViewCardCtrl.class, "client", "scenes", "CardWindows", "ViewCard.fxml");
 
         Parent root = loader.getValue();

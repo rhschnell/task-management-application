@@ -15,8 +15,8 @@
  */
 package client.windows.tags;
 
-import client.modules.ListModules;
 import client.MyFXML;
+import client.modules.MainModules;
 import client.windows.cards.add.AddCardCtrl;;
 import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
@@ -59,7 +59,7 @@ public class TagListCtrl {
     public void setAvailableTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
-            var loader =new MyFXML(createInjector(new ListModules()))
+            var loader =new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tagList.get(i),"addFromTagList");
@@ -75,7 +75,7 @@ public class TagListCtrl {
     public void setAppliedTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
-            var loader = new MyFXML(createInjector(new ListModules()))
+            var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tagList.get(i),"removeFromTagList");

@@ -15,8 +15,8 @@
  */
 package client.windows.cards.add;
 
-import client.modules.ListModules;
 import client.MyFXML;
+import client.modules.MainModules;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardListUtils;
@@ -109,7 +109,7 @@ public class AddCardCtrl implements Initializable {
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
-        var loader =  new MyFXML(createInjector(new ListModules()))
+        var loader =  new MyFXML(createInjector(new MainModules()))
                 .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
         ctrl.setCtrl2(this);
@@ -129,7 +129,7 @@ public class AddCardCtrl implements Initializable {
 
         for(int i=0;i<appliedTags.size();i++)
         {
-            var loader =  new MyFXML(createInjector(new ListModules()))
+            var loader =  new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setCtrl2(this);
