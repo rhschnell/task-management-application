@@ -78,5 +78,4 @@ public class Board {
         return this.cardLists.size();
     }
 
-
 }
