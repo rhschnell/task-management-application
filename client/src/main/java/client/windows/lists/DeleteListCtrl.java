@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.scenes.ListManagement;
+package client.windows.lists;
 
-import client.utils.CardListUtils;
+import client.serverUtils.CardListUtils;
+import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -60,7 +61,7 @@ public class DeleteListCtrl implements Initializable {
     public void delete(){
         ((Stage)deleteButton.getScene().getWindow()).close();
         server.deleteCardList((int)listCtrl.getCardList().getId());
-        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
     /**

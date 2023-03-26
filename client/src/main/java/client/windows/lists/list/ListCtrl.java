@@ -21,7 +21,7 @@ import client.windows.cards.addCard.AddCardCtrl;
 import client.windows.cards.viewCard.ViewCardCtrl;
 import client.MainCtrl;
 import client.serverUtils.ServerUtils;
-import client.windows.lists.CustomListCellCtrl;
+import client.windows.lists.DeleteListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -86,16 +86,16 @@ public class ListCtrl {
      * @param cardList the list of cards to be added
      */
     public void addCards(CardList cardList) {
-        cardListView.setCellFactory(param -> {
-            ListCell<Card> cell = new CustomListCellCtrl();
-            cell.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2) {
-                    viewCard(cell.getItem());
-                }
-            });
-            return cell;
-        });
-        cardListView.getItems().addAll(cardList.getCards());
+//        cardListView.setCellFactory(param -> {
+//            ListCell<Card> cell = new CustomListCellCtrl();
+//            cell.setOnMouseClicked(event -> {
+//                if (event.getClickCount() == 2) {
+//                    viewCard(cell.getItem());
+//                }
+//            });
+//            return cell;
+//        });
+//        cardListView.getItems().addAll(cardList.getCards());
     }
 
     /**
@@ -132,13 +132,13 @@ public class ListCtrl {
      * Displays the DeleteList FXML into a new window (Popup).
      */
     public void deleteScreen() {
-        var loader = myFXML.load(DeleteListCtrl.class ,"client", "scenes", "ListManagement", "DeleteList.fxml");
+        var loader = myFXML.load(DeleteListCtrl.class ,"client", "windows", "lists", "DeleteList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
         String title = "Delete a list";
-        mainCtrl.popUp(scene, title);
+//        mainCtrl.popUp(scene, title);
     }
 
 }
