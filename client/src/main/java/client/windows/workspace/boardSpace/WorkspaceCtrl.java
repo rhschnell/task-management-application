@@ -16,13 +16,13 @@
 package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
-import client.modules.ListModules;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
@@ -32,7 +32,6 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -59,8 +58,6 @@ public class WorkspaceCtrl implements Initializable {
     private HBox boardControls;
     @FXML
     private TextField keyField;
-    @FXML
-    private Button addListButton;
 
     private List<String> joinedKeys;
     private Board shownBoard;
@@ -117,7 +114,7 @@ public class WorkspaceCtrl implements Initializable {
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             var boardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardcell", "BoardCell.fxml");
+                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(shownBoard);
             boardCell.getValue().setCursor(Cursor.HAND);
@@ -156,7 +153,7 @@ public class WorkspaceCtrl implements Initializable {
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
-            var loader = new MyFXML(createInjector(new ListModules()))
+            var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();

@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 public class BoardCellCtrl {
-    private final MainCtrl mainCtrl;
-
     private Board board;
 
     @FXML
@@ -21,8 +19,8 @@ public class BoardCellCtrl {
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public BoardCellCtrl(MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
+    public BoardCellCtrl() {
+
     }
 
     /**
@@ -31,6 +29,10 @@ public class BoardCellCtrl {
     public void setBoard(Board board) {
         this.board = board;
         this.boardTitle.setText(board.getTitle());
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }
 
