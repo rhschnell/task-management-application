@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.lists;
+package client.windows.lists.list;
 
 import client.*;
 import client.utils.HelperMethods;
@@ -21,6 +21,7 @@ import client.windows.cards.addCard.AddCardCtrl;
 import client.windows.cards.viewCard.ViewCardCtrl;
 import client.MainCtrl;
 import client.serverUtils.ServerUtils;
+import client.windows.lists.CustomListCellCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;

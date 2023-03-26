@@ -17,7 +17,7 @@ package client.windows.cards.addCard;
 
 import client.modules.ListModules;
 import client.MyFXML;
-import client.windows.lists.ListCtrl;
+import client.windows.lists.list.ListCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardListUtils;
 import com.google.inject.Inject;
