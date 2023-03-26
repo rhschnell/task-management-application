@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.lists;
+package client.windows.lists.delete;
 
 import client.serverUtils.CardListUtils;
 import client.windows.lists.list.ListCtrl;

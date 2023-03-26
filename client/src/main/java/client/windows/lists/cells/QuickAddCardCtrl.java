@@ -1,4 +1,4 @@
-package client.scenes.ListManagement;
+package client.windows.lists.cells;
 
 
 import client.serverUtils.CardListUtils;
@@ -14,8 +14,6 @@ import javax.inject.Inject;
 public class QuickAddCardCtrl {
 
     private CardUtils cardUtils;
-
-
     private final CardListUtils server;
     private ListCtrl listCtrl;
     @FXML
@@ -43,7 +41,7 @@ public class QuickAddCardCtrl {
         cardUtils.insertCard(card);
         listCtrl.getCardList().addCard(card);
         server.insertCardList(listCtrl.getCardList());
-//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+//        listCtrl.refresh();
     }
 
 

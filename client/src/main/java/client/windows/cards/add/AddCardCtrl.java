@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.cards.addCard;
+package client.windows.cards.add;
 
 import client.modules.ListModules;
 import client.MyFXML;
@@ -138,11 +138,11 @@ public class AddCardCtrl implements Initializable {
         }
     }
 
-//    /**
-//     * Displays the pop-up (TagList) in order to choose and add a tag.
-//     */
-//    public void addTagPopup() {
-////        List<Tag> availableTags = server.getTags();
+    /**
+     * Displays the pop-up (TagList) in order to choose and add a tag.
+     */
+    public void addTagPopup() {
+//        List<Tag> availableTags = server.getTags();
 //        availableTags.removeAll(appliedTags);
 //        var loader =  listCtrl.getMyFXML().
 //                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
@@ -153,7 +153,7 @@ public class AddCardCtrl implements Initializable {
 //        Scenes scene = new Scenes(root);
 //        String title = "Add tag";
 //        listCtrl.getMainCtrl().popUp(scene, title);
-//    }
+    }
     /**
      *
      * @param location

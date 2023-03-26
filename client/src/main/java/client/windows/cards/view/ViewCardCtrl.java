@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.cards.viewCard;
+package client.windows.cards.view;
 
 import client.modules.ListModules;
 import client.MyFXML;
 import client.MainCtrl;
-import client.windows.cards.editCard.EditCardCtrl;
+import client.windows.cards.edit.EditCardCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardUtils;
 import client.serverUtils.ServerUtils;

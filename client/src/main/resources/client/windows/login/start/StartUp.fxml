@@ -13,7 +13,7 @@
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.login.start.StartUpCtrl">
     <AnchorPane prefHeight="548.5" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" VBox.vgrow="ALWAYS">
          <AnchorPane layoutX="414.0" layoutY="196.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="195.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
-             <Button layoutX="86.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#showUserLogIn" prefHeight="30.0" prefWidth="190.0" styleClass="green-button" text="User log in" textAlignment="CENTER" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0">
+             <Button layoutX="86.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#showUserLogin" prefHeight="30.0" prefWidth="190.0" styleClass="green-button" text="User log in" textAlignment="CENTER" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0">
                  <font>
                      <Font name="Arial Bold" size="12.0" />
                  </font>

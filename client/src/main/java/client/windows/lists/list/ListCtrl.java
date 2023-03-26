@@ -17,15 +17,13 @@ package client.windows.lists.list;
 
 import client.*;
 import client.modules.ListModules;
-import client.scenes.ListManagement.QuickAddCardCtrl;
+import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
-import client.windows.cards.addCard.AddCardCtrl;
-import client.windows.cards.viewCard.ViewCardCtrl;
-import client.MainCtrl;
+import client.windows.cards.add.AddCardCtrl;
+import client.windows.cards.view.ViewCardCtrl;
 import client.serverUtils.ServerUtils;
-import client.windows.lists.DeleteListCtrl;
-
-import client.windows.lists.listCell.ListCellCtrl;
+import client.windows.lists.delete.DeleteListCtrl;
+import client.windows.lists.cells.CardCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -46,8 +44,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
 
-    private ServerUtils server;
-    private MainCtrl mainCtrl;
+    private final ServerUtils server;
     private final MyFXML myFXML;
     private CardList cardList;
 
@@ -62,15 +59,10 @@ public class ListCtrl {
      * @param server a server util
      */
     @Inject
-    public ListCtrl(ServerUtils server, MyFXML myFXML, MainCtrl mainCtrl) {
-        this.mainCtrl = mainCtrl;
+    public ListCtrl(ServerUtils server, MyFXML myFXML) {
         this.server = server;
         cardList = new CardList();
         this.myFXML = myFXML;
-    }
-
-    public MainCtrl getMainCtrl() {
-        return mainCtrl;
     }
 
     public void setCardList(CardList cardList) {
@@ -100,16 +92,16 @@ public class ListCtrl {
 
         for (Card card: cardList.getCards()) {
             var cardCell = new MyFXML(createInjector(new ListModules()))
-                    .load(ListCellCtrl.class, "client", "scenes", "ListManagement", "CustomListCell.fxml");
-            ListCellCtrl controller = cardCell.getKey();
+                    .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
+            CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
             makeNodeDraggable(cardCell.getValue());
             cardVBox.getChildren().add(cardCell.getValue());
         }
 
         var quickAddCard =
-                new MyFXML(createInjector()).load(QuickAddCardCtrl.class, "client", "scenes",
-                        "ListManagement", "QuickAddCardCell.fxml");
+                new MyFXML(createInjector(new ListModules())).load(QuickAddCardCtrl.class, "client", "windows",
+                        "lists", "cells", "QuickAddCardCell.fxml");
         quickAddCard.getKey().setListCtrl(this);
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeNodeDraggable(quickAddCard.getValue());
@@ -195,7 +187,7 @@ public class ListCtrl {
      * @param cell the card to be viewed
      */
     public void viewCard(Card cell) {
-        var loader = myFXML.load(ViewCardCtrl.class, "client", "scenes", "CardWindows", "ViewCard.fxml");
+        var loader = myFXML.load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -211,7 +203,7 @@ public class ListCtrl {
      * Displays the AddCard FXML into a new window (Popup).
      */
     public void addCardScreen() {
-        var loader = myFXML.load(AddCardCtrl.class, "client", "scenes", "CardWindows", "AddCard.fxml");
+        var loader = myFXML.load(AddCardCtrl.class, "client", "windows", "cards", "AddCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -224,13 +216,12 @@ public class ListCtrl {
      * Displays the DeleteList FXML into a new window (Popup).
      */
     public void deleteScreen() {
-        var loader = myFXML.load(DeleteListCtrl.class ,"client", "windows", "lists", "DeleteList.fxml");
+        var loader = myFXML.load(DeleteListCtrl.class,"client", "windows", "lists", "delete", "DeleteList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
         String title = "Delete a list";
-//        mainCtrl.popUp(scene, title);
+        HelperMethods.popUp(scene, title);
     }
-
 }

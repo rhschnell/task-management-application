@@ -15,21 +15,33 @@
  */
 package client.windows.workspace;
 
+import client.MyFXML;
+import client.modules.ListModules;
+import client.utils.HelperMethods;
+import client.utils.Scenes;
+import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
+import commons.Board;
+import commons.CardList;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-
+import javafx.scene.layout.VBox;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import static com.google.inject.Guice.createInjector;
+
 public class WorkspaceCtrl implements Initializable {
-
-    private WorkspaceService service;
-
+    private final WorkspaceService service;
+    private final HelperMethods hm;
     @FXML
     private Label boardName;
     @FXML
@@ -43,13 +55,17 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button addListButton;
 
+    private Board shownBoard;
+
     /**
      * Constructor for WorkspaceCtrl
      * @param service corresponding service
+     * @param hm corresponding helper methods
      */
     @Inject
-    public WorkspaceCtrl(WorkspaceService service) {
+    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm) {
         this.service = service;
+        this.hm = hm;
     }
 
     /**
@@ -57,7 +73,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        service.disconnect();
+        hm.setScene(Scenes.USER);
     }
 
     /**
@@ -71,45 +87,95 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources) {
         // schedule service.refreshWorkspace();
-
-
-
-
-        // SET ALL FXML ELEMENTS IN SERVICE
-        service.setBoardControls(boardControls);
-        service.setBoardName(boardName);
-        service.setBoardNameButton(boardNameButton);
-        service.setKeyField(keyField);
-        service.setListContainer(listContainer);
-        service.setAddListButton(addListButton);
-
-        service.clearWorkspace(); // No board -> board controls
+        clearWorkspace(); // No board -> board controls
+        //        Timeline tl = new Timeline();
+//        tl.setCycleCount(-1);
+//        KeyFrame kf = new KeyFrame(Duration.millis(800),
+//                event -> {
+//                    try {
+//                        refreshWorkspace();
+//                    } catch (Exception ignored) {}
+//                });
+//        tl.getKeyFrames().add(kf);
+//        tl.play();
     }
 
     public void connect() {
-        service.showBoard(keyField.getText());
+        showBoard(keyField.getText());
     }
 
     /**
      * Method to clear the workspace
      */
     public void clearWorkspace() {
-        service.clearWorkspace();
+        shownBoard = null;
+        boardName.setText("");
+        boardNameButton.setText("");
+        listContainer.getChildren().clear();
+        boardName.setVisible(false);
+        boardNameButton.setVisible(false);
+        listContainer.setVisible(false);
+        for (Node child : boardControls.getChildren())
+            child.setVisible(false);
+        addListButton.setVisible(false);
     }
 
+    public void refreshWorkspace() {
+        // TODO
+        // Check with server if update
+        // if update -> ask server for ids of update items
+        // update those locally
+        String key = shownBoard.getKey();
+        Board serverBoard = service.getBoard(key);
+        if (!shownBoard.equals(serverBoard)) {
+            showBoard(key);
+        }
+    }
+
+    public void showBoard(String targetKey) {
+        try {
+            shownBoard = service.getBoard(targetKey);
+        } catch (NotFoundException | BadRequestException e) {
+            shownBoard = new Board(targetKey, targetKey, null);
+            service.insertBoard(shownBoard);
+        }
+
+        listContainer.getChildren().clear();
+        boardName.setText(shownBoard.getTitle());
+        boardNameButton.setText(shownBoard.getTitle());
+        for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
+            var loader = new MyFXML(createInjector(new ListModules()))
+                    .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
+            CardList cardList = shownBoard.getCardLists().get(i);
+            VBox list = (VBox) loader.getValue();
+            ListCtrl ctrl = loader.getKey();
+            ctrl.setCardList(cardList);
+            ctrl.displayCards();
+            ctrl.setListTitle(cardList.getListTitle());
+            listContainer.getChildren().add(list);
+        }
+        for (Node child : boardControls.getChildren())
+            if (!child.isVisible())
+                child.setVisible(true);
+        if (!boardName.isVisible())
+            boardName.setVisible(true);
+        if (!boardNameButton.isVisible())
+            boardNameButton.setVisible(true);
+        if (!listContainer.isVisible())
+            listContainer.setVisible(true);
+    }
 
     /**
      * Method to delete the shown board from the database
      */
     public void deleteBoard() {
-        service.deleteBoard();
+        service.deleteBoard(shownBoard);
         clearWorkspace();
     }
 
-    /**
-     * TEMPORARY METHOD FOR CONTINUED TESTING
-     */
-    public void addListTemp() {
-        service.addList();
+    public void addList() {
+        shownBoard.addList(new CardList("Temporary", new ArrayList<>()));
+        service.insertBoard(shownBoard);
+        refreshWorkspace();
     }
 }

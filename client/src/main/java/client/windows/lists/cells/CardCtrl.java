@@ -1,10 +1,10 @@
-package client.windows.lists.listCell;
+package client.windows.lists.cells;
 
 import client.MainCtrl;
 import client.MyFXML;
 import client.modules.ListModules;
 import client.utils.HelperMethods;
-import client.windows.cards.viewCard.ViewCardCtrl;
+import client.windows.cards.view.ViewCardCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
@@ -24,7 +24,7 @@ import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
-public class ListCellCtrl {
+public class CardCtrl {
     @FXML
     private Label cardTitle;
     @FXML
@@ -55,7 +55,7 @@ public class ListCellCtrl {
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public ListCellCtrl(MainCtrl mainCtrl) {
+    public CardCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
 

@@ -1,4 +1,4 @@
-package client.windows.cards.editCard;
+package client.windows.cards.edit;
 
 import client.MainCtrl;
 import client.serverUtils.CardUtils;

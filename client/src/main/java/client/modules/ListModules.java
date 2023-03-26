@@ -15,8 +15,8 @@
  */
 package client.modules;
 
-import client.windows.cards.addCard.AddCardCtrl;
-import client.windows.cards.viewCard.ViewCardCtrl;
+import client.windows.cards.add.AddCardCtrl;
+import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.TagListCtrl;
 import com.google.inject.Binder;
