@@ -27,8 +27,6 @@ import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -38,7 +36,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -108,16 +105,16 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources) {
         clearWorkspace();
-        Timeline tl = new Timeline();
-        tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(800),
-                event -> {
-                    try {
-                        refreshWorkspace();
-                    } catch (Exception ignored) {}
-                });
-        tl.getKeyFrames().add(kf);
-        tl.play();
+//        Timeline tl = new Timeline();
+//        tl.setCycleCount(-1);
+//        KeyFrame kf = new KeyFrame(Duration.millis(800),
+//                event -> {
+//                    try {
+//                        refreshWorkspace();
+//                    } catch (Exception ignored) {}
+//                });
+//        tl.getKeyFrames().add(kf);
+//        tl.play();
     }
 
     public void loadBoard() {
@@ -159,7 +156,7 @@ public class WorkspaceCtrl implements Initializable {
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
             ctrl.setCardList(cardList);
-            ctrl.addCards(cardList);
+            ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
