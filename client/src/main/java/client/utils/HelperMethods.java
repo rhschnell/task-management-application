@@ -1,14 +1,17 @@
 package client.utils;
 
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class HelperMethods {
     private Stage primaryStage;
     private Scene[] scenes;
+    private static DataFormat cardFormat;
 
     public HelperMethods() {
+        cardFormat = new DataFormat("card");
     }
 
     /**
@@ -25,6 +28,10 @@ public class HelperMethods {
         popUp.setResizable(false);
         popUp.setResizable(false);
         popUp.showAndWait();
+    }
+
+    public static DataFormat getCardFormat() {
+        return cardFormat;
     }
 
     public void setScene(Scenes s) {

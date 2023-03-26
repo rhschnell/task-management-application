@@ -60,7 +60,7 @@ public class TagListCtrl {
     {
         for(int i=0; i<tagList.size(); i++) {
             var loader =new MyFXML(createInjector(new ListModules()))
-                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tagList.get(i),"addFromTagList");
             ctrl.setCtrl(this);
@@ -76,7 +76,7 @@ public class TagListCtrl {
     {
         for(int i=0; i<tagList.size(); i++) {
             var loader = new MyFXML(createInjector(new ListModules()))
-                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tagList.get(i),"removeFromTagList");
             ctrl.setCtrl(this);

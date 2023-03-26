@@ -86,7 +86,7 @@ public class ViewCardCtrl {
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
                 var loader = new MyFXML(createInjector(new ListModules()))
-                        .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+                        .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
                 CustomTagCellCtrl ctrl = loader.getKey();
                 ctrl.setTagObject(card.getTags().get(i), "viewTag");
                 appliedTagsVbox.getChildren().add(loader.getValue());
@@ -122,7 +122,7 @@ public class ViewCardCtrl {
 
     public void edit()
     {
-        var loader = myFXML.load(EditCardCtrl.class, "client", "scenes", "CardWindows", "EditCard.fxml");
+        var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setCard(card);
         loader.getKey().setViewCardScene(cardDescription.getScene());
         Stage stage = new Stage();
