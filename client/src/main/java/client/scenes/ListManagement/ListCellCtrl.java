@@ -4,7 +4,6 @@ import client.ListModules;
 import client.MyFXML;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainCtrl;
-import client.scenes.TagManagement.TagListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
@@ -145,6 +144,7 @@ public class ListCellCtrl {
     protected void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
+        this.setDisplayTags(item.getTags());
         setOnButtonClick(event -> {
             System.out.println(item.getTitle());
             // Handle button click
