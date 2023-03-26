@@ -15,12 +15,11 @@
  */
 package client.windows.login.admin;
 
-import client.MainCtrl;
-import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -28,28 +27,25 @@ import java.util.ResourceBundle;
 
 public class AdminLoginCtrl implements Initializable {
 
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
+    private final AdminLoginService service;
+
+    private final String serverPassword = "group1";
+
+    @FXML
+    private Label message;
     @FXML
     private TextField serverAddress;
 
-    /**
-     * Constructor for AdminLoginCtrl
-     * @param server a server util
-     * @param mainCtrl a main controller
-     */
-    @Inject
-    public AdminLoginCtrl(ServerUtils server, MainCtrl mainCtrl) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
-    }
+    @FXML
+    private PasswordField passwordField;
 
     /**
-     * Getter for server address
-     * @return the server address
+     * Constructor for AdminLoginCtrl
+     * @param service corresponding service
      */
-    public TextField getServerAddress() {
-        return serverAddress;
+    @Inject
+    public AdminLoginCtrl(AdminLoginService service) {
+        this.service = service;
     }
 
     /**
@@ -65,6 +61,7 @@ public class AdminLoginCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.serverAddress.setText("http://localhost:8080");
+        showWelcome();
     }
 
 
@@ -73,31 +70,43 @@ public class AdminLoginCtrl implements Initializable {
      * the user to the workspace. Otherwise, shows an error message.
      */
     public void connect(){
-        server.setServer(serverAddress.getText());
-        if (server.pingServer()){
-            //TODO
+        if (!service.serverPing(serverAddress.getText())){
+            showServerIncorrect();
+        } else if (passwordField.getText().isBlank()) {
+            showPasswordBlank();
+        }else if (!passwordField.getText().equals(serverPassword)){
+            showPasswordIncorrect();
+            passwordField.clear();
         } else {
-            showErrorMessage();
+            service.showWorkspace();
+            passwordField.clear();
+            showWelcome();
         }
+    }
+
+    /**
+     * Shows a welcome message to the user
+     */
+    private void showWelcome() {
+        message.setText("Enter the address and the password of the server.");
+    }
+
+    /**
+     * Shows a message to the user indicating that the entered password is incorrect
+     */
+    private void showPasswordIncorrect() {
+        message.setText("The password you entered is incorrect. Please try again.");
+    }
+
+    private void showPasswordBlank() {
+        message.setText("The password field must not be blank.");
     }
 
     /**
      * Shows a message to the user indicating that the connection to the server could not be made.
      */
-    private void showErrorMessage() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Connection error");
-        alert.setContentText("The server you entered does not exist or is turned off. Please try a new server");
-
-        alert.showAndWait();
-    }
-
-    /**
-     * When called, it switches back to the board overview, disconnecting the user from the workspace.
-     */
-    public void showWorkspace() {
-//        mainCtrl.setWorkspace();
+    private void showServerIncorrect() {
+        message.setText("The server you entered does not exist or is turned off. Please try a new server");
     }
 
     /**
@@ -105,6 +114,6 @@ public class AdminLoginCtrl implements Initializable {
      */
     @FXML
     public void back() {
-//        mainCtrl.setStartUp();
+        service.back();
     }
 }
