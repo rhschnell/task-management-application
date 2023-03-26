@@ -1,7 +1,9 @@
 package client.scenes.ListManagement;
 
-import client.utils.CardListUtils;
-import client.utils.CardUtils;
+
+import client.serverUtils.CardListUtils;
+import client.serverUtils.CardUtils;
+import client.windows.lists.list.ListCtrl;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,14 +40,15 @@ public class QuickAddCardCtrl {
      */
     public void addCard() {
         Card card = new Card(cardTitle.getText());
-        cardUtils.addCard(card);
+        cardUtils.insertCard(card);
         listCtrl.getCardList().addCard(card);
-        server.addCardList(listCtrl.getCardList());
-        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+        server.insertCardList(listCtrl.getCardList());
+//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
     }
 
 
     public void setListCtrl(ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
     }
+
 }

@@ -15,13 +15,13 @@
  */
 package client.scenes.UserWorkspace;
 
-import client.ListModules;
-import client.Main;
+import client.MainCtrl;
 import client.MyFXML;
-import client.scenes.ListManagement.AddListCtrl;
-import client.scenes.ListManagement.ListCtrl;
-import client.scenes.MainCtrl;
-import client.utils.BoardUtils;
+import client.modules.ListModules;
+import client.serverUtils.BoardUtils;
+import client.utils.HelperMethods;
+import client.utils.Scenes;
+import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -30,8 +30,6 @@ import jakarta.ws.rs.NotFoundException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -46,6 +44,8 @@ public class WorkspaceCtrl implements Initializable {
 
     private final BoardUtils server;
     private final MainCtrl mainCtrl;
+
+    private final HelperMethods helperMethods;
 
     private Board shownBoard;
 
@@ -66,13 +66,15 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Constructor for WorkspaceCtrl
      *
-     * @param server   a server util
-     * @param mainCtrl a main controller
+     * @param server        a server util
+     * @param mainCtrl      a main controller
+     * @param helperMethods an instance of HelperMethods
      */
     @Inject
-    public WorkspaceCtrl(BoardUtils server, client.scenes.MainCtrl mainCtrl) {
+    public WorkspaceCtrl(BoardUtils server, MainCtrl mainCtrl, HelperMethods helperMethods) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.helperMethods = helperMethods;
         boardName = new Label();
         boardNameButton = new Button();
         listContainer = new HBox();
@@ -91,7 +93,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        mainCtrl.setUserLogin();
+        helperMethods.setScene(Scenes.USER);
     }
 
     /**
@@ -123,24 +125,24 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard = server.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
             shownBoard = new Board(targetKey, targetKey, null);
-            server.addBoard(shownBoard);
+            server.insertBoard(shownBoard);
         }
-        mainCtrl.setWorkspace();
+        helperMethods.setScene(Scenes.WORKSPACE);
         displayBoard();
     }
 
     //TODO Remove this pop up and integrate board join to the workspace directly,
     // as suggested by the heuristic evaluation
-    public void joinPopUp() {
-        var loader = Main.getFXML().
-                load(ListCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
-        Parent root = loader.getValue();
-        Scene boardJoin = new Scene(root);
-        String title = "Join/Create a board";
-        mainCtrl.popUp(boardJoin, title);
-        loadBoard();
-
-    }
+//    public void joinPopUp() {
+//        var loader = Main.getFXML().
+//                load(ListCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
+//        Parent root = loader.getValue();
+//        Scene boardJoin = new Scene(root);
+//        String title = "Join/Create a board";
+////        HelperMethods.popUp(boardJoin, title);
+//        loadBoard();
+//
+//    }
 
     /**
      * Adds children (Lists) to the HBOX resulting in the creation of the board.
@@ -171,16 +173,16 @@ public class WorkspaceCtrl implements Initializable {
             listContainer.setVisible(true);
     }
 
-    public void addListPopup() {
-        var loader = Main.getFXML().
-                load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        String title = "Create a list";
-        mainCtrl.popUp(scene, title);
-    }
+//    public void addListPopup() {
+//        var loader = Main.getFXML().
+//                load(AddListCtrl.class, "client", "scenes", "ListManagement", "AddList.fxml");
+//
+//        Parent root = loader.getValue();
+//        Scene scene = new Scene(root);
+//
+//        String title = "Create a list";
+//        mainCtrl.popUp(scene, title);
+//    }
 
 
     /**

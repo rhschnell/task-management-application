@@ -16,12 +16,16 @@
 package client.windows.lists.list;
 
 import client.*;
+import client.modules.ListModules;
+import client.scenes.ListManagement.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.addCard.AddCardCtrl;
 import client.windows.cards.viewCard.ViewCardCtrl;
 import client.MainCtrl;
 import client.serverUtils.ServerUtils;
 import client.windows.lists.DeleteListCtrl;
+
+import client.windows.lists.listCell.ListCellCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;

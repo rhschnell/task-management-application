@@ -71,7 +71,7 @@ public class WorkspaceService {
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
             ctrl.setCardList(cardList);
-            ctrl.addCards(cardList);
+//            ctrl.addCards(cardList); //TODO: check here
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }

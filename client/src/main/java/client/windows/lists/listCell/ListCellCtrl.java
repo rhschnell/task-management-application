@@ -1,6 +1,13 @@
-package client.windows.lists;
+package client.windows.lists.listCell;
 
-import client.windows.tags.TagListCtrl;
+import client.MainCtrl;
+import client.MyFXML;
+import client.modules.ListModules;
+import client.utils.HelperMethods;
+import client.windows.cards.viewCard.ViewCardCtrl;
+import com.google.inject.Inject;
+import commons.Card;
+import commons.Tag;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -10,13 +17,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
-import static com.google.inject.Guice.createInjector;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.awt.*;
 import java.util.List;
+
+import static com.google.inject.Guice.createInjector;
 
 public class ListCellCtrl {
     @FXML
@@ -49,12 +55,13 @@ public class ListCellCtrl {
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public ListCellCtrl(MainCtrl mainCtrl){
+    public ListCellCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
     }
 
     /**
      * Sets the title of the card shown in the overview of the list
+     *
      * @param text Text to set title to
      */
     public void setCardTitle(String text) {
@@ -63,27 +70,24 @@ public class ListCellCtrl {
 
     /**
      * Sets the first 3 tags to be displayed on the board overview page on tge card
+     *
      * @param tags the list of tags that the card has
      */
-    public void setDisplayTags(List <Tag> tags)
-    {
+    public void setDisplayTags(List<Tag> tags) {
         tagCircle1.setVisible(false);
         tagCircle2.setVisible(false);
         tagCircle3.setVisible(false);
-        if(tags.size()>0)
-        {
+        if (tags.size() > 0) {
             tagCircle1.setFill(Paint.valueOf(tags.get(0).getColor()));
             tagCircle1.setVisible(true);
 
         }
-        if(tags.size()>1)
-        {
+        if (tags.size() > 1) {
             tagCircle2.setFill(Paint.valueOf(tags.get(1).getColor()));
             tagCircle2.setVisible(true);
 
         }
-        if(tags.size()>2)
-        {
+        if (tags.size() > 2) {
             tagCircle3.setFill(Paint.valueOf(tags.get(2).getColor()));
             tagCircle3.setVisible(true);
 
@@ -92,13 +96,14 @@ public class ListCellCtrl {
 
     /**
      * Sets the event to happen when interacting with the delete button
+     *
      * @param handler the event to happen
      */
     public void setOnButtonClick(EventHandler<ActionEvent> handler) {
         deleteButton.setOnAction(handler);
     }
-    public void click()
-    {
+
+    public void click() {
         long clickTime = System.currentTimeMillis();
         if (clickTime - lastClickTime < 300) { // detect double-click
             viewCard(card); // your method to open a file
@@ -117,15 +122,16 @@ public class ListCellCtrl {
         controller.setCard(cell);
 
         String title = "View Card";
-        mainCtrl.popUp(scene, title);
+        HelperMethods.popUp(scene, title);
     }
 
 
     /**
      * Sets the visibility of the icon that indicates that a card has a description
+     *
      * @param visible Boolean indicating the appropriate visibility status of the icon
      */
-    public void setDescriptionIconVisible(boolean visible){
+    public void setDescriptionIconVisible(boolean visible) {
         descriptionIcon.setVisible(visible);
     }
 
@@ -135,7 +141,7 @@ public class ListCellCtrl {
      * @param item The new item for the cell.
      */
 
-    protected void updateItem(Card item) {
+    public void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
         this.setDisplayTags(item.getTags());
