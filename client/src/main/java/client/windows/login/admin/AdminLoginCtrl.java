@@ -23,23 +23,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import server.PasswordService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AdminLoginCtrl implements Initializable {
-
     private final AdminLoginService service;
-
+    private final PasswordService passwordService = new PasswordService();
     private final HelperMethods hm;
-
-    private final String serverPassword = "group1";
-
     @FXML
     private Label message;
     @FXML
     private TextField serverAddress;
-
     @FXML
     private PasswordField passwordField;
 
@@ -80,7 +76,7 @@ public class AdminLoginCtrl implements Initializable {
             showServerIncorrect();
         } else if (passwordField.getText().isBlank()) {
             showPasswordBlank();
-        }else if (!passwordField.getText().equals(serverPassword)){
+        } else if (!passwordService.isPasswordCorrect(passwordField.getText())){
             showPasswordIncorrect();
             passwordField.clear();
         } else {
