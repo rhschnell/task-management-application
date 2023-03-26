@@ -26,8 +26,6 @@ import javafx.scene.layout.HBox;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.google.inject.Guice.createInjector;
-
 public class WorkspaceCtrl implements Initializable {
 
     private WorkspaceService service;
