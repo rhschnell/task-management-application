@@ -15,13 +15,12 @@
  */
 package client.scenes.ListManagement;
 
-import client.CustomListCell;
+import client.ListModules;
 import client.Main;
 import client.MyFXML;
 import client.scenes.CardWindows.AddCardCtrl;
 import client.scenes.CardWindows.ViewCardCtrl;
 import client.scenes.MainCtrl;
-import client.scenes.QuickAddCardCell;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -30,8 +29,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
+import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
 
@@ -54,7 +54,6 @@ public class ListCtrl {
     public ListCtrl(ServerUtils server, MyFXML myFXML) {
         this.mainCtrl = Main.getINJECTOR().getInstance(MainCtrl.class);
         this.server = server;
-        listTitle = new Label();
         cardList = new CardList();
         this.myFXML = myFXML;
     }
@@ -88,18 +87,22 @@ public class ListCtrl {
     }
 
     /**
-     * Adds a CardList object to the list
-     * @param cardList the list of cards to be added
+     * Displays the cards onto the list's inner VBox
      */
-    public void addCards(CardList cardList) {
+    public void displayCards() {
 
         for (Card card: cardList.getCards()) {
-            AnchorPane cardCell = new CustomListCell(card);
-            cardVBox.getChildren().add(cardCell);
+            var cardCell = new MyFXML(createInjector(new ListModules()))
+                    .load(ListCellCtrl.class, "client", "scenes", "ListManagement", "CustomListCell.fxml");
+            ListCellCtrl controller = cardCell.getKey();
+            controller.updateItem(card);
+            cardVBox.getChildren().add(cardCell.getValue());
         }
 
-        AnchorPane quickAddCardCell = new QuickAddCardCell();
-        cardVBox.getChildren().add(quickAddCardCell);
+        var quickAddCard =
+                new MyFXML(createInjector()).load(QuickAddCardCtrl.class, "client", "scenes",
+                        "ListManagement", "QuickAddCardCell.fxml");
+        cardVBox.getChildren().add(quickAddCard.getValue());
     }
 
     /**

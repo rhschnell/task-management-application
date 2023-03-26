@@ -156,7 +156,7 @@ public class WorkspaceCtrl implements Initializable {
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
             ctrl.setCardList(cardList);
-            ctrl.addCards(cardList);
+            ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }

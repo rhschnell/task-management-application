@@ -118,7 +118,7 @@
             </AnchorPane>
          </left>
          <center>
-            <AnchorPane prefHeight="713.0" prefWidth="1026.0">
+            <AnchorPane prefHeight="713.0" prefWidth="1026.0" style="-fx-background-color: F8FEFB;">
                <children>
                   <HBox alignment="CENTER_LEFT" blendMode="DARKEN" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" minWidth="500.0" prefHeight="47.0" prefWidth="869.0" scaleShape="false" style="-fx-background-color: #B3D1C5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="268.0">
                      <children>
@@ -167,11 +167,11 @@
                         </Button>
                      </children>
                   </HBox>
-                  <ScrollPane layoutY="45.0" prefHeight="502.0" prefWidth="822.0" style="-fx-background: F8FEFB;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+                  <ScrollPane fitToHeight="true" layoutY="45.0" prefHeight="502.0" prefWidth="822.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
                      <content>
-                        <HBox fx:id="listContainer" prefHeight="450.0" prefWidth="820.0" spacing="30.0" style="-fx-background-color: F8FEFB;">
+                        <HBox fx:id="listContainer" prefHeight="450.0" prefWidth="820.0" spacing="30.0" style="-fx-background-color: transparent;">
                            <padding>
-                              <Insets left="20.0" right="20.0" top="20.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding></HBox>
                      </content>
                   </ScrollPane>
