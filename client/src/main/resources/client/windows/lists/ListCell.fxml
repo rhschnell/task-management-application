@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="40.0" prefWidth="250.0" styleClass="card" stylesheets="/client/style/stylesheet.css"
@@ -25,9 +26,24 @@
                <Insets left="10.0" />
             </HBox.margin>
          </Label>
+         <Circle fx:id="tagCircle3" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+            <HBox.margin>
+               <Insets right="5.0" />
+            </HBox.margin>
+         </Circle>
+         <Circle fx:id="tagCircle2" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+            <HBox.margin>
+               <Insets right="5.0" />
+            </HBox.margin>
+         </Circle>
+         <Circle fx:id="tagCircle1" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+            <HBox.margin>
+               <Insets right="5.0" />
+            </HBox.margin>
+         </Circle>
          <ImageView fx:id="descriptionIcon" fitHeight="18.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../icons/pencil-alt.png" />
+               <Image url="/client/icons/pencil-alt.png" />
             </image>
          </ImageView>
             <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="11.0" prefWidth="17.0" style="-fx-background-color: transparent; -fx-text-fill: black; -fx-background-radius: 10;" text="X" textAlignment="RIGHT">
