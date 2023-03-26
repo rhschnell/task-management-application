@@ -102,6 +102,7 @@ public class ListCtrl {
         var quickAddCard =
                 new MyFXML(createInjector()).load(QuickAddCardCtrl.class, "client", "scenes",
                         "ListManagement", "QuickAddCardCell.fxml");
+        quickAddCard.getKey().setListCtrl(this);
         cardVBox.getChildren().add(quickAddCard.getValue());
     }
 

@@ -41,7 +41,7 @@
          </Circle>
          <ImageView fx:id="descriptionIcon" fitHeight="18.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../icons/pencil-alt.png" />
+               <Image url="/client/icons/pencil-alt.png" />
             </image>
          </ImageView>
             <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="11.0" prefWidth="17.0" style="-fx-background-color: transparent; -fx-text-fill: black; -fx-background-radius: 10;" text="X" textAlignment="RIGHT">

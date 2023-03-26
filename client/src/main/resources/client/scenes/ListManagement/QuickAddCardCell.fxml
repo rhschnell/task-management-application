@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="40.0" prefWidth="250.0" styleClass="card" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ListManagement.QuickAddCardCtrl">
+<AnchorPane prefHeight="40.0" prefWidth="442.0" style="-fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0); -fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ListManagement.QuickAddCardCtrl">
    <children>
-        <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="165.0" prefHeight="21.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <TextField fx:id="cardTitle" onMouseClicked="#setAddButtonVisible" prefHeight="50.0" prefWidth="226.0" promptText="+ Add new card" style="-fx-background-color: transparent;">
+        <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <TextField fx:id="cardTitle" maxWidth="-Infinity" onMouseClicked="#setAddButtonVisible" prefHeight="50.0" prefWidth="500.0" promptText="+ Add new card" style="-fx-background-color: transparent;">
             <font>
                <Font name="System Italic" size="12.0" />
             </font>
@@ -18,10 +18,13 @@
                <Insets />
             </opaqueInsets>
          </TextField>
-            <Button fx:id="addButton" disable="true" mnemonicParsing="false" onMouseClicked="#addCard" prefHeight="26.0" prefWidth="81.0" style="-fx-background-color: transparent; -fx-text-fill: black; -fx-background-radius: 10;" text="Add" textAlignment="RIGHT" visible="false">
+            <Button fx:id="addButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addCard" prefHeight="26.0" prefWidth="50.0" styleClass="blue-button" text="Add" textAlignment="RIGHT" visible="false">
             <font>
                <Font name="System Bold" size="12.0" />
             </font>
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
             </Button>
         </HBox>
    </children>
