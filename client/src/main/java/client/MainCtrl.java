@@ -5,7 +5,7 @@ import client.utils.Scenes;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
-import client.windows.workspace.WorkspaceCtrl;
+import client.windows.workspace.boardspace.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

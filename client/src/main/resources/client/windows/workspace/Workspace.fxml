@@ -44,7 +44,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="1024.0" style="-fx-background-color: F6F6F6;" stylesheets="@../../style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.WorkspaceCtrl">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="1024.0" style="-fx-background-color: F6F6F6;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.boardspace.WorkspaceCtrl">
    <left>
       <AnchorPane prefHeight="548.0" prefWidth="271.0" style="-fx-effect: dropshadow( three-pass-box , gray, 2, 0.0 , 1, 0); -fx-background-color: ACC7BB;">
          <VBox layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="231.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">

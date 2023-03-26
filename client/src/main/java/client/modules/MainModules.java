@@ -19,7 +19,7 @@ import client.MainCtrl;
 import client.utils.HelperMethods;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
-import client.windows.workspace.WorkspaceCtrl;
+import client.windows.workspace.boardspace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;

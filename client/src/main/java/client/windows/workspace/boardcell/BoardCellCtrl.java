@@ -9,10 +9,11 @@ import javafx.scene.image.ImageView;
 
 public class BoardCellCtrl {
     private final MainCtrl mainCtrl;
+
     private Board board;
+
     @FXML
     private Label boardTitle;
-
     @FXML
     private ImageView deleteIcon;
 

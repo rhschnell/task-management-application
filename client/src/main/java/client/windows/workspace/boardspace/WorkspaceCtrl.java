@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.workspace;
+package client.windows.workspace.boardspace;
 
 import client.MyFXML;
 import client.modules.ListModules;
@@ -27,6 +27,8 @@ import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -35,6 +37,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,16 +97,18 @@ public class WorkspaceCtrl implements Initializable {
         joinedKeys = new ArrayList<>();
         // schedule service.refreshWorkspace();
         clearWorkspace(); // No board -> board controls
-        //        Timeline tl = new Timeline();
-//        tl.setCycleCount(-1);
-//        KeyFrame kf = new KeyFrame(Duration.millis(800),
-//                event -> {
-//                    try {
-//                        refreshWorkspace();
-//                    } catch (Exception ignored) {}
-//                });
-//        tl.getKeyFrames().add(kf);
-//        tl.play();
+
+
+        Timeline tl = new Timeline();
+        tl.setCycleCount(-1);
+        KeyFrame kf = new KeyFrame(Duration.millis(800),
+                event -> {
+                    try {
+                        refreshWorkspace();
+                    } catch (Exception ignored) {}
+                });
+        tl.getKeyFrames().add(kf);
+        tl.play();
     }
 
     public void connect() {
@@ -132,10 +137,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void refreshWorkspace() {
-        // TODO
-        // Check with server if update
-        // if update -> ask server for ids of update items
-        // update those locally
         String key = shownBoard.getKey();
         Board serverBoard = service.getBoard(key);
         if (!shownBoard.equals(serverBoard)) {
