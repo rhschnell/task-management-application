@@ -15,13 +15,11 @@
  */
 package client.windows.workspace;
 
-import client.Main;
 import client.MyFXML;
 import client.modules.ListModules;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
-import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.workspace.boardcell.BoardCellCtrl;
 import com.google.inject.Inject;
@@ -32,12 +30,12 @@ import jakarta.ws.rs.NotFoundException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

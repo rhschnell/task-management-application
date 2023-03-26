@@ -1,6 +1,5 @@
 package client.windows.lists.cells;
 
-import client.MainCtrl;
 import client.MyFXML;
 import client.modules.ListModules;
 import client.utils.HelperMethods;
