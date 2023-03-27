@@ -36,12 +36,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
@@ -59,6 +57,9 @@ public class ListCtrl {
 
     @FXML
     private VBox cardVBox;
+
+    @FXML
+    private TextField renameTitle;
 
     private CardUtils cardUtils;
 
@@ -289,5 +290,20 @@ public class ListCtrl {
 
         String title = "Delete a list";
         HelperMethods.popUp(scene, title);
+    }
+
+    public void rename()
+    {
+        renameTitle.setVisible(true);
+        renameTitle.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+            {
+                listTitle.setText(renameTitle.getText());
+                CardListUtils utils = new CardListUtils(server);
+                cardList.setListTitle(renameTitle.getText());
+                utils.insertCardList(cardList);
+                renameTitle.setVisible(false);
+            }
+        });
     }
 }
