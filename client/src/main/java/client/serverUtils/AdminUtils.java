@@ -23,13 +23,14 @@ public class AdminUtils {
 
     /**
      * Sends a post request to the server for the admin password
+     *
      * @param pass The password
      */
     public void sendPassword(String pass) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.ADMIN)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(pass, APPLICATION_JSON), String.class);
+            .target(serverUtils.getServer()).path(Route.ADMIN)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(pass, APPLICATION_JSON), Void.class);
     }
 }
