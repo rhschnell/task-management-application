@@ -1,4 +1,4 @@
-package server;
+package server.features.passwords;
 
 import org.springframework.stereotype.Service;
 
