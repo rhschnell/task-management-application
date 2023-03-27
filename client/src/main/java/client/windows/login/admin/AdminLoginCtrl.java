@@ -80,7 +80,7 @@ public class AdminLoginCtrl implements Initializable {
 
         try {
             service.sendPassword(passwordField.getText());
-            hm.setScene(Scenes.WORKSPACE);
+            hm.setScene(Scenes.ADMINVIEW);
             passwordField.clear();
             showWelcome();
         } catch (ForbiddenException e) {
