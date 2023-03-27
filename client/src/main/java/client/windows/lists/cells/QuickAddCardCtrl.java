@@ -13,8 +13,7 @@ import javax.inject.Inject;
 
 public class QuickAddCardCtrl {
 
-    private CardUtils cardUtils;
-    private final CardListUtils server;
+    private final CardService service;
     private ListCtrl listCtrl;
     @FXML
     private TextField cardTitle;
@@ -22,9 +21,8 @@ public class QuickAddCardCtrl {
     private Button addButton;
 
     @Inject
-    public QuickAddCardCtrl(CardUtils cardUtils, CardListUtils server, ListCtrl listCtrl) {
-        this.cardUtils = cardUtils;
-        this.server = server;
+    public QuickAddCardCtrl(CardService service, ListCtrl listCtrl) {
+        this.service = service;
         this.listCtrl = listCtrl;
     }
 
@@ -38,9 +36,9 @@ public class QuickAddCardCtrl {
      */
     public void addCard() {
         Card card = new Card(cardTitle.getText());
-//        cardUtils.insertCard(card);
+        service.insertCard(card);
         listCtrl.getCardList().addCard(card);
-//        server.insertCardList(listCtrl.getCardList());
+        service.insertCardList(listCtrl.getCardList());
     }
 
 
