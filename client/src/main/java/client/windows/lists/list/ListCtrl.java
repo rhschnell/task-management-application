@@ -16,14 +16,12 @@
 package client.windows.lists.list;
 
 import client.*;
-import client.modules.ListModules;
 import client.modules.MainModules;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
-import client.windows.cards.view.ViewCardCtrl;
 import client.serverUtils.ServerUtils;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.cells.CardCtrl;
@@ -48,9 +46,8 @@ import javafx.util.Pair;
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
-
-    private final ServerUtils server;
     private final MyFXML myFXML;
+    private final ServerUtils server;
     private CardList cardList;
 
     @FXML
@@ -68,15 +65,16 @@ public class ListCtrl {
     private CardListUtils cardListUtils;
     /**
      * Constructor for ListCtrl
-     * @param server a server util
+     *
+     * @param server  a server util
      */
     @Inject
     public ListCtrl(CardUtils cardUtils, ServerUtils server, MyFXML myFXML, CardListUtils cardListUtils) {
         this.server = server;
+        this.myFXML = myFXML;
         this.cardListUtils = cardListUtils;
         this.cardUtils = cardUtils;
         cardList = new CardList();
-        this.myFXML = myFXML;
         Card c = new Card();
         cardFormat = HelperMethods.getCardFormat();
     }
@@ -108,7 +106,7 @@ public class ListCtrl {
 
 
         for (Card card: cardList.getCards()) {
-            var cardCell = new MyFXML(createInjector(new ListModules()))
+            var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
@@ -117,7 +115,7 @@ public class ListCtrl {
         }
 
         var quickAddCard =
-                new MyFXML(createInjector(new ListModules())).load(QuickAddCardCtrl.class, "client", "windows",
+                new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
                         "lists", "cells", "QuickAddCardCell.fxml");
         quickAddCard.getKey().setListCtrl(this);
         cardVBox.getChildren().add(quickAddCard.getValue());
@@ -166,8 +164,7 @@ public class ListCtrl {
         });
         dragDropHelper(cardCell);
     }
-    public void dragDropHelper(Pair<CardCtrl,Parent> cardCell )
-    {
+    public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -194,7 +191,6 @@ public class ListCtrl {
             event.consume();
         });
     }
-
 
     private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
@@ -225,8 +221,7 @@ public class ListCtrl {
         });
         quickCardDragHelper(cardCell);
     }
-    public void quickCardDragHelper(Pair<QuickAddCardCtrl,Parent> cardCell )
-    {
+    public void quickCardDragHelper(Pair<QuickAddCardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -252,28 +247,13 @@ public class ListCtrl {
             event.consume();
         });
     }
-    /**
-     * Opens the view card pop up for a card in the list
-     * @param cell the card to be viewed
-     */
-    public void viewCard(Card cell) {
-        var loader = myFXML.load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        ViewCardCtrl controller = loader.getKey();
-        controller.setCard(cell);
-
-        String title = "View Card";
-        HelperMethods.popUp(scene, title);
-    }
 
     /**
      * Displays the AddCard FXML into a new window (Popup).
      */
     public void addCardScreen() {
-        var loader = myFXML.load(AddCardCtrl.class, "client", "windows", "cards", "AddCard.fxml");
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AddCardCtrl.class, "client", "windows", "cards", "AddCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -286,10 +266,12 @@ public class ListCtrl {
      * Displays the DeleteList FXML into a new window (Popup).
      */
     public void deleteScreen() {
-        var loader = myFXML.load(DeleteListCtrl.class,"client", "windows", "lists", "delete", "DeleteList.fxml");
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteListCtrl.class,"client", "windows", "lists", "delete", "DeleteList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setDeleteId(this.getCardList().getId());
 
         String title = "Delete a list";
         HelperMethods.popUp(scene, title);

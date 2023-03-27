@@ -19,6 +19,8 @@ import client.MainCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.lists.cells.CardService;
+import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
@@ -40,5 +42,9 @@ public class MainModules implements Module {
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DeleteListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardService.class).in(Scopes.SINGLETON);
     }
 }

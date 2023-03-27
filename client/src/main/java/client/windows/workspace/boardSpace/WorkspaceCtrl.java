@@ -179,7 +179,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void addList() {
-        shownBoard.addList(new CardList("Temporary", new ArrayList<>()));
+        shownBoard.addList(new CardList("Call Rename Function", new ArrayList<>()));
         service.insertBoard(shownBoard);
         refreshWorkspace();
     }

@@ -46,16 +46,12 @@ public class AddCardCtrl implements Initializable {
 
     @FXML
     private TextField cardTitle;
-
     @FXML
     private TextArea cardDescription;
-
     @FXML
     private Button cancelButton;
-
     @FXML
     private Button saveButton;
-
     @FXML
     private VBox appliedTagsVbox;
 
@@ -64,18 +60,12 @@ public class AddCardCtrl implements Initializable {
     /**
      * Constructor for AddCardCtrl
      * @param server a server util
-     * @param listCtrl a main controller
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, ListCtrl listCtrl) {
-        this.listCtrl = listCtrl;
+    public AddCardCtrl(ServerUtils server) {
         this.server = new CardListUtils(server);
         appliedTags = new ArrayList<>();
         appliedTagsVbox = new VBox();
-    }
-
-    public ListCtrl getListCtrl() {
-        return listCtrl;
     }
 
     /**
