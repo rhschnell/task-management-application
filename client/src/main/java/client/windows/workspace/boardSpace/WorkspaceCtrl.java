@@ -22,7 +22,6 @@ import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;

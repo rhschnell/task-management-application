@@ -109,7 +109,7 @@ public class AddCardCtrl implements Initializable {
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
-        var loader =  new MyFXML(createInjector(new ListModules()))
+        var loader =  new MyFXML(createInjector(new MainModules()))
                 .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
         ctrl.setCtrl2(this);
@@ -129,7 +129,7 @@ public class AddCardCtrl implements Initializable {
 
         for(int i=0;i<appliedTags.size();i++)
         {
-            var loader =  new MyFXML(createInjector(new ListModules()))
+            var loader =  new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setCtrl2(this);

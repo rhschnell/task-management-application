@@ -1,7 +1,8 @@
 package client.windows.lists.cells;
 
+import client.MainCtrl;
 import client.MyFXML;
-import client.modules.ListModules;
+import client.modules.MainModules;
 import client.serverUtils.CardUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
@@ -111,7 +112,7 @@ public class CardCtrl {
     }
 
     public void viewCard(Card cell) {
-        var loader = new MyFXML(createInjector(new ListModules()))
+        var loader = new MyFXML(createInjector(new MainModules()))
                 .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
         Parent root = loader.getValue();

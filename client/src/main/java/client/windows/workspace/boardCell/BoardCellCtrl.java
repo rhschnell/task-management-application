@@ -1,6 +1,5 @@
 package client.windows.workspace.boardCell;
 
-import client.MainCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;

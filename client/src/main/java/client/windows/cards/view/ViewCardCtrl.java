@@ -86,7 +86,7 @@ public class ViewCardCtrl {
     {
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
-                var loader = new MyFXML(createInjector(new ListModules()))
+                var loader = new MyFXML(createInjector(new MainModules()))
                         .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
                 CustomTagCellCtrl ctrl = loader.getKey();
                 ctrl.setTagObject(card.getTags().get(i), "viewTag");

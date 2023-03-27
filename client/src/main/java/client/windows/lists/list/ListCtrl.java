@@ -16,7 +16,7 @@
 package client.windows.lists.list;
 
 import client.*;
-import client.modules.ListModules;
+import client.modules.MainModules;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import client.windows.lists.cells.QuickAddCardCtrl;
