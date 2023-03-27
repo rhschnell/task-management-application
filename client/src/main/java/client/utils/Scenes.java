@@ -5,5 +5,4 @@ public enum Scenes {
     WORKSPACE,
     ADMIN,
     USER,
-
 }

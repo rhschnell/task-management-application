@@ -20,6 +20,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
+import client.windows.tags.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
@@ -31,10 +32,13 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -47,6 +51,7 @@ import static com.google.inject.Guice.createInjector;
 public class WorkspaceCtrl implements Initializable {
     private final WorkspaceService service;
     private final HelperMethods hm;
+    private final MyFXML myFXML;
     @FXML
     private Label boardName;
     @FXML
@@ -67,9 +72,10 @@ public class WorkspaceCtrl implements Initializable {
      * @param hm corresponding helper methods
      */
     @Inject
-    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm) {
+    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm, MyFXML myFXML) {
         this.service = service;
         this.hm = hm;
+        this.myFXML = myFXML;
     }
 
     /**
@@ -145,7 +151,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null);
+            shownBoard = new Board(targetKey, targetKey, null, null);
             service.insertBoard(shownBoard);
         }
 
@@ -183,4 +189,23 @@ public class WorkspaceCtrl implements Initializable {
         service.insertBoard(shownBoard);
         refreshWorkspace();
     }
+
+    public Board getShownBoard(){
+        return shownBoard;
+    }
+
+    public void tagOverview() {
+        var loader = myFXML.load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+        loader.getKey();
+        Stage stage = new Stage();
+        stage.setScene(new Scene((loader.getValue())));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+//        Parent root = loader.getValue();
+//        Scene scene = new Scene(root);
+//        System.out.println("no");
+//        String title = "Tag Overview";
+//        HelperMethods.popUp(scene, title);
+    }
+
 }

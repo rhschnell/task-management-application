@@ -47,7 +47,7 @@ public class CustomTagCellCtrl {
     public void setTagObject(Tag tag, String type){
         this.tag = tag;
         tagTitle.setText(tag.getName());
-        tagColor.setFill(Color.web(tag.getColor()));
+        tagColor.setFill(Color.web("#FFFFFF"));
         this.type=type;
         if(type.equals("addFromTagList"))
         {
@@ -55,7 +55,8 @@ public class CustomTagCellCtrl {
         }
         if(type.equals("viewTag"))
         {
-            actionButton.setVisible(false);
+            actionButton.setText("Edit");
+            actionButton.getStyleClass().add("blue-button");
         }
         if(type.equals("removeFromTagList") || type.equals("removeFromAddCard"))
         {
