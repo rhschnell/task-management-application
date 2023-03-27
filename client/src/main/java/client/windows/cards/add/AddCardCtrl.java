@@ -109,8 +109,8 @@ public class AddCardCtrl implements Initializable {
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
-        var loader =  new MyFXML(createInjector(new MainModules()))
-                .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+        var loader =  new MyFXML(createInjector(new ListModules()))
+                .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
         ctrl.setCtrl2(this);
         ctrl.setTagObject(tag,"removeFromAddCard");
@@ -129,8 +129,8 @@ public class AddCardCtrl implements Initializable {
 
         for(int i=0;i<appliedTags.size();i++)
         {
-            var loader =  new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+            var loader =  new MyFXML(createInjector(new ListModules()))
+                    .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setCtrl2(this);
             ctrl.setTagObject(appliedTags.get(i),"removeFromAddCard");
@@ -145,7 +145,7 @@ public class AddCardCtrl implements Initializable {
 //        List<Tag> availableTags = server.getTags();
 //        availableTags.removeAll(appliedTags);
 //        var loader =  listCtrl.getMyFXML().
-//                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+//                .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","TagList.fxml");
 //        TagListCtrl ctrl = loader.getKey();
 //        ctrl.setAvailableTags(availableTags);
 //        ctrl.setAppliedTags(appliedTags);

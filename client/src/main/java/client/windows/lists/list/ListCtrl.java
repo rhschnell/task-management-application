@@ -16,7 +16,9 @@
 package client.windows.lists.list;
 
 import client.*;
-import client.modules.MainModules;
+import client.modules.ListModules;
+import client.serverUtils.CardListUtils;
+import client.serverUtils.CardUtils;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
@@ -37,9 +39,13 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
+
+
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
@@ -54,15 +60,23 @@ public class ListCtrl {
     @FXML
     private VBox cardVBox;
 
+    private CardUtils cardUtils;
+
+    private DataFormat cardFormat;
+    private CardListUtils cardListUtils;
     /**
      * Constructor for ListCtrl
      * @param server a server util
      */
     @Inject
-    public ListCtrl(ServerUtils server, MyFXML myFXML) {
+    public ListCtrl(CardUtils cardUtils, ServerUtils server, MyFXML myFXML, CardListUtils cardListUtils) {
         this.server = server;
+        this.cardListUtils = cardListUtils;
+        this.cardUtils = cardUtils;
         cardList = new CardList();
         this.myFXML = myFXML;
+        Card c = new Card();
+        cardFormat = HelperMethods.getCardFormat();
     }
 
     public void setCardList(CardList cardList) {
@@ -90,12 +104,13 @@ public class ListCtrl {
      */
     public void displayCards() {
 
+
         for (Card card: cardList.getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
-            makeNodeDraggable(cardCell.getValue());
+            makeCardDraggable(cardCell);
             cardVBox.getChildren().add(cardCell.getValue());
         }
 
@@ -104,84 +119,135 @@ public class ListCtrl {
                         "lists", "cells", "QuickAddCardCell.fxml");
         quickAddCard.getKey().setListCtrl(this);
         cardVBox.getChildren().add(quickAddCard.getValue());
-        makeNodeDraggable(quickAddCard.getValue());
+        makeQuickCardReceiveDrag(quickAddCard);
         quickAddCard.getValue().setOnDragDetected(event -> {});
     }
 
-    private void makeNodeDraggable(Node box) {
+    private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
-        box.setCursor(Cursor.HAND);
+        cardCell.getValue().setCursor(Cursor.HAND);
 
-        box.setOnDragDetected(event -> {
-            Dragboard db = box.startDragAndDrop(TransferMode.MOVE);
+        cardCell.getValue().setOnDragDetected(event -> {
+            Dragboard db = cardCell.getValue().startDragAndDrop(TransferMode.MOVE);
             Image dragImage = new Image("client/icons/DragFile.png");
             ImageView dragView = new ImageView(dragImage);
             db.setDragView(dragView.getImage(), -20 ,-10);
 
-            /* Put a string on a dragboard */
+            /* Put data on a dragboard */
             ClipboardContent content = new ClipboardContent();
-            content.putString("DRAGGING");
+            content.put(cardFormat,cardCell.getKey().getCard());
             db.setContent(content);
             event.consume();
         });
 
-        box.setOnDragOver(event -> {
-            if (event.getGestureSource() != box && event.getDragboard().hasString()) {
+        cardCell.getValue().setOnDragOver(event -> {
+            if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
         });
 
-        box.setOnDragEntered(event -> {
-            if (event.getGestureSource() != box && event.getDragboard().hasString()) {
-                int index = ((VBox) box.getParent()).getChildren().indexOf(box);
-                ((VBox) box.getParent()).getChildren().add(index,separator);
+        cardCell.getValue().setOnDragEntered(event -> {
+            if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
+                int index = ((VBox) cardCell.getValue().getParent()).getChildren().indexOf(cardCell.getValue());
+                ((VBox) cardCell.getValue().getParent()).getChildren().add(index,separator);
 
             }
             event.consume();
         });
 
-        box.setOnDragExited(event -> {
+        cardCell.getValue().setOnDragExited(event -> {
             {
-                ((VBox) box.getParent()).getChildren().remove(separator);
+                ((VBox) cardCell.getValue().getParent()).getChildren().remove(separator);
                 event.consume();
             }
         });
-        makeMoreDraggable(box);
+        dragDropHelper(cardCell);
     }
-    public void makeMoreDraggable(Node box)
+    public void dragDropHelper(Pair<CardCtrl,Parent> cardCell )
     {
-        box.setOnDragDropped(event -> {
+        cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
-            if (db.hasString()) {
-                Node draggedNode = ((Node) event.getGestureSource());
+            if (db.hasContent(cardFormat)) {
+                //Pair<CardCtrl,Parent> draggedObject = ((Pair<CardCtrl,Parent>) event.getD());
+                Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
-
                 // If the old parent is a VBox, remove the dragged node from the old parent
                 if (oldParent instanceof VBox) {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
+                    Card draggedCard =(Card)db.getContent(cardFormat);
+                    cardUtils.deleteCard(draggedCard.getId());
+                    this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
+                            getParent()).getChildren().indexOf(cardCell.getValue())));
+                    System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue())));
+                    cardListUtils.insertCardList(this.getCardList());
                 }
 
-                // If the target is a VBox, add the dragged node to the target
-                if (box.getParent() instanceof VBox) {
-                    ((VBox) box.getParent())
-                            .getChildren().add((((VBox) box.getParent()).getChildren().
-                                    indexOf(box)),draggedNode);
-                }
                 success = true;
             }
             event.setDropCompleted(success);
             event.consume();
         });
-        box.setOnDragDone(event -> {
-            if (event.getTransferMode() == TransferMode.MOVE) {
-                box.getParent().requestLayout();
+    }
+
+
+    private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
+        Separator separator = new Separator();
+        cardCell.getValue().setCursor(Cursor.HAND);
+
+
+        cardCell.getValue().setOnDragOver(event -> {
+            if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
         });
-    }
 
+        cardCell.getValue().setOnDragEntered(event -> {
+            if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
+                int index = ((VBox) cardCell.getValue().getParent()).getChildren().indexOf(cardCell.getValue());
+                ((VBox) cardCell.getValue().getParent()).getChildren().add(index,separator);
+
+            }
+            event.consume();
+        });
+
+        cardCell.getValue().setOnDragExited(event -> {
+            {
+                ((VBox) cardCell.getValue().getParent()).getChildren().remove(separator);
+                event.consume();
+            }
+        });
+        quickCardDragHelper(cardCell);
+    }
+    public void quickCardDragHelper(Pair<QuickAddCardCtrl,Parent> cardCell )
+    {
+        cardCell.getValue().setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasContent(cardFormat)) {
+                //Pair<CardCtrl,Parent> draggedObject = ((Pair<CardCtrl,Parent>) event.getD());
+                Node draggedNode = (Node) event.getGestureSource();
+                Parent oldParent = draggedNode.getParent();
+                // If the old parent is a VBox, remove the dragged node from the old parent
+                if (oldParent instanceof VBox) {
+                    ((VBox) oldParent).getChildren().remove(draggedNode);
+                    Card draggedCard =(Card)db.getContent(cardFormat);
+                    cardUtils.deleteCard(draggedCard.getId());
+                    this.getCardList().addCard(draggedCard);
+                    System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue())));
+                    cardListUtils.insertCardList(this.getCardList());
+                }
+
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+    }
     /**
      * Opens the view card pop up for a card in the list
      * @param cell the card to be viewed

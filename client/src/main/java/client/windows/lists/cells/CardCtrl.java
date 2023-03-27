@@ -1,14 +1,13 @@
 package client.windows.lists.cells;
 
 import client.MyFXML;
-import client.modules.MainModules;
+import client.modules.ListModules;
+import client.serverUtils.CardUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -48,12 +47,16 @@ public class CardCtrl {
 
     private long lastClickTime;
 
+    private MainCtrl mainCtrl;
+
+    private CardUtils cardUtils;
     /**
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public CardCtrl() {
-
+    public CardCtrl(CardUtils cardUtils , MainCtrl mainCtrl) {
+        this.cardUtils = cardUtils;
+        this.mainCtrl = mainCtrl;
     }
 
     /**
@@ -94,10 +97,9 @@ public class CardCtrl {
     /**
      * Sets the event to happen when interacting with the delete button
      *
-     * @param handler the event to happen
      */
-    public void setOnButtonClick(EventHandler<ActionEvent> handler) {
-        deleteButton.setOnAction(handler);
+    public void cardDeleteButton() {
+        cardUtils.deleteCard(card.getId());
     }
 
     public void click() {
@@ -109,8 +111,8 @@ public class CardCtrl {
     }
 
     public void viewCard(Card cell) {
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(ViewCardCtrl.class, "client", "scenes", "CardWindows", "ViewCard.fxml");
+        var loader = new MyFXML(createInjector(new ListModules()))
+                .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -122,6 +124,9 @@ public class CardCtrl {
         HelperMethods.popUp(scene, title);
     }
 
+    public Card getCard() {
+        return card;
+    }
 
     /**
      * Sets the visibility of the icon that indicates that a card has a description
@@ -142,10 +147,10 @@ public class CardCtrl {
         this.card = item;
         setCardTitle(item.getTitle());
         this.setDisplayTags(item.getTags());
-        setOnButtonClick(event -> {
+       /* setOnButtonClick(event -> {
             System.out.println(item.getTitle());
             // Handle button click
-        });
+        });*/
         setDescriptionIconVisible(item.hasDescription());
     }
 }
