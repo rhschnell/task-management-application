@@ -181,7 +181,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void addList() {
-        shownBoard.addList(new CardList("Call Rename Function", new ArrayList<>()));
+        shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
         refreshWorkspace();
     }
