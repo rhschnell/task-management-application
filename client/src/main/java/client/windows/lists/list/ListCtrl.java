@@ -15,16 +15,13 @@
  */
 package client.windows.lists.list;
 
-import client.*;
+import client.MyFXML;
 import client.modules.MainModules;
-import client.serverUtils.CardListUtils;
-import client.serverUtils.CardUtils;
-import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
-import client.serverUtils.ServerUtils;
-import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.cells.CardCtrl;
+import client.windows.lists.cells.QuickAddCardCtrl;
+import client.windows.lists.delete.DeleteListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -42,40 +39,29 @@ import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
-    private final MyFXML myFXML;
-    private final ServerUtils server;
     private CardList cardList;
+    private ListService service;
+    private DataFormat cardFormat;
 
     @FXML
     private Label listTitle;
-
     @FXML
     private VBox cardVBox;
-
     @FXML
     private TextField renameTitle;
 
-    private CardUtils cardUtils;
 
-    private DataFormat cardFormat;
-    private CardListUtils cardListUtils;
     /**
      * Constructor for ListCtrl
      *
-     * @param server  a server util
      */
     @Inject
-    public ListCtrl(CardUtils cardUtils, ServerUtils server, MyFXML myFXML, CardListUtils cardListUtils) {
-        this.server = server;
-        this.myFXML = myFXML;
-        this.cardListUtils = cardListUtils;
-        this.cardUtils = cardUtils;
+    public ListCtrl(ListService service) {
+        this.service = service;
         cardList = new CardList();
-        Card c = new Card();
         cardFormat = HelperMethods.getCardFormat();
     }
 
@@ -177,12 +163,12 @@ public class ListCtrl {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
                     this.getCardList().removeCard(draggedCard);
-                    cardUtils.deleteCard(draggedCard.getId());
+                    service.deleteCard(draggedCard.getId());
                     this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
                             getParent()).getChildren().indexOf(cardCell.getValue())));
                     System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue())));
-                    cardListUtils.insertCardList(this.getCardList());
+                    service.insertCardList(this.getCardList());
                 }
 
                 success = true;
@@ -233,12 +219,12 @@ public class ListCtrl {
                 if (oldParent instanceof VBox) {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    cardUtils.deleteCard(draggedCard.getId());
+                    service.deleteCard(draggedCard.getId());
                     this.getCardList().removeCard(draggedCard);
                     this.getCardList().addCard(draggedCard);
                     System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue())));
-                    cardListUtils.insertCardList(this.getCardList());
+                    service.insertCardList(this.getCardList());
                 }
 
                 success = true;
@@ -284,9 +270,8 @@ public class ListCtrl {
             if(event.getCode().equals(KeyCode.ENTER))
             {
                 listTitle.setText(renameTitle.getText());
-                CardListUtils utils = new CardListUtils(server);
                 cardList.setListTitle(renameTitle.getText());
-                utils.insertCardList(cardList);
+                service.insertCardList(cardList);
                 renameTitle.setVisible(false);
             }
         });
