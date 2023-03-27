@@ -1,5 +1,6 @@
 package client.windows.workspace.boardCell;
 
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
@@ -7,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 public class BoardCellCtrl {
+    private WorkspaceCtrl workspaceCtrl;
+
     private Board board;
 
     @FXML
@@ -22,6 +25,14 @@ public class BoardCellCtrl {
 
     }
 
+    public void showMyBoard() {
+        workspaceCtrl.showBoard(board.getKey());
+    }
+
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
     /**
      * Setter for the board
      */
@@ -30,6 +41,10 @@ public class BoardCellCtrl {
         this.boardTitle.setText(board.getTitle());
     }
 
+    /**
+     * Getter for the board
+     * @return board
+     */
     public Board getBoard() {
         return board;
     }
