@@ -17,9 +17,13 @@ package client.modules;
 
 import client.MainCtrl;
 import client.utils.HelperMethods;
+import client.windows.cards.add.AddCardCtrl;
+import client.windows.cards.view.ViewCardCtrl;
+import client.windows.lists.list.ListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
-import client.windows.workspace.WorkspaceCtrl;
+import client.windows.tags.TagListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -33,5 +37,9 @@ public class MainModules implements Module {
         binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
         binder.bind(HelperMethods.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
     }
 }

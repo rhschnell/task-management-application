@@ -15,8 +15,8 @@
  */
 package client.windows.cards.add;
 
-import client.modules.ListModules;
 import client.MyFXML;
+import client.modules.MainModules;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardListUtils;

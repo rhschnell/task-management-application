@@ -13,28 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.workspace;
+package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
-import client.modules.ListModules;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
+import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -45,16 +51,15 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Label boardName;
     @FXML
-    private Button boardNameButton;
+    private VBox boardList;
     @FXML
     private HBox listContainer;
     @FXML
     private HBox boardControls;
     @FXML
     private TextField keyField;
-    @FXML
-    private Button addListButton;
 
+    private List<String> joinedKeys;
     private Board shownBoard;
 
     /**
@@ -86,22 +91,35 @@ public class WorkspaceCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
+        joinedKeys = new ArrayList<>();
         // schedule service.refreshWorkspace();
         clearWorkspace(); // No board -> board controls
-        //        Timeline tl = new Timeline();
-//        tl.setCycleCount(-1);
-//        KeyFrame kf = new KeyFrame(Duration.millis(800),
-//                event -> {
-//                    try {
-//                        refreshWorkspace();
-//                    } catch (Exception ignored) {}
-//                });
-//        tl.getKeyFrames().add(kf);
-//        tl.play();
+
+
+        Timeline tl = new Timeline();
+        tl.setCycleCount(-1);
+        KeyFrame kf = new KeyFrame(Duration.millis(100),
+                event -> {
+                    try {
+                        refreshWorkspace();
+                    } catch (Exception ignored) {}
+                });
+        tl.getKeyFrames().add(kf);
+        tl.play();
     }
 
     public void connect() {
         showBoard(keyField.getText());
+
+        if(!joinedKeys.contains(keyField.getText())) {
+            joinedKeys.add(keyField.getText());
+            var boardCell = new MyFXML(createInjector(new MainModules()))
+                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
+            BoardCellCtrl controller = boardCell.getKey();
+            controller.setBoard(shownBoard);
+            boardCell.getValue().setCursor(Cursor.HAND);
+            boardList.getChildren().add(boardCell.getValue());
+        }
     }
 
     /**
@@ -110,21 +128,13 @@ public class WorkspaceCtrl implements Initializable {
     public void clearWorkspace() {
         shownBoard = null;
         boardName.setText("");
-        boardNameButton.setText("");
         listContainer.getChildren().clear();
         boardName.setVisible(false);
-        boardNameButton.setVisible(false);
         listContainer.setVisible(false);
-        for (Node child : boardControls.getChildren())
-            child.setVisible(false);
-        addListButton.setVisible(false);
+        boardControls.setVisible(false);
     }
 
     public void refreshWorkspace() {
-        // TODO
-        // Check with server if update
-        // if update -> ask server for ids of update items
-        // update those locally
         String key = shownBoard.getKey();
         Board serverBoard = service.getBoard(key);
         if (!shownBoard.equals(serverBoard)) {
@@ -142,9 +152,8 @@ public class WorkspaceCtrl implements Initializable {
 
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
-        boardNameButton.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
-            var loader = new MyFXML(createInjector(new ListModules()))
+            var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
@@ -154,13 +163,10 @@ public class WorkspaceCtrl implements Initializable {
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
-        for (Node child : boardControls.getChildren())
-            if (!child.isVisible())
-                child.setVisible(true);
+        if (!boardControls.isVisible())
+            boardControls.setVisible(true);
         if (!boardName.isVisible())
             boardName.setVisible(true);
-        if (!boardNameButton.isVisible())
-            boardNameButton.setVisible(true);
         if (!listContainer.isVisible())
             listContainer.setVisible(true);
     }

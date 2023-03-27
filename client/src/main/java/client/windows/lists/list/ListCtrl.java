@@ -106,7 +106,7 @@ public class ListCtrl {
 
 
         for (Card card: cardList.getCards()) {
-            var cardCell = new MyFXML(createInjector(new ListModules()))
+            var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
@@ -115,7 +115,7 @@ public class ListCtrl {
         }
 
         var quickAddCard =
-                new MyFXML(createInjector(new ListModules())).load(QuickAddCardCtrl.class, "client", "windows",
+                new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
                         "lists", "cells", "QuickAddCardCell.fxml");
         quickAddCard.getKey().setListCtrl(this);
         cardVBox.getChildren().add(quickAddCard.getValue());

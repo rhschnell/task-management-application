@@ -15,8 +15,8 @@
  */
 package client.windows.tags;
 
-import client.modules.ListModules;
 import client.MyFXML;
+import client.modules.MainModules;
 import client.windows.cards.add.AddCardCtrl;;
 import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;

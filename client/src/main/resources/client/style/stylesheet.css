@@ -147,3 +147,15 @@
 .scroll-pane .viewport {
        -fx-background-color: transparent;
 }
+
+.board-cell {
+    -fx-background-color:   #ACC7BB;
+}
+
+.board-cell:hover {
+    -fx-background-color:  derive(#ACC7BB, -10.0%);
+}
+
+.board-cell:pressed {
+    -fx-background-color:  derive(#ACC7BB, -20.0%);
+}

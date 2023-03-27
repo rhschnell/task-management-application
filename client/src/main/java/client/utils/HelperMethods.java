@@ -18,7 +18,6 @@ public class HelperMethods {
      * Displays a new window(popup) consisting of a scene and with a custom title.
      * @param scene represents the scene that needs to be shown in the popup.
      * @param title represents the popup's title.
-     * @return the controller of the popUp
      */
     public static void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
