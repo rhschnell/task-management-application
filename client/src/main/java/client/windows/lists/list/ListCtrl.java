@@ -177,6 +177,7 @@ public class ListCtrl {
                 if (oldParent instanceof VBox) {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
+                    this.getCardList().removeCard(draggedCard);
                     cardUtils.deleteCard(draggedCard.getId());
                     this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
                             getParent()).getChildren().indexOf(cardCell.getValue())));
@@ -235,7 +236,8 @@ public class ListCtrl {
                 if (oldParent instanceof VBox) {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    cardUtils.deleteCard(draggedCard.getId());
+                   cardUtils.deleteCard(draggedCard.getId());
+                    this.getCardList().removeCard(draggedCard);
                     this.getCardList().addCard(draggedCard);
                     System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue())));
