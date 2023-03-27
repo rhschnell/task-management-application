@@ -169,7 +169,8 @@ public class WorkspaceCtrl implements Initializable {
             boardList.getChildren().clear();
             for (String k : joinedKeys) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
-                        .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
+                        .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell",
+                                "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
                 controller.setBoard(service.getBoard(k));
                 boardCell.getValue().setCursor(Cursor.HAND);
