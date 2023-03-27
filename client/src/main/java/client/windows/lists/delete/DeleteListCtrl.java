@@ -15,8 +15,6 @@
  */
 package client.windows.lists.delete;
 
-import client.serverUtils.CardListUtils;
-import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

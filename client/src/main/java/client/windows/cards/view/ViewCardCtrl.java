@@ -121,7 +121,6 @@ public class ViewCardCtrl {
     public void edit() {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setCard(card);
-        loader.getKey().setViewCardScene(cardDescription.getScene());
         Stage stage = new Stage();
         stage.setScene(new Scene(loader.getValue()));
         stage.initModality(Modality.APPLICATION_MODAL);
