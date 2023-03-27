@@ -15,16 +15,13 @@
  */
 package client.windows.lists.list;
 
-import client.*;
+import client.MyFXML;
 import client.modules.MainModules;
-import client.serverUtils.CardListUtils;
-import client.serverUtils.CardUtils;
-import client.serverUtils.ServerUtils;
-import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
-import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.cells.CardCtrl;
+import client.windows.lists.cells.QuickAddCardCtrl;
+import client.windows.lists.delete.DeleteListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -41,7 +38,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
-
 
 import static com.google.inject.Guice.createInjector;
 
