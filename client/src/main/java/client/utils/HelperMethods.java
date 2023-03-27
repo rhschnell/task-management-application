@@ -48,6 +48,9 @@ public class HelperMethods {
             case WORKSPACE:
                 scene = 2;
                 break;
+            case ADMINVIEW:
+                scene = 4;
+                break;
             default:
                 throw new IllegalArgumentException();
         }
