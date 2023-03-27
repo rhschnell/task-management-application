@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.cards.viewCard;
+package client.windows.cards.view;
 
-import client.modules.ListModules;
+import client.modules.MainModules;
 import client.MyFXML;
 import client.MainCtrl;
-import client.windows.cards.editCard.EditCardCtrl;
+import client.modules.MainModules;
+import client.windows.cards.edit.EditCardCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardUtils;
 import client.serverUtils.ServerUtils;
@@ -81,12 +82,11 @@ public class ViewCardCtrl {
     }
 
 
-    public void applyTag()
-    {
+    public void applyTag() {
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
-                var loader = new MyFXML(createInjector(new ListModules()))
-                        .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+                var loader = new MyFXML(createInjector(new MainModules()))
+                        .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
                 CustomTagCellCtrl ctrl = loader.getKey();
                 ctrl.setTagObject(card.getTags().get(i), "viewTag");
                 appliedTagsVbox.getChildren().add(loader.getValue());
@@ -115,16 +115,12 @@ public class ViewCardCtrl {
      */
     public void delete() {
         ((Stage)deleteButton.getScene().getWindow()).close();
-        Card removed = card;
         server.deleteCard(card.getId());
-//        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 
-    public void edit()
-    {
-        var loader = myFXML.load(EditCardCtrl.class, "client", "scenes", "CardWindows", "EditCard.fxml");
+    public void edit() {
+        var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setCard(card);
-        loader.getKey().setViewCardScene(cardDescription.getScene());
         Stage stage = new Stage();
         stage.setScene(new Scene(loader.getValue()));
         stage.initModality(Modality.APPLICATION_MODAL);

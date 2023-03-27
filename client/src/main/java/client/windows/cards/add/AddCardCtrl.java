@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.cards.addCard;
+package client.windows.cards.add;
 
-import client.modules.ListModules;
 import client.MyFXML;
-import client.windows.lists.list.ListCtrl;
+import client.modules.MainModules;
 import client.windows.tags.CustomTagCellCtrl;
-import client.serverUtils.CardListUtils;
 import com.google.inject.Inject;
-import client.serverUtils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,41 +39,36 @@ import static com.google.inject.Guice.createInjector;
 
 public class AddCardCtrl implements Initializable {
 
-    private final CardListUtils server;
-    private final ListCtrl listCtrl;
+    private final AddCardService service;
 
     @FXML
     private TextField cardTitle;
-
     @FXML
     private TextArea cardDescription;
-
     @FXML
     private Button cancelButton;
-
     @FXML
     private Button saveButton;
-
     @FXML
     private VBox appliedTagsVbox;
 
     private List<Tag> appliedTags;
+    private CardList cardList;
 
     /**
      * Constructor for AddCardCtrl
-     * @param server a server util
-     * @param listCtrl a main controller
+     *
+     * @param service corresponding service
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, ListCtrl listCtrl) {
-        this.listCtrl = listCtrl;
-        this.server = new CardListUtils(server);
+    public AddCardCtrl(AddCardService service) {
+        this.service = service;
         appliedTags = new ArrayList<>();
         appliedTagsVbox = new VBox();
     }
 
-    public ListCtrl getListCtrl() {
-        return listCtrl;
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 
     /**
@@ -97,9 +90,8 @@ public class AddCardCtrl implements Initializable {
                 appliedTags,
                 new ArrayList<>());
         appliedTags = new ArrayList<>();
-        listCtrl.getCardList().addCard(card);
-        server.insertCardList(listCtrl.getCardList());
-//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+        cardList.addCard(card);
+        service.insertCardList(cardList);
     }
 
     /**
@@ -109,8 +101,8 @@ public class AddCardCtrl implements Initializable {
     public void applyTag(Tag tag)
     {
         appliedTags.add(tag);
-        var loader =  new MyFXML(createInjector(new ListModules()))
-                .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+        var loader =  new MyFXML(createInjector(new MainModules()))
+                .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
         ctrl.setCtrl2(this);
         ctrl.setTagObject(tag,"removeFromAddCard");
@@ -129,8 +121,8 @@ public class AddCardCtrl implements Initializable {
 
         for(int i=0;i<appliedTags.size();i++)
         {
-            var loader =  new MyFXML(createInjector(new ListModules()))
-                    .load(CustomTagCellCtrl.class, "client", "scenes", "TagManagement", "CustomTagCell.fxml");
+            var loader =  new MyFXML(createInjector(new MainModules()))
+                    .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setCtrl2(this);
             ctrl.setTagObject(appliedTags.get(i),"removeFromAddCard");
@@ -138,14 +130,14 @@ public class AddCardCtrl implements Initializable {
         }
     }
 
-//    /**
-//     * Displays the pop-up (TagList) in order to choose and add a tag.
-//     */
-//    public void addTagPopup() {
-////        List<Tag> availableTags = server.getTags();
+    /**
+     * Displays the pop-up (TagList) in order to choose and add a tag.
+     */
+    public void addTagPopup() {
+//        List<Tag> availableTags = server.getTags();
 //        availableTags.removeAll(appliedTags);
 //        var loader =  listCtrl.getMyFXML().
-//                load(TagListCtrl.class, "client", "scenes", "TagManagement", "TagList.fxml");
+//                .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","TagList.fxml");
 //        TagListCtrl ctrl = loader.getKey();
 //        ctrl.setAvailableTags(availableTags);
 //        ctrl.setAppliedTags(appliedTags);
@@ -153,7 +145,7 @@ public class AddCardCtrl implements Initializable {
 //        Scenes scene = new Scenes(root);
 //        String title = "Add tag";
 //        listCtrl.getMainCtrl().popUp(scene, title);
-//    }
+    }
     /**
      *
      * @param location

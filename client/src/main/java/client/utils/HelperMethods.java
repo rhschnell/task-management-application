@@ -1,21 +1,23 @@
 package client.utils;
 
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class HelperMethods {
     private Stage primaryStage;
     private Scene[] scenes;
+    private static DataFormat cardFormat;
 
     public HelperMethods() {
+        cardFormat = new DataFormat("card");
     }
 
     /**
      * Displays a new window(popup) consisting of a scene and with a custom title.
      * @param scene represents the scene that needs to be shown in the popup.
      * @param title represents the popup's title.
-     * @return the controller of the popUp
      */
     public static void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
@@ -25,6 +27,10 @@ public class HelperMethods {
         popUp.setResizable(false);
         popUp.setResizable(false);
         popUp.showAndWait();
+    }
+
+    public static DataFormat getCardFormat() {
+        return cardFormat;
     }
 
     public void setScene(Scenes s) {

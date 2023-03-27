@@ -1,7 +1,7 @@
 package client.windows.tags;
 
 
-import client.windows.cards.addCard.AddCardCtrl;
+import client.windows.cards.add.AddCardCtrl;
 import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;

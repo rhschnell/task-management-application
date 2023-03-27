@@ -15,6 +15,8 @@
  */
 package client.windows.login.admin;
 
+import client.utils.HelperMethods;
+import client.utils.Scenes;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +31,8 @@ public class AdminLoginCtrl implements Initializable {
 
     private final AdminLoginService service;
 
+    private final HelperMethods hm;
+
     private final String serverPassword = "group1";
 
     @FXML
@@ -42,10 +46,12 @@ public class AdminLoginCtrl implements Initializable {
     /**
      * Constructor for AdminLoginCtrl
      * @param service corresponding service
+     * @param hm corresponding helper methods
      */
     @Inject
-    public AdminLoginCtrl(AdminLoginService service) {
+    public AdminLoginCtrl(AdminLoginService service, HelperMethods hm) {
         this.service = service;
+        this.hm = hm;
     }
 
     /**
@@ -78,7 +84,7 @@ public class AdminLoginCtrl implements Initializable {
             showPasswordIncorrect();
             passwordField.clear();
         } else {
-            service.showWorkspace();
+            hm.setScene(Scenes.WORKSPACE);
             passwordField.clear();
             showWelcome();
         }
@@ -110,10 +116,9 @@ public class AdminLoginCtrl implements Initializable {
     }
 
     /**
-     * Return's to the main screen
+     * Sets the scene back to the main menu.
      */
-    @FXML
     public void back() {
-        service.back();
+        hm.setScene(Scenes.STARTUP);
     }
 }

@@ -15,6 +15,8 @@
  */
 package client.windows.login.start;
 
+import client.utils.HelperMethods;
+import client.utils.Scenes;
 import com.google.inject.Inject;
 import javafx.fxml.Initializable;
 
@@ -22,15 +24,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StartUpCtrl implements Initializable {
-    private final StartUpService service;
+    private final HelperMethods hm;
 
     /**
      * Constructor for AdminLoginCtrl
-     * @param service a startUpService
+     * @param hm a HelperMethods instance
      */
     @Inject
-    public StartUpCtrl(StartUpService service) {
-        this.service = service;
+    public StartUpCtrl(HelperMethods hm) {
+        this.hm = hm;
     }
 
     /**
@@ -51,13 +53,13 @@ public class StartUpCtrl implements Initializable {
      * When called, it switches to the admin log in scene.
      */
     public void showAdminLogin() {
-        service.showAdminLogin();
+        hm.setScene(Scenes.ADMIN);
     }
 
     /**
      * When called, it switches to the user log in scene.
      */
-    public void showUserLogIn() {
-        service.showUserLogin();
+    public void showUserLogin() {
+        hm.setScene(Scenes.USER);
     }
 }

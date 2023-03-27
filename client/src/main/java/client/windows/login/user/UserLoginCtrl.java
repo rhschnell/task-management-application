@@ -15,6 +15,8 @@
  */
 package client.windows.login.user;
 
+import client.utils.HelperMethods;
+import client.utils.Scenes;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,6 +30,8 @@ public class UserLoginCtrl implements Initializable {
 
     private final UserLoginService service;
 
+    private final HelperMethods hm;
+
     @FXML
     private TextField serverAddress;
 
@@ -39,8 +43,9 @@ public class UserLoginCtrl implements Initializable {
      * @param service corresponding service
      */
     @Inject
-    public UserLoginCtrl(UserLoginService service) {
+    public UserLoginCtrl(UserLoginService service, HelperMethods hm) {
         this.service = service;
+        this.hm = hm;
     }
 
     /**
@@ -56,6 +61,7 @@ public class UserLoginCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.serverAddress.setText("http://localhost:8080");
+        showWelcome();
     }
 
 
@@ -65,7 +71,8 @@ public class UserLoginCtrl implements Initializable {
      */
     public void connect(){
         if (service.serverPing(serverAddress.getText())){
-            service.showWorkspace();
+            hm.setScene(Scenes.WORKSPACE);
+            showWelcome();
         } else {
             showServerIncorrect();
         }
@@ -82,14 +89,13 @@ public class UserLoginCtrl implements Initializable {
      * Shows a message to the user indicating that the connection to the server could not be made.
      */
     private void showServerIncorrect() {
-        message.setText("The server you entered does not exist or is turned off. Please try a new server");
+        message.setText("The server you entered does not exist or is turned off. Please try a new server.");
     }
 
     /**
      * Return's to the main screen
      */
-    @FXML
     public void back() {
-        service.back();
+        hm.setScene(Scenes.STARTUP);
     }
 }
