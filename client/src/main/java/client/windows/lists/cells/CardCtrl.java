@@ -1,6 +1,5 @@
 package client.windows.lists.cells;
 
-import client.MainCtrl;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.serverUtils.CardUtils;
@@ -28,36 +27,29 @@ public class CardCtrl {
     private Label cardTitle;
     @FXML
     private Button deleteButton;
-
     @FXML
     private Circle tagCircle1;
-
     @FXML
     private Circle tagCircle2;
-
     @FXML
     private Circle tagCircle3;
-
-    private Card card;
-
     @FXML
     private ImageView descriptionIcon;
-
     @FXML
     private AnchorPane pane;
 
+    private Card card;
     private long lastClickTime;
 
-    private MainCtrl mainCtrl;
+    private final CardService service;
 
-    private CardUtils cardUtils;
+
     /**
-     * Creates a new instance of ListCellCtrl
+     * Creates a new instance of CardCtrl
      */
     @Inject
-    public CardCtrl(CardUtils cardUtils , MainCtrl mainCtrl) {
-        this.cardUtils = cardUtils;
-        this.mainCtrl = mainCtrl;
+    public CardCtrl(CardService service) {
+        this.service = service;
     }
 
     /**
@@ -100,13 +92,14 @@ public class CardCtrl {
      *
      */
     public void cardDeleteButton() {
-        cardUtils.deleteCard(card.getId());
+        service.deleteCard(card);
+
     }
 
     public void click() {
         long clickTime = System.currentTimeMillis();
-        if (clickTime - lastClickTime < 300) { // detect double-click
-            viewCard(card); // your method to open a file
+        if (clickTime - lastClickTime < 300) {
+            viewCard(card);
         }
         lastClickTime = clickTime;
     }
@@ -148,10 +141,6 @@ public class CardCtrl {
         this.card = item;
         setCardTitle(item.getTitle());
         this.setDisplayTags(item.getTags());
-       /* setOnButtonClick(event -> {
-            System.out.println(item.getTitle());
-            // Handle button click
-        });*/
         setDescriptionIconVisible(item.hasDescription());
     }
 }

@@ -37,7 +37,6 @@ public class MainModules implements Module {
         binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
         binder.bind(HelperMethods.class).in(Scopes.SINGLETON);
-        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);

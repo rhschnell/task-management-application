@@ -38,9 +38,9 @@ public class QuickAddCardCtrl {
      */
     public void addCard() {
         Card card = new Card(cardTitle.getText());
-        cardUtils.insertCard(card);
+//        cardUtils.insertCard(card);
         listCtrl.getCardList().addCard(card);
-        server.insertCardList(listCtrl.getCardList());
+//        server.insertCardList(listCtrl.getCardList());
     }
 
 
