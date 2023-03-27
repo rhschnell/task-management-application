@@ -119,6 +119,8 @@ public class WorkspaceCtrl implements Initializable {
             boardCell.getValue().setCursor(Cursor.HAND);
             boardList.getChildren().add(boardCell.getValue());
         }
+
+        keyField.clear();
     }
 
     /**
