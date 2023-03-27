@@ -257,6 +257,7 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setCardList(this.cardList);
 
         String title = "Create a card";
         HelperMethods.popUp(scene, title);
@@ -277,8 +278,7 @@ public class ListCtrl {
         HelperMethods.popUp(scene, title);
     }
 
-    public void rename()
-    {
+    public void rename() {
         renameTitle.setVisible(true);
         renameTitle.setOnKeyPressed(event -> {
             if(event.getCode().equals(KeyCode.ENTER))

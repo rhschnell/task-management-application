@@ -17,12 +17,12 @@ package client.windows.cards.add;
 
 import client.MyFXML;
 import client.modules.MainModules;
-import client.windows.lists.list.ListCtrl;
 import client.windows.tags.CustomTagCellCtrl;
 import client.serverUtils.CardListUtils;
 import com.google.inject.Inject;
 import client.serverUtils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,8 +41,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class AddCardCtrl implements Initializable {
 
-    private final CardListUtils server;
-    private final ListCtrl listCtrl;
+    private final AddCardService service;
 
     @FXML
     private TextField cardTitle;
@@ -56,16 +55,22 @@ public class AddCardCtrl implements Initializable {
     private VBox appliedTagsVbox;
 
     private List<Tag> appliedTags;
+    private CardList cardList;
 
     /**
      * Constructor for AddCardCtrl
-     * @param server a server util
+     *
+     * @param service corresponding service
      */
     @Inject
-    public AddCardCtrl(ServerUtils server) {
-        this.server = new CardListUtils(server);
+    public AddCardCtrl(AddCardService service) {
+        this.service = service;
         appliedTags = new ArrayList<>();
         appliedTagsVbox = new VBox();
+    }
+
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 
     /**
@@ -87,9 +92,8 @@ public class AddCardCtrl implements Initializable {
                 appliedTags,
                 new ArrayList<>());
         appliedTags = new ArrayList<>();
-        listCtrl.getCardList().addCard(card);
-        server.insertCardList(listCtrl.getCardList());
-//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+        cardList.addCard(card);
+        service.insertCardList(cardList);
     }
 
     /**
