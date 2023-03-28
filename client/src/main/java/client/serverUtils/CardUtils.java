@@ -51,6 +51,7 @@ public class CardUtils {
     /**
      * Sends a request to the server to delete a certain card from the database
      * @param id the id of the card to delete
+     * @return the card that has been deleted
      */
     public Card getCard(long id) {
         return ClientBuilder.newClient(new ClientConfig())
