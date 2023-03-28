@@ -15,8 +15,6 @@
  */
 package client.windows.lists.delete;
 
-import client.serverUtils.CardListUtils;
-import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,8 +26,8 @@ import java.util.ResourceBundle;
 
 
 public class DeleteListCtrl implements Initializable {
-    private final CardListUtils server;
-    private final ListCtrl listCtrl;
+    private final DeleteListService service;
+    private long deleteId;
 
     @FXML
     private Button deleteButton;
@@ -39,14 +37,14 @@ public class DeleteListCtrl implements Initializable {
 
     /**
      * Constructor for DeleteListCtrl
-     * @param server a server util
-     * @param listCtrl a main controller
+     * @param service corresponding service
      */
     @Inject
-    public DeleteListCtrl(CardListUtils server, ListCtrl listCtrl){
-        this.listCtrl = listCtrl;
-        this.server = server;
+    public DeleteListCtrl(DeleteListService service) {
+        this.service = service;
     }
+
+
 
     /**
      * This method cancels deleting the list from the board
@@ -60,8 +58,7 @@ public class DeleteListCtrl implements Initializable {
      */
     public void delete(){
         ((Stage)deleteButton.getScene().getWindow()).close();
-        server.deleteCardList((int)listCtrl.getCardList().getId());
-//        listCtrl.getMainCtrl().getWorkspaceCtrl().refreshWorkspace();
+        service.deleteCardList(this.deleteId);
     }
 
     /**
@@ -77,5 +74,10 @@ public class DeleteListCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+
+    public void setDeleteId(long deleteId) {
+        this.deleteId = deleteId;
     }
 }

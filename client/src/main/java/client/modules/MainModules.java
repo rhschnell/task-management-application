@@ -17,11 +17,17 @@ package client.modules;
 
 import client.MainCtrl;
 import client.utils.HelperMethods;
+import client.windows.adminview.boardCell.BoardCellCtrl;
+import client.windows.adminview.boardCell.BoardCellService;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.lists.cells.CardService;
+import client.windows.lists.delete.DeleteListCtrl;
+import client.windows.lists.list.ListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.tags.TagListCtrl;
+import client.windows.tags.TagOverviewCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -39,5 +45,12 @@ public class MainModules implements Module {
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DeleteListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardService.class).in(Scopes.SINGLETON);
+        binder.bind(BoardCellCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(BoardCellService.class).in(Scopes.SINGLETON);
+        binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
     }
 }

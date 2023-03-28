@@ -41,7 +41,7 @@ public class CardListUtils {
      * Sends a request to the server to delete a certain card list from the database
      * @param id of card list delete
      */
-    public void deleteCardList(int id) {
+    public void deleteCardList(long id) {
         ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.CARD_LIST + "/" + id)
                 .request(APPLICATION_JSON)

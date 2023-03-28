@@ -13,32 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.workspace.boardSpace;
+package client.windows.adminview.boardSpace;
 
 import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.lists.list.ListCtrl;
-import client.windows.tags.TagOverviewCtrl;
-import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.ProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -48,10 +45,9 @@ import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
-public class WorkspaceCtrl implements Initializable {
-    private final WorkspaceService service;
+public class AdminCtrl implements Initializable {
+    private final AdminService service;
     private final HelperMethods hm;
-    private final MyFXML myFXML;
     @FXML
     private Label boardName;
     @FXML
@@ -72,10 +68,9 @@ public class WorkspaceCtrl implements Initializable {
      * @param hm corresponding helper methods
      */
     @Inject
-    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm, MyFXML myFXML) {
+    public AdminCtrl(AdminService service, HelperMethods hm) {
         this.service = service;
         this.hm = hm;
-        this.myFXML = myFXML;
     }
 
     /**
@@ -83,7 +78,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        hm.setScene(Scenes.USER);
+        hm.setScene(Scenes.ADMIN);
     }
 
     /**
@@ -96,34 +91,42 @@ public class WorkspaceCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-        joinedKeys = new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
+        try {
+            for (Board board : service.getBoards()) {
+                var boardCell = new MyFXML(createInjector(new MainModules()))
+                        .load(BoardCellCtrl.class, "client", "windows",
+                                "adminview", "boardcell", "BoardCell.fxml");
+                BoardCellCtrl controller = boardCell.getKey();
+                controller.setBoard(board);
+                boardCell.getValue().setCursor(Cursor.HAND);
+                boardList.getChildren().add(boardCell.getValue());
+            }
+        } catch (ProcessingException ignored) {}
 
+        // schedule service.refreshWorkspace();
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(300),
+        KeyFrame kf = new KeyFrame(Duration.millis(100),
                 event -> {
                     try {
                         refreshWorkspace();
-                    } catch (Exception ignored) {ignored.printStackTrace();}
+                    } catch (Exception ignored) {}
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
     }
 
-    public void connect() {
+    public void add() {
         showBoard(keyField.getText());
-
-        if (keyField.getText().equals("")) {return;}
 
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             var boardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
+                    .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(shownBoard);
-            controller.setWorkspaceCtrl(this);
             boardCell.getValue().setCursor(Cursor.HAND);
             boardList.getChildren().add(boardCell.getValue());
         }
@@ -143,54 +146,21 @@ public class WorkspaceCtrl implements Initializable {
         boardControls.setVisible(false);
     }
 
-    public void refreshWorkspace(boolean... forced) {
-        if (forced.length == 0) {forced = new boolean[] {false};}
-        // Refresh the board
-        String key = "";
-
-        try {
-            key = shownBoard.getKey();
+    public void refreshWorkspace() {
+        if(shownBoard != null) {
+            String key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
             }
-        } catch (Exception ignored) {}
-
-        // Refresh the board list (joined boards)
-        boolean removed = false;
-        List<String> tempList = new ArrayList<>(joinedKeys);
-        for (String k : tempList) {
-            try {
-                service.getBoard(k);
-            } catch (NotFoundException e) {
-                removed = true;
-                joinedKeys.remove(k);
-                if (key.equals(k)) {
-                    clearWorkspace();
-                }
-            }
         }
-
-        if (removed || forced[0]) {
-            boardList.getChildren().clear();
-            for (String k : joinedKeys) {
-                var boardCell = new MyFXML(createInjector(new MainModules()))
-                        .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell",
-                                "BoardCell.fxml");
-                BoardCellCtrl controller = boardCell.getKey();
-                controller.setBoard(service.getBoard(k));
-                boardCell.getValue().setCursor(Cursor.HAND);
-                boardList.getChildren().add(boardCell.getValue());
-            }
-        }
-
     }
 
     public void showBoard(String targetKey) {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null, null);
+            shownBoard = new Board(targetKey, targetKey, null);
             service.insertBoard(shownBoard);
         }
 
@@ -220,36 +190,12 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void deleteBoard() {
         service.deleteBoard(shownBoard);
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();
-        joinedKeys.remove(shownBoard.getKey());
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();System.out.println();
-        refreshWorkspace(true);
         clearWorkspace();
     }
 
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
+        refreshWorkspace();
     }
-
-    public Board getShownBoard(){
-        return shownBoard;
-    }
-
-    public void tagOverview() {
-        var loader = myFXML.load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
-        loader.getKey();
-        Stage stage = new Stage();
-        stage.setScene(new Scene((loader.getValue())));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-//        Parent root = loader.getValue();
-//        Scene scene = new Scene(root);
-//        System.out.println("no");
-//        String title = "Tag Overview";
-//        HelperMethods.popUp(scene, title);
-    }
-
 }

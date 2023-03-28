@@ -82,8 +82,7 @@ public class ViewCardCtrl {
     }
 
 
-    public void applyTag()
-    {
+    public void applyTag() {
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
                 var loader = new MyFXML(createInjector(new MainModules()))
@@ -116,16 +115,12 @@ public class ViewCardCtrl {
      */
     public void delete() {
         ((Stage)deleteButton.getScene().getWindow()).close();
-        Card removed = card;
         server.deleteCard(card.getId());
-//        mainCtrl.getWorkspaceCtrl().refreshWorkspace();
     }
 
-    public void edit()
-    {
+    public void edit() {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setCard(card);
-        loader.getKey().setViewCardScene(cardDescription.getScene());
         Stage stage = new Stage();
         stage.setScene(new Scene(loader.getValue()));
         stage.initModality(Modality.APPLICATION_MODAL);
