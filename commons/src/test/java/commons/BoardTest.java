@@ -18,7 +18,7 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board("000000", "My Board", null);
+        board = new Board("000000", "My Board", null, null);
         cardList = new CardList();
         Card card = new Card(
                 "My Card",
@@ -28,7 +28,7 @@ class BoardTest {
                 null
         );
         cardList.addCard(card);
-        board2 = new Board("000001", "My Board", null);
+        board2 = new Board("000001", "My Board", null, null);
         board2.addList(cardList);
     }
 
