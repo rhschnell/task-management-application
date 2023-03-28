@@ -20,18 +20,19 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.adminview.boardCell.BoardCellCtrl;
+import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
 import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.ProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -39,9 +40,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.inject.Guice.createInjector;
@@ -60,10 +59,8 @@ public class AdminCtrl implements Initializable {
     @FXML
     private TextField keyField;
 
-    private List<String> joinedKeys;
+    private Set<String> joinedKeys;
     private Board shownBoard;
-
-    private List<String> joinedKeys;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -96,16 +93,16 @@ public class AdminCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = service.getBoards().stream()
                 .map(Board::getKey)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        clearWorkspace(); // No board -> board controls
+        clearWorkspace();
 
         for(Board board : service.getBoards()) {
             var boardCell = new MyFXML(createInjector(new MainModules()))
                     .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(board);
-            boardCell.getValue().setCursor(Cursor.HAND);
+            controller.setAdminCtrl(this);
             boardList.getChildren().add(boardCell.getValue());
         }
 
@@ -115,7 +112,7 @@ public class AdminCtrl implements Initializable {
         KeyFrame kf = new KeyFrame(Duration.millis(100),
                 event -> {
                     try {
-                        refreshWorkspace();
+                        refreshWorkspace(false);
                     } catch (Exception ignored) {}
                 });
         tl.getKeyFrames().add(kf);
@@ -125,7 +122,9 @@ public class AdminCtrl implements Initializable {
     public void add() {
         showBoard(keyField.getText());
 
-        if (keyField.getText().equals("")) {return;}
+        if (keyField.getText().equals("")) {
+            return;
+        }
 
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
@@ -152,13 +151,10 @@ public class AdminCtrl implements Initializable {
         boardControls.setVisible(false);
     }
 
-    public void refreshWorkspace(boolean... forced) {
-        if (forced.length == 0) {forced = new boolean[] {false};}
+    public void refreshWorkspace(boolean forced) {
         // Refresh the board
-        String key = "";
-
         try {
-            key = shownBoard.getKey();
+            String key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
@@ -166,29 +162,24 @@ public class AdminCtrl implements Initializable {
         } catch (Exception ignored) {}
 
         // Refresh the board list (joined boards)
-        boolean removed = false;
-        List<String> tempList = new ArrayList<>(joinedKeys);
-        for (String k : tempList) {
-            try {
-                service.getBoard(k);
-            } catch (NotFoundException e) {
-                removed = true;
-                joinedKeys.remove(k);
-                if (key.equals(k)) {
-                    clearWorkspace();
-                }
-            }
+        Set<String> currentKeys = new HashSet<>(joinedKeys);
+        joinedKeys = service.getBoards().stream()
+                .map(Board::getKey)
+                .collect(Collectors.toSet());
+
+        if(currentKeys.equals(joinedKeys)) {
+            return;
         }
 
-        if (removed || forced[0]) {
+        if (forced) {
             boardList.getChildren().clear();
             for (String k : joinedKeys) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
-                        .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell",
+                        .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardCell",
                                 "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
                 controller.setBoard(service.getBoard(k));
-                boardCell.getValue().setCursor(Cursor.HAND);
+                controller.setAdminCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
         }
@@ -228,19 +219,20 @@ public class AdminCtrl implements Initializable {
      * Method to delete the shown board from the database
      */
     public void deleteBoard() {
-        service.deleteBoard(shownBoard);
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();
-        joinedKeys.remove(shownBoard.getKey());
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();System.out.println();
-        refreshWorkspace(true);
-        clearWorkspace();
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteBoardCtrl.class,
+                        "client", "windows", "adminview", "deleteboard", "DeleteBoard.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setAdminCtrl(this);
+        loader.getKey().setBoardKey(shownBoard.getKey());
+        HelperMethods.popUp(scene, "Delete the board");
     }
 
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
-        refreshWorkspace();
+        refreshWorkspace(false);
     }
 }
