@@ -19,13 +19,14 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
-import client.windows.lists.list.ListCtrl;
 import client.windows.adminview.boardCell.BoardCellCtrl;
+import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.ProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -59,6 +60,7 @@ public class AdminCtrl implements Initializable {
     @FXML
     private TextField keyField;
 
+    private List<String> joinedKeys;
     private Board shownBoard;
 
     private List<String> joinedKeys;
@@ -98,14 +100,23 @@ public class AdminCtrl implements Initializable {
 
         clearWorkspace(); // No board -> board controls
 
+        for(Board board : service.getBoards()) {
+            var boardCell = new MyFXML(createInjector(new MainModules()))
+                    .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
+            BoardCellCtrl controller = boardCell.getKey();
+            controller.setBoard(board);
+            boardCell.getValue().setCursor(Cursor.HAND);
+            boardList.getChildren().add(boardCell.getValue());
+        }
 
+        // schedule service.refreshWorkspace();
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(300),
+        KeyFrame kf = new KeyFrame(Duration.millis(100),
                 event -> {
                     try {
                         refreshWorkspace();
-                    } catch (Exception ignored) {ignored.printStackTrace();}
+                    } catch (Exception ignored) {}
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
@@ -230,5 +241,6 @@ public class AdminCtrl implements Initializable {
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
+        refreshWorkspace();
     }
 }
