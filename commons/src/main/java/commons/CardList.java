@@ -48,6 +48,8 @@ public class CardList {
      * @param index The index the cards needs to end up at
      */
     public void addCard(Card card, int index) {
+        if(index>cards.size())
+            index=(cards.size());
         this.cards.add(index, card);
         if(cards.size()==1)
             cards.get(0).setPriority(1);
@@ -89,7 +91,7 @@ public class CardList {
         {
             cards.get(i).setPriority(cards.get(i).getPriority()-1);
         }
-       return this.cards.remove(index);
+        return this.cards.remove(index);
 
     }
 

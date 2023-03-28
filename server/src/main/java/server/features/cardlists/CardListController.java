@@ -95,7 +95,7 @@ public class CardListController {
 
     @PostMapping("/removeFromCardList/")
     public ResponseEntity<Card> removeFromCardList(@RequestBody Card card) {
-       return ResponseEntity.ok(service.removeFromCardList(card));
+        return ResponseEntity.ok(service.removeFromCardList(card));
     }
 
 

@@ -29,7 +29,7 @@ public class CardListService implements RepositoryService<CardList, Long> {
     }
     public int getListLength(long id)
     {
-       return repo.getById(id).getCards().size();
+        return repo.getById(id).getCards().size();
     }
 
     /**
@@ -73,7 +73,7 @@ public class CardListService implements RepositoryService<CardList, Long> {
             }}
 
         return card;
-        }
+    }
 
 
 

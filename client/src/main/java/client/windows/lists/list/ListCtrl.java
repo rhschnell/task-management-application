@@ -161,8 +161,10 @@ public class ListCtrl {
                     Card draggedCard =(Card)db.getContent(cardFormat);
 
                     service.deleteFromCardList(draggedCard);
-                    this.cardList = service.getCardList(cardList.getId());
-                    cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().indexOf(cardCell.getValue()))-1);
+                    cardList = service.getCardList(cardList.getId());
+                    this.getCardList().removeCard(draggedCard);
+                    cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue()))-1);
                     service.insertCardList(cardList);
 
                 }
@@ -214,7 +216,7 @@ public class ListCtrl {
                     Card draggedCard =(Card)db.getContent(cardFormat);
 
                     service.deleteFromCardList(draggedCard);
-                    this.cardList = service.getCardList(cardList.getId());
+                    cardList = service.getCardList(cardList.getId());
                     this.getCardList().removeCard(draggedCard);
                     cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue()))-1);
