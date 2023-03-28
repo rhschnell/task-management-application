@@ -19,7 +19,6 @@ import client.MainCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
-import client.windows.lists.list.ListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.tags.TagListCtrl;
