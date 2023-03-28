@@ -16,16 +16,22 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
-import client.scenes.MainScreens.BoardJoinCtrl;
-import client.scenes.MainScreens.LoginCtrl;
-import client.scenes.MainScreens.WorkspaceCtrl;
+
+import client.modules.MainModules;
+import client.utils.HelperMethods;
+import client.windows.adminview.boardSpace.AdminCtrl;
+import client.windows.login.admin.AdminLoginCtrl;
+import client.windows.login.start.StartUpCtrl;
+import client.windows.login.user.UserLoginCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
-    private static final Injector INJECTOR = createInjector(new MyModule());
+    private static final Injector INJECTOR = createInjector(new MainModules());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
     public static void main(String[] args) {
@@ -33,26 +39,21 @@ public class Main extends Application {
     }
 
     /**
-     *
      * @param primaryStage the primary stage for this application, onto which
-     * the application scene can be set.
-     * Applications may create other stages, if needed, but they will not be
-     * primary stages.
+     *                     the application scene can be set.
+     *                     Applications may create other stages, if needed, but they will not be
+     *                     primary stages.
      */
     @Override
     public void start(Stage primaryStage) {
-        var login = FXML.load(LoginCtrl.class, "client", "scenes", "MainScreens", "Login.fxml");
-        var workspace = FXML.load(WorkspaceCtrl.class, "client", "scenes","MainScreens","Workspace.fxml");
-        var boardJoin = FXML.load(BoardJoinCtrl.class, "client", "scenes", "MainScreens", "BoardJoin.fxml");
-        var mainCtrl = INJECTOR.getInstance(client.scenes.MainCtrl.class);
-        mainCtrl.initialize(primaryStage, login, workspace, boardJoin);
-    }
-
-    public static Injector getINJECTOR() {
-        return INJECTOR;
-    }
-
-    public static MyFXML getFXML() {
-        return FXML;
+        var startUp = FXML.load(StartUpCtrl.class, "client", "windows", "login", "start", "StartUp.fxml");
+        var userLogin = FXML.load(UserLoginCtrl.class, "client", "windows", "login", "user", "UserLogin.fxml");
+        var adminLogin = FXML
+                        .load(AdminLoginCtrl.class, "client", "windows", "login", "admin", "AdminLogin.fxml");
+        var workspace = FXML.load(WorkspaceCtrl.class, "client", "windows", "workspace", "Workspace.fxml");
+        var adminView = FXML.load(AdminCtrl.class, "client", "windows", "adminview", "AdminView.fxml");;
+        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        HelperMethods hm = INJECTOR.getInstance(HelperMethods.class);
+        mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, workspace, adminView, hm);
     }
 }

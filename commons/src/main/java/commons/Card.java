@@ -2,6 +2,7 @@ package commons;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,30 +16,37 @@ public class Card implements Serializable {
     private String description;
     private String backgroundColour;
 
-    @ManyToMany
-    private List<Tag> tags;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> subTasks;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "Card_Tag",
+            joinColumns = {
+                @JoinColumn(name = "card_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                @JoinColumn(name = "tag_id", referencedColumnName = "id")
+            })
+    private List<Tag> tags;
 
     /**
      * Custom constructor for all parameters without ID (auto-generated)
      * Creates a new Card
      *
-     * @param title Title of the card
-     * @param description Description of the card
+     * @param title            Title of the card
+     * @param description      Description of the card
      * @param backgroundColour Background colour of the card
-     * @param tags Tags associated with this card
-     * @param subTasks Subtasks for this card
-     * @param id id
+     * @param tags             Tags associated with this card
+     * @param subTasks         Subtasks for this card
+     * @param id               id
      */
     public Card(String title, String description, String backgroundColour, List<Tag> tags,
-                List<Task> subTasks, long id){
-        this.title =title;
+                List<Task> subTasks, long id) {
+        this.title = title;
         this.description = description;
         this.backgroundColour = backgroundColour;
         this.tags = tags;
@@ -50,19 +58,28 @@ public class Card implements Serializable {
      * Custom constructor for all parameters without ID (auto-generated)
      * Creates a new Card
      *
-     * @param title Title of the card
-     * @param description Description of the card
+     * @param title            Title of the card
+     * @param description      Description of the card
      * @param backgroundColour Background colour of the card
-     * @param tags Tags associated with this card
-     * @param subTasks Subtasks for this card
+     * @param tags             Tags associated with this card
+     * @param subTasks         Subtasks for this card
      */
     public Card(String title, String description, String backgroundColour, List<Tag> tags,
-                List<Task> subTasks){
-        this.title =title;
+                List<Task> subTasks) {
+        this.title = title;
         this.description = description;
         this.backgroundColour = backgroundColour;
         this.tags = tags;
         this.subTasks = subTasks;
+    }
+
+    /**
+     * Create a card with just a title
+     *
+     * @param title Title of the card
+     */
+    public Card(String title) {
+        this.title = title;
     }
 
     /**
@@ -135,5 +152,14 @@ public class Card implements Serializable {
      */
     public void deleteSubTask(Task task) {
         this.subTasks.remove(task);
+    }
+
+    /**
+     * Check if this card has a description
+     *
+     * @return Whether this card has a description
+     */
+    public boolean hasDescription() {
+        return this.description != null && !this.description.isEmpty();
     }
 }
