@@ -32,6 +32,7 @@ public class AddTagCtrl {
         this.server = server;
         this.workspaceCtrl = workspaceCtrl;
         this.tagOverviewCtrl = tagOverviewCtrl;
+        tagColor=new ColorPicker();
     }
 
     public void cancel() {
@@ -44,7 +45,7 @@ public class AddTagCtrl {
 
     public void save() {
         ((Stage)addTagButton.getScene().getWindow()).close();
-        Tag tag = new Tag(tagTitle.getText(), tagColor.getId());
+        Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString());
 
         workspaceCtrl.getShownBoard().addTag(tag);
         server.addBoard(workspaceCtrl.getShownBoard());

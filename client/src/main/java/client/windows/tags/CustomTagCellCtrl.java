@@ -47,7 +47,7 @@ public class CustomTagCellCtrl {
     public void setTagObject(Tag tag, String type){
         this.tag = tag;
         tagTitle.setText(tag.getName());
-        tagColor.setFill(Color.web("#FFFFFF"));
+        tagColor.setFill(Color.web(tag.getColor()));
         this.type=type;
         if(type.equals("addFromTagList"))
         {
