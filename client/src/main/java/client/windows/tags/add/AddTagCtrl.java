@@ -1,5 +1,6 @@
 package client.windows.tags.add;
 
+import client.serverUtils.BoardUtils;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -23,7 +24,7 @@ public class AddTagCtrl {
     private ColorPicker tagColor;
 
     @FXML
-    private Button cancelButton;
+    private Button closeButton;
 
     @FXML
     private Button addTagButton;
@@ -32,9 +33,8 @@ public class AddTagCtrl {
      * Constructor for AddTagCtrl
      */
     @Inject
-    public AddTagCtrl(AddTagService service, WorkspaceCtrl workspaceCtrl, TagOverviewCtrl tagOverviewCtrl){
+    public AddTagCtrl(AddTagService service, TagOverviewCtrl tagOverviewCtrl){
         this.service = service;
-        this.workspaceCtrl = workspaceCtrl;
         this.tagOverviewCtrl = tagOverviewCtrl;
         tagColor=new ColorPicker();
     }
@@ -60,8 +60,8 @@ public class AddTagCtrl {
     /**
      * Method to close the popup window when the cancel button is pressed
      */
-    public void cancel() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
+    public void close() {
+        ((Stage)closeButton.getScene().getWindow()).close();
     }
 
     /**

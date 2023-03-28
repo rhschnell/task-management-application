@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
-public class TagOverviewCtrl implements Initializable {
+public class TagOverviewCtrl {
     private WorkspaceCtrl workspaceCtrl;
 
     @FXML
@@ -65,8 +65,9 @@ public class TagOverviewCtrl implements Initializable {
     public void displayTagList() {
         workspaceCtrl.refreshWorkspace();
         Board shownBoard = workspaceCtrl.getShownBoard();
-        if (shownBoard == null) {return;}
+
         List<Tag> tagList = shownBoard.getTagList();
+
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
@@ -91,21 +92,6 @@ public class TagOverviewCtrl implements Initializable {
      */
     public void cancel(){
         ((Stage)cancelButton.getScene().getWindow()).close();
-    }
-
-    /**
-     *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        displayTagList();
     }
 
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {

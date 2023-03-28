@@ -111,9 +111,9 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void connect() {
-        showBoard(keyField.getText());
-
         if (keyField.getText().equals("")) {return;}
+
+        showBoard(keyField.getText());
 
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
@@ -245,6 +245,8 @@ public class WorkspaceCtrl implements Initializable {
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
         loader.getKey().setWorkspaceCtrl(this);
+
+        loader.getKey().displayTagList();
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
