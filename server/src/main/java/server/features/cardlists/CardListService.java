@@ -67,9 +67,9 @@ public class CardListService implements RepositoryService<CardList, Long> {
         for(int i=0;i<repo.findAll().size();i++)
         {
             if(repo.findAll().get(i).getCards().contains(card)) {
-                CardList thatlist = repo.findAll().get(i);
-                thatlist.removeCard(card);
-                repo.save(thatlist);
+                CardList repoList = repo.findAll().get(i);
+                repoList.removeCard(card);
+                repo.save(repoList);
             }}
 
         return card;
