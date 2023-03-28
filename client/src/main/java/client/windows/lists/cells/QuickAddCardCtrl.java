@@ -34,7 +34,7 @@ public class QuickAddCardCtrl {
      */
     public void addCard() {
         Card card = new Card(cardTitle.getText());
-        service.insertCard(card);
+        card.setPriority(service.getLastId());
         listCtrl.getCardList().addCard(card);
         service.insertCardList(listCtrl.getCardList());
     }

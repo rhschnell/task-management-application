@@ -165,7 +165,7 @@ public class ListCtrl {
                     this.getCardList().removeCard(draggedCard);
                     service.deleteCard(draggedCard.getId());
                     this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
-                            getParent()).getChildren().indexOf(cardCell.getValue())));
+                            getParent()).getChildren().indexOf(cardCell.getValue()))-1);
                     System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue())));
                     service.insertCardList(this.getCardList());

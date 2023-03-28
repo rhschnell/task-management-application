@@ -88,7 +88,7 @@ public class AddCardCtrl implements Initializable {
                 cardDescription.getText(),
                 "white",
                 appliedTags,
-                new ArrayList<>());
+                new ArrayList<>(),service.getLastId());
         appliedTags = new ArrayList<>();
         cardList.addCard(card);
         service.insertCardList(cardList);

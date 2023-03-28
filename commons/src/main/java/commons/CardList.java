@@ -20,6 +20,8 @@ public class CardList {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
+
+    @OrderBy("priority ASC")
     private List<Card> cards = new ArrayList<>();
     /**
      * Constructor for Tests
@@ -46,6 +48,22 @@ public class CardList {
      */
     public void addCard(Card card, int index) {
         this.cards.add(index, card);
+        int i=index;
+        long swap;
+        while((i+1)<cards.size() && cards.get(i).getPriority()>cards.get(i+1).getPriority())
+        {
+            swap =  cards.get(i).getPriority();
+            cards.get(i).setPriority(cards.get(i+1).getPriority());
+            cards.get(i+1).setPriority(swap);
+            i++;
+        }
+        while((i-1)>0 && cards.get(i).getPriority()<cards.get(i-1).getPriority())
+        {
+            swap =  cards.get(i).getPriority();
+            cards.get(i).setPriority(cards.get(i-1).getPriority());
+            cards.get(i+1).setPriority(swap);
+            i--;
+        }
     }
 
     /**

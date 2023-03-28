@@ -75,6 +75,23 @@ public class CardController {
         }
     }
 
+    @GetMapping("/getLastId")
+    public ResponseEntity<Long> getLastId() {
+        try {
+            int size = service.getAll().size();
+            long pos;
+            if(size!=0)
+             pos = service.getAll().get(size-1).getId()+1;
+            else
+                pos=1;
+            return ResponseEntity.ok(pos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     /**
      * Gets all cards from the database

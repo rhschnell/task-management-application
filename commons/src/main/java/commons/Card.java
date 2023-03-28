@@ -23,6 +23,9 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+
+    private long priority ;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "Card_Tag",
             joinColumns = {
@@ -74,6 +77,25 @@ public class Card implements Serializable {
     }
 
     /**
+     *
+     * @param title            Title of the card
+     * @param description      Description of the card
+     * @param backgroundColour Background colour of the card
+     * @param tags             Tags associated with this card
+     * @param subTasks         Subtasks for this card
+     * @param priority         The priority of the card
+     */
+    public Card(String title, String description, String backgroundColour, List<Tag> tags,
+                List<Task> subTasks,Long priority) {
+        this.title = title;
+        this.description = description;
+        this.backgroundColour = backgroundColour;
+        this.tags = tags;
+        this.subTasks = subTasks;
+        this.priority = priority;
+    }
+
+    /**
      * Create a card with just a title
      *
      * @param title Title of the card
@@ -93,6 +115,7 @@ public class Card implements Serializable {
         }
         this.tags.add(newTag);
     }
+
 
     /**
      * Add new subtask to the list
@@ -134,6 +157,7 @@ public class Card implements Serializable {
         tags.remove(toRemove);
     }
 
+
     /**
      * Delete subtask by index
      *
@@ -153,6 +177,7 @@ public class Card implements Serializable {
     public void deleteSubTask(Task task) {
         this.subTasks.remove(task);
     }
+
 
     /**
      * Check if this card has a description
