@@ -8,10 +8,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.Button?>
-<AnchorPane prefHeight="40.0" prefWidth="250.0" styleClass="board-cell" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.boardCell.BoardCellCtrl">
+<AnchorPane prefHeight="40.0" prefWidth="250.0" styleClass="board-cell" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.adminview.boardCell.BoardCellCtrl">
     <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="165.0" prefHeight="21.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
-        <Label fx:id="boardTitle" contentDisplay="TOP" prefHeight="40.0" prefWidth="500.0" text="Board Title" wrapText="true" onMouseClicked="#showMyBoard">
+        <Label fx:id="boardTitle" contentDisplay="TOP" prefHeight="40.0" prefWidth="500.0" text="Board Title" wrapText="true">
         <font>
             <Font name="Arial Bold" size="13.0" />
         </font>
@@ -22,9 +21,8 @@
             <Insets />
         </HBox.margin>
         </Label>
-
-        <ImageView fx:id="deleteIcon" fitHeight="18.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="/client/icons/trash-can.png" />
+        <ImageView fx:id="deleteIcon" fitHeight="18.0" fitWidth="81.0" onMouseClicked="#delete" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../../icons/trash-can.png" />
         </ImageView>
     </HBox>
 </AnchorPane>

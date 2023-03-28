@@ -1,22 +1,22 @@
 package client.windows.tags.view;
 
-import client.MyFXML;
-import client.modules.MainModules;
-import client.utils.HelperMethods;
+//import client.MyFXML;
+//import client.modules.MainModules;
+//import client.utils.HelperMethods;
+//import client.windows.tags.edit.EditTagCtrl;
+//import javafx.scene.Parent;
+//import javafx.scene.Scene;
 import client.windows.cards.add.AddCardCtrl;
 import client.serverUtils.ServerUtils;
-import client.windows.tags.edit.EditTagCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import static com.google.inject.Guice.createInjector;
+//import static com.google.inject.Guice.createInjector;
 
 
 public class CustomTagCellCtrl {
@@ -110,17 +110,17 @@ public class CustomTagCellCtrl {
      * @param tag The tag to be edited
      */
     public void editTag(Tag tag){
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(EditTagCtrl.class, "client", "windows", "tags", "EditTag.fxml");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        EditTagCtrl controller = loader.getKey();
-        controller.setTag(tag);
-        controller.setCustomTagCellCtrl(this);
-        String title = "Edit Tag";
-        HelperMethods.popUp(scene, title);
+//        var loader = new MyFXML(createInjector(new MainModules()))
+//                .load(EditTagCtrl.class, "client", "windows", "tags", "EditTag.fxml");
+//
+//        Parent root = loader.getValue();
+//        Scene scene = new Scene(root);
+//
+//        EditTagCtrl controller = loader.getKey();
+//        controller.setTag(tag);
+//        controller.setCustomTagCellCtrl(this);
+//        String title = "Edit Tag";
+//        HelperMethods.popUp(scene, title);
     }
 
     /**
@@ -154,7 +154,6 @@ public class CustomTagCellCtrl {
     public TagOverviewCtrl getTagOverviewCtrl(){
         return this.tagOverviewCtrl;
     }
-
 
 }
 

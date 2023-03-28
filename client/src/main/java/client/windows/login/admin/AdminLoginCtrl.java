@@ -18,28 +18,22 @@ package client.windows.login.admin;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import com.google.inject.Inject;
+import jakarta.ws.rs.ForbiddenException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AdminLoginCtrl implements Initializable {
-
     private final AdminLoginService service;
-
     private final HelperMethods hm;
-
-    private final String serverPassword = "group1";
-
     @FXML
     private Label message;
     @FXML
     private TextField serverAddress;
-
     @FXML
     private PasswordField passwordField;
 
@@ -78,15 +72,20 @@ public class AdminLoginCtrl implements Initializable {
     public void connect(){
         if (!service.serverPing(serverAddress.getText())){
             showServerIncorrect();
+            return;
         } else if (passwordField.getText().isBlank()) {
             showPasswordBlank();
-        }else if (!passwordField.getText().equals(serverPassword)){
-            showPasswordIncorrect();
-            passwordField.clear();
-        } else {
-            hm.setScene(Scenes.WORKSPACE);
+            return;
+        }
+
+        try {
+            service.sendPassword(passwordField.getText());
+            hm.setScene(Scenes.ADMINVIEW);
             passwordField.clear();
             showWelcome();
+        } catch (ForbiddenException e) {
+            showPasswordIncorrect();
+            passwordField.clear();
         }
     }
 

@@ -15,17 +15,13 @@
  */
 package client.windows.lists.list;
 
-import client.*;
-import client.modules.ListModules;
-import client.serverUtils.CardListUtils;
-import client.serverUtils.CardUtils;
+import client.MyFXML;
+import client.modules.MainModules;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
-import client.windows.cards.view.ViewCardCtrl;
-import client.serverUtils.ServerUtils;
-import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.cells.CardCtrl;
+import client.windows.lists.delete.DeleteListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -43,41 +39,33 @@ import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
+    private final HelperMethods hm;
+    private final ListService service;
 
-    private final ServerUtils server;
-    private final MyFXML myFXML;
     private CardList cardList;
+    private DataFormat cardFormat;
 
     @FXML
     private Label listTitle;
-
     @FXML
     private VBox cardVBox;
-
     @FXML
     private TextField renameTitle;
 
-    private CardUtils cardUtils;
 
-    private DataFormat cardFormat;
-    private CardListUtils cardListUtils;
     /**
      * Constructor for ListCtrl
-     * @param server a server util
+     *
      */
     @Inject
-    public ListCtrl(CardUtils cardUtils, ServerUtils server, MyFXML myFXML, CardListUtils cardListUtils) {
-        this.server = server;
-        this.cardListUtils = cardListUtils;
-        this.cardUtils = cardUtils;
+    public ListCtrl(ListService service, HelperMethods hm) {
+        this.service = service;
+        this.hm = hm;
         cardList = new CardList();
-        this.myFXML = myFXML;
-        Card c = new Card();
-        cardFormat = HelperMethods.getCardFormat();
+        cardFormat = this.hm.getCardFormat();
     }
 
     public void setCardList(CardList cardList) {
@@ -107,7 +95,7 @@ public class ListCtrl {
 
 
         for (Card card: cardList.getCards()) {
-            var cardCell = new MyFXML(createInjector(new ListModules()))
+            var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
@@ -116,7 +104,7 @@ public class ListCtrl {
         }
 
         var quickAddCard =
-                new MyFXML(createInjector(new ListModules())).load(QuickAddCardCtrl.class, "client", "windows",
+                new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
                         "lists", "cells", "QuickAddCardCell.fxml");
         quickAddCard.getKey().setListCtrl(this);
         cardVBox.getChildren().add(quickAddCard.getValue());
@@ -165,8 +153,7 @@ public class ListCtrl {
         });
         dragDropHelper(cardCell);
     }
-    public void dragDropHelper(Pair<CardCtrl,Parent> cardCell )
-    {
+    public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -179,12 +166,12 @@ public class ListCtrl {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
                     this.getCardList().removeCard(draggedCard);
-                    cardUtils.deleteCard(draggedCard.getId());
+                    service.deleteCard(draggedCard.getId());
                     this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
                             getParent()).getChildren().indexOf(cardCell.getValue())));
                     System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue())));
-                    cardListUtils.insertCardList(this.getCardList());
+                    service.insertCardList(this.getCardList());
                 }
 
                 success = true;
@@ -193,7 +180,6 @@ public class ListCtrl {
             event.consume();
         });
     }
-
 
     private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
@@ -224,8 +210,7 @@ public class ListCtrl {
         });
         quickCardDragHelper(cardCell);
     }
-    public void quickCardDragHelper(Pair<QuickAddCardCtrl,Parent> cardCell )
-    {
+    public void quickCardDragHelper(Pair<QuickAddCardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -237,12 +222,12 @@ public class ListCtrl {
                 if (oldParent instanceof VBox) {
                     ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    cardUtils.deleteCard(draggedCard.getId());
+                    service.deleteCard(draggedCard.getId());
                     this.getCardList().removeCard(draggedCard);
                     this.getCardList().addCard(draggedCard);
                     System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
                             indexOf(cardCell.getValue())));
-                    cardListUtils.insertCardList(this.getCardList());
+                    service.insertCardList(this.getCardList());
                 }
 
                 success = true;
@@ -251,31 +236,17 @@ public class ListCtrl {
             event.consume();
         });
     }
-    /**
-     * Opens the view card pop up for a card in the list
-     * @param cell the card to be viewed
-     */
-    public void viewCard(Card cell) {
-        var loader = myFXML.load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        ViewCardCtrl controller = loader.getKey();
-        controller.setCard(cell);
-
-        String title = "View Card";
-        HelperMethods.popUp(scene, title);
-    }
 
     /**
      * Displays the AddCard FXML into a new window (Popup).
      */
     public void addCardScreen() {
-        var loader = myFXML.load(AddCardCtrl.class, "client", "windows", "cards", "AddCard.fxml");
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AddCardCtrl.class, "client", "windows", "cards", "AddCard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setCardList(this.cardList);
 
         String title = "Create a card";
         HelperMethods.popUp(scene, title);
@@ -285,25 +256,25 @@ public class ListCtrl {
      * Displays the DeleteList FXML into a new window (Popup).
      */
     public void deleteScreen() {
-        var loader = myFXML.load(DeleteListCtrl.class,"client", "windows", "lists", "delete", "DeleteList.fxml");
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteListCtrl.class,"client", "windows", "lists", "delete", "DeleteList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setDeleteId(this.getCardList().getId());
 
         String title = "Delete a list";
         HelperMethods.popUp(scene, title);
     }
 
-    public void rename()
-    {
+    public void rename() {
         renameTitle.setVisible(true);
         renameTitle.setOnKeyPressed(event -> {
             if(event.getCode().equals(KeyCode.ENTER))
             {
                 listTitle.setText(renameTitle.getText());
-                CardListUtils utils = new CardListUtils(server);
                 cardList.setListTitle(renameTitle.getText());
-                utils.insertCardList(cardList);
+                service.insertCardList(cardList);
                 renameTitle.setVisible(false);
             }
         });
