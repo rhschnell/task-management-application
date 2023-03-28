@@ -155,20 +155,16 @@ public class ListCtrl {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasContent(cardFormat)) {
-                //Pair<CardCtrl,Parent> draggedObject = ((Pair<CardCtrl,Parent>) event.getD());
                 Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
-                // If the old parent is a VBox, remove the dragged node from the old parent
                 if (oldParent instanceof VBox) {
-                    ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    this.getCardList().removeCard(draggedCard);
-                    service.deleteCard(draggedCard.getId());
-                    this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
-                            getParent()).getChildren().indexOf(cardCell.getValue()))-1);
-                    System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
-                            indexOf(cardCell.getValue())));
-                    service.insertCardList(this.getCardList());
+
+                    service.deleteFromCardList(draggedCard);
+                    this.cardList = service.getCardList(cardList.getId());
+                    cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().indexOf(cardCell.getValue()))-1);
+                    service.insertCardList(cardList);
+
                 }
 
                 success = true;
@@ -212,19 +208,17 @@ public class ListCtrl {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasContent(cardFormat)) {
-                //Pair<CardCtrl,Parent> draggedObject = ((Pair<CardCtrl,Parent>) event.getD());
                 Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
-                // If the old parent is a VBox, remove the dragged node from the old parent
                 if (oldParent instanceof VBox) {
-                    ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    service.deleteCard(draggedCard.getId());
+
+                    service.deleteFromCardList(draggedCard);
+                    this.cardList = service.getCardList(cardList.getId());
                     this.getCardList().removeCard(draggedCard);
-                    this.getCardList().addCard(draggedCard);
-                    System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
-                            indexOf(cardCell.getValue())));
-                    service.insertCardList(this.getCardList());
+                    cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue()))-1);
+                    service.insertCardList(cardList);
                 }
 
                 success = true;

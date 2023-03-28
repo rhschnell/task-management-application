@@ -1,5 +1,6 @@
 package server.features.cardlists;
 
+import commons.Card;
 import commons.CardList;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +79,23 @@ public class CardListController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/getListLength/{id}")
+    public ResponseEntity<Integer> getListLength(@PathVariable("id") long id) {
+        try {
+            Integer returnCardList = service.getListLength(id);
+            return ResponseEntity.ok(returnCardList);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/removeFromCardList/")
+    public ResponseEntity<Card> removeFromCardList(@RequestBody Card card) {
+       return ResponseEntity.ok(service.removeFromCardList(card));
     }
 
 

@@ -38,6 +38,7 @@ public class CardList {
      * @param card Card to be added
      */
     public void addCard(Card card) {
+        card.setPriority(cards.size()+1);
         this.cards.add(card);
     }
 
@@ -48,22 +49,13 @@ public class CardList {
      */
     public void addCard(Card card, int index) {
         this.cards.add(index, card);
-        int i=index;
-        long swap;
-        while((i+1)<cards.size() && cards.get(i).getPriority()>cards.get(i+1).getPriority())
+        if(cards.size()==1)
+            cards.get(0).setPriority(1);
+        for(int i = index;i<cards.size()-1;i++)
         {
-            swap =  cards.get(i).getPriority();
             cards.get(i).setPriority(cards.get(i+1).getPriority());
-            cards.get(i+1).setPriority(swap);
-            i++;
         }
-        while((i-1)>0 && cards.get(i).getPriority()<cards.get(i-1).getPriority())
-        {
-            swap =  cards.get(i).getPriority();
-            cards.get(i).setPriority(cards.get(i-1).getPriority());
-            cards.get(i+1).setPriority(swap);
-            i--;
-        }
+        cards.get(cards.size()-1).setPriority(cards.size());
     }
 
     /**
@@ -75,7 +67,12 @@ public class CardList {
         if (!this.cards.contains(card)) {
             return null;
         }
+        int index = cards.indexOf(card);
         this.cards.remove(card);
+        for(int i=index;i<cards.size();i++)
+        {
+            cards.get(i).setPriority(cards.get(i).getPriority()-1);
+        }
         return card;
     }
 
@@ -88,7 +85,12 @@ public class CardList {
         if (index >= this.cards.size()) {
             return null;
         }
-        return this.cards.remove(index);
+        for(int i=index;i<cards.size();i++)
+        {
+            cards.get(i).setPriority(cards.get(i).getPriority()-1);
+        }
+       return this.cards.remove(index);
+
     }
 
     /**

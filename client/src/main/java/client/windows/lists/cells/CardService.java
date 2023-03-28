@@ -28,8 +28,4 @@ public class CardService {
         cardListUtils.insertCardList(cardList);
     }
 
-    public long getLastId()
-    {
-        return cardListUtils.getLastId();
-    }
 }

@@ -1,5 +1,6 @@
 package client.serverUtils;
 
+import commons.Card;
 import commons.CardList;
 import commons.Route;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -60,13 +61,19 @@ public class CardListUtils {
                 .accept(APPLICATION_JSON)
                 .delete(Response.class);
     }
-
+    public void deleteFromCardList(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.CARD_LIST + "/removeFromCardList/")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
     /**
      * Sends a request to the server to retrieve a certain card list from the database
      * @param id key of the card list to find
      * @return the desired card list
      */
-    public CardList getCardList(int id) {
+    public CardList getCardList(long id) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.CARD_LIST + "/" + id)
                 .request(APPLICATION_JSON)

@@ -12,11 +12,6 @@ public class AddCardService {
 
         this.server = server;
     }
-
-    public Long getLastId()
-    {
-        return server.getLastId();
-    }
     public void insertCardList(CardList cardList) {
         server.insertCardList(cardList);
     }
