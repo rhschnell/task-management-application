@@ -239,7 +239,7 @@ public class WorkspaceCtrl implements Initializable {
 
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))
-        .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+                .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
         loader.getKey();
         Stage stage = new Stage();
         stage.setScene(new Scene((loader.getValue())));
