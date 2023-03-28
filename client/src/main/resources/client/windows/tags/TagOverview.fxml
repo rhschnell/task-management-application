@@ -29,7 +29,7 @@
       </Button>
       <ScrollPane layoutX="28.0" layoutY="65.0" prefHeight="150.0" prefWidth="336.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0">
          <content>
-            <VBox fx:id="displayedTags" prefHeight="149.0" prefWidth="319.0" />
+            <VBox fx:id="displayedTags" maxHeight="1.7976931348623157E308" prefHeight="0.0" prefWidth="320.0" spacing="10.0" />
          </content>
       </ScrollPane>
    </children>
