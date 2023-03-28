@@ -51,7 +51,7 @@ import static com.google.inject.Guice.createInjector;
 public class WorkspaceCtrl implements Initializable {
     private final WorkspaceService service;
     private final HelperMethods hm;
-    private final MyFXML myFXML;
+
     @FXML
     private Label boardName;
     @FXML
@@ -72,10 +72,9 @@ public class WorkspaceCtrl implements Initializable {
      * @param hm corresponding helper methods
      */
     @Inject
-    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm, MyFXML myFXML) {
+    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm) {
         this.service = service;
         this.hm = hm;
-        this.myFXML = myFXML;
     }
 
     /**
@@ -239,7 +238,8 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void tagOverview() {
-        var loader = myFXML.load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+        var loader = new MyFXML(createInjector(new MainModules()))
+        .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
         loader.getKey();
         Stage stage = new Stage();
         stage.setScene(new Scene((loader.getValue())));

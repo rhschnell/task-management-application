@@ -80,7 +80,7 @@ public class BoardUtils {
      * @param board The board to add
      * @return The added board
      */
-    public Board addBoard(Board board)
+    public Board insertBoard(Board board)
     {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.BOARD)

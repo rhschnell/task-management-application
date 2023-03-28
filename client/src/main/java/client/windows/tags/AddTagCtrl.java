@@ -48,7 +48,7 @@ public class AddTagCtrl {
         Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString());
 
         workspaceCtrl.getShownBoard().addTag(tag);
-        server.addBoard(workspaceCtrl.getShownBoard());
+        server.insertBoard(workspaceCtrl.getShownBoard());
 
         tagOverviewCtrl.updateDisplayedTags();
     }

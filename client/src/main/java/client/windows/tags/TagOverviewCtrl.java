@@ -39,19 +39,14 @@ public class TagOverviewCtrl implements Initializable {
     }
 
     public void addTag() {
-        try {
-            var loader = myFXML.load(AddTagCtrl.class, "client", "windows", "tags", "AddTag.fxml");
-            loader.getKey().set(this);
+        var loader = myFXML.load(AddTagCtrl.class, "client", "windows", "tags", "AddTag.fxml");
+        loader.getKey().set(this);
 
-            Parent root = loader.getValue();
-            Scene scene = new Scene(root);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
 
-            String title = "Add Tag";
-            HelperMethods.popUp(scene, title);
-
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+        String title = "Add Tag";
+        HelperMethods.popUp(scene, title);
     }
 
     public void displayTagList() {
