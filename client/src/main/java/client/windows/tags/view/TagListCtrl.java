@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.tags;
+package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
@@ -59,11 +59,11 @@ public class TagListCtrl {
     public void setAvailableTags(List<Tag> tagList)
     {
         for(int i=0; i<tagList.size(); i++) {
-            var loader =new MyFXML(createInjector(new MainModules()))
+            var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tagList.get(i),"addFromTagList");
-            ctrl.setCtrl(this);
+            ctrl.setTagListCtrl(this);
             availableTagsBox.getChildren().add(loader.getValue());
         }
     }
@@ -79,7 +79,7 @@ public class TagListCtrl {
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tagList.get(i),"removeFromTagList");
-            ctrl.setCtrl(this);
+            ctrl.setTagListCtrl(this);
             appliedTagsBox.getChildren().add(loader.getValue());
         }
     }

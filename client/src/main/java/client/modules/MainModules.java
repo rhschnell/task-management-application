@@ -26,7 +26,9 @@ import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
-import client.windows.tags.TagListCtrl;
+import client.windows.tags.add.AddTagCtrl;
+import client.windows.tags.view.TagListCtrl;
+import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -50,5 +52,7 @@ public class MainModules implements Module {
         binder.bind(CardService.class).in(Scopes.SINGLETON);
         binder.bind(BoardCellCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardCellService.class).in(Scopes.SINGLETON);
+        binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
     }
 }

@@ -17,10 +17,10 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
-import client.windows.lists.cells.QuickAddCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
@@ -42,8 +42,10 @@ import javafx.util.Pair;
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
+    private final HelperMethods hm;
+    private final ListService service;
+
     private CardList cardList;
-    private ListService service;
     private DataFormat cardFormat;
 
     @FXML
@@ -59,10 +61,11 @@ public class ListCtrl {
      *
      */
     @Inject
-    public ListCtrl(ListService service) {
+    public ListCtrl(ListService service, HelperMethods hm) {
         this.service = service;
+        this.hm = hm;
         cardList = new CardList();
-        cardFormat = HelperMethods.getCardFormat();
+        cardFormat = this.hm.getCardFormat();
     }
 
     public void setCardList(CardList cardList) {

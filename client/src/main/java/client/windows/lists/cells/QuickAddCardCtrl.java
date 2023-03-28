@@ -1,6 +1,5 @@
 package client.windows.lists.cells;
 
-
 import client.windows.lists.list.ListCtrl;
 import commons.Card;
 import javafx.fxml.FXML;
