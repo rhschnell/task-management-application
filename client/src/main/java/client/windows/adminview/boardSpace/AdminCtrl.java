@@ -26,6 +26,8 @@ import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.ResponseProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -37,6 +39,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.ConnectException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,14 +96,16 @@ public class AdminCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         clearWorkspace(); // No board -> board controls
 
-        for(Board board : service.getBoards()) {
-            var boardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
-            BoardCellCtrl controller = boardCell.getKey();
-            controller.setBoard(board);
-            boardCell.getValue().setCursor(Cursor.HAND);
-            boardList.getChildren().add(boardCell.getValue());
-        }
+        try {
+            for (Board board : service.getBoards()) {
+                var boardCell = new MyFXML(createInjector(new MainModules()))
+                        .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
+                BoardCellCtrl controller = boardCell.getKey();
+                controller.setBoard(board);
+                boardCell.getValue().setCursor(Cursor.HAND);
+                boardList.getChildren().add(boardCell.getValue());
+            }
+        } catch (ProcessingException ignored) {}
 
         // schedule service.refreshWorkspace();
         Timeline tl = new Timeline();
