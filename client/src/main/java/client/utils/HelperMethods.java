@@ -8,10 +8,13 @@ import javafx.stage.Stage;
 public class HelperMethods {
     private Stage primaryStage;
     private Scene[] scenes;
-    private static DataFormat cardFormat;
+    private DataFormat cardFormat;
 
     public HelperMethods() {
-        cardFormat = new DataFormat("card");
+    }
+
+    public void setCardFormat(DataFormat cardFormat) {
+        this.cardFormat = cardFormat;
     }
 
     /**
@@ -29,7 +32,7 @@ public class HelperMethods {
         popUp.showAndWait();
     }
 
-    public static DataFormat getCardFormat() {
+    public DataFormat getCardFormat() {
         return cardFormat;
     }
 
@@ -47,6 +50,9 @@ public class HelperMethods {
                 break;
             case WORKSPACE:
                 scene = 2;
+                break;
+            case ADMINVIEW:
+                scene = 4;
                 break;
             default:
                 throw new IllegalArgumentException();

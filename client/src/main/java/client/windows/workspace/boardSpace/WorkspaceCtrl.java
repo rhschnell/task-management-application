@@ -20,7 +20,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
-import client.windows.tags.TagOverviewCtrl;
+import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
@@ -32,13 +32,12 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -97,17 +96,16 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new ArrayList<>();
-        // schedule service.refreshWorkspace();
         clearWorkspace(); // No board -> board controls
 
 
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(100),
+        KeyFrame kf = new KeyFrame(Duration.millis(300),
                 event -> {
                     try {
                         refreshWorkspace();
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {ignored.printStackTrace();}
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
@@ -116,15 +114,20 @@ public class WorkspaceCtrl implements Initializable {
     public void connect() {
         showBoard(keyField.getText());
 
+        if (keyField.getText().equals("")) {return;}
+
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             var boardCell = new MyFXML(createInjector(new MainModules()))
                     .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(shownBoard);
+            controller.setWorkspaceCtrl(this);
             boardCell.getValue().setCursor(Cursor.HAND);
             boardList.getChildren().add(boardCell.getValue());
         }
+
+        keyField.clear();
     }
 
     /**
@@ -139,12 +142,48 @@ public class WorkspaceCtrl implements Initializable {
         boardControls.setVisible(false);
     }
 
-    public void refreshWorkspace() {
-        String key = shownBoard.getKey();
-        Board serverBoard = service.getBoard(key);
-        if (!shownBoard.equals(serverBoard)) {
-            showBoard(key);
+    public void refreshWorkspace(boolean... forced) {
+        if (forced.length == 0) {forced = new boolean[] {false};}
+        // Refresh the board
+        String key = "";
+
+        try {
+            key = shownBoard.getKey();
+            Board serverBoard = service.getBoard(key);
+            if (!shownBoard.equals(serverBoard)) {
+                showBoard(key);
+            }
+        } catch (Exception ignored) {}
+
+        // Refresh the board list (joined boards)
+        boolean removed = false;
+        if (joinedKeys == null) {return;}
+        List<String> tempList = new ArrayList<>(joinedKeys);
+        for (String k : tempList) {
+            try {
+                service.getBoard(k);
+            } catch (NotFoundException e) {
+                removed = true;
+                joinedKeys.remove(k);
+                if (key.equals(k)) {
+                    clearWorkspace();
+                }
+            }
         }
+
+        if (removed || forced[0]) {
+            boardList.getChildren().clear();
+            for (String k : joinedKeys) {
+                var boardCell = new MyFXML(createInjector(new MainModules()))
+                        .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell",
+                                "BoardCell.fxml");
+                BoardCellCtrl controller = boardCell.getKey();
+                controller.setBoard(service.getBoard(k));
+                boardCell.getValue().setCursor(Cursor.HAND);
+                boardList.getChildren().add(boardCell.getValue());
+            }
+        }
+
     }
 
     public void showBoard(String targetKey) {
@@ -181,13 +220,18 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void deleteBoard() {
         service.deleteBoard(shownBoard);
+        for (String s : joinedKeys) {System.out.print(s + " ");}
+        System.out.println();
+        joinedKeys.remove(shownBoard.getKey());
+        for (String s : joinedKeys) {System.out.print(s + " ");}
+        System.out.println();System.out.println();
+        refreshWorkspace(true);
         clearWorkspace();
     }
 
     public void addList() {
-        shownBoard.addList(new CardList("Temporary", new ArrayList<>()));
+        shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
-        refreshWorkspace();
     }
 
     public Board getShownBoard(){
@@ -195,17 +239,20 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void tagOverview() {
-        var loader = myFXML.load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
-        loader.getKey();
-        Stage stage = new Stage();
-        stage.setScene(new Scene((loader.getValue())));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-//        Parent root = loader.getValue();
-//        Scene scene = new Scene(root);
-//        System.out.println("no");
-//        String title = "Tag Overview";
-//        HelperMethods.popUp(scene, title);
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+        loader.getKey().setWorkspaceCtrl(this);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Tag Overview";
+        HelperMethods.popUp(scene, title);
+
+//        var loader = myFXML.load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+//        Stage stage = new Stage();
+//        stage.setScene(new Scene((loader.getValue())));
+//        stage.initModality(Modality.APPLICATION_MODAL);
+//        stage.showAndWait();
     }
 
 }

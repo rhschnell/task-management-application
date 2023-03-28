@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.add.AddTagCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.edit.EditTagCtrl">
    <children>
       <TextField fx:id="tagTitle" layoutX="20.0" layoutY="15.0" prefHeight="26.0" prefWidth="310.0" promptText="Type your tag name..." style="-fx-background-insets: 0, 0 0 0 0; -fx-background-color: none; -fx-padding: 0px;">
          <font>   
@@ -17,12 +17,12 @@
       </TextField>
       <Line endX="200.0" layoutX="130.0" layoutY="45.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" AnchorPane.leftAnchor="19.292892456054688" AnchorPane.rightAnchor="19.292892456054688" />
       <Line endX="200.0" layoutX="130.0" layoutY="119.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-      <Button fx:id="addTagButton" layoutX="266.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="63.0" styleClass="blue-button" text="Add tag">
+      <Button fx:id="saveButton" layoutX="273.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="56.0" styleClass="blue-button" text="Save">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="cancelButton" cancelButton="true" layoutX="194.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
+      <Button fx:id="cancelButton" cancelButton="true" layoutX="201.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
@@ -33,5 +33,10 @@
             <Font name="Arial Bold" size="12.0" />
          </font>
       </Label>
+      <Button fx:id="deleteButton" cancelButton="true" layoutX="18.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#delete" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Delete">
+         <font>
+            <Font name="Arial Bold" size="12.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

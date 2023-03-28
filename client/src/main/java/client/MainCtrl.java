@@ -2,12 +2,14 @@ package client;
 
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -18,10 +20,13 @@ public class MainCtrl {
     private Scene userLogin;
     private Scene adminLogin;
     private Scene workspace;
+    private Scene adminView;
     private StartUpCtrl startUpCtrl;
     private UserLoginCtrl userLoginCtrl;
     private AdminLoginCtrl adminLoginCtrl;
     private WorkspaceCtrl workspaceCtrl;
+
+    private WorkspaceCtrl adminViewCtrl;
     private HelperMethods hm;
 
     /**
@@ -36,6 +41,7 @@ public class MainCtrl {
                            Pair<UserLoginCtrl, Parent> userLogin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
                            Pair<WorkspaceCtrl, Parent> workspace,
+                           Pair<AdminCtrl, Parent> adminView,
                            HelperMethods hm) {
         this.primaryStage = primary;
 
@@ -51,13 +57,17 @@ public class MainCtrl {
         this.userLoginCtrl = userLogin.getKey();
         this.userLogin = new Scene(userLogin.getValue());
 
+        this.adminViewCtrl = workspace.getKey();
+        this.adminView = new Scene(adminView.getValue());
+
         primary.setTitle("Talio");
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
         this.hm = hm;
-        hm.setScenes(this.startUp, this.adminLogin, this.workspace, this.userLogin);
+        hm.setScenes(this.startUp, this.adminLogin, this.workspace, this.userLogin, this.adminView);
         hm.setPrimaryStage(primaryStage);
         hm.setScene(Scenes.STARTUP);
+        hm.setCardFormat(new DataFormat("card"));
         primary.show();
     }
 }
