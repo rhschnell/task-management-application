@@ -7,6 +7,7 @@ import client.windows.cards.view.ViewCardCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,6 +35,10 @@ public class CardCtrl {
     private Circle tagCircle3;
     @FXML
     private ImageView descriptionIcon;
+
+    @FXML
+    private Label subtaskIndicator;
+
     @FXML
     private AnchorPane pane;
 
@@ -45,6 +50,8 @@ public class CardCtrl {
 
     /**
      * Creates a new instance of CardCtrl
+     *
+     * @param service The CardService for this CardCtrl
      */
     @Inject
     public CardCtrl(CardService service) {
@@ -88,7 +95,6 @@ public class CardCtrl {
 
     /**
      * Sets the event to happen when interacting with the delete button
-     *
      */
     public void cardDeleteButton() {
         service.deleteCard(card);
@@ -136,11 +142,39 @@ public class CardCtrl {
      * @param item The new item for the cell.
      */
 
+    /**
+     * Sets the subtasks indicator in the UI to reflect the number of completed subtasks for this
+     * card as ratio completed/total
+     *
+     * @param completed The amount of completed or checked subtasks
+     * @param total     The total amount of subtasks on this card
+     */
+    public void setSubtasksCompleted(long completed, long total) {
+        if (completed > total) {
+            throw new IllegalArgumentException("Cannot have more completed " +
+                                               "subtasks than the total amount of" +
+                                               " subtasks");
+        }
+        if (completed < 0) {
+            throw new IllegalArgumentException("Cannot have negative amounts of completed or " +
+                                               "total subtasks");
+        }
+        subtaskIndicator.setText(String.format("%d/%d", completed, total));
+    }
+
     public void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
         this.setDisplayTags(item.getTags());
         setDescriptionIconVisible(item.hasDescription());
+
+        long subtasks = card.getSubTasks().size();
+        if (subtasks > 0){
+            long completedTasks =
+                    card.getSubTasks().stream().filter(Task::isCompleted).count();
+            setSubtasksCompleted(completedTasks, card.getSubTasks().size());
+            subtaskIndicator.setVisible(true);
+        }
     }
 }
 
