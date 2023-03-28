@@ -17,17 +17,17 @@ Feedback: None.
 Mark: Excellent
 
 
-Feedback: 
+Feedback: None.
 
 
 
 #### Performance of the *Previous* Minute Taker
 
 
-Mark: 
+Mark: Good
 
 
-Feedback: 
+Feedback: The "Who, what, when?" section is empty. Are there no responsibility assigned to each team member after the meeting? The names of the minutes file names are inconsistent.
 
 
 
@@ -37,7 +37,7 @@ Feedback:
 Mark: Excellent
 
 
-Feedback: 
+Feedback: None.
 
 
 
@@ -47,7 +47,7 @@ Feedback:
 Mark: Excellent
 
 
-Feedback: 
+Feedback: None.
 
 
 #### Potentially Shippable Product
@@ -56,4 +56,4 @@ Feedback:
 Mark: Excellent
 
 
-Feedback: 
+Feedback: None.

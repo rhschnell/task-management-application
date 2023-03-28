@@ -27,7 +27,7 @@ Feedback: Why `.md` file? Keep the file types consistent. It varies too much per
 Mark: Good
 
 
-Feedback: The "Who, what, when?" section is empty. Are there no respinsbility assigned to each team member after the meeting? The names of the minutes file names are inconsistent.
+Feedback: The "Who, what, when?" section is empty. Are there no responsibility assigned to each team member after the meeting? The names of the minutes file names are inconsistent.
 
 
 
