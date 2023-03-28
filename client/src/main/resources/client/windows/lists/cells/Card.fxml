@@ -39,6 +39,14 @@
                <Insets right="5.0" />
             </HBox.margin>
          </Circle>
+         <Label fx:id="subtaskIndicator" contentDisplay="TOP" layoutX="20.0" layoutY="10.0" prefHeight="40.0" prefWidth="300.0" text="Text" visible="false" wrapText="true">
+            <font>
+               <Font name="Arial" size="13.0" />
+            </font>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+         </Label>
          <ImageView fx:id="descriptionIcon" fitHeight="18.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
             <image>
                <Image url="@/client/icons/pencil-alt.png" />

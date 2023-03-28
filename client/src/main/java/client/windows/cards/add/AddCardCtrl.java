@@ -52,7 +52,9 @@ public class AddCardCtrl implements Initializable {
     @FXML
     private VBox appliedTagsVbox;
 
+
     private List<Tag> appliedTags;
+
     private CardList cardList;
 
     /**

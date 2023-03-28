@@ -16,7 +16,6 @@ public class Card implements Serializable {
     private String description;
     private String backgroundColour;
 
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> subTasks;
 
