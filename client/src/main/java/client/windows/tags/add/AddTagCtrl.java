@@ -1,6 +1,5 @@
 package client.windows.tags.add;
 
-import client.serverUtils.BoardUtils;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;

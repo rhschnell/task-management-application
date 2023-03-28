@@ -9,16 +9,13 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
