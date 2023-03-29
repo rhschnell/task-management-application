@@ -22,6 +22,7 @@ import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -184,6 +185,7 @@ public class WorkspaceCtrl implements Initializable {
                 boardCell.getValue().setCursor(Cursor.HAND);
                 boardList.getChildren().add(boardCell.getValue());
             }
+            boardName.setText(shownBoard.getTitle());
         }
 
     }
@@ -241,7 +243,7 @@ public class WorkspaceCtrl implements Initializable {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
-        loader.getKey().setWorkspaceCtrl(this);
+        loader.getKey().setBoard(shownBoard);
 
         loader.getKey().displayTagList();
 
@@ -252,4 +254,18 @@ public class WorkspaceCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Method to rename boards.
+     * Called by Rename button in workspace
+     */
+    public void renameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(false);
+        HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
+        refreshWorkspace(true);
+    }
 }
