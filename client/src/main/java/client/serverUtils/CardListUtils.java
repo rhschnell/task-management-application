@@ -1,6 +1,4 @@
 package client.serverUtils;
-
-import commons.Card;
 import commons.CardList;
 import commons.Route;
 import jakarta.ws.rs.client.ClientBuilder;
