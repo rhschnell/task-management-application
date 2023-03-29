@@ -123,7 +123,6 @@ public class WorkspaceCtrl implements Initializable {
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(shownBoard);
             controller.setWorkspaceCtrl(this);
-            boardCell.getValue().setCursor(Cursor.HAND);
             boardList.getChildren().add(boardCell.getValue());
         }
 
