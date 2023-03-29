@@ -125,7 +125,7 @@ public class CardCtrl {
 
         ViewCardCtrl controller = loader.getKey();
         controller.setCard(cell);
-
+        controller.setBoardKey(getBoardKey());
         String title = "View Card";
         HelperMethods.popUp(scene, title);
     }
@@ -186,6 +186,15 @@ public class CardCtrl {
             setSubtasksCompleted(completedTasks, card.getSubTasks().size());
             subtaskIndicator.setVisible(true);
         }
+    }
+
+    private String getBoardKey()
+    {
+        return service.getBoardKey();
+    }
+    public void setBoardKey(String boardKey)
+    {
+        service.setBoardKey(boardKey);
     }
 }
 

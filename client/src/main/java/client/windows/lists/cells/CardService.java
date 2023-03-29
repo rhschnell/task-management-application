@@ -9,6 +9,7 @@ import commons.CardList;
 public class CardService {
     private final CardUtils cardUtils;
     private final CardListUtils cardListUtils;
+    private String boardKey;
 
     @Inject
     public CardService(CardUtils cardUtils, CardListUtils cardListUtils) {
@@ -43,4 +44,11 @@ public class CardService {
         cardListUtils.insertCardList(cardList);
     }
 
+    public String getBoardKey() {
+        return boardKey;
+    }
+
+    public void setBoardKey(String boardKey) {
+        this.boardKey = boardKey;
+    }
 }

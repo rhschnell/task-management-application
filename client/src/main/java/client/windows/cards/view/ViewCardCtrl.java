@@ -19,9 +19,6 @@ import client.modules.MainModules;
 import client.MyFXML;
 import client.MainCtrl;
 import client.windows.cards.edit.EditCardCtrl;
-import client.serverUtils.CardListUtils;
-import client.serverUtils.CardUtils;
-import client.serverUtils.ServerUtils;
 import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Card;
@@ -38,8 +35,6 @@ import static com.google.inject.Guice.createInjector;
 
 public class ViewCardCtrl {
 
-    private CardUtils server;
-    private CardListUtils cardListUtils;
 
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
@@ -60,13 +55,15 @@ public class ViewCardCtrl {
     @FXML
     private VBox appliedTagsVbox;
 
+    private ViewCardService service;
+
     /**
      * Constructor for ViewCardCtrl
      * @param server a server util
      */
     @Inject
-    public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl, MyFXML myFXML) {
-        this.server = new CardUtils(server);
+    public ViewCardCtrl(ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
+        this.service=service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
     }
@@ -84,6 +81,7 @@ public class ViewCardCtrl {
 
 
     public void applyTag() {
+        appliedTagsVbox.getChildren().clear();
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
                 var loader = new MyFXML(createInjector(new MainModules()))
@@ -116,16 +114,24 @@ public class ViewCardCtrl {
      */
     public void delete() {
         ((Stage)deleteButton.getScene().getWindow()).close();
-        server.deleteFromCardList(card);
-        server.deleteCard(card.getId());
+        service.deleteCard(card);
     }
 
     public void edit() {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
+        loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
         Stage stage = new Stage();
         stage.setScene(new Scene(loader.getValue()));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+    }
+    public String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    public void setBoardKey(String boardKey)
+    {
+        service.setBoardKey(boardKey);
     }
 }
