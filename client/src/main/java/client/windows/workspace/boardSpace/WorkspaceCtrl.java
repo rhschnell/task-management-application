@@ -22,6 +22,7 @@ import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -253,6 +254,15 @@ public class WorkspaceCtrl implements Initializable {
 
         String title = "Tag Overview";
         HelperMethods.popUp(scene, title);
+    }
+
+    public void renameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setWorkspaceCtrl(this);
+        HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
     }
 
 }
