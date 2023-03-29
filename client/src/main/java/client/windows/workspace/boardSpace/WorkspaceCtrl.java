@@ -32,6 +32,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -228,6 +229,12 @@ public class WorkspaceCtrl implements Initializable {
         joinedKeys.remove(shownBoard.getKey());
         for (String s : joinedKeys) {System.out.print(s + " ");}
         System.out.println();System.out.println();
+        refreshWorkspace(true);
+        clearWorkspace();
+    }
+
+    public void leaveBoard() {
+        this.joinedKeys.remove(shownBoard.getKey());
         refreshWorkspace(true);
         clearWorkspace();
     }
