@@ -185,6 +185,7 @@ public class WorkspaceCtrl implements Initializable {
                 boardCell.getValue().setCursor(Cursor.HAND);
                 boardList.getChildren().add(boardCell.getValue());
             }
+            boardName.setText(shownBoard.getTitle());
         }
 
     }
@@ -263,6 +264,7 @@ public class WorkspaceCtrl implements Initializable {
         Scene scene = new Scene(loader.getValue());
         loader.getKey().setWorkspaceCtrl(this);
         HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
+        refreshWorkspace(true);
     }
 
 }

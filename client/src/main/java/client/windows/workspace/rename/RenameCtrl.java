@@ -39,5 +39,6 @@ public class RenameCtrl {
 
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
+        this.inputField.setText(workspaceCtrl.getShownBoard().getTitle());
     }
 }
