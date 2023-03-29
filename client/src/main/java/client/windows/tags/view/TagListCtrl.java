@@ -18,7 +18,6 @@ package client.windows.tags.view;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.windows.cards.add.AddCardCtrl;;
-import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
