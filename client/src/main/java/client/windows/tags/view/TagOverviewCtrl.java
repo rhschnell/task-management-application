@@ -3,6 +3,7 @@ package client.windows.tags.view;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
+import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.tags.add.AddTagCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -14,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class TagOverviewCtrl {
     private WorkspaceCtrl workspaceCtrl;
+    private Board board;
 
     @FXML
     private VBox displayedTags;
@@ -60,10 +63,10 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-        workspaceCtrl.refreshWorkspace();
-        Board shownBoard = workspaceCtrl.getShownBoard();
-
-        List<Tag> tagList = shownBoard.getTagList();
+//        workspaceCtrl.refreshWorkspace();
+//        Board shownBoard = workspaceCtrl.getShownBoard();
+        
+        List<Tag> tagList = getBoard().getTagList();
 
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))
@@ -91,7 +94,11 @@ public class TagOverviewCtrl {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Board getBoard(){
+        return this.board;
     }
 }

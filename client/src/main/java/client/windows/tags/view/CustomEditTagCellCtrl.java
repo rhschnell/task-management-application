@@ -6,6 +6,7 @@ import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.edit.EditTagCtrl;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -65,6 +66,10 @@ public class CustomEditTagCellCtrl {
      */
     public void deleteTag(){
         server.deleteTag(tag.getId());
+
+        Board shownBoard = tagOverviewCtrl.getBoard();
+        shownBoard.removeTag(tag);
+
         tagOverviewCtrl.updateDisplayedTags();
     }
 

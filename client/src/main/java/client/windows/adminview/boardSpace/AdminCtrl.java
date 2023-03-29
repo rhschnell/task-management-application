@@ -21,6 +21,7 @@ import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.tags.view.TagOverviewCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -32,6 +33,8 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -197,5 +200,20 @@ public class AdminCtrl implements Initializable {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
         refreshWorkspace();
+    }
+
+    public void tagOverview() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+
+        loader.getKey().setBoard(shownBoard);
+
+        loader.getKey().displayTagList();
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Tag Overview";
+        HelperMethods.popUp(scene, title);
     }
 }
