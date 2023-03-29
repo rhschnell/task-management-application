@@ -23,6 +23,7 @@ import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
+import com.sun.istack.NotNull;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
@@ -181,6 +182,7 @@ public class WorkspaceCtrl implements Initializable {
                                 "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
                 controller.setBoard(service.getBoard(k));
+                controller.setWorkspaceCtrl(this);
                 boardCell.getValue().setCursor(Cursor.HAND);
                 boardList.getChildren().add(boardCell.getValue());
             }
@@ -233,9 +235,15 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void leaveBoard() {
-        this.joinedKeys.remove(shownBoard.getKey());
+        leaveBoard(shownBoard);
+    }
+
+    public void leaveBoard(@NotNull Board board) {
+        this.joinedKeys.remove(board.getKey());
         refreshWorkspace(true);
-        clearWorkspace();
+        if (board.equals(this.shownBoard)) {
+            clearWorkspace();
+        }
     }
 
     public void addList() {

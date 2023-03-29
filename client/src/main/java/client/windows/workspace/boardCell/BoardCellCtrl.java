@@ -21,8 +21,10 @@ public class BoardCellCtrl {
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public BoardCellCtrl() {
+    public BoardCellCtrl() {}
 
+    public void leaveBoard() {
+        workspaceCtrl.leaveBoard(board);
     }
 
     public void showMyBoard() {
