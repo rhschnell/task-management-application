@@ -69,6 +69,15 @@ public class AddCardCtrl {
         service.setCardList(cardList);
     }
 
+    public void setBoardKey(String boardKey)
+    {
+        service.setBoardKey(boardKey);
+    }
+    public String getBoardKey()
+    {
+        return service.getBoardKey();
+    }
+
     /**
      * This method cancels adding the created card to the list
      */

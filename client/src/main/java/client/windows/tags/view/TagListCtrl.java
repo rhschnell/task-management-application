@@ -18,6 +18,7 @@ package client.windows.tags.view;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.windows.cards.add.AddCardCtrl;;
+import client.windows.cards.edit.EditCardCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -32,6 +33,7 @@ import static com.google.inject.Guice.createInjector;
 public class TagListCtrl {
 
     private AddCardCtrl addCardCtrl;
+    private EditCardCtrl editCardCtrl;
     @FXML
     private Button cancelButton;
 
@@ -40,13 +42,26 @@ public class TagListCtrl {
     @FXML
     private VBox availableTagsBox;
 
+    private String type;
+
 
 
     @Inject
-    public TagListCtrl(AddCardCtrl addCardCtrl) {
+    public TagListCtrl(AddCardCtrl addCardCtrl, EditCardCtrl editCardCtrl) {
         this.addCardCtrl = addCardCtrl;
+        this.editCardCtrl = editCardCtrl;
+
         availableTagsBox=new VBox();
         appliedTagsBox=new VBox();
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     /**
@@ -86,6 +101,14 @@ public class TagListCtrl {
 
     public void setAddCardCtrl(AddCardCtrl addCardCtrl){
         this.addCardCtrl = addCardCtrl;
+    }
+
+    public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
+        this.editCardCtrl = editCardCtrl;
+    }
+
+    public EditCardCtrl getEditCardCtrl() {
+        return editCardCtrl;
     }
 
     /**

@@ -35,17 +35,6 @@ public class TagUtils {
                 .post(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
-    /**
-     * Sends a request to the server to get all tags from the database
-     * @return List of all tags in the database
-     */
-    public List<Tag> getTags() {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.TAG)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Tag>>() {});
-    }
 
     /**
      * Sends a post request to the server to add a tag to the database
@@ -69,5 +58,13 @@ public class TagUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(Response.class);
+    }
+
+    public List<Tag> getBoardTags(String key) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD + "/getBoardTags/" + key)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>() {});
     }
 }

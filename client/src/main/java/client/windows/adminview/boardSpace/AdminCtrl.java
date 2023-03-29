@@ -209,6 +209,7 @@ public class AdminCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setBoardKey(shownBoard.getKey());
             ctrl.setCardList(cardList);
             ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());

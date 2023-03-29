@@ -2,6 +2,7 @@ package server.features.boards;
 
 import commons.Board;
 import commons.Route;
+import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +74,18 @@ public class BoardController {
         try {
             Board returnBoard = service.getByID(key);
             return ResponseEntity.ok(returnBoard);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/getBoardTags/{key}")
+    public ResponseEntity<List<Tag>> getBoardTags(@PathVariable("key") String key) {
+        try {
+            List<Tag> returnTags = service.getByID(key).getTagList();
+            return ResponseEntity.ok(returnTags);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException e) {

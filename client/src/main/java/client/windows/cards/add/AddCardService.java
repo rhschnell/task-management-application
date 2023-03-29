@@ -16,6 +16,7 @@ public class AddCardService {
     private List<Tag> appliedTags;
 
     private CardList cardList;
+    private String boardKey;
 
     @Inject
     public AddCardService(CardListUtils server, TagUtils tagUtils) {
@@ -23,6 +24,14 @@ public class AddCardService {
         this.server = server;
         this.tagUtils = tagUtils;
         appliedTags = new ArrayList<>();
+    }
+
+    public String getBoardKey() {
+        return boardKey;
+    }
+
+    public void setBoardKey(String boardKey) {
+        this.boardKey = boardKey;
     }
 
     /**
@@ -56,7 +65,7 @@ public class AddCardService {
      */
     public List<Tag> getTags()
     {
-        return tagUtils.getTags();
+        return tagUtils.getBoardTags(boardKey);
     }
 
     /**
@@ -102,7 +111,7 @@ public class AddCardService {
     public List<Tag> getAvailableTags()
     {
         List<Tag> availableTags = new ArrayList<>();
-        availableTags.addAll(tagUtils.getTags());
+        availableTags.addAll(tagUtils.getBoardTags(boardKey));
         availableTags.removeAll(appliedTags);
         return availableTags;
     }

@@ -206,6 +206,7 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setBoardKey(shownBoard.getKey());
             ctrl.setHelperMethod(hm);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
@@ -238,7 +239,10 @@ public class WorkspaceCtrl implements Initializable {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
     }
-
+    public String getBordKey()
+    {
+        return shownBoard.getKey();
+    }
     public Board getShownBoard(){
         return shownBoard;
     }
