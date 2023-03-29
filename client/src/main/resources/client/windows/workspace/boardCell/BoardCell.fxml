@@ -23,7 +23,7 @@
         </HBox.margin>
         </Label>
 
-        <ImageView fx:id="deleteIcon" fitHeight="18.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#leaveBoard">
+        <ImageView fx:id="leaveIcon" fitHeight="18.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#leaveBoard">
             <Image url="/client/icons/exit.png" />
         </ImageView>
     </HBox>

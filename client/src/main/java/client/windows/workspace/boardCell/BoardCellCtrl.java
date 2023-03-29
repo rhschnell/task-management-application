@@ -4,10 +4,15 @@ import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
-public class BoardCellCtrl {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class BoardCellCtrl implements Initializable {
     private WorkspaceCtrl workspaceCtrl;
 
     private Board board;
@@ -15,13 +20,15 @@ public class BoardCellCtrl {
     @FXML
     private Label boardTitle;
     @FXML
-    private ImageView deleteIcon;
+    private ImageView leaveIcon;
 
     /**
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public BoardCellCtrl() {}
+    public BoardCellCtrl() {
+
+    }
 
     public void leaveBoard() {
         workspaceCtrl.leaveBoard(board);
@@ -49,6 +56,20 @@ public class BoardCellCtrl {
      */
     public Board getBoard() {
         return board;
+    }
+
+    /**
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        leaveIcon.setCursor(Cursor.HAND);
+        boardTitle.setCursor(Cursor.DEFAULT);
     }
 }
 
