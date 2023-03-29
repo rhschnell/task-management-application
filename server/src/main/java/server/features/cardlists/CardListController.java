@@ -82,23 +82,6 @@ public class CardListController {
     }
 
     /**
-     * Return the length of a list , given the id
-     * @param id The id of the list the user request the length
-     * @return the length of the list
-     */
-    @GetMapping("/getListLength/{id}")
-    public ResponseEntity<Integer> getListLength(@PathVariable("id") long id) {
-        try {
-            Integer returnCardList = service.getListLength(id);
-            return ResponseEntity.ok(returnCardList);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    /**
      *
      * @param card The card that needs to be removed using the delete method from the object
      *             so the priority is preserved.

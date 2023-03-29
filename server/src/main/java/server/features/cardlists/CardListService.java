@@ -27,10 +27,6 @@ public class CardListService implements RepositoryService<CardList, Long> {
         }
         repo.save(cardList);
     }
-    public int getListLength(long id)
-    {
-        return repo.getById(id).getCards().size();
-    }
 
     /**
      * Deletes card list with given ID from repository
