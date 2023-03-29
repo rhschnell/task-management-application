@@ -255,4 +255,15 @@ public class WorkspaceCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Method to copy the key of currently shown board to the
+     * clipboard. This method is called by the copy key button.
+     *
+     * After copying the key to the clipboard a small notification is displayed.
+     */
+    public void copyKey() {
+        String key = shownBoard.getKey();
+        service.copyKey(key);
+    }
+
 }

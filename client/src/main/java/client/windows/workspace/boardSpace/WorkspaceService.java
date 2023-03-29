@@ -3,6 +3,7 @@ package client.windows.workspace.boardSpace;
 import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import javafx.scene.input.Clipboard;
 
 public class WorkspaceService {
     private final BoardUtils server;
@@ -22,5 +23,9 @@ public class WorkspaceService {
 
     public void deleteBoard(Board board) {
         server.deleteBoard(board.getKey());
+    }
+
+    public void copyKey(String key) {
+        Clipboard clipboard = Clipboard.getSystemClipBoard();
     }
 }
