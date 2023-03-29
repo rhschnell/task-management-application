@@ -65,6 +65,10 @@ public class CustomTagCellCtrl {
             actionButton.setText("Remove");
             actionButton.getStyleClass().add("red-button");
         }
+        if(type.equals("removeFromAddCard") ) {
+            actionButton.setText("Remove");
+            actionButton.getStyleClass().add("red-button");
+        }
         if(type.equals("viewTag") ) {
             actionButton.setVisible(false);
         }
@@ -86,12 +90,12 @@ public class CustomTagCellCtrl {
             tagListCtrl.escapeWindow();
         }
 
-        if(type.equals("addFromTagList") && tagListCtrl.getType()==null) {
+        if(type.equals("addFromTagList") ) {
             tagListCtrl.getCardCtrl().applyTag(tag);
             tagListCtrl.escapeWindow();
         }
 
-        if(type.equals("removeFromTagList") && tagListCtrl.getType()==null){
+        if(type.equals("removeFromTagList") ){
             tagListCtrl.getCardCtrl().removeAppliedTag(tag);
             tagListCtrl.escapeWindow();
         }
