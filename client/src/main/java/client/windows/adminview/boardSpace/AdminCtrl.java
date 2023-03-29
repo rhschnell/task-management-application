@@ -23,6 +23,7 @@ import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -41,7 +42,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.google.inject.Guice.createInjector;
@@ -72,6 +76,7 @@ public class AdminCtrl implements Initializable {
     public AdminCtrl(AdminService service, HelperMethods hm) {
         this.service = service;
         this.hm = hm;
+        joinedKeys = new HashSet<>();
     }
 
     /**
@@ -171,6 +176,7 @@ public class AdminCtrl implements Initializable {
         if(currentKeys.equals(joinedKeys)) {
             return;
         }
+        boardName.setText(shownBoard.getTitle());
 
         if (forced) {
             boardList.getChildren().clear();
@@ -250,5 +256,28 @@ public class AdminCtrl implements Initializable {
 
         String title = "Tag Overview";
         HelperMethods.popUp(scene, title);
+    }
+
+    /**
+     * Method to rename boards.
+     * Called by Rename button in workspace
+     */
+    public void renameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(true);
+        HelperMethods.popUp(scene, "Rename board: " + shownBoard.getTitle());
+        refreshWorkspace(true);
+    }
+
+    /**
+     * Getter for shown board
+     * @return the shown board
+     */
+    public Board getShownBoard() {
+        return shownBoard;
     }
 }
