@@ -167,11 +167,7 @@ public class AdminCtrl implements Initializable {
                 .map(Board::getKey)
                 .collect(Collectors.toSet());
 
-        if(currentKeys.equals(joinedKeys)) {
-            return;
-        }
-
-        if (forced) {
+        if(!currentKeys.equals(joinedKeys) || forced) {
             boardList.getChildren().clear();
             for (String k : joinedKeys) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
