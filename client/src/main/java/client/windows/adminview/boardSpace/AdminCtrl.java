@@ -255,7 +255,8 @@ public class AdminCtrl implements Initializable {
         copyButton.setText("Copied key!");
         copyButton.getStyleClass().remove("green-button");
         copyButton.getStyleClass().add("blue-button");
-        delay(2000, () -> {copyButton.setText("Copy key");
+        delay(2000, () -> {
+            copyButton.setText("Copy key");
             copyButton.getStyleClass().remove("blue-button");
             copyButton.getStyleClass().add("green-button");});
     }
