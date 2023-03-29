@@ -21,7 +21,7 @@ public class CardService {
      * @param card , the card that needs to be deleted
      */
     public void deleteCard(Card card) {
-        cardListUtils.deleteFromCardList(card);
+        cardUtils.deleteFromCardList(card);
         cardUtils.deleteCard(card.getId());
     }
 

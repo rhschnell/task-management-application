@@ -50,17 +50,6 @@ public class CardListUtils {
     }
 
     /**
-     * Deletes a card from the list of lists
-     * @param card The card that needs to be deleted from the list of lists
-     */
-    public void deleteFromCardList(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.CARD_LIST + "/removeFromCardList/")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-    /**
      * Sends a request to the server to retrieve a certain card list from the database
      * @param id key of the card list to find
      * @return the desired card list
