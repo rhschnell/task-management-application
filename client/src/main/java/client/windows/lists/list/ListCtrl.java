@@ -249,7 +249,7 @@ public class ListCtrl {
         loader.getKey().setCardList(this.cardList);
 
         String title = "Create a card";
-        HelperMethods.popUp(scene, title);
+        hm.popUp(scene, title);
     }
 
     /**

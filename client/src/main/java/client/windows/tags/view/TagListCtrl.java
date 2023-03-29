@@ -32,7 +32,6 @@ import static com.google.inject.Guice.createInjector;
 
 public class TagListCtrl {
 
-    private ServerUtils server;
     private AddCardCtrl addCardCtrl;
     @FXML
     private Button cancelButton;
@@ -45,9 +44,8 @@ public class TagListCtrl {
 
 
     @Inject
-    public TagListCtrl(ServerUtils server, AddCardCtrl addCardCtrl) {
+    public TagListCtrl(AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
-        this.server = server;
         availableTagsBox=new VBox();
         appliedTagsBox=new VBox();
     }
@@ -85,6 +83,10 @@ public class TagListCtrl {
     }
     public AddCardCtrl getCardCtrl() {
         return addCardCtrl;
+    }
+
+    public void setAddCardCtrl(AddCardCtrl addCardCtrl){
+        this.addCardCtrl = addCardCtrl;
     }
 
     /**

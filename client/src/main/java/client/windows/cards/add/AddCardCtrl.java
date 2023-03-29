@@ -17,27 +17,27 @@ package client.windows.cards.add;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.utils.HelperMethods;
 import client.windows.tags.view.CustomTagCellCtrl;
+import client.windows.tags.view.TagListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import commons.Tag;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
-public class AddCardCtrl implements Initializable {
+public class AddCardCtrl {
 
     private final AddCardService service;
 
@@ -53,9 +53,7 @@ public class AddCardCtrl implements Initializable {
     private VBox appliedTagsVbox;
 
 
-    private List<Tag> appliedTags;
-
-    private CardList cardList;
+    private HelperMethods hm;
 
     /**
      * Constructor for AddCardCtrl
@@ -63,14 +61,13 @@ public class AddCardCtrl implements Initializable {
      * @param service corresponding service
      */
     @Inject
-    public AddCardCtrl(AddCardService service) {
+    public AddCardCtrl(AddCardService service, HelperMethods hm) {
         this.service = service;
-        appliedTags = new ArrayList<>();
-        appliedTagsVbox = new VBox();
+        this.hm=hm;
     }
 
     public void setCardList(CardList cardList) {
-        this.cardList = cardList;
+        service.setCardList(cardList);
     }
 
     /**
@@ -89,11 +86,11 @@ public class AddCardCtrl implements Initializable {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
-                appliedTags,
+                service.getAppliedTags(),
                 new ArrayList<>());
-        appliedTags = new ArrayList<>();
-        cardList.addCard(card);
-        service.insertCardList(cardList);
+        service.setAppliedTags(new ArrayList<>());
+        service.addCard(card);
+        service.insertCardList();
     }
 
     /**
@@ -102,9 +99,9 @@ public class AddCardCtrl implements Initializable {
      */
     public void applyTag(Tag tag)
     {
-        appliedTags.add(tag);
+        service.applyTag(tag);
         var loader =  new MyFXML(createInjector(new MainModules()))
-                .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
+                .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
         ctrl.setAddCardCtrl(this);
         ctrl.setTagObject(tag,"removeFromAddCard");
@@ -118,16 +115,16 @@ public class AddCardCtrl implements Initializable {
      */
     public void removeAppliedTag(Tag tag)
     {
-        appliedTags.remove(tag);
+        service.removeAppliedTag(tag);
         appliedTagsVbox.getChildren().clear();
 
-        for(int i=0;i<appliedTags.size();i++)
+        for(int i=0;i<service.getAppliedTags().size();i++)
         {
             var loader =  new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setAddCardCtrl(this);
-            ctrl.setTagObject(appliedTags.get(i),"removeFromAddCard");
+            ctrl.setTagObject(service.getAppliedTags().get(i),"removeFromAddCard");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
     }
@@ -136,31 +133,16 @@ public class AddCardCtrl implements Initializable {
      * Displays the pop-up (TagList) in order to choose and add a tag.
      */
     public void addTagPopup() {
-//        List<Tag> availableTags = server.getTags();
-//        availableTags.removeAll(appliedTags);
-//        var loader =  listCtrl.getMyFXML().
-//                .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","TagList.fxml");
-//        TagListCtrl ctrl = loader.getKey();
-//        ctrl.setAvailableTags(availableTags);
-//        ctrl.setAppliedTags(appliedTags);
-//        Parent root = loader.getValue();
-//        Scenes scene = new Scenes(root);
-//        String title = "Add tag";
-//        listCtrl.getMainCtrl().popUp(scene, title);
-    }
-    /**
-     *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(TagListCtrl.class, "client", "windows", "tags","TagList.fxml");
+        TagListCtrl ctrl = loader.getKey();
+        ctrl.setAvailableTags(service.getAvailableTags());
+        ctrl.setAppliedTags(service.getAppliedTags());
+        ctrl.setAddCardCtrl(this);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Add tag";
+        hm.popUp(scene, title);
     }
 
 }
