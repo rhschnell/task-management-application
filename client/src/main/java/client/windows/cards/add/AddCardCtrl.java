@@ -91,6 +91,7 @@ public class AddCardCtrl implements Initializable {
                 "white",
                 appliedTags,
                 new ArrayList<>());
+        card.setPriority(cardList.getCards().size()+1);
         appliedTags = new ArrayList<>();
         cardList.addCard(card);
         service.insertCardList(cardList);
