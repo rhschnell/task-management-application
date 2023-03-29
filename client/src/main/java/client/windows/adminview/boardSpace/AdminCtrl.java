@@ -22,6 +22,8 @@ import client.utils.Scenes;
 import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.tags.view.TagOverviewCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
