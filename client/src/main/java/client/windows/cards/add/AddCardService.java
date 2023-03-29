@@ -42,6 +42,14 @@ public class AddCardService {
     }
 
     /**
+     * Returns the CardList from where the AddCard method was called
+     * @return the cardList
+     */
+    public CardList getCardList() {
+        return cardList;
+    }
+
+    /**
      * Returns the tags from the service
      * //TODO get the tags from the board
      * @return the list of tags of the board

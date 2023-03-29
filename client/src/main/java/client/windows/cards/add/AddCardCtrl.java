@@ -87,7 +87,7 @@ public class AddCardCtrl {
                 "white",
                 service.getAppliedTags(),
                 new ArrayList<>());
-        card.setPriority(cardList.getCards().size()+1);
+        card.setPriority(service.getCardList().getCards().size()+1);
         service.setAppliedTags(new ArrayList<>());
         service.addCard(card);
         service.insertCardList();
