@@ -89,4 +89,8 @@ public class Board {
     public void addTag(Tag tag) {
         tagList.add(tag);
     }
+
+    public void removeTag(Tag tag) {
+        tagList.remove(tag);
+    }
 }

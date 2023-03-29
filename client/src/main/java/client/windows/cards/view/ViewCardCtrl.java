@@ -19,6 +19,7 @@ import client.modules.MainModules;
 import client.MyFXML;
 import client.MainCtrl;
 import client.windows.cards.edit.EditCardCtrl;
+import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import client.serverUtils.ServerUtils;
 import client.windows.tags.view.CustomTagCellCtrl;
@@ -38,6 +39,7 @@ import static com.google.inject.Guice.createInjector;
 public class ViewCardCtrl {
 
     private CardUtils server;
+    private CardListUtils cardListUtils;
 
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
@@ -114,6 +116,7 @@ public class ViewCardCtrl {
      */
     public void delete() {
         ((Stage)deleteButton.getScene().getWindow()).close();
+        server.deleteFromCardList(card);
         server.deleteCard(card.getId());
     }
 

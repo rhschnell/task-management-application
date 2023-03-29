@@ -20,6 +20,8 @@ public class CardList {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
+
+    @OrderBy("priority ASC")
     private List<Card> cards = new ArrayList<>();
     /**
      * Constructor for Tests
@@ -36,6 +38,7 @@ public class CardList {
      * @param card Card to be added
      */
     public void addCard(Card card) {
+        card.setPriority(cards.size()+1);
         this.cards.add(card);
     }
 
@@ -45,7 +48,16 @@ public class CardList {
      * @param index The index the cards needs to end up at
      */
     public void addCard(Card card, int index) {
+        if(index>cards.size())
+            index=(cards.size());
         this.cards.add(index, card);
+        if(cards.size()==1)
+            cards.get(0).setPriority(1);
+        for(int i = index;i<cards.size()-1;i++)
+        {
+            cards.get(i).setPriority(cards.get(i+1).getPriority());
+        }
+        cards.get(cards.size()-1).setPriority(cards.size());
     }
 
     /**
@@ -57,7 +69,12 @@ public class CardList {
         if (!this.cards.contains(card)) {
             return null;
         }
+        int index = cards.indexOf(card);
         this.cards.remove(card);
+        for(int i=index;i<cards.size();i++)
+        {
+            cards.get(i).setPriority(cards.get(i).getPriority()-1);
+        }
         return card;
     }
 
@@ -70,7 +87,12 @@ public class CardList {
         if (index >= this.cards.size()) {
             return null;
         }
+        for(int i=index;i<cards.size();i++)
+        {
+            cards.get(i).setPriority(cards.get(i).getPriority()-1);
+        }
         return this.cards.remove(index);
+
     }
 
     /**

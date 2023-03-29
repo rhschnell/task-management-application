@@ -206,6 +206,7 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setHelperMethod(hm);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());
@@ -246,7 +247,7 @@ public class WorkspaceCtrl implements Initializable {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
-        loader.getKey().setWorkspaceCtrl(this);
+        loader.getKey().setBoard(shownBoard);
 
         loader.getKey().displayTagList();
 

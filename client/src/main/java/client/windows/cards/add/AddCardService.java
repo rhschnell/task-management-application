@@ -12,7 +12,6 @@ public class AddCardService {
 
         this.server = server;
     }
-
     public void insertCardList(CardList cardList) {
         server.insertCardList(cardList);
     }

@@ -32,12 +32,13 @@ public class QuickAddCardCtrl {
      * Adds a new card with a title
      */
     public void addCard() {
-        Card card = new Card(cardTitle.getText());
-        listCtrl.getCardList().addCard(card);
-        service.insertCardList(listCtrl.getCardList());
+        service.insertCard(new Card(cardTitle.getText()),listCtrl.getCardList());
     }
 
-
+    /**
+     * Set the ListCtrl the QuickAdd is on
+     * @param listCtrl the listCtrl that needs to be setted
+     */
     public void setListCtrl(ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
     }
