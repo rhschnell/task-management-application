@@ -6,5 +6,4 @@ public enum Scenes {
     ADMINVIEW,
     ADMIN,
     USER,
-
 }

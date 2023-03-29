@@ -27,7 +27,7 @@ class BoardControllerTest {
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
-        Board board = new Board("000000", "My Board", cardLists);
+        Board board = new Board("000000", "My Board", cardLists, null);
 
         ResponseEntity<Void> response = sut.insert(board);
 
@@ -53,7 +53,7 @@ class BoardControllerTest {
 
     @Test
     void getByIdSuccess() {
-        Board myBoard = new Board("any key", "some title", new LinkedList<>());
+        Board myBoard = new Board("any key", "some title", new LinkedList<>(), null);
 
         ResponseEntity<Void> response = sut.insert(myBoard);
         Board saved = sut.getById(myBoard.getKey()).getBody();
@@ -94,8 +94,8 @@ class BoardControllerTest {
 
     @Test
     void deleteExisting() {
-        Board board1 = new Board("1", "Title", new ArrayList<>());
-        Board board2 = new Board("2", "Title", new ArrayList<>());
+        Board board1 = new Board("1", "Title", new ArrayList<>(), null);
+        Board board2 = new Board("2", "Title", new ArrayList<>(), null);
 
         sut.insert(board1);
         sut.insert(board2);

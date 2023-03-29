@@ -20,6 +20,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
+import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
@@ -31,6 +32,8 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -47,6 +50,7 @@ import static com.google.inject.Guice.createInjector;
 public class WorkspaceCtrl implements Initializable {
     private final WorkspaceService service;
     private final HelperMethods hm;
+
     @FXML
     private Label boardName;
     @FXML
@@ -107,9 +111,9 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void connect() {
-        showBoard(keyField.getText());
-
         if (keyField.getText().equals("")) {return;}
+
+        showBoard(keyField.getText());
 
         if(!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
@@ -152,6 +156,10 @@ public class WorkspaceCtrl implements Initializable {
 
         // Refresh the board list (joined boards)
         boolean removed = false;
+        if (joinedKeys == null) {
+            return;
+        }
+
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) {
             try {
@@ -184,7 +192,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null);
+            shownBoard = new Board(targetKey, targetKey, null, null);
             service.insertBoard(shownBoard);
         }
 
@@ -196,6 +204,7 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setHelperMethod(hm);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());
@@ -227,4 +236,24 @@ public class WorkspaceCtrl implements Initializable {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
     }
+
+    public Board getShownBoard(){
+        return shownBoard;
+    }
+
+    public void tagOverview() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+
+        loader.getKey().setWorkspaceCtrl(this);
+
+        loader.getKey().displayTagList();
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Tag Overview";
+        HelperMethods.popUp(scene, title);
+    }
+
 }
