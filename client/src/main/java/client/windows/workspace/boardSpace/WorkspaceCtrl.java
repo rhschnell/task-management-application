@@ -223,11 +223,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void deleteBoard() {
         service.deleteBoard(shownBoard);
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();
         joinedKeys.remove(shownBoard.getKey());
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();System.out.println();
         refreshWorkspace(true);
         clearWorkspace();
     }
