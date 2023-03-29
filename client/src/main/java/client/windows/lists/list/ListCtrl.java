@@ -42,10 +42,9 @@ import javafx.util.Pair;
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
-    private final HelperMethods hm;
+    private HelperMethods hm;
     private final ListService service;
 
-    private CardList cardList;
     private DataFormat cardFormat;
 
     @FXML
@@ -61,22 +60,12 @@ public class ListCtrl {
      *
      */
     @Inject
-    public ListCtrl(ListService service, HelperMethods hm) {
+    public ListCtrl(ListService service) {
         this.service = service;
-        this.hm = hm;
-        cardList = new CardList();
-        cardFormat = this.hm.getCardFormat();
     }
 
     public void setCardList(CardList cardList) {
-        this.cardList = cardList;
-    }
-
-    /**
-     * Getter for the card list
-     */
-    public CardList getCardList() {
-        return cardList;
+        service.setCardList(cardList);
     }
 
 
@@ -94,7 +83,7 @@ public class ListCtrl {
     public void displayCards() {
 
 
-        for (Card card: cardList.getCards()) {
+        for (Card card: service.getCardList().getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
@@ -158,20 +147,14 @@ public class ListCtrl {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasContent(cardFormat)) {
-                //Pair<CardCtrl,Parent> draggedObject = ((Pair<CardCtrl,Parent>) event.getD());
                 Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
-                // If the old parent is a VBox, remove the dragged node from the old parent
                 if (oldParent instanceof VBox) {
-                    ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    this.getCardList().removeCard(draggedCard);
-                    service.deleteCard(draggedCard.getId());
-                    this.getCardList().addCard(draggedCard, (((VBox) cardCell.getValue().
-                            getParent()).getChildren().indexOf(cardCell.getValue())));
-                    System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
-                            indexOf(cardCell.getValue())));
-                    service.insertCardList(this.getCardList());
+                    int position = (((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue()))-1;
+                    service.dragAndDrop(draggedCard,position);
+
                 }
 
                 success = true;
@@ -179,6 +162,15 @@ public class ListCtrl {
             event.setDropCompleted(success);
             event.consume();
         });
+    }
+
+    /**
+     * Returns the CardList of the Controller
+     * @return
+     */
+    public CardList getCardList()
+    {
+        return service.getCardList();
     }
 
     private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
@@ -215,19 +207,13 @@ public class ListCtrl {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasContent(cardFormat)) {
-                //Pair<CardCtrl,Parent> draggedObject = ((Pair<CardCtrl,Parent>) event.getD());
                 Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
-                // If the old parent is a VBox, remove the dragged node from the old parent
                 if (oldParent instanceof VBox) {
-                    ((VBox) oldParent).getChildren().remove(draggedNode);
                     Card draggedCard =(Card)db.getContent(cardFormat);
-                    service.deleteCard(draggedCard.getId());
-                    this.getCardList().removeCard(draggedCard);
-                    this.getCardList().addCard(draggedCard);
-                    System.out.println((((VBox) cardCell.getValue().getParent()).getChildren().
-                            indexOf(cardCell.getValue())));
-                    service.insertCardList(this.getCardList());
+                    int position = (((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue()))-1;
+                    service.dragAndDrop(draggedCard,position);
                 }
 
                 success = true;
@@ -246,7 +232,7 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-        loader.getKey().setCardList(this.cardList);
+        loader.getKey().setCardList(service.getCardList());
 
         String title = "Create a card";
         hm.popUp(scene, title);
@@ -261,7 +247,7 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-        loader.getKey().setDeleteId(this.getCardList().getId());
+        loader.getKey().setDeleteId(service.getCardList().getId());
 
         String title = "Delete a list";
         HelperMethods.popUp(scene, title);
@@ -273,10 +259,14 @@ public class ListCtrl {
             if(event.getCode().equals(KeyCode.ENTER))
             {
                 listTitle.setText(renameTitle.getText());
-                cardList.setListTitle(renameTitle.getText());
-                service.insertCardList(cardList);
+                service.renameCardList(renameTitle.getText());
                 renameTitle.setVisible(false);
             }
         });
+    }
+
+    public void setHelperMethod(HelperMethods hm) {
+        this.hm = hm;
+        this.cardFormat = this.hm.getCardFormat();
     }
 }
