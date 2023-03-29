@@ -33,6 +33,7 @@ public class QuickAddCardCtrl {
      */
     public void addCard() {
         Card card = new Card(cardTitle.getText());
+        service.insertCard(card);
         listCtrl.getCardList().addCard(card);
         service.insertCardList(listCtrl.getCardList());
     }
