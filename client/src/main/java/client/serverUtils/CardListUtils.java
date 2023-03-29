@@ -1,15 +1,12 @@
 package client.serverUtils;
-
 import commons.CardList;
 import commons.Route;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.inject.Inject;
-import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -36,7 +33,6 @@ public class CardListUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
-
     /**
      * Sends a request to the server to delete a certain card list from the database
      * @param id of card list delete
@@ -54,23 +50,11 @@ public class CardListUtils {
      * @param id key of the card list to find
      * @return the desired card list
      */
-    public CardList getCardList(int id) {
+    public CardList getCardList(long id) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(serverUtils.getServer()).path(Route.CARD_LIST + "/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(CardList.class);
-    }
-
-    /**
-     * Sends a request to the server to get all card lists from the database
-     * @return List of all card lists in the database
-     */
-    public List<CardList> getCardLists() {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.CARD_LIST)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {});
     }
 }

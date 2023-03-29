@@ -1,23 +1,48 @@
 package client.windows.adminview.boardCell;
 
+import client.MyFXML;
+import client.modules.MainModules;
+import client.utils.HelperMethods;
+import client.windows.adminview.boardSpace.AdminCtrl;
+import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
-public class BoardCellCtrl {
-    private final BoardCellService service;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
+
+public class BoardCellCtrl  implements Initializable {
+    private AdminCtrl adminCtrl;
     private Board board;
 
     @FXML
     private Label boardTitle;
 
+    @FXML
+    private ImageView deleteIcon;
+
     /**
-     * Creates a new instance of ListCellCtrl
+     * Creates a new instance of BoardCellCtrl
      */
     @Inject
     public BoardCellCtrl(BoardCellService service) {
-        this.service = service;
+    }
+
+    public void setAdminCtrl(AdminCtrl adminCtrl) {
+        this.adminCtrl = adminCtrl;
+    }
+
+    public void showMyBoard() {
+        adminCtrl.showBoard(board.getKey());
     }
 
     /**
@@ -33,7 +58,20 @@ public class BoardCellCtrl {
     }
 
     public void delete() {
-        service.deleteBoard(this.board);
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteBoardCtrl.class,
+                        "client", "windows", "adminview", "deleteboard", "DeleteBoard.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setAdminCtrl(adminCtrl);
+        loader.getKey().setBoardKey(board.getKey());
+        HelperMethods.popUp(scene, "Delete the board");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        deleteIcon.setCursor(Cursor.HAND);
     }
 }
 

@@ -204,6 +204,7 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setHelperMethod(hm);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());

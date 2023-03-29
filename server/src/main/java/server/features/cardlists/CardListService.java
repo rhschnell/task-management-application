@@ -1,5 +1,6 @@
 package server.features.cardlists;
 
+import commons.Card;
 import commons.CardList;
 import org.springframework.stereotype.Service;
 import server.features.RepositoryService;
@@ -57,6 +58,20 @@ public class CardListService implements RepositoryService<CardList, Long> {
         }
         return repo.getById(id);
     }
+
+    public Card removeFromCardList(Card card) {
+        for(int i=0;i<repo.findAll().size();i++)
+        {
+            if(repo.findAll().get(i).getCards().contains(card)) {
+                CardList repoList = repo.findAll().get(i);
+                repoList.removeCard(card);
+                repo.save(repoList);
+            }}
+
+        return card;
+    }
+
+
 
     /**
      * Returns all card lists from repository

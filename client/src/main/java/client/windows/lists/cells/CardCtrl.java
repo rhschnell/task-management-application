@@ -101,6 +101,9 @@ public class CardCtrl {
 
     }
 
+    /**
+     * This functions is called when clicking, and when double clicking within 300ms the viewCard is opened
+     */
     public void click() {
         long clickTime = System.currentTimeMillis();
         if (clickTime - lastClickTime < 300) {
@@ -109,6 +112,10 @@ public class CardCtrl {
         lastClickTime = clickTime;
     }
 
+    /**
+     * Opens the ViewCard FXML , displaying the cell card
+     * @param cell the card that needs to be displayed
+     */
     public void viewCard(Card cell) {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
@@ -123,6 +130,10 @@ public class CardCtrl {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Returns the card
+     * @return the card that the controller stores
+     */
     public Card getCard() {
         return card;
     }
