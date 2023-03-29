@@ -274,10 +274,13 @@ public class WorkspaceCtrl implements Initializable {
         copyButton.setText("Copied key!");
         copyButton.getStyleClass().remove("green-button");
         copyButton.getStyleClass().add("blue-button");
+        copyButton.setDisable(true);
         delay(2000, () -> {
             copyButton.setText("Copy key");
             copyButton.getStyleClass().remove("blue-button");
-            copyButton.getStyleClass().add("green-button");});
+            copyButton.getStyleClass().add("green-button");
+            copyButton.setDisable(false);
+        });
     }
 
     /**
