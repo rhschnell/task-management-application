@@ -257,6 +257,10 @@ public class WorkspaceCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Method to rename boards. \n
+     * Called by Rename button in workspace
+     */
     public void renameBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
