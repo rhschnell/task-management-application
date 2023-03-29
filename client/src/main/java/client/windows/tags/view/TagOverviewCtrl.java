@@ -21,6 +21,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class TagOverviewCtrl {
     private WorkspaceCtrl workspaceCtrl;
+    private Board board;
 
     @FXML
     private VBox displayedTags;
@@ -60,16 +61,16 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-        workspaceCtrl.refreshWorkspace();
-        Board shownBoard = workspaceCtrl.getShownBoard();
-
-        List<Tag> tagList = shownBoard.getTagList();
+//        workspaceCtrl.refreshWorkspace();
+//        Board shownBoard = workspaceCtrl.getShownBoard();
+        
+        List<Tag> tagList = getBoard().getTagList();
 
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
-            CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(tag, "viewTag");
+                    .load(CustomEditTagCellCtrl.class, "client", "windows", "tags", "CustomEditTagCell.fxml");
+            CustomEditTagCellCtrl ctrl = loader.getKey();
+            ctrl.setTagObject(tag);
             ctrl.setTagOverviewCtrl(this);
 
             displayedTags.getChildren().add(loader.getValue());
@@ -91,7 +92,11 @@ public class TagOverviewCtrl {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Board getBoard(){
+        return this.board;
     }
 }
