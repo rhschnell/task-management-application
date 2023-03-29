@@ -96,15 +96,4 @@ public class EditTagCtrl {
         this.customEditTagCellCtrl = customEditTagCellCtrl;
     }
 
-    /**
-     *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
-     */
-
 }
