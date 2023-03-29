@@ -29,11 +29,13 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -61,6 +63,8 @@ public class WorkspaceCtrl implements Initializable {
     private HBox boardControls;
     @FXML
     private TextField keyField;
+    @FXML
+    private Button copyButton;
 
     private List<String> joinedKeys;
     private Board shownBoard;
@@ -261,9 +265,37 @@ public class WorkspaceCtrl implements Initializable {
      *
      * After copying the key to the clipboard a small notification is displayed.
      */
-    public void copyKey() {
+    public void copyKey() throws InterruptedException {
+        // Functionality
         String key = shownBoard.getKey();
         service.copyKey(key);
+
+        // Notification
+        copyButton.setText("Copied key!");
+        copyButton.getStyleClass().remove("green-button");
+        copyButton.getStyleClass().add("blue-button");
+        delay(2000, () -> {copyButton.setText("Copy key");
+            copyButton.getStyleClass().remove("blue-button");
+            copyButton.getStyleClass().add("green-button");});
+    }
+
+    /**
+     * Delay method
+     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * @param millis amount of milliseconds to delay
+     * @param continuation empty
+     */
+    private static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException ignored) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
     }
 
 }
