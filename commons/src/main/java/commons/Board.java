@@ -22,6 +22,10 @@ public class Board {
     @JoinColumn(referencedColumnName = "key")
     private List<CardList> cardLists; // Use a list here to make the annotation work
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "key")
+    private List<Tag> tagList; // Use a list here to make the annotation work
+
 
     /**
      * Constructor for board class
@@ -29,12 +33,16 @@ public class Board {
      * @param title title
      * @param cardLists null
      */
-    public Board(String key, String title, List<CardList> cardLists) {
+    public Board(String key, String title, List<CardList> cardLists, List<Tag> tagList) {
         this.key = key;
         this.title = title;
         this.cardLists = cardLists;
         if (cardLists == null) {
             this.cardLists = new ArrayList<>();
+        }
+        this.tagList = tagList;
+        if(tagList == null){
+            this.tagList = new ArrayList<>();
         }
     }
 
@@ -78,4 +86,7 @@ public class Board {
         return this.cardLists.size();
     }
 
+    public void addTag(Tag tag) {
+        tagList.add(tag);
+    }
 }

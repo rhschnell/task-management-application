@@ -17,7 +17,7 @@ package client.windows.cards.add;
 
 import client.MyFXML;
 import client.modules.MainModules;
-import client.windows.tags.CustomTagCellCtrl;
+import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -52,7 +52,9 @@ public class AddCardCtrl implements Initializable {
     @FXML
     private VBox appliedTagsVbox;
 
+
     private List<Tag> appliedTags;
+
     private CardList cardList;
 
     /**
@@ -104,7 +106,7 @@ public class AddCardCtrl implements Initializable {
         var loader =  new MyFXML(createInjector(new MainModules()))
                 .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
         CustomTagCellCtrl ctrl = loader.getKey();
-        ctrl.setCtrl2(this);
+        ctrl.setAddCardCtrl(this);
         ctrl.setTagObject(tag,"removeFromAddCard");
         appliedTagsVbox.getChildren().add(loader.getValue());
     }
@@ -124,7 +126,7 @@ public class AddCardCtrl implements Initializable {
             var loader =  new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "scenes", "windows", "tags","CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setCtrl2(this);
+            ctrl.setAddCardCtrl(this);
             ctrl.setTagObject(appliedTags.get(i),"removeFromAddCard");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }

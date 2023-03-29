@@ -9,6 +9,7 @@ import client.windows.login.user.UserLoginCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -66,6 +67,7 @@ public class MainCtrl {
         hm.setScenes(this.startUp, this.adminLogin, this.workspace, this.userLogin, this.adminView);
         hm.setPrimaryStage(primaryStage);
         hm.setScene(Scenes.STARTUP);
+        hm.setCardFormat(new DataFormat("card"));
         primary.show();
     }
 }

@@ -26,18 +26,6 @@ public class BoardUtils {
     }
 
     /**
-     * Sends a post request to the server to add a board to the database
-     * @param board The board to add
-     */
-    public void insertBoard(Board board) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
-    }
-
-    /**
      * Sends a request to the server to delete a certain board from the database
      * @param key of board to delete
      */
@@ -73,4 +61,20 @@ public class BoardUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Board>>() {});
     }
+
+    /**
+     * Sends a post request to the server to add a board to the database
+     *
+     * @param board The board to add
+     * @return The added board
+     */
+
+    public Board insertBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.BOARD)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
 }

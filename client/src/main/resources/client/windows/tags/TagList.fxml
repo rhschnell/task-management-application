@@ -13,7 +13,7 @@
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="314.0"
       prefWidth="392.0" style="-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);"
       stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="client.windows.tags.TagListCtrl">
+      fx:controller="client.windows.tags.view.TagListCtrl">
    <children>
       <Separator prefHeight="29.0" prefWidth="390.0" visible="false" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Available Tags">
