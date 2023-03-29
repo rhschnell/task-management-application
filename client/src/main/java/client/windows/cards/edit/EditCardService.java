@@ -49,8 +49,8 @@ public class EditCardService {
     public List<Tag> getAvailableTags()
     {
         List<Tag> availableTags = new ArrayList<>();
-        availableTags.addAll(getTags());
-        availableTags.removeAll(card.getTags());
+        availableTags.addAll(tagUtils.getBoardTags(boardKey));
+        availableTags.removeAll(appliedTags);
         return availableTags;
     }
     public void insertCard(Card card) {
@@ -69,40 +69,15 @@ public class EditCardService {
     }
 
     /**
-     * Returns the tags that have been already applied to the card
-     * @return the list of cards applied
-     */
-    public List<Tag> getAppliedTags()
-    {
-        return appliedTags;
-    }
-
-    /**
-     * Sets the appliedTags of the card
-     * @param newTagList the tags that have been applied to the card
-     */
-    public void setAppliedTags(List<Tag> newTagList)
-    {
-        this.appliedTags=newTagList;
-    }
-
-    /**
      * Adds a tag to the list of the applied tags of the card
      * @param tag the tag that needs to be added to the card
      */
     public void applyTag(Tag tag)
     {
-        appliedTags.add(tag);
+        if(!appliedTags.contains(tag))
+            appliedTags.add(tag);
     }
 
-    /**
-     * Removes a tag from the list of the applied tags of the card
-     * @param tag the tag that needs to be removed
-     */
-    public void removeAppliedTag(Tag tag)
-    {
-        appliedTags.remove(tag);
-    }
 
     public String getBoardKey() {
         return boardKey;

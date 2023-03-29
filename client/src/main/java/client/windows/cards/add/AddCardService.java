@@ -92,17 +92,10 @@ public class AddCardService {
      */
     public void applyTag(Tag tag)
     {
-        appliedTags.add(tag);
+        if(!appliedTags.contains(tag))
+            appliedTags.add(tag);
     }
 
-    /**
-     * Removes a tag from the list of the applied tags of the card
-     * @param tag the tag that needs to be removed
-     */
-    public void removeAppliedTag(Tag tag)
-    {
-        appliedTags.remove(tag);
-    }
 
     /**
      * Returns the available tags of the card (the tags that have not been applied yet)

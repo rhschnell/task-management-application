@@ -33,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -102,41 +103,20 @@ public class AddCardCtrl {
         service.insertCardList();
     }
 
-    /**
-     * Adds the tag to the card, adds the added tag to the VBOX.
-     * @param tag The tag that is added and needs to be displayed in the appliedTagsVbox on the AddCard
-     */
-    public void applyTag(Tag tag)
+    public void setAppliedTags(List<Tag> appliedTags)
     {
-        service.applyTag(tag);
-        var loader =  new MyFXML(createInjector(new MainModules()))
-                .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
-        CustomTagCellCtrl ctrl = loader.getKey();
-        ctrl.setAddCardCtrl(this);
-        ctrl.setTagObject(tag,"removeFromAddCard");
-        appliedTagsVbox.getChildren().add(loader.getValue());
-    }
-
-    /**
-     * Removes the tag from the list of applied tags that will be later sent to the server, and refreshes
-     * the AppliedTagsVbox by clearing it and adding again all the applied tags.
-     * @param tag the tag that needs to be removed from the list of the applied tags
-     */
-    public void removeAppliedTag(Tag tag)
-    {
-        service.removeAppliedTag(tag);
         appliedTagsVbox.getChildren().clear();
-
-        for(int i=0;i<service.getAppliedTags().size();i++)
-        {
-            var loader =  new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
+        for(int i=0;i<appliedTags.size();i++) {
+            service.applyTag(appliedTags.get(i));
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
             ctrl.setAddCardCtrl(this);
-            ctrl.setTagObject(service.getAppliedTags().get(i),"removeFromAddCard");
+            ctrl.setTagObject(appliedTags.get(i), "viewTag");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
     }
+
 
     /**
      * Displays the pop-up (TagList) in order to choose and add a tag.
@@ -148,6 +128,7 @@ public class AddCardCtrl {
         ctrl.setAvailableTags(service.getAvailableTags());
         ctrl.setAppliedTags(service.getAppliedTags());
         ctrl.setAddCardCtrl(this);
+        ctrl.setType("add");
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";

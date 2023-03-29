@@ -80,28 +80,20 @@ public class CustomTagCellCtrl {
      * the pop-up window is closed
      */
     public void chooseAndClose() {
-        if(type.equals("addFromTagList") && tagListCtrl.getType()!=null) {
-            tagListCtrl.getEditCardCtrl().applyTag(tag);
-            tagListCtrl.escapeWindow();
+        if(type.equals("addFromTagList") && tagListCtrl.getType().equals("add")) {
+            tagListCtrl.refreshAdd(tag);
         }
 
-        if(type.equals("removeFromTagList") && tagListCtrl.getType()!=null){
-            tagListCtrl.getEditCardCtrl().removeAppliedTag(tag);
-            tagListCtrl.escapeWindow();
+        if(type.equals("removeFromTagList") && tagListCtrl.getType().equals("add")){
+            tagListCtrl.refreshRemove(tag);
         }
 
-        if(type.equals("addFromTagList") ) {
-            tagListCtrl.getCardCtrl().applyTag(tag);
-            tagListCtrl.escapeWindow();
+        if(type.equals("addFromTagList") && tagListCtrl.getType().equals("edit")) {
+            tagListCtrl.refreshAdd(tag);
         }
 
-        if(type.equals("removeFromTagList") ){
-            tagListCtrl.getCardCtrl().removeAppliedTag(tag);
-            tagListCtrl.escapeWindow();
-        }
-
-        if(type.equals("removeFromAddCard")){
-            addCardCtrl.removeAppliedTag(tag);
+        if(type.equals("removeFromTagList")&& tagListCtrl.getType().equals("edit") ){
+            tagListCtrl.refreshRemove(tag);
         }
     }
 
