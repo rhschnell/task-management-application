@@ -1,5 +1,6 @@
 package server.features.cardlists;
 
+import commons.Card;
 import commons.CardList;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,23 @@ public class CardListController {
         try {
             CardList returnCardList = service.getByID(id);
             return ResponseEntity.ok(returnCardList);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     *
+     * @param card The card that needs to be removed using the delete method from the object
+     *             so the priority is preserved.
+     * @return the card that has been deleted
+     */
+    @PostMapping("/removeFromCardList/")
+    public ResponseEntity<Card> removeFromCardList(@RequestBody Card card) {
+        try {
+            return ResponseEntity.ok(service.removeFromCardList(card));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException e) {

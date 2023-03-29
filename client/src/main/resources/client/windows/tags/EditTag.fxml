@@ -22,7 +22,7 @@
             <Font name="Arial Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="cancelButton" cancelButton="true" layoutX="201.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
+      <Button fx:id="cancelButton" cancelButton="true" layoutX="20.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
          <font>
             <Font name="Arial Bold" size="12.0" />
          </font>
@@ -33,10 +33,5 @@
             <Font name="Arial Bold" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="deleteButton" cancelButton="true" layoutX="18.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#delete" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Delete">
-         <font>
-            <Font name="Arial Bold" size="12.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>

@@ -16,15 +16,31 @@ public class CardService {
         this.cardListUtils = cardListUtils;
     }
 
+    /**
+     * Deletes the card
+     * @param card , the card that needs to be deleted
+     */
     public void deleteCard(Card card) {
+        cardUtils.deleteFromCardList(card);
         cardUtils.deleteCard(card.getId());
     }
 
-    public void insertCard(Card card) {
-        cardUtils.insertCard(card);
+    /**
+     * Inserts a card into the database
+     * @param card the Card that needs to be inserted
+     */
+    public void insertCard(Card card,CardList cardList) {
+        card.setPriority(cardList.getCards().size()+1);
+        cardList.addCard(card);
+        insertCardList(cardList);
     }
 
+    /**
+     * Inserts a new CardList into the database
+     * @param cardList the CardList that needs to be inserted
+     */
     public void insertCardList(CardList cardList) {
         cardListUtils.insertCardList(cardList);
     }
+
 }

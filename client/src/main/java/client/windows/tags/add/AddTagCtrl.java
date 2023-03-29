@@ -47,7 +47,7 @@ public class AddTagCtrl {
         ((Stage)addTagButton.getScene().getWindow()).close();
         Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString());
 
-        Board shownBoard = workspaceCtrl.getShownBoard();
+        Board shownBoard = tagOverviewCtrl.getBoard();
         if (shownBoard == null) {
             return;
         }

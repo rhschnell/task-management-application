@@ -74,8 +74,6 @@ public class CardController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
     /**
      * Gets all cards from the database
      * @return ResponseEntity containing a list of all cards

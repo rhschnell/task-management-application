@@ -82,7 +82,7 @@ public class UserLoginCtrl implements Initializable {
      * Shows a welcome message to the user
      */
     private void showWelcome() {
-        message.setText("Enter the address and the password of the server.");
+        message.setText("Enter the address of the server.");
     }
 
     /**
