@@ -111,7 +111,7 @@
                         </font>
                      </Label>
                      <Separator orientation="VERTICAL" prefHeight="200.0" />
-                     <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="46.0" prefWidth="70.0" styleClass="green-button" text="Rename">
+                     <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="46.0" prefWidth="70.0" styleClass="green-button" text="Rename" onMouseClicked="#renameBoard">
                         <HBox.margin>
                            <Insets />
                         </HBox.margin>

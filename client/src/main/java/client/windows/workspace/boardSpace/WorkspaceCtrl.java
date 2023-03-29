@@ -258,7 +258,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Method to rename boards. \n
+     * Method to rename boards.
      * Called by Rename button in workspace
      */
     public void renameBoard() {
@@ -266,9 +266,9 @@ public class WorkspaceCtrl implements Initializable {
                 .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
 
         Scene scene = new Scene(loader.getValue());
-        loader.getKey().setWorkspaceCtrl(this);
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(false);
         HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
         refreshWorkspace(true);
     }
-
 }
