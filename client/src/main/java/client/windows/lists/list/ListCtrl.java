@@ -45,7 +45,6 @@ public class ListCtrl {
     private HelperMethods hm;
     private final ListService service;
 
-    private CardList cardList;
     private DataFormat cardFormat;
 
     @FXML
@@ -63,18 +62,10 @@ public class ListCtrl {
     @Inject
     public ListCtrl(ListService service) {
         this.service = service;
-        cardList = new CardList();
     }
 
     public void setCardList(CardList cardList) {
-        this.cardList = cardList;
-    }
-
-    /**
-     * Getter for the card list
-     */
-    public CardList getCardList() {
-        return cardList;
+        service.setCardList(cardList);
     }
 
 
@@ -92,7 +83,7 @@ public class ListCtrl {
     public void displayCards() {
 
 
-        for (Card card: cardList.getCards()) {
+        for (Card card: service.getCardList().getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
@@ -160,13 +151,9 @@ public class ListCtrl {
                 Parent oldParent = draggedNode.getParent();
                 if (oldParent instanceof VBox) {
                     Card draggedCard =(Card)db.getContent(cardFormat);
-
-                    service.deleteFromCardList(draggedCard);
-                    cardList = service.getCardList(cardList.getId());
-                    this.getCardList().removeCard(draggedCard);
-                    cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().
-                            indexOf(cardCell.getValue()))-1);
-                    service.insertCardList(cardList);
+                    int position = (((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue()))-1;
+                    service.dragAndDrop(draggedCard,position);
 
                 }
 
@@ -175,6 +162,15 @@ public class ListCtrl {
             event.setDropCompleted(success);
             event.consume();
         });
+    }
+
+    /**
+     * Returns the CardList of the Controller
+     * @return
+     */
+    public CardList getCardList()
+    {
+        return service.getCardList();
     }
 
     private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
@@ -215,13 +211,9 @@ public class ListCtrl {
                 Parent oldParent = draggedNode.getParent();
                 if (oldParent instanceof VBox) {
                     Card draggedCard =(Card)db.getContent(cardFormat);
-
-                    service.deleteFromCardList(draggedCard);
-                    cardList = service.getCardList(cardList.getId());
-                    this.getCardList().removeCard(draggedCard);
-                    cardList.addCard(draggedCard,(((VBox) cardCell.getValue().getParent()).getChildren().
-                            indexOf(cardCell.getValue()))-1);
-                    service.insertCardList(cardList);
+                    int position = (((VBox) cardCell.getValue().getParent()).getChildren().
+                            indexOf(cardCell.getValue()))-1;
+                    service.dragAndDrop(draggedCard,position);
                 }
 
                 success = true;
@@ -240,7 +232,7 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-        loader.getKey().setCardList(this.cardList);
+        loader.getKey().setCardList(service.getCardList());
 
         String title = "Create a card";
         HelperMethods.popUp(scene, title);
@@ -255,7 +247,7 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-        loader.getKey().setDeleteId(this.getCardList().getId());
+        loader.getKey().setDeleteId(service.getCardList().getId());
 
         String title = "Delete a list";
         HelperMethods.popUp(scene, title);
@@ -267,8 +259,7 @@ public class ListCtrl {
             if(event.getCode().equals(KeyCode.ENTER))
             {
                 listTitle.setText(renameTitle.getText());
-                cardList.setListTitle(renameTitle.getText());
-                service.insertCardList(cardList);
+                service.renameCardList(renameTitle.getText());
                 renameTitle.setVisible(false);
             }
         });

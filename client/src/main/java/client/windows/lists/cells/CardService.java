@@ -29,8 +29,10 @@ public class CardService {
      * Inserts a card into the database
      * @param card the Card that needs to be inserted
      */
-    public void insertCard(Card card) {
-        cardUtils.insertCard(card);
+    public void insertCard(Card card,CardList cardList) {
+        card.setPriority(cardList.getCards().size()+1);
+        cardList.addCard(card);
+        insertCardList(cardList);
     }
 
     /**
