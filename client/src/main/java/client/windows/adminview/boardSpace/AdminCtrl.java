@@ -22,6 +22,7 @@ import client.utils.Scenes;
 import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.tags.view.TagOverviewCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -234,5 +235,20 @@ public class AdminCtrl implements Initializable {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
         refreshWorkspace(false);
+    }
+
+    public void tagOverview() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
+
+        loader.getKey().setBoard(shownBoard);
+
+        loader.getKey().displayTagList();
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Tag Overview";
+        HelperMethods.popUp(scene, title);
     }
 }
