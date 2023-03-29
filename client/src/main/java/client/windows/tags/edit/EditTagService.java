@@ -24,11 +24,4 @@ public class EditTagService {
         server.insertTag(tag);
     }
 
-    /**
-     * Method to delete a tag from the database
-     * @param tag The tag to be deleted
-     */
-    public void deleteTag(Tag tag){
-        server.deleteTag(tag.getId());
-    }
 }

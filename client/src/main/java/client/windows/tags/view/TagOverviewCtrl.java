@@ -67,9 +67,9 @@ public class TagOverviewCtrl {
 
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
-            CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(tag, "viewTag");
+                    .load(CustomEditTagCellCtrl.class, "client", "windows", "tags", "CustomEditTagCell.fxml");
+            CustomEditTagCellCtrl ctrl = loader.getKey();
+            ctrl.setTagObject(tag);
             ctrl.setTagOverviewCtrl(this);
 
             displayedTags.getChildren().add(loader.getValue());

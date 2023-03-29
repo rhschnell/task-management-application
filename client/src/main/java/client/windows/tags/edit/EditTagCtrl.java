@@ -1,6 +1,6 @@
 package client.windows.tags.edit;
 
-import client.windows.tags.view.CustomTagCellCtrl;
+import client.windows.tags.view.CustomEditTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -14,7 +14,7 @@ public class EditTagCtrl {
 
     private final EditTagService service;
 
-    private CustomTagCellCtrl customTagCellCtrl;
+    private CustomEditTagCellCtrl customEditTagCellCtrl;
 
     private Tag tag;
 
@@ -76,21 +76,10 @@ public class EditTagCtrl {
         tag.setColor(color.toString());
 
         service.insertTag(tag);
-        customTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
+        customEditTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
 
         ((Stage)saveButton.getScene().getWindow()).close();
     }
-
-    /**
-     * Method to delete the tag that is currently being edited
-     */
-//    public void delete(){
-//        service.deleteTag(tag);
-//
-//        customTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
-//
-//        ((Stage)deleteButton.getScene().getWindow()).close();
-//    }
 
     /**
      * Method to close the popup window when the cancel button is clicked
@@ -101,10 +90,10 @@ public class EditTagCtrl {
 
     /**
      * Method to set the customTagCellCtrl
-     * @param customTagCellCtrl The new CustomTagCellCtrl
+     * @param customEditTagCellCtrl The new CustomTagCellCtrl
      */
-    public void setCustomTagCellCtrl(CustomTagCellCtrl customTagCellCtrl) {
-        this.customTagCellCtrl = customTagCellCtrl;
+    public void setCustomTagCellCtrl(CustomEditTagCellCtrl customEditTagCellCtrl) {
+        this.customEditTagCellCtrl = customEditTagCellCtrl;
     }
 
     /**
