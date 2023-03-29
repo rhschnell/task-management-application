@@ -104,12 +104,17 @@
          <children>
             <AnchorPane blendMode="DARKEN" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: B7CEC4;">
                <children>
-                  <HBox fx:id="boardControls" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="869.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox fx:id="boardControls" fillHeight="false" layoutX="1.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="869.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
                      <Label fx:id="boardName" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="34.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS">
                         <font>
                            <Font name="Arial Bold" size="18.0" />
                         </font>
                      </Label>
+                     <Button fx:id="copyButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" styleClass="green-button" text="Copy Key" onMouseClicked="#copyKey">
+                        <font>
+                           <Font name="Arial Bold" size="12.0" />
+                        </font>
+                     </Button>
                      <Separator orientation="VERTICAL" prefHeight="200.0" />
                      <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="46.0" prefWidth="70.0" styleClass="green-button" text="Tags">
                         <font>
