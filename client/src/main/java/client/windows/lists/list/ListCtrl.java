@@ -252,6 +252,11 @@ public class ListCtrl {
         Scene scene = new Scene(root);
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
 
         String title = "Create a card";
         hm.popUp(scene, title);

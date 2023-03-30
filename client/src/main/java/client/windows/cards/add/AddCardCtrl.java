@@ -102,7 +102,12 @@ public class AddCardCtrl {
         service.addCard(card);
         service.insertCardList();
     }
-
+    /**
+     * Escapes the window
+     */
+    public void escape() {
+        ((Stage)saveButton.getScene().getWindow()).close();
+    }
     public void setAppliedTags(List<Tag> appliedTags)
     {
         service.setAppliedTags(new ArrayList<>());

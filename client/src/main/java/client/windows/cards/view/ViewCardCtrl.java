@@ -27,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -117,11 +118,23 @@ public class ViewCardCtrl {
         service.deleteCard(card);
     }
 
+    /**
+     * Escapes the window
+     */
+    public void escape() {
+        ((Stage)deleteButton.getScene().getWindow()).close();
+    }
+
     public void edit() {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
         Scene scene = new Scene(loader.getValue());
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
         HelperMethods.popUp(scene,"Edit Card");
     }
     public String getBoardKey() {
