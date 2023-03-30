@@ -23,7 +23,6 @@ import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
-import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
