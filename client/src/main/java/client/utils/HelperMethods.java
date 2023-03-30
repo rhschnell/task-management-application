@@ -1,9 +1,16 @@
 package client.utils;
 
+import client.MyFXML;
+import client.windows.workspace.helpWindow.HelpWindowCtrl;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import static com.google.inject.Guice.createInjector;
 
 public class HelperMethods {
     private Stage primaryStage;
@@ -25,6 +32,21 @@ public class HelperMethods {
     public static void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
+        if(!title.equals("Help Window"))
+        {
+            scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                if (event.getCode() == KeyCode.SLASH && event.isShiftDown()) {
+                    var loader = new MyFXML(createInjector(new client.modules.MainModules()))
+                            .load(HelpWindowCtrl.class, "client", "windows",
+                                    "workspace", "helpWindow", "helpWindow.fxml");
+                    Parent root = loader.getValue();
+                    Scene helpScene = new Scene(root);
+                    String helpTitle = "Help Window";
+                    HelperMethods.popUp(helpScene, helpTitle);
+                }
+
+            });
+        }
         popUp.initModality(Modality.APPLICATION_MODAL);
         popUp.setTitle(title);
         popUp.setResizable(false);
@@ -62,9 +84,24 @@ public class HelperMethods {
 
     public void setScenes(Scene... scenes) {
         this.scenes = scenes;
+
     }
+    public void helpWindowListner(Stage stage)
+    {}
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.SLASH && event.isShiftDown()) {
+                var loader = new MyFXML(createInjector(new client.modules.MainModules()))
+                        .load(HelpWindowCtrl.class, "client", "windows",
+                                "workspace", "helpWindow", "helpWindow.fxml");
+                Parent root = loader.getValue();
+                Scene helpScene = new Scene(root);
+                String helpTitle = "Help Window";
+                HelperMethods.popUp(helpScene, helpTitle);
+            }
+
+        });
     }
 }
