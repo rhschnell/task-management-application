@@ -28,7 +28,7 @@ public class MainCtrl {
     private AdminLoginCtrl adminLoginCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
-    private WorkspaceCtrl adminViewCtrl;
+    private AdminCtrl adminViewCtrl;
     private HelperMethods hm;
 
     private Map<String, List<String>> serverToKeyListMap;
@@ -38,13 +38,11 @@ public class MainCtrl {
      *
      * @param primary       represents the primary stage
      * @param adminLogin    represents the pair of login scene, and its controller.
-     * @param workspace     represents the pair of workspace scene, and its controller
      */
     public void initialize(Stage primary,
                            Pair<StartUpCtrl, Parent> startUp,
                            Pair<UserLoginCtrl, Parent> userLogin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           Pair<WorkspaceCtrl, Parent> workspace,
                            Pair<AdminCtrl, Parent> adminView,
                            HelperMethods hm) {
         this.primaryStage = primary;
@@ -55,13 +53,10 @@ public class MainCtrl {
         this.adminLoginCtrl = adminLogin.getKey();
         this.adminLogin = new Scene(adminLogin.getValue());
 
-        this.workspaceCtrl = workspace.getKey();
-        this.workspace = new Scene(workspace.getValue());
-
         this.userLoginCtrl = userLogin.getKey();
         this.userLogin = new Scene(userLogin.getValue());
 
-        this.adminViewCtrl = workspace.getKey();
+        this.adminViewCtrl = adminView.getKey();
         this.adminView = new Scene(adminView.getValue());
 
         this.serverToKeyListMap = new HashMap<String, List<String>>();

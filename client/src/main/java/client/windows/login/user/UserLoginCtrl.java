@@ -15,22 +15,28 @@
  */
 package client.windows.login.user;
 
+import client.MyFXML;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 public class UserLoginCtrl implements Initializable {
 
     private final UserLoginService service;
-
-    private final HelperMethods hm;
+    private final HelperMethods helperMethods;
 
     @FXML
     private TextField serverAddress;
@@ -43,9 +49,9 @@ public class UserLoginCtrl implements Initializable {
      * @param service corresponding service
      */
     @Inject
-    public UserLoginCtrl(UserLoginService service, HelperMethods hm) {
+    public UserLoginCtrl(UserLoginService service, HelperMethods helperMethods) {
         this.service = service;
-        this.hm = hm;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -71,8 +77,18 @@ public class UserLoginCtrl implements Initializable {
      */
     public void connect(){
         if (service.serverPing(serverAddress.getText())){
-            hm.setScene(Scenes.WORKSPACE);
-            hm.setServerIP(serverAddress.getText());
+
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(WorkspaceCtrl.class, "client", "windows", "workspace", "Workspace.fxml");
+
+
+            helperMethods.setServerIP(serverAddress.getText());
+            loader.getKey().setHelperMethods(helperMethods);
+            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+            loader.getKey().setJoinedKeys(helperMethods.getMemMap().get(serverAddress.getText()));
+            helperMethods.setScene(new Scene(loader.getValue()));
+
+
             showWelcome();
         } else {
             showServerIncorrect();
@@ -97,6 +113,6 @@ public class UserLoginCtrl implements Initializable {
      * Return's to the main screen
      */
     public void back() {
-        hm.setScene(Scenes.STARTUP);
+        helperMethods.setScene(Scenes.STARTUP);
     }
 }

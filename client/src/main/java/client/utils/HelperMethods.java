@@ -87,9 +87,12 @@ public class HelperMethods {
         primaryStage.setScene(scenes[scene]);
     }
 
+    public void setScene(Scene scene) {
+        primaryStage.setScene(scene);
+    }
+
     public void setScenes(Scene... scenes) {
         this.scenes = scenes;
-
     }
 
     public void setPrimaryStage(Stage primaryStage) {

@@ -25,6 +25,8 @@ public class LeaveCtrl {
     }
 
     public void leave() {
+        ((Stage) leaveButton.getScene().getWindow()).close();
+
         joinedKeys.remove(leaveBoard.getKey());
         workspaceCtrl.refreshWorkspace(true);
         if (leaveBoard.equals(workspaceCtrl.getShownBoard())) {
@@ -32,7 +34,6 @@ public class LeaveCtrl {
         }
         hm.getMemMap().get(hm.getServerIP()).remove(leaveBoard.getKey());
 
-        ((Stage) leaveButton.getScene().getWindow()).close();
     }
 
     public void cancel() {
