@@ -18,6 +18,7 @@ package client.windows.cards.view;
 import client.modules.MainModules;
 import client.MyFXML;
 import client.MainCtrl;
+import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
@@ -28,7 +29,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static com.google.inject.Guice.createInjector;
@@ -121,10 +121,8 @@ public class ViewCardCtrl {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
-        Stage stage = new Stage();
-        stage.setScene(new Scene(loader.getValue()));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+        Scene scene = new Scene(loader.getValue());
+        HelperMethods.popUp(scene,"Edit Card");
     }
     public String getBoardKey() {
         return service.getBoardKey();
