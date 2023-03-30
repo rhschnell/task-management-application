@@ -66,6 +66,13 @@ public class EditTagCtrl {
     }
 
     /**
+     * Method to set the colorpicker in the edit tag popup
+     */
+    public void setColorPicker(){
+        tagColor.setValue(Color.web(tag.getColor()));
+    }
+
+    /**
      * Method to save the just edited tag
      */
     public void save() {

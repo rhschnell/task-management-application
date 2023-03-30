@@ -23,7 +23,7 @@ public class AddTagCtrl {
     private ColorPicker tagColor;
 
     @FXML
-    private Button closeButton;
+    private Button cancelButton;
 
     @FXML
     private Button addTagButton;
@@ -57,10 +57,10 @@ public class AddTagCtrl {
     }
 
     /**
-     * Method to close the popup window when the cancel button is pressed
+     * Method to cancel the popup window when the cancel button is pressed
      */
-    public void close() {
-        ((Stage)closeButton.getScene().getWindow()).close();
+    public void cancel() {
+        ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
     /**
