@@ -92,7 +92,12 @@ public class EditCardCtrl implements Initializable {
     public void setCardDescription(String description) {
         cardDescription.setText(description);
     }
-
+    /**
+     * Escapes the window
+     */
+    public void escape() {
+        ((Stage)saveButton.getScene().getWindow()).close();
+    }
 
     /**
      * Saves the changes and closes the pop-up
