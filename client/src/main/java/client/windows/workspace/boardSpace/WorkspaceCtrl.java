@@ -202,6 +202,8 @@ public class WorkspaceCtrl implements Initializable {
             service.insertBoard(shownBoard);
         }
 
+        hm.getMemMap().computeIfAbsent(hm.getServerIP(), k -> new ArrayList<>());
+
         hm.getMemMap().get(hm.getServerIP()).add(shownBoard.getKey());
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
