@@ -195,7 +195,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void showBoard(String targetKey) {
-        hm.getMemMap().get(hm.getServerIP()).add(shownBoard.getKey());
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
@@ -203,6 +202,7 @@ public class WorkspaceCtrl implements Initializable {
             service.insertBoard(shownBoard);
         }
 
+        hm.getMemMap().get(hm.getServerIP()).add(shownBoard.getKey());
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
