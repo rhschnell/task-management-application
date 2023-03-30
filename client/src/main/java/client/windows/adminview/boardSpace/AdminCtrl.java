@@ -166,6 +166,7 @@ public class AdminCtrl implements Initializable {
         try {
             String key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
+            boardName.setText(shownBoard.getTitle());
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
             }
@@ -177,7 +178,7 @@ public class AdminCtrl implements Initializable {
                 .map(Board::getKey)
                 .collect(Collectors.toSet());
 
-        boardName.setText(shownBoard.getTitle());
+
         if(!currentKeys.equals(joinedKeys) || forced) {
             boardList.getChildren().clear();
             for (String k : joinedKeys) {
