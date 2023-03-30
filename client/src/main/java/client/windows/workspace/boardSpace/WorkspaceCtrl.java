@@ -22,6 +22,7 @@ import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.leave.LeaveCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
@@ -243,12 +244,16 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void leaveBoard(@NotNull Board board) {
-        this.joinedKeys.remove(board.getKey());
-        refreshWorkspace(true);
-        if (board.equals(this.shownBoard)) {
-            clearWorkspace();
-        }
-        hm.getMemMap().get(hm.getServerIP()).remove(shownBoard.getKey());
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(LeaveCtrl.class, "client", "windows", "workspace", "leave", "LeaveBoard.fxml");
+
+        LeaveCtrl leaveCtrl = loader.getKey();
+        leaveCtrl.setWorkspaceCtrl(this);
+        leaveCtrl.setHelperMethods(hm);
+        leaveCtrl.setJoinedKeys(joinedKeys);
+        leaveCtrl.setLeaveBoard(board);
+
+        hm.popUp(new Scene(loader.getValue()), "Leave Board");
     }
 
     public void addList() {
