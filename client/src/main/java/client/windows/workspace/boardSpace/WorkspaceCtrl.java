@@ -207,8 +207,10 @@ public class WorkspaceCtrl implements Initializable {
         }
 
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+        if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
+            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
+        }
 
-        helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
