@@ -85,6 +85,7 @@ public class CustomEditTagCellCtrl {
 
         EditTagCtrl controller = loader.getKey();
         controller.setTag(tag);
+        controller.setColorPicker();
         controller.setCustomTagCellCtrl(this);
 
         String title = "Edit Tag";

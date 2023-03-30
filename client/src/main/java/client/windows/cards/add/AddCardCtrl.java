@@ -105,6 +105,7 @@ public class AddCardCtrl {
 
     public void setAppliedTags(List<Tag> appliedTags)
     {
+        service.setAppliedTags(new ArrayList<>());
         appliedTagsVbox.getChildren().clear();
         for(int i=0;i<appliedTags.size();i++) {
             service.applyTag(appliedTags.get(i));
