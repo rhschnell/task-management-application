@@ -32,7 +32,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -105,7 +104,7 @@ public class WorkspaceCtrl implements Initializable {
                 event -> {
                     try {
                         refreshWorkspace();
-                    } catch (Exception ignored) {ignored.printStackTrace();}
+                    } catch (Exception ignored) {}
                 });
         tl.getKeyFrames().add(kf);
         tl.play();

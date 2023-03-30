@@ -13,6 +13,8 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.*;
+
 
 public class MainCtrl {
     private Stage primaryStage;
@@ -28,6 +30,8 @@ public class MainCtrl {
 
     private WorkspaceCtrl adminViewCtrl;
     private HelperMethods hm;
+
+    private Map<String, List<String>> serverToKeyListMap;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
@@ -59,6 +63,8 @@ public class MainCtrl {
 
         this.adminViewCtrl = workspace.getKey();
         this.adminView = new Scene(adminView.getValue());
+
+        this.serverToKeyListMap = new HashMap<>();
 
         primary.setTitle("Talio");
         primary.setMinHeight(576);
