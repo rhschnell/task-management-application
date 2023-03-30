@@ -10,12 +10,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.List;
+import java.util.Map;
+
 import static com.google.inject.Guice.createInjector;
 
 public class HelperMethods {
     private Stage primaryStage;
     private Scene[] scenes;
     private DataFormat cardFormat;
+    private Map<String, List<String>> memMap;
+    private String serverIP;
 
     public HelperMethods() {
     }
@@ -101,5 +106,37 @@ public class HelperMethods {
             }
 
         });
+    }
+
+    /**
+     *
+     * @param serverToKeyListMap
+     */
+    public void setMemMap(Map<String, List<String>> serverToKeyListMap) {
+        this.memMap = serverToKeyListMap;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Map<String, List<String>> getMemMap() {
+        return memMap;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getServerIP() {
+        return serverIP;
+    }
+
+    /**
+     *
+     * @param serverIP
+     */
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
     }
 }

@@ -64,7 +64,7 @@ public class MainCtrl {
         this.adminViewCtrl = workspace.getKey();
         this.adminView = new Scene(adminView.getValue());
 
-        this.serverToKeyListMap = new HashMap<>();
+        this.serverToKeyListMap = new HashMap<String, List<String>>();
 
         primary.setTitle("Talio");
         primary.setMinHeight(576);
@@ -74,6 +74,7 @@ public class MainCtrl {
         hm.setPrimaryStage(primaryStage);
         hm.setScene(Scenes.STARTUP);
         hm.setCardFormat(new DataFormat("card"));
+        hm.setMemMap(serverToKeyListMap);
         primary.show();
     }
 }

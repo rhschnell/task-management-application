@@ -171,6 +171,7 @@ public class WorkspaceCtrl implements Initializable {
             } catch (NotFoundException e) {
                 removed = true;
                 joinedKeys.remove(k);
+                hm.getMemMap().get(hm.getServerIP()).remove(k);
                 if (key.equals(k)) {
                     clearWorkspace();
                 }
@@ -194,6 +195,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     public void showBoard(String targetKey) {
+        hm.getMemMap().get(hm.getServerIP()).add(shownBoard.getKey());
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
@@ -244,13 +246,14 @@ public class WorkspaceCtrl implements Initializable {
         if (board.equals(this.shownBoard)) {
             clearWorkspace();
         }
+        hm.getMemMap().get(hm.getServerIP()).remove(shownBoard.getKey());
     }
 
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
     }
-    public String getBordKey()
+    public String getBoardKey()
     {
         return shownBoard.getKey();
     }
