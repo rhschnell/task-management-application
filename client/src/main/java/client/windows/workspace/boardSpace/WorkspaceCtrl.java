@@ -87,6 +87,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
+        joinedKeys = new ArrayList<>();
         hm.setScene(Scenes.USER);
     }
 
@@ -100,7 +101,7 @@ public class WorkspaceCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-        joinedKeys = new ArrayList<>();
+        joinedKeys = hm.getMemMap().get(hm.getServerIP());
         clearWorkspace(); // No board -> board controls
 
 

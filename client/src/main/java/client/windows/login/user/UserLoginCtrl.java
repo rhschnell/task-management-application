@@ -72,6 +72,7 @@ public class UserLoginCtrl implements Initializable {
     public void connect(){
         if (service.serverPing(serverAddress.getText())){
             hm.setScene(Scenes.WORKSPACE);
+            hm.setServerIP(serverAddress.getText());
             showWelcome();
         } else {
             showServerIncorrect();
