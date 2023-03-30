@@ -129,6 +129,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setBoard(shownBoard);
             controller.setWorkspaceCtrl(this);
             boardList.getChildren().add(boardCell.getValue());
+            hm.getMemMap().get(hm.getServerIP()).add(keyField.getText());
         }
 
         keyField.clear();
