@@ -37,6 +37,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -204,9 +206,28 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+
+
             ctrl.setHelperMethod(hm);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
+            list.setOnMouseEntered(event -> {
+                list.requestFocus();
+                list.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.UP) {
+                        ctrl.setFocusDown();
+                        System.out.println(ctrl.getFocus() + "" + list);
+                    }
+                    if (keyEvent.getCode() == KeyCode.DOWN) {
+                        ctrl.setFocusUp();
+                        System.out.println(ctrl.getFocus() + "" + list);
+                    }
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        ctrl.openFocus();
+                        System.out.println(ctrl.getFocus() + "" + list);
+                    }
+                });
+            });
             ctrl.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }

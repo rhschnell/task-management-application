@@ -9,12 +9,17 @@ import commons.Card;
 import commons.Tag;
 import commons.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -130,6 +135,14 @@ public class CardCtrl {
         HelperMethods.popUp(scene, title);
     }
 
+    public void setFocus()
+    {
+        pane.setOpacity(0.4);
+    }
+    public void removeFocus()
+    {
+        cardTitle.setTextFill(Paint.valueOf("black"));
+    }
     /**
      * Returns the card
      * @return the card that the controller stores

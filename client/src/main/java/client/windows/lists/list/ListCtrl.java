@@ -17,6 +17,10 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.CardListUtils;
+import client.serverUtils.CardUtils;
+import client.serverUtils.ServerUtils;
+import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
@@ -54,6 +58,12 @@ public class ListCtrl {
     @FXML
     private TextField renameTitle;
 
+    private long focus;
+
+    private Card firstHighlight;
+
+    private long openFocus;
+
 
     /**
      * Constructor for ListCtrl
@@ -62,6 +72,9 @@ public class ListCtrl {
     @Inject
     public ListCtrl(ListService service) {
         this.service = service;
+        focus=0;
+        openFocus=0;
+        firstHighlight = new Card();
     }
 
     public void setCardList(CardList cardList) {
@@ -82,12 +95,19 @@ public class ListCtrl {
      */
     public void displayCards() {
 
-
+        CardCtrl openCtrl = new CardCtrl(new CardService(new CardUtils(new ServerUtils()),new CardListUtils(new ServerUtils())));
+        cardVBox.getChildren().clear();
         for (Card card: service.getCardList().getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
+            if(focus==card.getPriority())
+                cardCell.getKey().setFocus();
+            if(openFocus==1 && focus==card.getPriority())
+            {
+                openCtrl = cardCell.getKey();
+            }
             makeCardDraggable(cardCell);
             cardVBox.getChildren().add(cardCell.getValue());
         }
@@ -99,6 +119,11 @@ public class ListCtrl {
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
         quickAddCard.getValue().setOnDragDetected(event -> {});
+        if(openFocus==1 && focus==openCtrl.getCard().getPriority())
+        {
+            openFocus=0;
+            openCtrl.viewCard(openCtrl.getCard());
+        }
     }
 
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
@@ -117,6 +142,17 @@ public class ListCtrl {
             db.setContent(content);
             event.consume();
         });
+        cardCell.getValue().setOnMouseEntered(event ->{
+                if(firstHighlight!=cardCell.getKey().getCard())
+                {
+                    focus=cardCell.getKey().getCard().getPriority();
+                    firstHighlight = cardCell.getKey().getCard();
+                    displayCards();
+                }
+
+        event.consume();
+        });
+
 
         cardCell.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
@@ -141,6 +177,30 @@ public class ListCtrl {
             }
         });
         dragDropHelper(cardCell);
+    }
+    public void setFocusUp()
+    {
+        focus=focus+1;
+        if(focus>=cardVBox.getChildren().size())
+            focus=cardVBox.getChildren().size()-1;
+        displayCards();
+
+    }
+    public void setFocusDown()
+    {
+        focus=focus-1;
+        if(focus<1)
+            focus=1;
+        displayCards();
+    }
+    public void openFocus()
+    {
+     openFocus=1;
+     displayCards();
+    }
+    public long getFocus()
+    {
+       return focus;
     }
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
