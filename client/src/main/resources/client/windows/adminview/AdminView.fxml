@@ -110,7 +110,14 @@
                            <Font name="Arial Bold" size="18.0" />
                         </font>
                      </Label>
+                     <Button fx:id="copyButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#copyKey" prefHeight="27.0" prefWidth="85.0" styleClass="green-button" text="Copy Key">
+                        <font>
+                           <Font name="Arial Bold" size="12.0" />
+                        </font>
+                     </Button>
                      <Separator orientation="VERTICAL" prefHeight="200.0" />
+                     <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="46.0"
+                             prefWidth="70.0" styleClass="green-button" text="Rename" onMouseClicked="#renameBoard"/>
                      <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#tagOverview" prefHeight="27.0" prefWidth="60.0" styleClass="green-button" text="Tags">
                         <font>
                            <Font name="Arial Bold" size="12.0" />

@@ -42,5 +42,13 @@ public class QuickAddCardCtrl {
     public void setListCtrl(ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
     }
+    public String getBoardKey()
+    {
+        return service.getBoardKey();
+    }
+    public void setBoardKey(String boardKey)
+    {
+        service.setBoardKey(boardKey);
+    }
 
 }

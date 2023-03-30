@@ -22,6 +22,7 @@ import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
 import commons.Board;
@@ -30,10 +31,12 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -61,6 +64,8 @@ public class WorkspaceCtrl implements Initializable {
     private HBox boardControls;
     @FXML
     private TextField keyField;
+    @FXML
+    private Button copyButton;
 
     private List<String> joinedKeys;
     private Board shownBoard;
@@ -183,6 +188,7 @@ public class WorkspaceCtrl implements Initializable {
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
+            boardName.setText(shownBoard.getTitle());
         }
 
     }
@@ -203,6 +209,7 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setBoardKey(shownBoard.getKey());
             ctrl.setHelperMethod(hm);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
@@ -222,11 +229,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void deleteBoard() {
         service.deleteBoard(shownBoard);
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();
         joinedKeys.remove(shownBoard.getKey());
-        for (String s : joinedKeys) {System.out.print(s + " ");}
-        System.out.println();System.out.println();
         refreshWorkspace(true);
         clearWorkspace();
     }
@@ -247,7 +250,10 @@ public class WorkspaceCtrl implements Initializable {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
     }
-
+    public String getBordKey()
+    {
+        return shownBoard.getKey();
+    }
     public Board getShownBoard(){
         return shownBoard;
     }
@@ -267,4 +273,61 @@ public class WorkspaceCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Method to copy the key of currently shown board to the
+     * clipboard. This method is called by the copy key button.
+     *
+     * After copying the key to the clipboard a small notification is displayed.
+     */
+    public void copyKey() throws InterruptedException {
+        // Functionality
+        String key = shownBoard.getKey();
+        service.copyKey(key);
+
+        // Notification
+        copyButton.setText("Copied key!");
+        copyButton.getStyleClass().remove("green-button");
+        copyButton.getStyleClass().add("blue-button");
+        copyButton.setDisable(true);
+        delay(2000, () -> {
+            copyButton.setText("Copy key");
+            copyButton.getStyleClass().remove("blue-button");
+            copyButton.getStyleClass().add("green-button");
+            copyButton.setDisable(false);
+        });
+    }
+
+    /**
+     * Delay method
+     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * @param millis amount of milliseconds to delay
+     * @param continuation empty
+     */
+    private static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException ignored) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
+    }
+
+    /**
+     * Method to rename boards.
+     * Called by Rename button in workspace
+     */
+    public void renameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(false);
+        HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
+        refreshWorkspace(true);
+    }
 }

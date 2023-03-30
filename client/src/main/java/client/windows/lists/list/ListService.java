@@ -9,6 +9,16 @@ import commons.CardList;
 public class ListService {
     private final CardListUtils listServer;
     private final CardUtils cardServer;
+    private String boardKey;
+
+
+    public void setBoardKey(String boardKey) {
+        this.boardKey = boardKey;
+    }
+
+    public String getBoardKey() {
+        return boardKey;
+    }
 
     private CardList cardList;
     @Inject
