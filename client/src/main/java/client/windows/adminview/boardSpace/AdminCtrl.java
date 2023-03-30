@@ -29,6 +29,7 @@ import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.ProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.concurrent.Task;
@@ -101,21 +102,22 @@ public class AdminCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-        joinedKeys = service.getBoards().stream()
-                .map(Board::getKey)
-                .collect(Collectors.toSet());
+        try {
+            joinedKeys = service.getBoards().stream()
+                    .map(Board::getKey)
+                    .collect(Collectors.toSet());
 
-        clearWorkspace();
+            clearWorkspace();
 
-        for(Board board : service.getBoards()) {
-            var boardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
-            BoardCellCtrl controller = boardCell.getKey();
-            controller.setBoard(board);
-            controller.setAdminCtrl(this);
-            boardList.getChildren().add(boardCell.getValue());
-        }
-
+            for (Board board : service.getBoards()) {
+                var boardCell = new MyFXML(createInjector(new MainModules()))
+                        .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
+                BoardCellCtrl controller = boardCell.getKey();
+                controller.setBoard(board);
+                controller.setAdminCtrl(this);
+                boardList.getChildren().add(boardCell.getValue());
+            }
+        } catch (ProcessingException ignored) {}
         // schedule service.refreshWorkspace();
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
