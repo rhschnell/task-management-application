@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -127,12 +128,17 @@ public class CardCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
         ViewCardCtrl controller = loader.getKey();
         controller.setCard(cell);
-
+        controller.setBoardKey(getBoardKey());
         String title = "View Card";
         HelperMethods.popUp(scene, title);
+
     }
 
     public void setFocus()
@@ -199,6 +205,15 @@ public class CardCtrl {
             setSubtasksCompleted(completedTasks, card.getSubTasks().size());
             subtaskIndicator.setVisible(true);
         }
+    }
+
+    private String getBoardKey()
+    {
+        return service.getBoardKey();
+    }
+    public void setBoardKey(String boardKey)
+    {
+        service.setBoardKey(boardKey);
     }
 }
 

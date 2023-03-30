@@ -30,7 +30,7 @@ public class TagOverviewCtrl {
     private Button addTagButton;
 
     @FXML
-    private Button cancelButton;
+    private Button closeButton;
 
 
     /**
@@ -88,14 +88,22 @@ public class TagOverviewCtrl {
     /**
      * Method to close the popup window when the cancel button is pressed
      */
-    public void cancel(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
+    public void close(){
+        ((Stage)closeButton.getScene().getWindow()).close();
     }
 
+    /**
+     * Setter for the board
+     * @param board The new board to be set
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Getter for the board
+     * @return The board used
+     */
     public Board getBoard(){
         return this.board;
     }

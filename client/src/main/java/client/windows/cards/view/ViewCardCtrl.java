@@ -18,10 +18,8 @@ package client.windows.cards.view;
 import client.modules.MainModules;
 import client.MyFXML;
 import client.MainCtrl;
+import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
-import client.serverUtils.CardListUtils;
-import client.serverUtils.CardUtils;
-import client.serverUtils.ServerUtils;
 import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Card;
@@ -29,17 +27,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static com.google.inject.Guice.createInjector;
 
 public class ViewCardCtrl {
 
-    private CardUtils server;
-    private CardListUtils cardListUtils;
 
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
@@ -60,13 +56,15 @@ public class ViewCardCtrl {
     @FXML
     private VBox appliedTagsVbox;
 
+    private ViewCardService service;
+
     /**
      * Constructor for ViewCardCtrl
      * @param server a server util
      */
     @Inject
-    public ViewCardCtrl(ServerUtils server, MainCtrl mainCtrl, MyFXML myFXML) {
-        this.server = new CardUtils(server);
+    public ViewCardCtrl(ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
+        this.service=service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
     }
@@ -84,6 +82,7 @@ public class ViewCardCtrl {
 
 
     public void applyTag() {
+        appliedTagsVbox.getChildren().clear();
         if(card.getTags()!=null) {
             for (int i = 0; i < card.getTags().size(); i++) {
                 var loader = new MyFXML(createInjector(new MainModules()))
@@ -116,16 +115,34 @@ public class ViewCardCtrl {
      */
     public void delete() {
         ((Stage)deleteButton.getScene().getWindow()).close();
-        server.deleteFromCardList(card);
-        server.deleteCard(card.getId());
+        service.deleteCard(card);
+    }
+
+    /**
+     * Escapes the window
+     */
+    public void escape() {
+        ((Stage)deleteButton.getScene().getWindow()).close();
     }
 
     public void edit() {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
+        loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
-        Stage stage = new Stage();
-        stage.setScene(new Scene(loader.getValue()));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+        Scene scene = new Scene(loader.getValue());
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
+        HelperMethods.popUp(scene,"Edit Card");
+    }
+    public String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    public void setBoardKey(String boardKey)
+    {
+        service.setBoardKey(boardKey);
     }
 }

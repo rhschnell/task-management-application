@@ -82,6 +82,7 @@ public class ListCtrl {
     }
 
 
+
     /**
      * Setter for the list title
      * @param title the title of the list
@@ -109,6 +110,7 @@ public class ListCtrl {
                 openCtrl = cardCell.getKey();
             }
             makeCardDraggable(cardCell);
+            controller.setBoardKey(getBoardKey());
             cardVBox.getChildren().add(cardCell.getValue());
         }
 
@@ -116,6 +118,7 @@ public class ListCtrl {
                 new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
                         "lists", "cells", "QuickAddCardCell.fxml");
         quickAddCard.getKey().setListCtrl(this);
+        quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
         quickAddCard.getValue().setOnDragDetected(event -> {});
@@ -225,6 +228,21 @@ public class ListCtrl {
     }
 
     /**
+     * Sets the key of the board the list is in
+     * @param key
+     */
+    public void setBoardKey(String key)
+    {
+        service.setBoardKey(key);
+    }
+
+    public String getBoardKey()
+    {
+        return service.getBoardKey();
+    }
+
+
+    /**
      * Returns the CardList of the Controller
      * @return
      */
@@ -293,9 +311,15 @@ public class ListCtrl {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setCardList(service.getCardList());
+        loader.getKey().setBoardKey(getBoardKey());
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
 
         String title = "Create a card";
-        HelperMethods.popUp(scene, title);
+        hm.popUp(scene, title);
     }
 
     /**

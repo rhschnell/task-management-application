@@ -23,6 +23,7 @@ import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
@@ -30,10 +31,12 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -41,7 +44,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.google.inject.Guice.createInjector;
@@ -59,6 +65,8 @@ public class AdminCtrl implements Initializable {
     private HBox boardControls;
     @FXML
     private TextField keyField;
+    @FXML
+    private Button copyButton;
 
     private Set<String> joinedKeys;
     private Board shownBoard;
@@ -72,6 +80,7 @@ public class AdminCtrl implements Initializable {
     public AdminCtrl(AdminService service, HelperMethods hm) {
         this.service = service;
         this.hm = hm;
+        joinedKeys = new HashSet<>();
     }
 
     /**
@@ -157,6 +166,7 @@ public class AdminCtrl implements Initializable {
         try {
             String key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
+            boardName.setText(shownBoard.getTitle());
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
             }
@@ -168,11 +178,8 @@ public class AdminCtrl implements Initializable {
                 .map(Board::getKey)
                 .collect(Collectors.toSet());
 
-        if(currentKeys.equals(joinedKeys)) {
-            return;
-        }
 
-        if (forced) {
+        if(!currentKeys.equals(joinedKeys) || forced) {
             boardList.getChildren().clear();
             for (String k : joinedKeys) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
@@ -203,6 +210,7 @@ public class AdminCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
+            ctrl.setBoardKey(shownBoard.getKey());
             ctrl.setCardList(cardList);
             ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());
@@ -250,5 +258,68 @@ public class AdminCtrl implements Initializable {
 
         String title = "Tag Overview";
         HelperMethods.popUp(scene, title);
+    }
+
+    /**
+     * Method to rename boards.
+     * Called by Rename button in workspace
+     */
+    public void renameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(true);
+        HelperMethods.popUp(scene, "Rename board: " + shownBoard.getTitle());
+        refreshWorkspace(true);
+    }
+
+    /**
+     * Getter for shown board
+     * @return the shown board
+     */
+    public Board getShownBoard() {
+        return shownBoard;
+    }
+
+    /**
+     * Method to copy the key of currently shown board to the
+     * clipboard. This method is called by the copy key button.
+     *
+     * After copying the key to the clipboard a small notification is displayed.
+     */
+    public void copyKey() throws InterruptedException {
+        // Functionality
+        String key = shownBoard.getKey();
+        service.copyKey(key);
+
+        // Notification
+        copyButton.setText("Copied key!");
+        copyButton.getStyleClass().remove("green-button");
+        copyButton.getStyleClass().add("blue-button");
+        delay(2000, () -> {
+            copyButton.setText("Copy key");
+            copyButton.getStyleClass().remove("blue-button");
+            copyButton.getStyleClass().add("green-button");});
+    }
+
+    /**
+     * Delay method
+     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * @param millis amount of milliseconds to delay
+     * @param continuation empty
+     */
+    private static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException ignored) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
     }
 }

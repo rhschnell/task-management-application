@@ -56,14 +56,21 @@ public class CustomTagCellCtrl {
         tagTitle.setText(tag.getName());
         tagColor.setFill(Color.web(tag.getColor()));
 
-        if(type.equals("addFromTagList")) {
+        if(type.equals("addFromTagList") || type.equals("editAddFromTagList"))  {
             actionButton.setText("Add");
             actionButton.getStyleClass().add("blue-button");
         }
 
-        if(type.equals("removeFromTagList") || type.equals("removeFromAddCard")) {
+        if(type.equals("removeFromTagList") || type.equals("editRemoveFromTagList")) {
             actionButton.setText("Remove");
             actionButton.getStyleClass().add("red-button");
+        }
+        if(type.equals("removeFromAddCard") ) {
+            actionButton.setText("Remove");
+            actionButton.getStyleClass().add("red-button");
+        }
+        if(type.equals("viewTag") ) {
+            actionButton.setVisible(false);
         }
     }
 
@@ -73,18 +80,20 @@ public class CustomTagCellCtrl {
      * the pop-up window is closed
      */
     public void chooseAndClose() {
-        if(type.equals("addFromTagList")) {
-            tagListCtrl.getCardCtrl().applyTag(tag);
-            tagListCtrl.escapeWindow();
+        if(type.equals("addFromTagList") && tagListCtrl.getType().equals("add")) {
+            tagListCtrl.refreshAdd(tag);
         }
 
-        if(type.equals("removeFromTagList")){
-            tagListCtrl.getCardCtrl().removeAppliedTag(tag);
-            tagListCtrl.escapeWindow();
+        if(type.equals("removeFromTagList") && tagListCtrl.getType().equals("add")){
+            tagListCtrl.refreshRemove(tag);
         }
 
-        if(type.equals("removeFromAddCard")){
-            addCardCtrl.removeAppliedTag(tag);
+        if(type.equals("addFromTagList") && tagListCtrl.getType().equals("edit")) {
+            tagListCtrl.refreshAdd(tag);
+        }
+
+        if(type.equals("removeFromTagList")&& tagListCtrl.getType().equals("edit") ){
+            tagListCtrl.refreshRemove(tag);
         }
     }
 
