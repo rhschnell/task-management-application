@@ -111,7 +111,8 @@ public class AdminCtrl implements Initializable {
 
             for (Board board : service.getBoards()) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
-                        .load(BoardCellCtrl.class, "client", "windows", "adminview", "boardcell", "BoardCell.fxml");
+                        .load(BoardCellCtrl.class, "client", "windows", "adminview",
+                                "boardcell", "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
                 controller.setBoard(board);
                 controller.setAdminCtrl(this);
