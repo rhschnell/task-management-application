@@ -86,8 +86,6 @@ public class HelperMethods {
         this.scenes = scenes;
 
     }
-    public void helpWindowListner(Stage stage)
-    {}
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
