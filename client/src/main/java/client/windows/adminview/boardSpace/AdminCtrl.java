@@ -29,7 +29,6 @@ import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.ProcessingException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.concurrent.Task;
@@ -55,7 +54,6 @@ import static com.google.inject.Guice.createInjector;
 
 public class AdminCtrl implements Initializable {
     private final AdminService service;
-    private final HelperMethods hm;
     @FXML
     private Label boardName;
     @FXML
@@ -71,6 +69,7 @@ public class AdminCtrl implements Initializable {
 
     private Set<String> joinedKeys;
     private Board shownBoard;
+    private HelperMethods helperMethods;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -80,7 +79,7 @@ public class AdminCtrl implements Initializable {
     @Inject
     public AdminCtrl(AdminService service, HelperMethods hm) {
         this.service = service;
-        this.hm = hm;
+        this.helperMethods = hm;
         joinedKeys = new HashSet<>();
     }
 
@@ -89,7 +88,7 @@ public class AdminCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        hm.setScene(Scenes.ADMIN);
+        helperMethods.setScene(Scenes.ADMIN);
     }
 
     /**
@@ -102,23 +101,23 @@ public class AdminCtrl implements Initializable {
      *                  the root object was not localized.
      */
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            joinedKeys = service.getBoards().stream()
-                    .map(Board::getKey)
-                    .collect(Collectors.toSet());
-
-            clearWorkspace();
-
-            for (Board board : service.getBoards()) {
-                var boardCell = new MyFXML(createInjector(new MainModules()))
-                        .load(BoardCellCtrl.class, "client", "windows", "adminview",
-                                "boardcell", "BoardCell.fxml");
-                BoardCellCtrl controller = boardCell.getKey();
-                controller.setBoard(board);
-                controller.setAdminCtrl(this);
-                boardList.getChildren().add(boardCell.getValue());
-            }
-        } catch (ProcessingException ignored) {}
+//        try {
+//            joinedKeys = service.getBoards().stream()
+//                    .map(Board::getKey)
+//                    .collect(Collectors.toSet());
+//
+//            clearWorkspace();
+//
+//            for (Board board : service.getBoards()) {
+//                var boardCell = new MyFXML(createInjector(new MainModules()))
+//                        .load(BoardCellCtrl.class, "client", "windows", "adminview",
+//                                "boardcell", "BoardCell.fxml");
+//                BoardCellCtrl controller = boardCell.getKey();
+//                controller.setBoard(board);
+//                controller.setAdminCtrl(this);
+//                boardList.getChildren().add(boardCell.getValue());
+//            }
+//        } catch (ProcessingException ignored) {}
         // schedule service.refreshWorkspace();
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
@@ -324,5 +323,10 @@ public class AdminCtrl implements Initializable {
         };
         sleeper.setOnSucceeded(event -> continuation.run());
         new Thread(sleeper).start();
+    }
+
+    public void setHelperMethods(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
+        this.service.setServer(helperMethods.getServerIP());
     }
 }

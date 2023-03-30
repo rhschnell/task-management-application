@@ -2,7 +2,6 @@ package client;
 
 import client.utils.HelperMethods;
 import client.utils.Scenes;
-import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
@@ -21,14 +20,12 @@ public class MainCtrl {
     private Scene startUp;
     private Scene userLogin;
     private Scene adminLogin;
-    private Scene workspace;
-    private Scene adminView;
     private StartUpCtrl startUpCtrl;
     private UserLoginCtrl userLoginCtrl;
     private AdminLoginCtrl adminLoginCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
-    private AdminCtrl adminViewCtrl;
+
     private HelperMethods hm;
 
     private Map<String, List<String>> serverToKeyListMap;
@@ -43,7 +40,6 @@ public class MainCtrl {
                            Pair<StartUpCtrl, Parent> startUp,
                            Pair<UserLoginCtrl, Parent> userLogin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           Pair<AdminCtrl, Parent> adminView,
                            HelperMethods hm) {
         this.primaryStage = primary;
 
@@ -56,16 +52,13 @@ public class MainCtrl {
         this.userLoginCtrl = userLogin.getKey();
         this.userLogin = new Scene(userLogin.getValue());
 
-        this.adminViewCtrl = adminView.getKey();
-        this.adminView = new Scene(adminView.getValue());
-
         this.serverToKeyListMap = new HashMap<String, List<String>>();
 
         primary.setTitle("Talio");
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
         this.hm = hm;
-        hm.setScenes(this.startUp, this.adminLogin, this.workspace, this.userLogin, this.adminView);
+        hm.setScenes(this.startUp, this.adminLogin, null, this.userLogin, null);
         hm.setPrimaryStage(primaryStage);
         hm.setScene(Scenes.STARTUP);
         hm.setCardFormat(new DataFormat("card"));

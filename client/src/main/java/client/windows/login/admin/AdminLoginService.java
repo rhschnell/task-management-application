@@ -8,18 +8,18 @@ import com.google.inject.Inject;
 public class AdminLoginService {
     private final ServerUtils server;
     private final AdminUtils adminUtils;
-    private final HelperMethods hml;
+    private final HelperMethods helperMethods;
 
     /**
      * Constructor for AdminLoginService
      * @param server a server util
-     * @param hml
+     * @param helperMethods hm instance
      */
     @Inject
-    public AdminLoginService(ServerUtils server, HelperMethods hml) {
+    public AdminLoginService(ServerUtils server, HelperMethods helperMethods) {
         this.server = server;
         this.adminUtils = new AdminUtils(server);
-        this.hml = hml;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -28,7 +28,7 @@ public class AdminLoginService {
      */
     public boolean serverPing(String serverAddress) {
         server.setServer(serverAddress);
-        hml.setServerIP(serverAddress);
+        helperMethods.setServerIP(serverAddress);
         return server.pingServer();
     }
 
