@@ -18,7 +18,7 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board("000000", "My Board", null, null);
+        board = new Board("000000", "My Board", null, new ArrayList<>());
         cardList = new CardList();
         Card card = new Card(
                 "My Card",
@@ -106,5 +106,36 @@ class BoardTest {
     void setTitle() {
         board.setTitle("New Title");
         assertEquals("New Title", board.getTitle());
+    }
+
+    @Test
+    void getTagList()
+    {
+        assertNotNull(board.getTagList());
+    }
+
+    @Test
+    void setTagList()
+    {
+        ArrayList<Tag> list = new ArrayList<>();
+        board.setTagList(list);
+        assertEquals(list, board.getTagList());
+    }
+
+    @Test
+    void addTag()
+    {
+        Tag tag = new Tag();
+        board.addTag(tag);
+        assertEquals(tag, board.getTagList().get(0));
+    }
+
+    @Test
+    void removeTag()
+    {
+        Tag tag = new Tag();
+        board.addTag(tag);
+        board.removeTag(tag);
+        assertEquals(0, board.getTagList().size());
     }
 }
