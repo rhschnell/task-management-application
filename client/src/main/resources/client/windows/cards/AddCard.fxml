@@ -11,7 +11,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.cards.add.AddCardCtrl">
    <children>
         <TextField fx:id="cardTitle" prefHeight="26.0" prefWidth="310.0" promptText="Type your card title..." style="-fx-background-insets: 0, 0 0 0 0; -fx-background-color: none; -fx-padding: 0px;">
@@ -20,7 +19,7 @@
          </font>
       </TextField>
       <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-      <HBox alignment="CENTER_LEFT" spacing="100.0">
+      <HBox alignment="CENTER_LEFT" spacing="120.0">
          <children>
             <Label text="Chosen Tags">
                <font>
