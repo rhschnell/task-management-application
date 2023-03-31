@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import commons.Tag;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -51,6 +52,17 @@ public class AddCardCtrl {
     private Button saveButton;
     @FXML
     private VBox appliedTagsVbox;
+
+    @FXML
+    private TextField addSubtaskTitle;
+
+    @FXML
+    private Button addSubtaskButton;
+
+    @FXML
+    private VBox subtasks;
+
+    private List<Task> taskList;
 
 
     private HelperMethods hm;
