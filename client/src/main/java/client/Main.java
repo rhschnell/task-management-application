@@ -19,11 +19,9 @@ import static com.google.inject.Guice.createInjector;
 
 import client.modules.MainModules;
 import client.utils.HelperMethods;
-import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
-import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -50,10 +48,8 @@ public class Main extends Application {
         var userLogin = FXML.load(UserLoginCtrl.class, "client", "windows", "login", "user", "UserLogin.fxml");
         var adminLogin = FXML
                         .load(AdminLoginCtrl.class, "client", "windows", "login", "admin", "AdminLogin.fxml");
-        var workspace = FXML.load(WorkspaceCtrl.class, "client", "windows", "workspace", "Workspace.fxml");
-        var adminView = FXML.load(AdminCtrl.class, "client", "windows", "adminview", "AdminView.fxml");;
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         HelperMethods hm = INJECTOR.getInstance(HelperMethods.class);
-        mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, workspace, adminView, hm);
+        mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, hm);
     }
 }

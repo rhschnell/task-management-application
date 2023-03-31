@@ -34,6 +34,10 @@ public class AdminService {
         server.deleteBoard(board.getKey());
     }
 
+    public void setServer(String ip) {
+        server.setServer(ip);
+    }
+
     /**
      * Copies the entered string to the system clipboard
      * @param key String to copy

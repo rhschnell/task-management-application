@@ -15,21 +15,28 @@
  */
 package client.windows.login.admin;
 
+import client.MyFXML;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.adminview.boardSpace.AdminCtrl;
 import com.google.inject.Inject;
 import jakarta.ws.rs.ForbiddenException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static com.google.inject.Guice.createInjector;
 
 public class AdminLoginCtrl implements Initializable {
     private final AdminLoginService service;
-    private final HelperMethods hm;
+    private final HelperMethods helperMethods;
     @FXML
     private Label message;
     @FXML
@@ -40,12 +47,12 @@ public class AdminLoginCtrl implements Initializable {
     /**
      * Constructor for AdminLoginCtrl
      * @param service corresponding service
-     * @param hm corresponding helper methods
+     * @param helperMethods corresponding helper methods
      */
     @Inject
-    public AdminLoginCtrl(AdminLoginService service, HelperMethods hm) {
+    public AdminLoginCtrl(AdminLoginService service, HelperMethods helperMethods) {
         this.service = service;
-        this.hm = hm;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -80,8 +87,17 @@ public class AdminLoginCtrl implements Initializable {
 
         try {
             service.sendPassword(passwordField.getText());
-            hm.setScene(Scenes.ADMINVIEW);
-            passwordField.clear();
+
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(AdminCtrl.class, "client", "windows", "adminview", "AdminView.fxml");
+
+
+            helperMethods.setServerIP(serverAddress.getText());
+            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+            loader.getKey().setHelperMethods(helperMethods);
+            loader.getKey().refreshWorkspace(true);
+            helperMethods.setScene(new Scene(loader.getValue()));
+
             showWelcome();
         } catch (ForbiddenException e) {
             showPasswordIncorrect();
@@ -118,6 +134,6 @@ public class AdminLoginCtrl implements Initializable {
      * Sets the scene back to the main menu.
      */
     public void back() {
-        hm.setScene(Scenes.STARTUP);
+        helperMethods.setScene(Scenes.STARTUP);
     }
 }
