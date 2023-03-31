@@ -140,6 +140,7 @@ public class ViewCardCtrl {
             }
         });
         HelperMethods.popUp(scene,"Edit Card");
+        displayTasks();
     }
     public String getBoardKey() {
         return service.getBoardKey();
@@ -157,7 +158,7 @@ public class ViewCardCtrl {
         taskBox.getChildren().clear();
         for (Task task : card.getSubTasks()) {
             var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
-                    "client", "windows", "cards", "subtasks", "SubtaskCell.fxml");
+                    "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
             loader.getKey().disableEdit();
             taskBox.getChildren().add(loader.getValue());

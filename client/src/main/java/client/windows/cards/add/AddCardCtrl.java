@@ -186,7 +186,7 @@ public class AddCardCtrl extends SubtaskContainer {
         for (Task task : taskList) {
 
             var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
-                    "client", "windows", "cards", "subtasks", "SubtaskCell.fxml");
+                    "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
             loader.getKey().setSubtaskContainer(this);
             subtasks.getChildren().add(loader.getValue());

@@ -126,6 +126,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         service.insertCard(editedCard);
         viewCardCtrl.applyTag();
         ((Stage)saveButton.getScene().getWindow()).close();
+        viewCardCtrl.displayTasks();
 
     }
 
@@ -201,7 +202,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         for (Task task : newCard.getSubTasks()) {
 
             var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
-                    "client", "windows", "cards", "subtasks", "SubtaskCell.fxml");
+                    "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
             loader.getKey().setSubtaskContainer(this);
             subtasks.getChildren().add(loader.getValue());
