@@ -16,7 +16,7 @@
       <children>
          <ImageView fitHeight="28.0" fitWidth="150.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../../images/Logo.png" />
+               <Image url="/client/images/Logo.png" />
             </image>
          </ImageView>
          <Line endX="10.19305419921875" endY="20.5" startX="10.193061828613281" startY="3.814697265625E-6" stroke="#1a1a1a" strokeWidth="2.0" />

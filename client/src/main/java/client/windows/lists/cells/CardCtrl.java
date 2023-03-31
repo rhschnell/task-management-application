@@ -131,6 +131,7 @@ public class CardCtrl {
         ViewCardCtrl controller = loader.getKey();
         controller.setCard(cell);
         controller.setBoardKey(getBoardKey());
+        controller.displayTasks();
         String title = "View Card";
         HelperMethods.popUp(scene, title);
 
