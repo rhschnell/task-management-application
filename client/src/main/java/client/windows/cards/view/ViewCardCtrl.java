@@ -20,9 +20,11 @@ import client.MyFXML;
 import client.MainCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
+import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Card;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -56,11 +58,13 @@ public class ViewCardCtrl {
     @FXML
     private VBox appliedTagsVbox;
 
+    @FXML
+    private VBox taskBox;
+
     private ViewCardService service;
 
     /**
      * Constructor for ViewCardCtrl
-     * @param server a server util
      */
     @Inject
     public ViewCardCtrl(ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
@@ -129,6 +133,7 @@ public class ViewCardCtrl {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
+        loader.getKey().displayTasks();
         Scene scene = new Scene(loader.getValue());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -136,6 +141,7 @@ public class ViewCardCtrl {
             }
         });
         HelperMethods.popUp(scene,"Edit Card");
+        displayTasks();
     }
     public String getBoardKey() {
         return service.getBoardKey();
@@ -144,5 +150,19 @@ public class ViewCardCtrl {
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
+    }
+
+    /**
+     * Allows us to add subtasks to a list
+     */
+    public void displayTasks() {
+        taskBox.getChildren().clear();
+        for (Task task : card.getSubTasks()) {
+            var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
+                    "client", "windows", "subtasks", "SubtaskCell.fxml");
+            loader.getKey().updateItem(task);
+            loader.getKey().disableEdit();
+            taskBox.getChildren().add(loader.getValue());
+        }
     }
 }

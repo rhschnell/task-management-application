@@ -18,18 +18,23 @@ package client.windows.cards.add;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
+import client.windows.subtasks.SubtaskCellCtrl;
+import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import commons.Tag;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.ArrayList;
@@ -37,7 +42,7 @@ import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
-public class AddCardCtrl {
+public class AddCardCtrl extends SubtaskContainer {
 
     private final AddCardService service;
 
@@ -51,6 +56,17 @@ public class AddCardCtrl {
     private Button saveButton;
     @FXML
     private VBox appliedTagsVbox;
+
+    @FXML
+    private TextField addSubtaskTitle;
+
+    @FXML
+    private Button addSubtaskButton;
+
+    @FXML
+    private VBox subtasks;
+
+    private List<Task> taskList;
 
 
     private HelperMethods hm;
@@ -96,7 +112,7 @@ public class AddCardCtrl {
                 cardDescription.getText(),
                 "white",
                 service.getAppliedTags(),
-                new ArrayList<>());
+                taskList);
         card.setPriority(service.getCardList().getCards().size()+1);
         service.setAppliedTags(new ArrayList<>());
         service.addCard(card);
@@ -139,6 +155,47 @@ public class AddCardCtrl {
         Scene scene = new Scene(root);
         String title = "Add tag";
         hm.popUp(scene, title);
+    }
+
+    /**
+     * Adds a new subtask to a card
+     */
+    public void addTask() {
+        if (taskList == null) {
+            taskList = new ArrayList<>();
+        }
+        if (!(addSubtaskTitle.getText() != null && !addSubtaskTitle.getText().isEmpty())) {
+            return; //TODO: notify user in some way that you cannot add empty tasks
+        }
+        Task newTask = new Task();
+        newTask.setCompleted(false);
+        newTask.setTitle(addSubtaskTitle.getText());
+        taskList.add(newTask);
+        addSubtaskTitle.clear();
+        displayTasks();
+    }
+
+    public void handleKeyPressed(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            addTask();
+        }
+    }
+
+    public void displayTasks() {
+        subtasks.getChildren().clear();
+        for (Task task : taskList) {
+
+            var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
+                    "client", "windows", "subtasks", "SubtaskCell.fxml");
+            loader.getKey().updateItem(task);
+            loader.getKey().setSubtaskContainer(this);
+            subtasks.getChildren().add(loader.getValue());
+        }
+    }
+    @Override
+    public void deleteSubtask(Task task) {
+        taskList.remove(task);
+        displayTasks();
     }
 
 }

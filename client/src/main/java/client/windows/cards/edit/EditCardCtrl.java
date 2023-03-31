@@ -3,10 +3,13 @@ package client.windows.cards.edit;
 import client.MyFXML;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.subtasks.SubtaskCellCtrl;
+import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
 import commons.Card;
 import commons.Tag;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -14,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import com.google.inject.Inject;
@@ -23,7 +28,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import static com.google.inject.Guice.createInjector;
 
-public class EditCardCtrl implements Initializable {
+public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private final EditCardService service;
 
     @FXML
@@ -34,6 +39,15 @@ public class EditCardCtrl implements Initializable {
     private Button saveButton;
     private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
+
+    @FXML
+    private VBox subtasks;
+
+    @FXML
+    private Button addTaskButton;
+
+    @FXML
+    private TextField addTaskField;
 
     @FXML
     private VBox appliedTagsVbox;
@@ -66,6 +80,7 @@ public class EditCardCtrl implements Initializable {
         setAppliedTags(card.getTags());
         setCardTitle(card.getTitle());
         setCardDescription(card.getDescription());
+        newCard.setSubTasks(card.getSubTasks());
     }
 
     public String getBoardKey()
@@ -109,9 +124,11 @@ public class EditCardCtrl implements Initializable {
         editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(description);
+        editedCard.setSubTasks(newCard.getSubTasks());
         service.insertCard(editedCard);
         viewCardCtrl.applyTag();
         ((Stage)saveButton.getScene().getWindow()).close();
+        viewCardCtrl.displayTasks();
 
     }
 
@@ -163,6 +180,41 @@ public class EditCardCtrl implements Initializable {
 
     }
 
+    public void addTask()
+    {
+        if (!(addTaskField.getText() != null && !addTaskField.getText().isEmpty())) {
+            return; //TODO: notify user in some way that you cannot add empty tasks
+        }
+        Task newTask = new Task();
+        newTask.setCompleted(false);
+        newTask.setTitle(addTaskField.getText());
+        newCard.addSubTask(newTask);
+        addTaskField.clear();
+        displayTasks();
+    }
 
+    public void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            addTask();
+        }
+    }
+
+    public void displayTasks() {
+        subtasks.getChildren().clear();
+        for (Task task : newCard.getSubTasks()) {
+
+            var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
+                    "client", "windows", "subtasks", "SubtaskCell.fxml");
+            loader.getKey().updateItem(task);
+            loader.getKey().setSubtaskContainer(this);
+            subtasks.getChildren().add(loader.getValue());
+        }
+    }
+
+    @Override
+    public void deleteSubtask(Task task) {
+        newCard.getSubTasks().remove(task);
+        displayTasks();
+    }
 
 }
