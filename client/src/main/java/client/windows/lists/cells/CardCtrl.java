@@ -143,7 +143,7 @@ public class CardCtrl {
     }
     public void removeFocus()
     {
-      pane.setOpacity(1);
+        pane.setOpacity(1);
     }
     /**
      * Returns the card

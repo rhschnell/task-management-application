@@ -150,16 +150,13 @@ public class ListCtrl {
                 firstHighlight = cardCell.getKey().getCard();
                 if(previousFocus !=null)
                 {
-                   previousFocus.getKey().removeFocus();
+                    previousFocus.getKey().removeFocus();
                 }
                 previousFocus=cardCell;
                 cardCell.getKey().setFocus();
             }
-
             event.consume();
         });
-
-
         cardCell.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -203,6 +200,7 @@ public class ListCtrl {
     {
         focus=-1;
         openFocus=-1;
+        firstHighlight=new Card();
         displayCards();
 
     }
