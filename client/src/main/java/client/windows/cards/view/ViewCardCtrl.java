@@ -133,6 +133,7 @@ public class ViewCardCtrl {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
+        loader.getKey().displayTasks();
         Scene scene = new Scene(loader.getValue());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {

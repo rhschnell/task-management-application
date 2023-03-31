@@ -80,6 +80,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         setAppliedTags(card.getTags());
         setCardTitle(card.getTitle());
         setCardDescription(card.getDescription());
+        newCard.setSubTasks(card.getSubTasks());
     }
 
     public String getBoardKey()
@@ -123,6 +124,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(description);
+        editedCard.setSubTasks(newCard.getSubTasks());
         service.insertCard(editedCard);
         viewCardCtrl.applyTag();
         ((Stage)saveButton.getScene().getWindow()).close();

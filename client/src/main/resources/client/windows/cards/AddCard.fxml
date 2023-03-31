@@ -55,7 +55,11 @@
             <Button fx:id="addSubtaskButton" mnemonicParsing="false" onAction="#addTask" text="Add" />
          </children>
       </HBox>
-      <VBox fx:id="subtasks" prefHeight="77.0" prefWidth="312.0" />
+      <ScrollPane>
+         <content>
+            <VBox fx:id="subtasks" prefHeight="77.0" prefWidth="312.0" />
+         </content>
+      </ScrollPane>
       <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
       <HBox alignment="CENTER_LEFT" spacing="100.0">
          <children>
