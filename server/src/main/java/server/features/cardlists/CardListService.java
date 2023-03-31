@@ -60,13 +60,25 @@ public class CardListService implements RepositoryService<CardList, Long> {
     }
 
     public Card removeFromCardList(Card card) {
+        if(card == null)
+        {
+            throw new IllegalArgumentException();
+        }
+        int ok = 0;
         for(int i=0;i<repo.findAll().size();i++)
         {
             if(repo.findAll().get(i).getCards().contains(card)) {
                 CardList repoList = repo.findAll().get(i);
                 repoList.removeCard(card);
                 repo.save(repoList);
-            }}
+                ok = 1;
+            }
+        }
+
+        if(ok == 0)
+        {
+            throw new EntityNotFoundException();
+        }
 
         return card;
     }
