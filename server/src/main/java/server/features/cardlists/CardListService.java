@@ -59,6 +59,13 @@ public class CardListService implements RepositoryService<CardList, Long> {
         return repo.getById(id);
     }
 
+    /**
+     * Finds, deletes and returns the provided card from the repository.
+     * If null is provided the method returns an IllegalArgumentException
+     * If the card is not found the method returns an EntityNotFoundException
+     * @param card The card to be removed
+     * @return the card that was removed
+     */
     public Card removeFromCardList(Card card) {
         if(card == null)
         {
@@ -72,6 +79,7 @@ public class CardListService implements RepositoryService<CardList, Long> {
                 repoList.removeCard(card);
                 repo.save(repoList);
                 ok = 1;
+                break;
             }
         }
 

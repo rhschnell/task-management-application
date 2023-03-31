@@ -36,7 +36,7 @@ class TaskTest {
 
     @Test
     void isCompleted() {
-        assertEquals(false, task.isCompleted());
+        assertFalse(task.isCompleted());
     }
 
     @Test
@@ -53,7 +53,7 @@ class TaskTest {
     @Test
     void setCompleted() {
         task.setCompleted(true);
-        assertEquals(true, task.isCompleted());
+        assertTrue(task.isCompleted());
     }
 
     @Test
