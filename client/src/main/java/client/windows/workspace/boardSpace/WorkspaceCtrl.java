@@ -22,8 +22,10 @@ import client.utils.Scenes;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.leave.LeaveCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
+import com.sun.istack.NotNull;
 import commons.Board;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
@@ -33,7 +35,6 @@ import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,7 +53,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class WorkspaceCtrl implements Initializable {
     private final WorkspaceService service;
-    private final HelperMethods hm;
+    private HelperMethods helperMethods;
 
     @FXML
     private Label boardName;
@@ -73,12 +74,12 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Constructor for WorkspaceCtrl
      * @param service corresponding service
-     * @param hm corresponding helper methods
+     * @param helperMethods corresponding helper methods
      */
     @Inject
-    public WorkspaceCtrl(WorkspaceService service, HelperMethods hm) {
+    public WorkspaceCtrl(WorkspaceService service, HelperMethods helperMethods) {
         this.service = service;
-        this.hm = hm;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -86,7 +87,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @FXML
     public void disconnect() {
-        hm.setScene(Scenes.USER);
+        helperMethods.setScene(Scenes.USER);
     }
 
     /**
@@ -102,14 +103,13 @@ public class WorkspaceCtrl implements Initializable {
         joinedKeys = new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
-
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
         KeyFrame kf = new KeyFrame(Duration.millis(300),
                 event -> {
                     try {
                         refreshWorkspace();
-                    } catch (Exception ignored) {ignored.printStackTrace();}
+                    } catch (Exception ignored) {}
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
@@ -127,11 +127,12 @@ public class WorkspaceCtrl implements Initializable {
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(shownBoard);
             controller.setWorkspaceCtrl(this);
-            boardCell.getValue().setCursor(Cursor.HAND);
             boardList.getChildren().add(boardCell.getValue());
+            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
         }
 
         keyField.clear();
+        refreshWorkspace(true);
     }
 
     /**
@@ -172,6 +173,7 @@ public class WorkspaceCtrl implements Initializable {
             } catch (NotFoundException e) {
                 removed = true;
                 joinedKeys.remove(k);
+                helperMethods.getMemMap().get(helperMethods.getServerIP()).remove(k);
                 if (key.equals(k)) {
                     clearWorkspace();
                 }
@@ -186,10 +188,12 @@ public class WorkspaceCtrl implements Initializable {
                                 "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
                 controller.setBoard(service.getBoard(k));
-                boardCell.getValue().setCursor(Cursor.HAND);
+                controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
-            boardName.setText(shownBoard.getTitle());
+            if (shownBoard != null) {
+                boardName.setText(shownBoard.getTitle());
+            }
         }
 
     }
@@ -202,6 +206,11 @@ public class WorkspaceCtrl implements Initializable {
             service.insertBoard(shownBoard);
         }
 
+        helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+        if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
+            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
+        }
+
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
@@ -211,7 +220,7 @@ public class WorkspaceCtrl implements Initializable {
             VBox list = (VBox) loader.getValue();
             ListCtrl ctrl = loader.getKey();
             ctrl.setBoardKey(shownBoard.getKey());
-            ctrl.setHelperMethod(hm);
+            ctrl.setHelperMethod(helperMethods);
             ctrl.setCardList(cardList);
             ctrl.displayCards();
             ctrl.setListTitle(cardList.getListTitle());
@@ -235,11 +244,28 @@ public class WorkspaceCtrl implements Initializable {
         clearWorkspace();
     }
 
+    public void leaveBoard() {
+        leaveBoard(shownBoard);
+    }
+
+    public void leaveBoard(@NotNull Board board) {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(LeaveCtrl.class, "client", "windows", "workspace", "leave", "LeaveBoard.fxml");
+
+        LeaveCtrl leaveCtrl = loader.getKey();
+        leaveCtrl.setWorkspaceCtrl(this);
+        leaveCtrl.setHelperMethods(helperMethods);
+        leaveCtrl.setJoinedKeys(joinedKeys);
+        leaveCtrl.setLeaveBoard(board);
+
+        helperMethods.popUp(new Scene(loader.getValue()), "Leave Board");
+    }
+
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
     }
-    public String getBordKey()
+    public String getBoardKey()
     {
         return shownBoard.getKey();
     }
@@ -318,5 +344,13 @@ public class WorkspaceCtrl implements Initializable {
         loader.getKey().setAdmin(false);
         HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
         refreshWorkspace(true);
+    }
+
+    public void setJoinedKeys(List<String> joinedKeys) {
+        this.joinedKeys = joinedKeys;
+    }
+
+    public void setHelperMethods(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
     }
 }

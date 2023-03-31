@@ -77,4 +77,8 @@ public class BoardUtils {
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
     }
 
+    public void setServer(String server) {
+        serverUtils.setServer(server);
+    }
+
 }
