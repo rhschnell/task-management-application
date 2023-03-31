@@ -128,7 +128,6 @@ public class WorkspaceCtrl implements Initializable {
             BoardCellCtrl controller = boardCell.getKey();
             controller.setBoard(shownBoard);
             controller.setWorkspaceCtrl(this);
-            boardCell.getValue().setCursor(Cursor.HAND);
             boardList.getChildren().add(boardCell.getValue());
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
         }
@@ -207,12 +206,10 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard = new Board(targetKey, targetKey, null, null);
             service.insertBoard(shownBoard);
         }
-
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
@@ -232,15 +229,12 @@ public class WorkspaceCtrl implements Initializable {
                 list.setOnKeyPressed(keyEvent -> {
                     if (keyEvent.getCode() == KeyCode.UP) {
                         ctrl.setFocusDown();
-                        System.out.println(ctrl.getFocus() + "" + list);
                     }
                     if (keyEvent.getCode() == KeyCode.DOWN) {
                         ctrl.setFocusUp();
-                        System.out.println(ctrl.getFocus() + "" + list);
                     }
                     if (keyEvent.getCode() == KeyCode.ENTER) {
                         ctrl.openFocus();
-                        System.out.println(ctrl.getFocus() + "" + list);
                     }
                 });
             });
