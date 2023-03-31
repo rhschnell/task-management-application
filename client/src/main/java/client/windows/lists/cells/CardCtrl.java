@@ -142,7 +142,7 @@ public class CardCtrl {
     }
     public void removeFocus()
     {
-        cardTitle.setTextFill(Paint.valueOf("black"));
+      pane.setOpacity(1);
     }
     /**
      * Returns the card

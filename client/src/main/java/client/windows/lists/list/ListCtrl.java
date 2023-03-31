@@ -63,6 +63,7 @@ public class ListCtrl {
     private Card firstHighlight;
 
     private long openFocus;
+    private Pair<CardCtrl,Parent> previousFocus;
 
 
     /**
@@ -147,7 +148,12 @@ public class ListCtrl {
             if(firstHighlight!=cardCell.getKey().getCard()) {
                 focus=cardCell.getKey().getCard().getPriority();
                 firstHighlight = cardCell.getKey().getCard();
-                displayCards();
+                if(previousFocus !=null)
+                {
+                   previousFocus.getKey().removeFocus();
+                }
+                previousFocus=cardCell;
+                cardCell.getKey().setFocus();
             }
 
             event.consume();
