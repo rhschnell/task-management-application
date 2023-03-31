@@ -9,7 +9,6 @@ import commons.Card;
 import commons.Tag;
 import commons.Task;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,10 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -195,15 +190,18 @@ public class CardCtrl {
     public void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
-        this.setDisplayTags(item.getTags());
+        if(item.getTags()!=null)
+            this.setDisplayTags(item.getTags());
         setDescriptionIconVisible(item.hasDescription());
 
-        long subtasks = card.getSubTasks().size();
-        if (subtasks > 0){
-            long completedTasks =
-                    card.getSubTasks().stream().filter(Task::isCompleted).count();
-            setSubtasksCompleted(completedTasks, card.getSubTasks().size());
-            subtaskIndicator.setVisible(true);
+        if(card.getSubTasks() !=null) {
+            long subtasks = card.getSubTasks().size();
+            if (subtasks > 0) {
+                long completedTasks =
+                        card.getSubTasks().stream().filter(Task::isCompleted).count();
+                setSubtasksCompleted(completedTasks, card.getSubTasks().size());
+                subtaskIndicator.setVisible(true);
+            }
         }
     }
 

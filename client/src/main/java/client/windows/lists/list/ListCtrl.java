@@ -96,7 +96,8 @@ public class ListCtrl {
      */
     public void displayCards() {
 
-        CardCtrl openCtrl = new CardCtrl(new CardService(new CardUtils(new ServerUtils()),new CardListUtils(new ServerUtils())));
+        CardCtrl openCtrl = new CardCtrl(new CardService(new CardUtils(new ServerUtils()),
+                new CardListUtils(new ServerUtils())));
         cardVBox.getChildren().clear();
         for (Card card: service.getCardList().getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
@@ -132,28 +133,24 @@ public class ListCtrl {
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
         cardCell.getValue().setCursor(Cursor.HAND);
-
         cardCell.getValue().setOnDragDetected(event -> {
             Dragboard db = cardCell.getValue().startDragAndDrop(TransferMode.MOVE);
             Image dragImage = new Image("client/icons/DragFile.png");
             ImageView dragView = new ImageView(dragImage);
             db.setDragView(dragView.getImage(), -20 ,-10);
-
-            /* Put data on a dragboard */
             ClipboardContent content = new ClipboardContent();
             content.put(cardFormat,cardCell.getKey().getCard());
             db.setContent(content);
             event.consume();
         });
         cardCell.getValue().setOnMouseEntered(event ->{
-                if(firstHighlight!=cardCell.getKey().getCard())
-                {
-                    focus=cardCell.getKey().getCard().getPriority();
-                    firstHighlight = cardCell.getKey().getCard();
-                    displayCards();
-                }
+            if(firstHighlight!=cardCell.getKey().getCard()) {
+                focus=cardCell.getKey().getCard().getPriority();
+                firstHighlight = cardCell.getKey().getCard();
+                displayCards();
+            }
 
-        event.consume();
+            event.consume();
         });
 
 
@@ -196,14 +193,21 @@ public class ListCtrl {
             focus=1;
         displayCards();
     }
+    public void resetFocus()
+    {
+        focus=-1;
+        openFocus=-1;
+        displayCards();
+
+    }
     public void openFocus()
     {
-     openFocus=1;
-     displayCards();
+        openFocus=1;
+        displayCards();
     }
     public long getFocus()
     {
-       return focus;
+        return focus;
     }
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
