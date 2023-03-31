@@ -39,6 +39,12 @@ class CardListTest {
     }
 
     @Test
+    void noArgsConstructor(){
+        CardList cardList2 = new CardList();
+        assertNotNull(cardList2);
+    }
+
+    @Test
     void addCard() {
         cardList.addCard(card);
         assertEquals(card, cardList.getCard(0));
@@ -49,6 +55,37 @@ class CardListTest {
         cardList.addCard(card, 0);
         assertEquals(card, cardList.getCard(0));
     }
+    @Test
+    void addCardAboveSize(){
+        cardList.addCard(card, 100);
+        assertEquals(card, cardList.getCard(0));
+    }
+
+    @Test
+    void addCardShiftsPriorityInsertFirst(){
+        cardList.addCard(card);
+        assertEquals(1, card.getPriority());
+
+        Card card2 = new Card();
+        cardList.addCard(card2, 0);
+
+        assertEquals(2, card.getPriority());
+        assertEquals(1, card2.getPriority());
+    }
+
+
+    @Test
+    void addCardShiftsPriority(){
+        Card card2 = new Card();
+
+        cardList.addCard(card);
+        assertEquals(1, card.getPriority());
+
+        cardList.addCard(card2);
+        assertEquals(1, card.getPriority());
+        assertEquals(2, card2.getPriority());
+    }
+
 
     @Test
     void removeCardSuccessful() {
@@ -58,7 +95,7 @@ class CardListTest {
 
     @Test
     void removeCardUnsuccessful() {
-        assertEquals(null, cardList1.removeCard(new Card()));
+        assertNull(cardList1.removeCard(new Card()));
     }
 
     @Test
@@ -69,7 +106,7 @@ class CardListTest {
 
     @Test
     void removeCardByIndexUnsuccessful() {
-        assertEquals(null, cardList1.removeCard(10));
+        assertNull(cardList1.removeCard(10));
     }
 
     @Test
@@ -107,7 +144,8 @@ class CardListTest {
 
     @Test
     void getId() {
-        assertNotNull(cardList.getId());
+        cardList.setId(2);
+        assertEquals(2, cardList.getId());
     }
 
     @Test
