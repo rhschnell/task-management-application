@@ -13,6 +13,16 @@ public class PasswordService {
         System.out.println("The admin password is: " + password);
     }
 
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    public String getPassword()
+    {
+        return this.password;
+    }
+
     public boolean isPasswordCorrect(String enteredPassword) {
         return enteredPassword.equals(password);
     }
