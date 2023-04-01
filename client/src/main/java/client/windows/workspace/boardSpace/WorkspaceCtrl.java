@@ -313,19 +313,22 @@ public class WorkspaceCtrl implements Initializable {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
+        verifyHeight(focusedCardIndex,focusedListIndex);
 
     }
     public void setFocusDown()
     {
         resetFocus();
         focusedCardIndex = focusedCardIndex +1;
-        if(focusedCardIndex>=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size())
+        if(focusedCardIndex>0 && focusedListIndex>0 && focusedCardIndex>=shownBoard.getCardLists().
+                get(focusedListIndex-1).getCards().size())
             focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
         if(condition())
         {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
+        verifyHeight(focusedCardIndex,focusedListIndex);
     }
     public void setFocusLeft()
     {
@@ -333,10 +336,14 @@ public class WorkspaceCtrl implements Initializable {
         focusedListIndex = focusedListIndex -1;
         if(focusedListIndex<=0)
             focusedListIndex=1;
+        if(focusedCardIndex>0 && focusedListIndex>0 && shownBoard.getCardLists().
+                get(focusedListIndex-1).getCards().size()<=focusedCardIndex)
+            focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
         if(condition())
         {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            verifyHeight(focusedCardIndex,focusedListIndex);
         }
     }
     public void setFocusRight()
@@ -345,10 +352,14 @@ public class WorkspaceCtrl implements Initializable {
         focusedListIndex = focusedListIndex +1;
         if(focusedListIndex>=shownBoard.getCardLists().size())
             focusedListIndex=shownBoard.getCardLists().size();
+        if(focusedCardIndex>0 && focusedListIndex>0 && shownBoard.getCardLists().
+                get(focusedListIndex-1).getCards().size()<=focusedCardIndex)
+            focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
         if(condition())
         {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
+            verifyHeight(focusedCardIndex,focusedListIndex);
         }
     }
     public void setFocused(int cardIndex,int listIndex)
@@ -359,6 +370,13 @@ public class WorkspaceCtrl implements Initializable {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
         }
+    }
+    public void verifyHeight(int cardIndex,int listIndex)
+    {
+        ScrollPane scrollPane = ((ScrollPane) ((VBox) (listContainer.getChildren().get(listIndex-1))).
+                    getChildren().get(1));
+        scrollPane.setVvalue((double) (cardIndex - 1) * 25 / (315 - 25));
+
     }
     public void openFocused()
     {if(condition()) {
