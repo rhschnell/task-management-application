@@ -9,6 +9,7 @@ class TagTest {
     public Tag generateTag(){
         return new Tag("Frontend", "Blue");
     }
+
     @Test
     void getName() {
         assertEquals("Frontend", generateTag().getName());

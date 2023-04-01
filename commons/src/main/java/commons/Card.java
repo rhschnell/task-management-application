@@ -85,7 +85,7 @@ public class Card implements Serializable {
      * @param priority         The priority of the card
      */
     public Card(String title, String description, String backgroundColour, List<Tag> tags,
-                List<Task> subTasks,Long priority) {
+                List<Task> subTasks, Long priority) {
         this.title = title;
         this.description = description;
         this.backgroundColour = backgroundColour;
@@ -114,7 +114,6 @@ public class Card implements Serializable {
         }
         this.tags.add(newTag);
     }
-
 
     /**
      * Add new subtask to the list
@@ -156,7 +155,6 @@ public class Card implements Serializable {
         tags.remove(toRemove);
     }
 
-
     /**
      * Delete subtask by index
      *
@@ -176,7 +174,6 @@ public class Card implements Serializable {
     public void deleteSubTask(Task task) {
         this.subTasks.remove(task);
     }
-
 
     /**
      * Check if this card has a description

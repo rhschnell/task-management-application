@@ -8,5 +8,3 @@ public class Route {
     public final static String TAG = "api/tags";
     public final static String ADMIN = "api/admin";
 }
-
-
