@@ -25,6 +25,8 @@ import static com.google.inject.Guice.createInjector;
 
 public class CardCtrl {
     @FXML
+    private AnchorPane pane;
+    @FXML
     private Label cardTitle;
     @FXML
     private Button deleteButton;
@@ -40,8 +42,6 @@ public class CardCtrl {
     @FXML
     private Label subtaskIndicator;
 
-    @FXML
-    private AnchorPane pane;
 
     private Card card;
     private long lastClickTime;
@@ -137,14 +137,6 @@ public class CardCtrl {
 
     }
 
-    public void setFocus()
-    {
-        pane.setOpacity(0.4);
-    }
-    public void removeFocus()
-    {
-        pane.setOpacity(1);
-    }
     /**
      * Returns the card
      * @return the card that the controller stores

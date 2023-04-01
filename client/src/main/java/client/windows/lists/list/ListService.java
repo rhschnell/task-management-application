@@ -88,6 +88,8 @@ public class ListService {
      */
     public void dragAndDrop(Card draggedCard,int position)
     {
+        if(draggedCard.getPriority()<position && cardList.getCards().contains(draggedCard))
+            position--;
         deleteFromCardList(draggedCard);
         refreshCardList();
         cardList.removeCard(draggedCard);

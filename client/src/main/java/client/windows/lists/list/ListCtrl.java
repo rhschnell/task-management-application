@@ -32,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -50,6 +51,8 @@ public class ListCtrl {
     private DataFormat cardFormat;
 
     @FXML
+    private ScrollPane scrollPane;
+    @FXML
     private Label listTitle;
     @FXML
     private VBox cardVBox;
@@ -57,7 +60,6 @@ public class ListCtrl {
     private TextField renameTitle;
     private int listId;
     private long focusedCardIndex;
-    private Pair <CardCtrl,Parent> focusedCard;
     private  Pair<CardCtrl, Parent> cardCell;
 
     private WorkspaceCtrl workspaceCtrl;
@@ -65,7 +67,59 @@ public class ListCtrl {
 
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
-        focusedCard=null;
+        scrollPane.requestFocus();
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+
+                workspaceCtrl.openFocused();
+            }
+            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
+                    || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+                {
+                    {
+                        if (event.getCode() == KeyCode.UP) {
+                            workspaceCtrl.setFocusUp();
+                        }
+                        if (event.getCode() == KeyCode.DOWN) {
+                            workspaceCtrl.setFocusDown();
+                        }
+                        if (event.getCode() == KeyCode.LEFT) {
+                            workspaceCtrl.setFocusLeft();
+                        }
+                        if (event.getCode() == KeyCode.RIGHT) {
+                            workspaceCtrl.setFocusRight();
+                        }
+                    }
+                }
+            }
+            event.consume();
+        });
+        scrollPane.setOnMouseEntered(event -> {
+            scrollPane.requestFocus();
+            scrollPane.setOnKeyPressed(keyEvent -> {
+                {
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        workspaceCtrl.openFocused();
+                    }
+                        if (keyEvent.getCode() == KeyCode.UP) {
+                        workspaceCtrl.setFocusUp();
+                    }
+                    if (keyEvent.getCode() == KeyCode.DOWN) {
+                        workspaceCtrl.setFocusDown();
+                    }
+                    if (keyEvent.getCode() == KeyCode.LEFT) {
+                        workspaceCtrl.setFocusLeft();
+                    }
+                    if (keyEvent.getCode() == KeyCode.RIGHT) {
+                        workspaceCtrl.setFocusRight();
+                    }
+                }
+
+            });
+
+        });
+
+
     }
 
     public VBox getCardVBox() {
@@ -107,11 +161,6 @@ public class ListCtrl {
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
-            controller.removeFocus();
-            if(focusedCardIndex==card.getPriority()) {
-                cardCell.getKey().setFocus();
-                setFocusedCard(cardCell);
-            }
             makeCardDraggable(cardCell);
             controller.setBoardKey(getBoardKey());
             cardVBox.getChildren().add(cardCell.getValue());
@@ -141,15 +190,9 @@ public class ListCtrl {
             event.consume();
         });
         cardCell.getValue().setOnMouseEntered(event ->{
-            if(workspaceCtrl.getHighlightedStartedCard()==null || !workspaceCtrl.getHighlightedStartedCard().
-                    equals( cardCell.getKey().getCard())) {
-                workspaceCtrl.verifyListHovered(listId);
                 focusedCardIndex=cardCell.getKey().getCard().getPriority();
-                workspaceCtrl.setHighlightedStartedCard(cardCell.getKey().getCard());
-                workspaceCtrl.setFocused((int)focusedCardIndex, listId);
-                setFocusedCard(cardCell);
-                cardCell.getKey().setFocus();
-            }
+                workspaceCtrl.setFocused((int)focusedCardIndex, listId+1);
+
             event.consume();
         });
         cardCell.getValue().setOnDragOver(event -> {
@@ -174,42 +217,14 @@ public class ListCtrl {
         });
         dragDropHelper(cardCell);
     }
-    public void resetFocus()
-    {
-        focusedCardIndex=-1;
-    }
-    public void openFocusedIndex()
-    {
-        focusedCard.getKey().viewCard(focusedCard.getKey().getCard());
-    }
-    public void setFocus(int index)
-    {
-        focusedCardIndex=index;
-        displayCards();
-    }
     public void setListId(int index)
     {
         listId = index;
     }
 
-    public Pair<CardCtrl, Parent> getFocusedCard() {
-        return focusedCard;
-    }
-
-    public void setFocusedCard(Pair<CardCtrl, Parent> focusedCard) {
-        this.focusedCard=new Pair<>(focusedCard.getKey(),focusedCard.getValue());
-    }
-
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnMouseExited(event -> {
-            cardCell.getKey().removeFocus();
-            //if(!cardCell.getValue().isHover()&&!cardCell.getValue().isPressed()&&!cardCell.getValue().isFocused())
-                if (!cardCell.getValue().contains(event.getX()-5,event.getY())) {
-                    workspaceCtrl.resetFocus();
-                    focusedCardIndex=-1;
-                    focusedCard=null;
-                    workspaceCtrl.setHighlightedStartedCard(new Card());
-                }
+            workspaceCtrl.resetFocus();
         });
 
         cardCell.getValue().setOnDragDropped(event -> {

@@ -152,6 +152,10 @@ public class ViewCardCtrl {
         service.setBoardKey(boardKey);
     }
 
+    public void onlyForViewing()
+    {
+        editButton.setVisible(false);
+    }
     /**
      * Allows us to add subtasks to a list
      */

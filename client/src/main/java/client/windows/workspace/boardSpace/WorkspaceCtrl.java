@@ -19,6 +19,7 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
@@ -27,7 +28,6 @@ import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
 import commons.Board;
-import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -40,8 +40,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -73,10 +75,7 @@ public class WorkspaceCtrl implements Initializable {
     private List<String> joinedKeys;
     private int focusedCardIndex;
     private int focusedListIndex;
-    private ListCtrl focusedListIndexCtrl;
     private Board shownBoard;
-    private Card highlightedStartedCard;
-    private boolean hasFocus;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -87,17 +86,10 @@ public class WorkspaceCtrl implements Initializable {
     public WorkspaceCtrl(WorkspaceService service, HelperMethods helperMethods) {
         this.service = service;
         this.helperMethods = helperMethods;
-        focusedCardIndex =0;
-        focusedListIndex =0;
+        focusedCardIndex =1;
+        focusedListIndex =1;
     }
 
-    public Card getHighlightedStartedCard() {
-        return highlightedStartedCard;
-    }
-
-    public void setHighlightedStartedCard(Card highlightedStartedCard) {
-        this.highlightedStartedCard = highlightedStartedCard;
-    }
 
     /**
      * Return's to the main screen
@@ -247,111 +239,131 @@ public class WorkspaceCtrl implements Initializable {
             controller.setListId(i);
             controller.setBoardKey(shownBoard.getKey());
             controller.setHelperMethod(helperMethods);
-            if (focusedListIndex == i) {
-                focusedListIndexCtrl = controller;
-                if (focusedCardIndex > shownBoard.getCardLists().get(i).getCards().size())
-                    controller.setFocus(shownBoard.getCardLists().get(i).getCards().size());
-                else {
-                    controller.setFocus(focusedCardIndex);
-                }
-                hasFocus = true;
-            }
-
             controller.setCardList(cardList);
             controller.displayCards();
-            setMoveShortcutListeners(loader.getKey().getCardVBox(),controller);
+            setMoveShortcutListeners(loader.getKey().getCardVBox());
             controller.setListTitle(cardList.getListTitle());
-            int finalI = i;
-            //list.setOnMouseExited(event -> {if(finalI !=listHoveredBefore){System.out.println("de");}});
-            list.setOnMouseMoved(event -> {if(!((VBox) loader.getValue()).isHover()) System.out.println("");});
             listContainer.getChildren().add(list);
         }
     }
-    public void verifyListHovered(int listIndex)
+    public void setMoveShortcutListeners(VBox list)
     {
-        if(listIndex!=focusedListIndex)
-        {
-            setHighlightedStartedCard(new Card());
-            focusedListIndex=-1;
-            focusedCardIndex=-1;
-            if(hasFocus) {
-                hasFocus =false;
-                fillBoard();
-            }
-        }
-    }
-    public void setMoveShortcutListeners(VBox list,ListCtrl controller)
-    {
-        list.setOnMouseEntered(event -> {
-            list.requestFocus();
-            list.setOnKeyPressed(keyEvent -> {
+        list.requestFocus();
+        list.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
+                    || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
                 {
-                    if (keyEvent.getCode() == KeyCode.UP) {
-                        setFocusUp();
-                    }
-                    if (keyEvent.getCode() == KeyCode.DOWN) {
-                        setFocusDown();
-                    }
-                    if (keyEvent.getCode() == KeyCode.ENTER) {
-                        openFocused(focusedListIndexCtrl);
-                    }
-                    if (keyEvent.getCode() == KeyCode.LEFT) {
-                        setFocusLeft();
-                    }
-                    if (keyEvent.getCode() == KeyCode.RIGHT) {
-                        setFocusRight();
+                    {
+                        if (event.getCode() == KeyCode.UP) {
+                            setFocusUp();
+                        }
+                        if (event.getCode() == KeyCode.DOWN) {
+                            setFocusDown();
+                        }
+                        if (event.getCode() == KeyCode.LEFT) {
+                            setFocusLeft();
+                        }
+                        if (event.getCode() == KeyCode.RIGHT) {
+                            setFocusRight();
+                        }
                     }
                 }
-            });
-        });
-        list.setOnMouseExited(event -> {
-            controller.resetFocus();
+            }
+            event.consume();
         });
     }
 
     public void resetFocus()
     {
-        focusedListIndex=-1;
-        focusedCardIndex=-1;
-        focusedListIndexCtrl.resetFocus();
-        if(focusedListIndexCtrl !=null && focusedListIndexCtrl.getFocusedCard()!=null)
-            focusedListIndexCtrl.getFocusedCard().getKey().removeFocus();
+        if(condition()) {
+            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
+       }
+    }
+    public boolean condition()
+    {
+        if(focusedCardIndex>0 && focusedListIndex>0 && focusedListIndex<=shownBoard.getCardLists().size() && focusedCardIndex<=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size() && shownBoard.getCardLists().get(focusedListIndex-1).getCards().size()>0)
+            return true;
+        return false;
     }
     public void setFocusUp()
     {
+        resetFocus();
         focusedCardIndex = focusedCardIndex -1;
         if(focusedCardIndex<=0)
             focusedCardIndex=1;
-        fillBoard();
+        if(condition())
+        {
+            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
+        }
+
     }
     public void setFocusDown()
     {
+        resetFocus();
         focusedCardIndex = focusedCardIndex +1;
-        if(focusedCardIndex>=focusedListIndexCtrl.getCardList().getCards().size())
-            focusedCardIndex=focusedListIndexCtrl.getCardList().getCards().size();
-        fillBoard();
+        if(focusedCardIndex>=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size())
+            focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
+        if(condition())
+        {
+            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
+        }
     }
     public void setFocusLeft()
     {
+        resetFocus();
         focusedListIndex = focusedListIndex -1;
-        fillBoard();
+        if(focusedListIndex<=0)
+            focusedListIndex=1;
+        if(condition())
+        { VBox vbox = (VBox) ((ScrollPane) ((VBox) (listContainer.getChildren().get(focusedListIndex - 1))).getChildren().get(1)).getContent();
+            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+        }
     }
     public void setFocusRight()
     {
+        resetFocus();
         focusedListIndex = focusedListIndex +1;
-        fillBoard();
+        if(focusedListIndex>=shownBoard.getCardLists().size())
+            focusedListIndex=shownBoard.getCardLists().size();
+        if(condition())
+        {
+            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
+        }
     }
     public void setFocused(int cardIndex,int listIndex)
     {
         focusedCardIndex = cardIndex;
         focusedListIndex =listIndex;
+        if(condition()){
+            VBox vbox = (VBox) ((ScrollPane) ((VBox) (listContainer.getChildren().get(focusedListIndex - 1))).getChildren().get(1)).getContent();
+            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+        }
     }
-    public void openFocused(ListCtrl listCtrl)
-    {
-        if(focusedCardIndex!=-1)
-            listCtrl.openFocusedIndex();
-    }
+    public void openFocused()
+    {if(condition()) {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        ViewCardCtrl controller = loader.getKey();
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
+        controller.onlyForViewing();
+        controller.setCard(shownBoard.getCardLists().get(focusedListIndex - 1).getCards().get(focusedCardIndex - 1));
+        controller.setBoardKey(getBoardKey());
+        controller.displayTasks();
+        String title = "View Card";
+        HelperMethods.popUp(scene, title);
+    }
+    }
     /**
      * Method to delete the shown board from the database
      */
