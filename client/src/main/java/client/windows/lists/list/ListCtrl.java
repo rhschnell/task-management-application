@@ -26,6 +26,7 @@ import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -61,9 +62,14 @@ public class ListCtrl {
     private long focusedCardIndex;
 
     private Card highlightStartedCard;
+    private WorkspaceCtrl workspaceCtrl;
 
     private Pair<CardCtrl,Parent> focusedCard;
+    private boolean open;
 
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
 
     /**
      * Constructor for ListCtrl
@@ -74,6 +80,7 @@ public class ListCtrl {
         this.service = service;
         focusedCardIndex=-1;
         highlightStartedCard = new Card();
+        open=false;
     }
 
     public void setCardList(CardList cardList) {
@@ -94,9 +101,7 @@ public class ListCtrl {
      * Displays the cards onto the list's inner VBox
      */
     public void displayCards() {
-
-        CardCtrl openCtrl = new CardCtrl(new CardService(new CardUtils(new ServerUtils()),
-                new CardListUtils(new ServerUtils())));
+        Pair <CardCtrl,Parent> toOpen = null;
         cardVBox.getChildren().clear();
         for (Card card: service.getCardList().getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
@@ -104,9 +109,15 @@ public class ListCtrl {
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
+            controller.removeFocus();
             if(focusedCardIndex==card.getPriority()) {
                 cardCell.getKey().setFocus();
                 focusedCard = cardCell;
+                if(open==true)
+                {
+                     toOpen= cardCell;
+                     open=false;
+                }
             }
             makeCardDraggable(cardCell);
             controller.setBoardKey(getBoardKey());
@@ -121,6 +132,11 @@ public class ListCtrl {
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
         quickAddCard.getValue().setOnDragDetected(event -> {});
+        if(toOpen!=null)
+        {
+            toOpen.getKey().viewCard(toOpen.getKey().getCard());
+            open=false;
+        }
     }
 
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
@@ -137,12 +153,19 @@ public class ListCtrl {
             event.consume();
         });
         cardCell.getValue().setOnMouseEntered(event ->{
-            if(highlightStartedCard != cardCell.getKey().getCard()) {
+            if(workspaceCtrl.getHighlightatdStartedCard()==null || !workspaceCtrl.getHighlightatdStartedCard().equals( cardCell.getKey().getCard())) {
                 focusedCardIndex=cardCell.getKey().getCard().getPriority();
                 focusedCard=cardCell;
+                workspaceCtrl.setHighlightatdStartedCard(cardCell.getKey().getCard());
                 highlightStartedCard = cardCell.getKey().getCard();
                 cardCell.getKey().setFocus();
+                workspaceCtrl.setCardFocused((int) focusedCardIndex);
+                //System.out.println("highlightStartedCard"+highlightStartedCard);
+                //System.out.println("new card"+cardCell.getKey().getCard());
+                workspaceCtrl.setCardFocused((int)focusedCardIndex);
             }
+           // else
+             //   cardCell.getKey().removeFocus();
             event.consume();
         });
         cardCell.getValue().setOnDragOver(event -> {
@@ -151,7 +174,10 @@ public class ListCtrl {
             }
             event.consume();
         });
-        cardCell.getValue().setOnMouseExited(event -> {cardCell.getKey().removeFocus();});
+        cardCell.getValue().setOnMouseExited(event -> {
+            cardCell.getKey().removeFocus();
+            //workspaceCtrl.setCardFocused(-1);
+        });
 
         cardCell.getValue().setOnDragEntered(event -> {
             if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
@@ -175,14 +201,14 @@ public class ListCtrl {
         focusedCardIndex=focusedCardIndex+1;
         if(focusedCardIndex>=cardVBox.getChildren().size())
             focusedCardIndex=cardVBox.getChildren().size()-1;
-        focusedCard.getKey().removeFocus();
+        //focusedCard.getKey().removeFocus();
         displayCards();
 
     }
     public void setFocusDown()
     {
         focusedCardIndex=focusedCardIndex-1;
-        focusedCard.getKey().removeFocus();
+       // focusedCard.getKey().removeFocus();
         if(focusedCardIndex<1)
             focusedCardIndex=1;
         displayCards();
@@ -191,11 +217,27 @@ public class ListCtrl {
     {
         focusedCardIndex=-1;
         highlightStartedCard =new Card();
-        focusedCard.getKey().removeFocus();
+        if(focusedCard!=null)
+        focusedCard.getKey().removeFocus(); //?why would this get an error
     }
     public void openFocusedCard()
     {
         focusedCard.getKey().viewCard(focusedCard.getKey().getCard());
+    }
+    public void openFocusedIndex(int index)
+    {
+        focusedCardIndex=index;
+        open = true;
+        displayCards();
+    }
+    public void setFocus(int index)
+    {
+        focusedCardIndex=index;
+        displayCards();
+    }
+    public int getFocus()
+    {
+        return (int) focusedCard.getKey().getCard().getPriority();
     }
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnDragDropped(event -> {
