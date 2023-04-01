@@ -5,7 +5,6 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
-import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,8 +34,7 @@ public class BoardCellCtrl  implements Initializable {
     /**
      * Creates a new instance of BoardCellCtrl
      */
-    @Inject
-    public BoardCellCtrl(BoardCellService service) {
+    public BoardCellCtrl() {
     }
 
     public void setAdminCtrl(AdminCtrl adminCtrl) {
@@ -49,6 +47,7 @@ public class BoardCellCtrl  implements Initializable {
 
     /**
      * Setter for the board
+     * @param board The new board
      */
     public void setBoard(Board board) {
         this.board = board;
