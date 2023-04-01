@@ -273,18 +273,25 @@ public class WorkspaceCtrl implements Initializable {
         });
     }
 
-    public void resetFocus()
+    public VBox getFocusPosition()
     {
-        if(condition()) {
-            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
-            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
-       }
+        return (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).
+               getChildren().get(1)).getContent();
     }
     public boolean condition()
     {
-        if(focusedCardIndex>0 && focusedListIndex>0 && focusedListIndex<=shownBoard.getCardLists().size() && focusedCardIndex<=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size() && shownBoard.getCardLists().get(focusedListIndex-1).getCards().size()>0)
+        if(focusedCardIndex>0 && focusedListIndex>0 && focusedListIndex<=shownBoard.getCardLists().size()
+                && focusedCardIndex<=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size() &&
+                shownBoard.getCardLists().get(focusedListIndex-1).getCards().size()>0)
             return true;
         return false;
+    }
+    public void resetFocus()
+    {
+        if(condition()) {
+            VBox vbox = getFocusPosition();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
+        }
     }
     public void setFocusUp()
     {
@@ -294,7 +301,7 @@ public class WorkspaceCtrl implements Initializable {
             focusedCardIndex=1;
         if(condition())
         {
-            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
 
@@ -307,7 +314,7 @@ public class WorkspaceCtrl implements Initializable {
             focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
         if(condition())
         {
-            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
     }
@@ -318,7 +325,8 @@ public class WorkspaceCtrl implements Initializable {
         if(focusedListIndex<=0)
             focusedListIndex=1;
         if(condition())
-        { VBox vbox = (VBox) ((ScrollPane) ((VBox) (listContainer.getChildren().get(focusedListIndex - 1))).getChildren().get(1)).getContent();
+        {
+            VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
         }
     }
@@ -330,7 +338,7 @@ public class WorkspaceCtrl implements Initializable {
             focusedListIndex=shownBoard.getCardLists().size();
         if(condition())
         {
-            VBox vbox = (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).getChildren().get(1)).getContent();
+            VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
     }
@@ -339,30 +347,30 @@ public class WorkspaceCtrl implements Initializable {
         focusedCardIndex = cardIndex;
         focusedListIndex =listIndex;
         if(condition()){
-            VBox vbox = (VBox) ((ScrollPane) ((VBox) (listContainer.getChildren().get(focusedListIndex - 1))).getChildren().get(1)).getContent();
+            VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
         }
     }
     public void openFocused()
     {if(condition()) {
-        var loader = new MyFXML(createInjector(new MainModules()))
+            var loader = new MyFXML(createInjector(new MainModules()))
                 .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-        ViewCardCtrl controller = loader.getKey();
-        scene.getRoot().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                loader.getKey().escape();
-            }
-        });
-        controller.onlyForViewing();
-        controller.setCard(shownBoard.getCardLists().get(focusedListIndex - 1).getCards().get(focusedCardIndex - 1));
-        controller.setBoardKey(getBoardKey());
-        controller.displayTasks();
-        String title = "View Card";
-        HelperMethods.popUp(scene, title);
-    }
+            Parent root = loader.getValue();
+            Scene scene = new Scene(root);
+            ViewCardCtrl controller = loader.getKey();
+            scene.getRoot().setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ESCAPE)
+                    loader.getKey().escape();
+            });
+            controller.onlyForViewing();
+            controller.setCard(shownBoard.getCardLists().get(focusedListIndex - 1).
+                    getCards().get(focusedCardIndex - 1));
+            controller.setBoardKey(getBoardKey());
+            controller.displayTasks();
+            String title = "View Card";
+            HelperMethods.popUp(scene, title);
+        }
     }
     /**
      * Method to delete the shown board from the database

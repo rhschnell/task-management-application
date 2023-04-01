@@ -70,27 +70,13 @@ public class ListCtrl {
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-
                 workspaceCtrl.openFocused();
             }
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
                     || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
-                {
-                    {
-                        if (event.getCode() == KeyCode.UP) {
-                            workspaceCtrl.setFocusUp();
-                        }
-                        if (event.getCode() == KeyCode.DOWN) {
-                            workspaceCtrl.setFocusDown();
-                        }
-                        if (event.getCode() == KeyCode.LEFT) {
-                            workspaceCtrl.setFocusLeft();
-                        }
-                        if (event.getCode() == KeyCode.RIGHT) {
-                            workspaceCtrl.setFocusRight();
-                        }
-                    }
-                }
+
+                setKeyEventListeners(event);
+
             }
             event.consume();
         });
@@ -98,28 +84,28 @@ public class ListCtrl {
             scrollPane.requestFocus();
             scrollPane.setOnKeyPressed(keyEvent -> {
                 {
-                    if (keyEvent.getCode() == KeyCode.ENTER) {
-                        workspaceCtrl.openFocused();
-                    }
-                        if (keyEvent.getCode() == KeyCode.UP) {
-                        workspaceCtrl.setFocusUp();
-                    }
-                    if (keyEvent.getCode() == KeyCode.DOWN) {
-                        workspaceCtrl.setFocusDown();
-                    }
-                    if (keyEvent.getCode() == KeyCode.LEFT) {
-                        workspaceCtrl.setFocusLeft();
-                    }
-                    if (keyEvent.getCode() == KeyCode.RIGHT) {
-                        workspaceCtrl.setFocusRight();
-                    }
+                    setKeyEventListeners(keyEvent);
                 }
-
             });
-
         });
-
-
+    }
+    public void setKeyEventListeners(KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            workspaceCtrl.openFocused();
+        }
+        if (keyEvent.getCode() == KeyCode.UP) {
+            workspaceCtrl.setFocusUp();
+        }
+        if (keyEvent.getCode() == KeyCode.DOWN) {
+            workspaceCtrl.setFocusDown();
+        }
+        if (keyEvent.getCode() == KeyCode.LEFT) {
+            workspaceCtrl.setFocusLeft();
+        }
+        if (keyEvent.getCode() == KeyCode.RIGHT) {
+            workspaceCtrl.setFocusRight();
+        }
     }
 
     public VBox getCardVBox() {
@@ -190,8 +176,8 @@ public class ListCtrl {
             event.consume();
         });
         cardCell.getValue().setOnMouseEntered(event ->{
-                focusedCardIndex=cardCell.getKey().getCard().getPriority();
-                workspaceCtrl.setFocused((int)focusedCardIndex, listId+1);
+            focusedCardIndex=cardCell.getKey().getCard().getPriority();
+            workspaceCtrl.setFocused((int)focusedCardIndex, listId+1);
 
             event.consume();
         });
