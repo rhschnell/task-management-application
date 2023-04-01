@@ -206,6 +206,9 @@ public class ListCtrl {
             if(!cardCell.getValue().isHover()&&!cardCell.getValue().isPressed()&&!cardCell.getValue().isFocused())
                 if (!cardCell.getValue().contains(event.getX(), event.getY())) {
                     workspaceCtrl.resetFocus();
+                    focusedCardIndex=-1;
+                    focusedCard=null;
+                    workspaceCtrl.setHighlightedStartedCard(new Card());
                 }
         });
 

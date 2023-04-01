@@ -263,7 +263,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setListTitle(cardList.getListTitle());
             int finalI = i;
             //list.setOnMouseExited(event -> {if(finalI !=listHoveredBefore){System.out.println("de");}});
-            list.setOnMouseMoved(event -> {if(!((VBox) loader.getValue()).isHover()) System.out.println("ded");});
+            list.setOnMouseMoved(event -> {if(!((VBox) loader.getValue()).isHover()) System.out.println("");});
             listContainer.getChildren().add(list);
         }
     }
@@ -348,7 +348,8 @@ public class WorkspaceCtrl implements Initializable {
     }
     public void openFocused(ListCtrl listCtrl)
     {
-        listCtrl.openFocusedIndex();
+        if(focusedCardIndex!=-1)
+            listCtrl.openFocusedIndex();
     }
 
     /**
