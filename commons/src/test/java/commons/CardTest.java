@@ -182,7 +182,7 @@ class CardTest {
                 null,
                 priority
         );
-        assertEquals(500, card.getPriority());
+        assertEquals(priority, card.getPriority());
     }
     @Test
     void setTitle() {
