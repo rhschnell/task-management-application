@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="layout" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.customize.CustomizeCtrl">
+    <children>
+        <Label prefHeight="37.0" prefWidth="220.0" text="Customization">
+            <font>
+                <Font name="Arial Bold" size="18.0" />
+            </font>
+        </Label>
+        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
+        <Label text="Board Colors">
+            <font>
+                <Font name="Arial Bold" size="13.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" spacing="30.0">
+            <children>
+                <Label text="Background:">
+                    <font>
+                        <Font name="Arial" size="12.0" />
+                    </font>
+                </Label>
+                <ColorPicker fx:id="boardBackgroundColor" onAction="#setBoardBackgroundColor" />
+                <Button fx:id="resetBoardColorButton" mnemonicParsing="false" onAction="#resetBoard" prefHeight="2.0" prefWidth="41.0" styleClass="gray-button" text="Reset">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="70.0">
+            <children>
+                <Label text="Font:">
+                    <font>
+                        <Font name="Arial" size="12.0" />
+                    </font>
+                </Label>
+                <ColorPicker fx:id="boardFontColor" onAction="#setBoardFontColor" />
+            </children>
+        </HBox>
+        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
+        <Label prefWidth="68.0" text="List Colors">
+            <font>
+                <Font name="Arial Bold" size="13.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" spacing="30.0">
+            <children>
+                <Label text="Background:">
+                    <font>
+                        <Font name="Arial" size="12.0" />
+                    </font>
+                </Label>
+                <ColorPicker fx:id="listBackgroundColor" />
+                <Button fx:id="resetListColorButton" mnemonicParsing="false" prefHeight="2.0" prefWidth="41.0" styleClass="gray-button" text="Reset">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="70.0">
+            <children>
+                <Label text="Font:">
+                    <font>
+                        <Font name="Arial" size="12.0" />
+                    </font>
+                </Label>
+                <ColorPicker fx:id="listFontColor" />
+            </children>
+        </HBox>
+        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
+        <Label text="Card colors">
+            <font>
+                <Font name="Arial Bold" size="13.0" />
+            </font>
+        </Label>
+        <ScrollPane prefHeight="131.0" prefWidth="300.0">
+            <content>
+                <VBox fx:id="cardColors" prefHeight="131.0" prefWidth="282.0" />
+            </content>
+        </ScrollPane>
+        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#save" text="Save">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+              <Button fx:id="closeButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Close">
+                  <font>
+                      <Font name="Arial Bold" size="12.0" />
+                  </font>
+              </Button>
+         </children>
+      </HBox>
+    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

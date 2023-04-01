@@ -19,6 +19,7 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.customize.CustomizeCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
@@ -42,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -67,6 +69,9 @@ public class WorkspaceCtrl implements Initializable {
     private TextField keyField;
     @FXML
     private Button copyButton;
+
+    @FXML
+    private Button personalizeButton;
 
     private List<String> joinedKeys;
     private Board shownBoard;
@@ -195,7 +200,15 @@ public class WorkspaceCtrl implements Initializable {
                 boardName.setText(shownBoard.getTitle());
             }
         }
+        updateBoardColours();
+    }
 
+    public void updateBoardColours()
+    {
+        if(shownBoard!=null){
+            listContainer.setStyle("-fx-background-color: #"+shownBoard.getBackgroundColour());
+            boardName.setTextFill(Color.web(shownBoard.getFontColour()));
+        }
     }
 
     public void showBoard(String targetKey) {
@@ -344,6 +357,18 @@ public class WorkspaceCtrl implements Initializable {
         loader.getKey().setAdmin(false);
         HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
         refreshWorkspace(true);
+    }
+
+    public void customizeBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");
+
+        loader.getKey().setBoard(shownBoard);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Customize";
+        HelperMethods.popUp(scene, title);
     }
 
     public void setJoinedKeys(List<String> joinedKeys) {
