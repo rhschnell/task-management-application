@@ -49,8 +49,18 @@ public class CustomizeCtrl {
     }
 
     @FXML
-    public void setBoardFontColor()
+    public void setBoardFontColor() {
+        board.setFontColour(boardFontColor.getValue().toString().substring(2,8));
+    }
+
+    @FXML
+    public void resetBoard()
     {
+        board.setFontColour("000000");
+        board.setBackgroundColour("FFFFFF");
+        utils.insertBoard(board);
+        boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
+        boardFontColor.setValue(Color.web(board.getFontColour()));
     }
 
     public void close(){
@@ -66,6 +76,7 @@ public class CustomizeCtrl {
     public void setBoard(Board shownBoard) {
         board = shownBoard;
         boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
+        boardFontColor.setValue(Color.web(board.getFontColour()));
     }
 }
 

@@ -45,6 +45,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -204,6 +206,7 @@ public class WorkspaceCtrl implements Initializable {
 
         if(shownBoard!=null){
             listContainer.setStyle("-fx-background-color: #"+shownBoard.getBackgroundColour());
+            boardName.setTextFill(Color.web(shownBoard.getFontColour()));
         }
 
     }

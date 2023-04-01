@@ -31,7 +31,7 @@
                     </font>
                 </Label>
                 <ColorPicker fx:id="boardBackgroundColor" onAction="#setBoardBackgroundColor" />
-                <Button fx:id="resetBoardColorButton" mnemonicParsing="false" prefHeight="2.0" prefWidth="41.0" styleClass="gray-button" text="Reset">
+                <Button fx:id="resetBoardColorButton" mnemonicParsing="false" onAction="#resetBoard" prefHeight="2.0" prefWidth="41.0" styleClass="gray-button" text="Reset">
                     <font>
                         <Font size="11.0" />
                     </font>
