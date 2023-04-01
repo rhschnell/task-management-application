@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="350.0" style="-fx-background-color: #FFFFFF;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.add.AddTagCtrl">
+<VBox spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.add.AddTagCtrl">
    <children>
-      <TextField fx:id="tagTitle" layoutX="20.0" layoutY="15.0" prefHeight="26.0" prefWidth="310.0" promptText="Type your tag name..." style="-fx-background-insets: 0, 0 0 0 0; -fx-background-color: none; -fx-padding: 0px;">
-         <font>   
-            <Font name="Arial Bold Italic" size="16.0" />
+      <TextField fx:id="tagTitle" maxWidth="-Infinity" prefHeight="33.0" prefWidth="312.0" promptText="Type tag name..." style="-fx-control-inner-background: #f0f0f0; -fx-background-radius: 10; -fx-border-color: transparent;">
+         <font>
+            <Font name="Arial Bold" size="16.0" />
          </font>
       </TextField>
-      <Line endX="200.0" layoutX="130.0" layoutY="45.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" AnchorPane.leftAnchor="19.292892456054688" AnchorPane.rightAnchor="19.292892456054688" />
-      <Line endX="200.0" layoutX="130.0" layoutY="119.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-      <Button fx:id="addTagButton" layoutX="266.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="63.0" styleClass="blue-button" text="Add tag">
+      <Separator prefWidth="200.0" />
+      <Label text="Color">
          <font>
-            <Font name="Arial Bold" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="cancelButton" cancelButton="true" layoutX="194.0" layoutY="132.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
-         <font>
-            <Font name="Arial Bold" size="12.0" />
-         </font>
-      </Button>
-      <ColorPicker fx:id="tagColor" layoutX="20.0" layoutY="76.0" prefHeight="26.0" prefWidth="105.0" />
-      <Label layoutX="23.0" layoutY="54.0" text="Color">
-         <font>
-            <Font name="Arial Bold" size="12.0" />
+            <Font name="Arial Bold" size="13.0" />
          </font>
       </Label>
+      <ColorPicker fx:id="tagColor" prefHeight="26.0" prefWidth="105.0" style="-fx-background-radius: 10;" />
+      <Separator prefWidth="200.0" />
+      <HBox prefHeight="0.0" prefWidth="310.0">
+         <children>
+            <Button fx:id="addTagButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="71.0" styleClass="blue-button" text="Add tag">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="175.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="cancelButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancel" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>
