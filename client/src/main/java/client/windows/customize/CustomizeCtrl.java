@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class CustomizeCtrl {
@@ -44,7 +45,6 @@ public class CustomizeCtrl {
 
     @FXML
     public void setBoardBackgroundColor(){
-        System.out.println("-fx-background-color: #"+boardBackgroundColor.getValue().toString().substring(2,8));
         board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2,8));
     }
 
@@ -65,6 +65,7 @@ public class CustomizeCtrl {
 
     public void setBoard(Board shownBoard) {
         board = shownBoard;
+        boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
     }
 }
 
