@@ -22,6 +22,7 @@ import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -31,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -45,15 +47,70 @@ public class ListCtrl {
     private HelperMethods hm;
     private final ListService service;
 
+
     private DataFormat cardFormat;
 
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private Label listTitle;
     @FXML
     private VBox cardVBox;
     @FXML
     private TextField renameTitle;
+    private int listId;
+    private long focusedCardIndex;
+    private  Pair<CardCtrl, Parent> cardCell;
 
+    private WorkspaceCtrl workspaceCtrl;
+
+
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+        scrollPane.requestFocus();
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                workspaceCtrl.openFocused();
+            }
+            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
+                    || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+
+                setKeyEventListeners(event);
+
+            }
+            event.consume();
+        });
+        scrollPane.setOnMouseEntered(event -> {
+            scrollPane.requestFocus();
+            scrollPane.setOnKeyPressed(keyEvent -> {
+                {
+                    setKeyEventListeners(keyEvent);
+                }
+            });
+        });
+    }
+    public void setKeyEventListeners(KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            workspaceCtrl.openFocused();
+        }
+        if (keyEvent.getCode() == KeyCode.UP) {
+            workspaceCtrl.setFocusUp();
+        }
+        if (keyEvent.getCode() == KeyCode.DOWN) {
+            workspaceCtrl.setFocusDown();
+        }
+        if (keyEvent.getCode() == KeyCode.LEFT) {
+            workspaceCtrl.setFocusLeft();
+        }
+        if (keyEvent.getCode() == KeyCode.RIGHT) {
+            workspaceCtrl.setFocusRight();
+        }
+    }
+
+    public VBox getCardVBox() {
+        return cardVBox;
+    }
 
     /**
      * Constructor for ListCtrl
@@ -62,6 +119,7 @@ public class ListCtrl {
     @Inject
     public ListCtrl(ListService service) {
         this.service = service;
+        focusedCardIndex=-1;
     }
 
     public void setCardList(CardList cardList) {
@@ -82,13 +140,13 @@ public class ListCtrl {
      * Displays the cards onto the list's inner VBox
      */
     public void displayCards() {
-
-
+        cardVBox.getChildren().clear();
         for (Card card: service.getCardList().getCards()) {
-            var cardCell = new MyFXML(createInjector(new MainModules()))
+            cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
             controller.updateItem(card);
+            controller.setDisplayTags(card.getTags());
             makeCardDraggable(cardCell);
             controller.setBoardKey(getBoardKey());
             cardVBox.getChildren().add(cardCell.getValue());
@@ -107,32 +165,32 @@ public class ListCtrl {
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
         cardCell.getValue().setCursor(Cursor.HAND);
-
         cardCell.getValue().setOnDragDetected(event -> {
             Dragboard db = cardCell.getValue().startDragAndDrop(TransferMode.MOVE);
             Image dragImage = new Image("client/icons/DragFile.png");
             ImageView dragView = new ImageView(dragImage);
             db.setDragView(dragView.getImage(), -20 ,-10);
-
-            /* Put data on a dragboard */
             ClipboardContent content = new ClipboardContent();
             content.put(cardFormat,cardCell.getKey().getCard());
             db.setContent(content);
             event.consume();
         });
+        cardCell.getValue().setOnMouseEntered(event ->{
+            focusedCardIndex=cardCell.getKey().getCard().getPriority();
+            workspaceCtrl.setFocused((int)focusedCardIndex, listId+1);
 
+            event.consume();
+        });
         cardCell.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
         });
-
         cardCell.getValue().setOnDragEntered(event -> {
             if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
                 int index = ((VBox) cardCell.getValue().getParent()).getChildren().indexOf(cardCell.getValue());
                 ((VBox) cardCell.getValue().getParent()).getChildren().add(index,separator);
-
             }
             event.consume();
         });
@@ -145,7 +203,16 @@ public class ListCtrl {
         });
         dragDropHelper(cardCell);
     }
+    public void setListId(int index)
+    {
+        listId = index;
+    }
+
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
+        cardCell.getValue().setOnMouseExited(event -> {
+            workspaceCtrl.resetFocusAndCancelOpening();
+        });
+
         cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -252,11 +319,6 @@ public class ListCtrl {
         Scene scene = new Scene(root);
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
-        scene.getRoot().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                loader.getKey().escape();
-            }
-        });
 
         String title = "Create a card";
         hm.popUp(scene, title);

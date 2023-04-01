@@ -25,6 +25,8 @@ import static com.google.inject.Guice.createInjector;
 
 public class CardCtrl {
     @FXML
+    private AnchorPane pane;
+    @FXML
     private Label cardTitle;
     @FXML
     private Button deleteButton;
@@ -40,8 +42,6 @@ public class CardCtrl {
     @FXML
     private Label subtaskIndicator;
 
-    @FXML
-    private AnchorPane pane;
 
     private Card card;
     private long lastClickTime;
@@ -77,17 +77,17 @@ public class CardCtrl {
         tagCircle1.setVisible(false);
         tagCircle2.setVisible(false);
         tagCircle3.setVisible(false);
-        if (tags.size() > 0) {
+        if (tags!=null && tags.size() > 0) {
             tagCircle1.setFill(Paint.valueOf(tags.get(0).getColor()));
             tagCircle1.setVisible(true);
 
         }
-        if (tags.size() > 1) {
+        if (tags!=null && tags.size() > 1) {
             tagCircle2.setFill(Paint.valueOf(tags.get(1).getColor()));
             tagCircle2.setVisible(true);
 
         }
-        if (tags.size() > 2) {
+        if (tags!=null && tags.size() > 2) {
             tagCircle3.setFill(Paint.valueOf(tags.get(2).getColor()));
             tagCircle3.setVisible(true);
 
@@ -183,15 +183,18 @@ public class CardCtrl {
     public void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
-        this.setDisplayTags(item.getTags());
+        if(item.getTags()!=null)
+            this.setDisplayTags(item.getTags());
         setDescriptionIconVisible(item.hasDescription());
 
-        long subtasks = card.getSubTasks().size();
-        if (subtasks > 0){
-            long completedTasks =
-                    card.getSubTasks().stream().filter(Task::isCompleted).count();
-            setSubtasksCompleted(completedTasks, card.getSubTasks().size());
-            subtaskIndicator.setVisible(true);
+        if(card.getSubTasks() !=null) {
+            long subtasks = card.getSubTasks().size();
+            if (subtasks > 0) {
+                long completedTasks =
+                        card.getSubTasks().stream().filter(Task::isCompleted).count();
+                setSubtasksCompleted(completedTasks, card.getSubTasks().size());
+                subtaskIndicator.setVisible(true);
+            }
         }
     }
 

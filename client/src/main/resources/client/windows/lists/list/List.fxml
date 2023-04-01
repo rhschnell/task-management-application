@@ -26,7 +26,7 @@
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
       </Group>
-      <ScrollPane fitToHeight="true" focusTraversable="false" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="315.0" VBox.vgrow="ALWAYS">
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" focusTraversable="false" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="315.0" VBox.vgrow="ALWAYS">
          <content>
             <VBox fx:id="cardVBox" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="298.0" spacing="15.0">
                <padding>
