@@ -50,7 +50,7 @@ public class ViewCardCtrl {
     private Text cardDescription;
 
     @FXML
-    private Button deleteButton;
+    private Button cancelButton;
 
     @FXML
     private Button editButton;
@@ -118,7 +118,7 @@ public class ViewCardCtrl {
      * Method to delete the current card
      */
     public void delete() {
-        ((Stage)deleteButton.getScene().getWindow()).close();
+        ((Stage)cancelButton.getScene().getWindow()).close();
         service.deleteCard(card);
     }
 
@@ -126,7 +126,7 @@ public class ViewCardCtrl {
      * Escapes the window
      */
     public void escape() {
-        ((Stage)deleteButton.getScene().getWindow()).close();
+        ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
     public void edit() {
