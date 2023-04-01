@@ -68,6 +68,10 @@ public class ListCtrl {
         focusedCard=null;
     }
 
+    public VBox getCardVBox() {
+        return cardVBox;
+    }
+
     /**
      * Constructor for ListCtrl
      *

@@ -256,7 +256,7 @@ public class WorkspaceCtrl implements Initializable {
             }
             controller.setCardList(cardList);
             controller.displayCards();
-            setMoveShortcutListeners(list,controller);
+            setMoveShortcutListeners(loader.getKey().getCardVBox(),controller);
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
