@@ -76,6 +76,7 @@ public class WorkspaceCtrl implements Initializable {
     private ListCtrl focusedListIndexCtrl;
     private Board shownBoard;
     private Card highlightedStartedCard;
+    private boolean hasFocus;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -246,19 +247,37 @@ public class WorkspaceCtrl implements Initializable {
             controller.setListId(i);
             controller.setBoardKey(shownBoard.getKey());
             controller.setHelperMethod(helperMethods);
-            if(focusedListIndex == i )
-            {
-                focusedListIndexCtrl=controller;
-                if(focusedCardIndex >shownBoard.getCardLists().get(i).getCards().size())
+            if (focusedListIndex == i) {
+                focusedListIndexCtrl = controller;
+                if (focusedCardIndex > shownBoard.getCardLists().get(i).getCards().size())
                     controller.setFocus(shownBoard.getCardLists().get(i).getCards().size());
-                else
+                else {
                     controller.setFocus(focusedCardIndex);
+                }
+                hasFocus = true;
             }
+
             controller.setCardList(cardList);
             controller.displayCards();
             setMoveShortcutListeners(loader.getKey().getCardVBox(),controller);
             controller.setListTitle(cardList.getListTitle());
+            int finalI = i;
+            //list.setOnMouseExited(event -> {if(finalI !=listHoveredBefore){System.out.println("de");}});
+            list.setOnMouseMoved(event -> {if(!((VBox) loader.getValue()).isHover()) System.out.println("ded");});
             listContainer.getChildren().add(list);
+        }
+    }
+    public void verifyListHovered(int listIndex)
+    {
+        if(listIndex!=focusedListIndex)
+        {
+            setHighlightedStartedCard(new Card());
+            focusedListIndex=-1;
+            focusedCardIndex=-1;
+            if(hasFocus) {
+                hasFocus =false;
+                fillBoard();
+            }
         }
     }
     public void setMoveShortcutListeners(VBox list,ListCtrl controller)
@@ -290,15 +309,26 @@ public class WorkspaceCtrl implements Initializable {
         });
     }
 
-
+    public void resetFocus()
+    {
+        focusedListIndex=-1;
+        focusedCardIndex=-1;
+        focusedListIndexCtrl.resetFocus();
+        if(focusedListIndexCtrl !=null && focusedListIndexCtrl.getFocusedCard()!=null)
+            focusedListIndexCtrl.getFocusedCard().getKey().removeFocus();
+    }
     public void setFocusUp()
     {
         focusedCardIndex = focusedCardIndex -1;
+        if(focusedCardIndex<=0)
+            focusedCardIndex=1;
         fillBoard();
     }
     public void setFocusDown()
     {
         focusedCardIndex = focusedCardIndex +1;
+        if(focusedCardIndex>=focusedListIndexCtrl.getCardList().getCards().size())
+            focusedCardIndex=focusedListIndexCtrl.getCardList().getCards().size();
         fillBoard();
     }
     public void setFocusLeft()

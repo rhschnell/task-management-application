@@ -143,6 +143,7 @@ public class ListCtrl {
         cardCell.getValue().setOnMouseEntered(event ->{
             if(workspaceCtrl.getHighlightedStartedCard()==null || !workspaceCtrl.getHighlightedStartedCard().
                     equals( cardCell.getKey().getCard())) {
+                workspaceCtrl.verifyListHovered(listId);
                 focusedCardIndex=cardCell.getKey().getCard().getPriority();
                 workspaceCtrl.setHighlightedStartedCard(cardCell.getKey().getCard());
                 workspaceCtrl.setFocused((int)focusedCardIndex, listId);
@@ -157,10 +158,6 @@ public class ListCtrl {
             }
             event.consume();
         });
-        cardCell.getValue().setOnMouseExited(event -> {
-            cardCell.getKey().removeFocus();
-        });
-
         cardCell.getValue().setOnDragEntered(event -> {
             if (event.getGestureSource() != cardCell.getValue() && event.getDragboard().hasContent(cardFormat)) {
                 int index = ((VBox) cardCell.getValue().getParent()).getChildren().indexOf(cardCell.getValue());
@@ -195,11 +192,23 @@ public class ListCtrl {
         listId = index;
     }
 
+    public Pair<CardCtrl, Parent> getFocusedCard() {
+        return focusedCard;
+    }
+
     public void setFocusedCard(Pair<CardCtrl, Parent> focusedCard) {
         this.focusedCard=new Pair<>(focusedCard.getKey(),focusedCard.getValue());
     }
 
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
+        cardCell.getValue().setOnMouseExited(event -> {
+            cardCell.getKey().removeFocus();
+            if(!cardCell.getValue().isHover()&&!cardCell.getValue().isPressed()&&!cardCell.getValue().isFocused())
+                if (!cardCell.getValue().contains(event.getX(), event.getY())) {
+                    workspaceCtrl.resetFocus();
+                }
+        });
+
         cardCell.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
