@@ -293,6 +293,15 @@ public class WorkspaceCtrl implements Initializable {
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
         }
     }
+    public void resetFocusAndCancelOpening()
+    {
+        if(condition()) {
+            VBox vbox = getFocusPosition();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
+        }
+        focusedCardIndex=-1;
+        focusedListIndex=-1;
+    }
     public void setFocusUp()
     {
         resetFocus();

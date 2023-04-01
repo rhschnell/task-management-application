@@ -210,7 +210,7 @@ public class ListCtrl {
 
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocus();
+            workspaceCtrl.resetFocusAndCancelOpening();
         });
 
         cardCell.getValue().setOnDragDropped(event -> {
