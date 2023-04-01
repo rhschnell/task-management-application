@@ -203,8 +203,8 @@ public class ListCtrl {
     public void dragDropHelper(Pair<CardCtrl,Parent> cardCell ) {
         cardCell.getValue().setOnMouseExited(event -> {
             cardCell.getKey().removeFocus();
-            if(!cardCell.getValue().isHover()&&!cardCell.getValue().isPressed()&&!cardCell.getValue().isFocused())
-                if (!cardCell.getValue().contains(event.getX(), event.getY())) {
+            //if(!cardCell.getValue().isHover()&&!cardCell.getValue().isPressed()&&!cardCell.getValue().isFocused())
+                if (!cardCell.getValue().contains(event.getX()-5,event.getY())) {
                     workspaceCtrl.resetFocus();
                     focusedCardIndex=-1;
                     focusedCard=null;
