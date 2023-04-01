@@ -13,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
@@ -26,9 +27,10 @@ public class BoardCellCtrl  implements Initializable {
 
     @FXML
     private Label boardTitle;
-
     @FXML
     private ImageView deleteIcon;
+    @FXML
+    private ImageView protectionIcon;
 
     /**
      * Creates a new instance of BoardCellCtrl
@@ -69,9 +71,23 @@ public class BoardCellCtrl  implements Initializable {
         HelperMethods.popUp(scene, "Delete the board");
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         deleteIcon.setCursor(Cursor.HAND);
+        protectionIcon.setCursor(Cursor.HAND);
+
+        // TODO: if(board.isProtected())
+        protectionIcon.setOnMouseEntered(l -> {
+            Image lockSymbol = new Image("/client/icons/lock.png");
+            protectionIcon.setImage(lockSymbol);
+        });
+
+        protectionIcon.setOnMouseExited(l -> {
+            Image lockSymbol = new Image("/client/icons/unlock.png");
+            protectionIcon.setImage(lockSymbol);
+        });
+        // TODO: else
     }
 }
 

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
@@ -14,9 +15,10 @@ import java.util.ResourceBundle;
 
 public class BoardCellCtrl implements Initializable {
     private WorkspaceCtrl workspaceCtrl;
-
     private Board board;
 
+    @FXML
+    private ImageView protectionIcon;
     @FXML
     private Label boardTitle;
     @FXML
@@ -69,6 +71,19 @@ public class BoardCellCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         leaveIcon.setCursor(Cursor.HAND);
+        protectionIcon.setCursor(Cursor.HAND);
+
+        // TODO: if(board.isProtected())
+        protectionIcon.setOnMouseEntered(l -> {
+            Image lockSymbol = new Image("/client/icons/lock.png");
+            protectionIcon.setImage(lockSymbol);
+        });
+
+        protectionIcon.setOnMouseExited(l -> {
+            Image lockSymbol = new Image("/client/icons/unlock.png");
+            protectionIcon.setImage(lockSymbol);
+        });
+        // TODO: else
     }
 }
 

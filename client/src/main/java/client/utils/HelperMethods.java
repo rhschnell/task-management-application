@@ -55,7 +55,6 @@ public class HelperMethods {
         popUp.initModality(Modality.APPLICATION_MODAL);
         popUp.setTitle(title);
         popUp.setResizable(false);
-        popUp.setResizable(false);
         popUp.showAndWait();
     }
 
