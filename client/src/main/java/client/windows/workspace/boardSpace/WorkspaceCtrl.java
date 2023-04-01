@@ -50,7 +50,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -72,11 +71,11 @@ public class WorkspaceCtrl implements Initializable {
     private Button copyButton;
 
     private List<String> joinedKeys;
-    private int cardfocused;
-    private int listfocused;
+    private int focusedCardIndex;
+    private int focusedListIndex;
+    private ListCtrl focusedListIndexCtrl;
     private Board shownBoard;
-    public boolean reset ;
-    public Card highlightatdStartedCard;
+    private Card highlightedStartedCard;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -87,17 +86,16 @@ public class WorkspaceCtrl implements Initializable {
     public WorkspaceCtrl(WorkspaceService service, HelperMethods helperMethods) {
         this.service = service;
         this.helperMethods = helperMethods;
-        reset=false;
-        cardfocused=0;
-        listfocused=0;
+        focusedCardIndex =0;
+        focusedListIndex =0;
     }
 
-    public Card getHighlightatdStartedCard() {
-        return highlightatdStartedCard;
+    public Card getHighlightedStartedCard() {
+        return highlightedStartedCard;
     }
 
-    public void setHighlightatdStartedCard(Card highlightatdStartedCard) {
-        this.highlightatdStartedCard = highlightatdStartedCard;
+    public void setHighlightedStartedCard(Card highlightedStartedCard) {
+        this.highlightedStartedCard = highlightedStartedCard;
     }
 
     /**
@@ -148,7 +146,6 @@ public class WorkspaceCtrl implements Initializable {
             boardList.getChildren().add(boardCell.getValue());
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
         }
-
         keyField.clear();
         refreshWorkspace(true);
     }
@@ -227,7 +224,13 @@ public class WorkspaceCtrl implements Initializable {
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-       fillBoard();
+        fillBoard();
+        if (!boardControls.isVisible())
+            boardControls.setVisible(true);
+        if (!boardName.isVisible())
+            boardName.setVisible(true);
+        if (!listContainer.isVisible())
+            listContainer.setVisible(true);
     }
     public void fillBoard()
     {
@@ -243,140 +246,79 @@ public class WorkspaceCtrl implements Initializable {
             controller.setListId(i);
             controller.setBoardKey(shownBoard.getKey());
             controller.setHelperMethod(helperMethods);
-            controller.setCardList(cardList);
-            controller.displayCards();
-            int finalI = i;
-            list.setOnMouseEntered(event -> {
-                list.requestFocus();
-                list.setOnKeyPressed(keyEvent -> {
-                    {
-                        if (keyEvent.getCode() == KeyCode.UP) {
-                            setFocusUp(controller);
-                        }
-                        if (keyEvent.getCode() == KeyCode.DOWN) {
-                            setFocusDown(controller);
-                        }
-                        if (keyEvent.getCode() == KeyCode.ENTER) {
-                            //refreshBoard(listFocused, cardfocused, true);
-                        }
-                        if (keyEvent.getCode() == KeyCode.LEFT) {
-                            setFocusLeft(controller);
-                        }
-                        if (keyEvent.getCode() == KeyCode.RIGHT) {
-                            setFocusRight(controller);
-                        }
-                    }
-
-                });
-            });
-            list.setOnMouseExited(event -> {
-                controller.resetFocus();
-            });
-            controller.setListTitle(cardList.getListTitle());
-            listContainer.getChildren().add(list);
-        }
-        if (!boardControls.isVisible())
-            boardControls.setVisible(true);
-        if (!boardName.isVisible())
-            boardName.setVisible(true);
-        if (!listContainer.isVisible())
-            listContainer.setVisible(true);
-    }
-
-    public void refreshBoard(final int listFocused,int cardFocused,Boolean open)
-    {
-        if(reset==true)
-        {
-            fillBoard();
-            return;
-        }
-        listContainer.getChildren().clear();
-        boardName.setText(shownBoard.getTitle());
-        for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
-            var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
-            CardList cardList = shownBoard.getCardLists().get(i);
-            VBox list = (VBox) loader.getValue();
-            ListCtrl controller = loader.getKey();
-            controller.setListId(i);
-            controller.setWorkspaceCtrl(this);
-            controller.setBoardKey(shownBoard.getKey());
-            controller.setHelperMethod(helperMethods);
-            if(listFocused==i)
+            if(focusedListIndex == i )
             {
-                if(cardFocused>shownBoard.getCardLists().get(i).getCards().size())
+                focusedListIndexCtrl=controller;
+                if(focusedCardIndex >shownBoard.getCardLists().get(i).getCards().size())
                     controller.setFocus(shownBoard.getCardLists().get(i).getCards().size());
-                    else
-                controller.setFocus(cardFocused);
-                if(open)
-                {
-                    controller.openFocusedIndex(cardFocused);
-                    System.out.println("open");
-                }
+                else
+                    controller.setFocus(focusedCardIndex);
             }
             controller.setCardList(cardList);
             controller.displayCards();
-            list.setOnMouseEntered(event -> {
-                list.requestFocus();
-                list.setOnKeyPressed(keyEvent -> {
-                    {
-                        if (keyEvent.getCode() == KeyCode.UP) {
-                           setFocusUp(controller);
-                        }
-                        if (keyEvent.getCode() == KeyCode.DOWN) {
-                           setFocusDown(controller);
-                        }
-                        if (keyEvent.getCode() == KeyCode.ENTER) {
-                            //refreshBoard(listFocused, cardfocused, true);
-                        }
-                        if (keyEvent.getCode() == KeyCode.LEFT) {
-                            setFocusLeft(controller);
-                        }
-                        if (keyEvent.getCode() == KeyCode.RIGHT) {
-                            setFocusRight(controller);
-                        }
-                    }
-
-                });
-            });
-            list.setOnMouseExited(event -> {
-            });
-
+            setMoveShortcutListeners(list,controller);
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
-
         }
-        if (!boardControls.isVisible())
-            boardControls.setVisible(true);
-        if (!boardName.isVisible())
-            boardName.setVisible(true);
-        if (!listContainer.isVisible())
-            listContainer.setVisible(true);
     }
-    public void setFocusUp(ListCtrl listCtrl)
+    public void setMoveShortcutListeners(VBox list,ListCtrl controller)
     {
-        cardfocused=cardfocused-1;
-        refreshBoard(listfocused, cardfocused , false);
+        list.setOnMouseEntered(event -> {
+            list.requestFocus();
+            list.setOnKeyPressed(keyEvent -> {
+                {
+                    if (keyEvent.getCode() == KeyCode.UP) {
+                        setFocusUp();
+                    }
+                    if (keyEvent.getCode() == KeyCode.DOWN) {
+                        setFocusDown();
+                    }
+                    if (keyEvent.getCode() == KeyCode.ENTER) {
+                        openFocused(focusedListIndexCtrl);
+                    }
+                    if (keyEvent.getCode() == KeyCode.LEFT) {
+                        setFocusLeft();
+                    }
+                    if (keyEvent.getCode() == KeyCode.RIGHT) {
+                        setFocusRight();
+                    }
+                }
+            });
+        });
+        list.setOnMouseExited(event -> {
+            controller.resetFocus();
+        });
     }
-    public void setFocusDown(ListCtrl listCtrl)
+
+
+    public void setFocusUp()
     {
-       cardfocused=cardfocused+1;
-        refreshBoard(listfocused, cardfocused , false);
+        focusedCardIndex = focusedCardIndex -1;
+        fillBoard();
     }
-    public void setFocusLeft(ListCtrl listCtrl)
+    public void setFocusDown()
     {
-        listfocused=listfocused-1;
-        refreshBoard(listfocused, cardfocused , false);
+        focusedCardIndex = focusedCardIndex +1;
+        fillBoard();
     }
-    public void setFocusRight(ListCtrl listCtrl)
+    public void setFocusLeft()
     {
-        listfocused=listfocused+1;
-        refreshBoard(listfocused, cardfocused , false);
+        focusedListIndex = focusedListIndex -1;
+        fillBoard();
+    }
+    public void setFocusRight()
+    {
+        focusedListIndex = focusedListIndex +1;
+        fillBoard();
     }
     public void setFocused(int cardIndex,int listIndex)
     {
-        cardfocused = cardIndex;
-        listfocused=listIndex;
+        focusedCardIndex = cardIndex;
+        focusedListIndex =listIndex;
+    }
+    public void openFocused(ListCtrl listCtrl)
+    {
+        listCtrl.openFocusedIndex();
     }
 
     /**
