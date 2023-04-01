@@ -21,6 +21,7 @@ import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
+import client.windows.customize.CustomizeCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.rename.RenameCtrl;
@@ -41,6 +42,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -193,7 +195,15 @@ public class AdminCtrl implements Initializable {
                 boardList.getChildren().add(boardCell.getValue());
             }
         }
+        updateBoardColours();
+    }
 
+    public void updateBoardColours()
+    {
+        if(shownBoard!=null){
+            listContainer.setStyle("-fx-background-color: #"+shownBoard.getBackgroundColour());
+            boardName.setTextFill(Color.web(shownBoard.getFontColour()));
+        }
     }
 
     public void showBoard(String targetKey) {
@@ -328,5 +338,22 @@ public class AdminCtrl implements Initializable {
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
         this.service.setServer(helperMethods.getServerIP());
+    }
+
+    @FXML
+    public void customizeBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");
+
+        if(shownBoard == null)
+        {
+            return;
+        }
+        loader.getKey().setBoard(shownBoard);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Customize";
+        HelperMethods.popUp(scene, title);
     }
 }

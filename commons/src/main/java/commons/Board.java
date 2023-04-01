@@ -18,6 +18,9 @@ public class Board {
 
     private String title;
 
+    private String backgroundColour = "FFFFFF";
+    private String fontColour = "000000";
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "key")
     private List<CardList> cardLists; // Use a list here to make the annotation work
