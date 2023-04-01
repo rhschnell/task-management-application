@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
@@ -90,10 +91,22 @@
             </content>
         </ScrollPane>
         <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-        <Button fx:id="closeButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Close">
-            <font>
-                <Font name="Arial Bold" size="12.0" />
-            </font>
-        </Button>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#save" text="Save">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+              <Button fx:id="closeButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Close">
+                  <font>
+                      <Font name="Arial Bold" size="12.0" />
+                  </font>
+              </Button>
+         </children>
+      </HBox>
     </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </VBox>

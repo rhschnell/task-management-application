@@ -55,7 +55,12 @@ public class CustomizeCtrl {
 
     public void close(){
         ((Stage)closeButton.getScene().getWindow()).close();
+    }
+
+    public void save()
+    {
         utils.insertBoard(board);
+        ((Stage)closeButton.getScene().getWindow()).close();
     }
 
     public void setBoard(Board shownBoard) {
