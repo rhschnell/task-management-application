@@ -217,29 +217,29 @@ public class WorkspaceCtrl implements Initializable {
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
-            ListCtrl ctrl = loader.getKey();
-
-
-            ctrl.setBoardKey(shownBoard.getKey());
-            ctrl.setHelperMethod(helperMethods);
-            ctrl.setCardList(cardList);
-            ctrl.displayCards();
+            ListCtrl controller = loader.getKey();
+            controller.setBoardKey(shownBoard.getKey());
+            controller.setHelperMethod(helperMethods);
+            controller.setCardList(cardList);
+            controller.displayCards();
             list.setOnMouseEntered(event -> {
                 list.requestFocus();
                 list.setOnKeyPressed(keyEvent -> {
                     if (keyEvent.getCode() == KeyCode.UP) {
-                        ctrl.setFocusDown();
+                        controller.setFocusDown();
                     }
                     if (keyEvent.getCode() == KeyCode.DOWN) {
-                        ctrl.setFocusUp();
+                        controller.setFocusUp();
                     }
                     if (keyEvent.getCode() == KeyCode.ENTER) {
-                        ctrl.openFocus();
+                        controller.openFocusedCard();
                     }
                 });
             });
-            list.setOnMouseExited(event -> {ctrl.resetFocus();});
-            ctrl.setListTitle(cardList.getListTitle());
+            list.setOnMouseExited(event -> {
+                controller.resetFocus();
+            });
+            controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
         }
         if (!boardControls.isVisible())

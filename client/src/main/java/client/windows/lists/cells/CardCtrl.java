@@ -77,17 +77,17 @@ public class CardCtrl {
         tagCircle1.setVisible(false);
         tagCircle2.setVisible(false);
         tagCircle3.setVisible(false);
-        if (tags.size() > 0) {
+        if (tags!=null && tags.size() > 0) {
             tagCircle1.setFill(Paint.valueOf(tags.get(0).getColor()));
             tagCircle1.setVisible(true);
 
         }
-        if (tags.size() > 1) {
+        if (tags!=null && tags.size() > 1) {
             tagCircle2.setFill(Paint.valueOf(tags.get(1).getColor()));
             tagCircle2.setVisible(true);
 
         }
-        if (tags.size() > 2) {
+        if (tags!=null && tags.size() > 2) {
             tagCircle3.setFill(Paint.valueOf(tags.get(2).getColor()));
             tagCircle3.setVisible(true);
 

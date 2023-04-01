@@ -24,17 +24,17 @@
                <Insets left="10.0" />
             </HBox.margin>
          </Label>
-         <Circle fx:id="tagCircle3" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+         <Circle fx:id="tagCircle3" fill="WHITE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
             <HBox.margin>
                <Insets right="5.0" />
             </HBox.margin>
          </Circle>
-         <Circle fx:id="tagCircle2" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+         <Circle fx:id="tagCircle2" fill="WHITE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
             <HBox.margin>
                <Insets right="5.0" />
             </HBox.margin>
          </Circle>
-         <Circle fx:id="tagCircle1" fill="DODGERBLUE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
+         <Circle fx:id="tagCircle1" fill="WHITE" radius="9.0" stroke="BLACK" strokeType="INSIDE">
             <HBox.margin>
                <Insets right="5.0" />
             </HBox.margin>
