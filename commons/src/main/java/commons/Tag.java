@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +26,8 @@ public class Tag implements Serializable {
     private long id;
 
     @JsonIgnore
-    @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.REMOVE},mappedBy = "tags", fetch = FetchType.EAGER)
+    @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.REMOVE},
+            mappedBy = "tags", fetch = FetchType.EAGER)
     private List<Card> cards;
 
 
@@ -39,6 +41,7 @@ public class Tag implements Serializable {
     public Tag(String name, String color) {
         this.name = name;
         this.color = color;
+        this.cards = new ArrayList<>();
     }
 
     /**
