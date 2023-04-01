@@ -9,6 +9,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -85,5 +86,10 @@ public class BoardCellCtrl implements Initializable {
         });
         // TODO: else
     }
+//
+//    public void setLabelColour()
+//    {
+//        this.boardTitle.setTextFill(Color.web(board.getFontColour()));
+//    }
 }
 
