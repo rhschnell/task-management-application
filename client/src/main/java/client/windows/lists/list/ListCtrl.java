@@ -50,6 +50,8 @@ public class ListCtrl {
     private HelperMethods hm;
     private final ListService service;
 
+    private int listid;
+
     private DataFormat cardFormat;
 
     @FXML
@@ -139,6 +141,10 @@ public class ListCtrl {
         }
     }
 
+    public int getListid() {
+        return listid;
+    }
+
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
         cardCell.getValue().setCursor(Cursor.HAND);
@@ -159,10 +165,9 @@ public class ListCtrl {
                 workspaceCtrl.setHighlightatdStartedCard(cardCell.getKey().getCard());
                 highlightStartedCard = cardCell.getKey().getCard();
                 cardCell.getKey().setFocus();
-                workspaceCtrl.setCardFocused((int) focusedCardIndex);
                 //System.out.println("highlightStartedCard"+highlightStartedCard);
                 //System.out.println("new card"+cardCell.getKey().getCard());
-                workspaceCtrl.setCardFocused((int)focusedCardIndex);
+                workspaceCtrl.setFocused((int)focusedCardIndex,listid);
             }
            // else
              //   cardCell.getKey().removeFocus();
@@ -234,6 +239,10 @@ public class ListCtrl {
     {
         focusedCardIndex=index;
         displayCards();
+    }
+    public void setListId(int index)
+    {
+        listid =index;
     }
     public int getFocus()
     {

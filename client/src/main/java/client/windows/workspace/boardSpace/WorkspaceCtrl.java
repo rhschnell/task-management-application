@@ -73,6 +73,7 @@ public class WorkspaceCtrl implements Initializable {
 
     private List<String> joinedKeys;
     private int cardfocused;
+    private int listfocused;
     private Board shownBoard;
     public boolean reset ;
     public Card highlightatdStartedCard;
@@ -88,6 +89,7 @@ public class WorkspaceCtrl implements Initializable {
         this.helperMethods = helperMethods;
         reset=false;
         cardfocused=0;
+        listfocused=0;
     }
 
     public Card getHighlightatdStartedCard() {
@@ -238,6 +240,7 @@ public class WorkspaceCtrl implements Initializable {
             VBox list = (VBox) loader.getValue();
             ListCtrl controller = loader.getKey();
             controller.setWorkspaceCtrl(this);
+            controller.setListId(i);
             controller.setBoardKey(shownBoard.getKey());
             controller.setHelperMethod(helperMethods);
             controller.setCardList(cardList);
@@ -246,23 +249,24 @@ public class WorkspaceCtrl implements Initializable {
             list.setOnMouseEntered(event -> {
                 list.requestFocus();
                 list.setOnKeyPressed(keyEvent -> {
-                    if (keyEvent.getCode() == KeyCode.UP) {
-                        controller.setFocusDown();
+                    {
+                        if (keyEvent.getCode() == KeyCode.UP) {
+                            setFocusUp(controller);
+                        }
+                        if (keyEvent.getCode() == KeyCode.DOWN) {
+                            setFocusDown(controller);
+                        }
+                        if (keyEvent.getCode() == KeyCode.ENTER) {
+                            //refreshBoard(listFocused, cardfocused, true);
+                        }
+                        if (keyEvent.getCode() == KeyCode.LEFT) {
+                            setFocusLeft(controller);
+                        }
+                        if (keyEvent.getCode() == KeyCode.RIGHT) {
+                            setFocusRight(controller);
+                        }
                     }
-                    if (keyEvent.getCode() == KeyCode.DOWN) {
-                        controller.setFocusUp();
-                    }
-                    if (keyEvent.getCode() == KeyCode.ENTER) {
-                        controller.openFocusedCard();
-                    }
-                    if (keyEvent.getCode() == KeyCode.LEFT) {
-                        controller.resetFocus();
-                        refreshBoard(finalI -1,controller.getFocus(),false);
-                    }
-                    if (keyEvent.getCode() == KeyCode.RIGHT) {
-                        controller.resetFocus();
-                        refreshBoard(finalI +1,controller.getFocus(),false);
-                    }
+
                 });
             });
             list.setOnMouseExited(event -> {
@@ -294,6 +298,7 @@ public class WorkspaceCtrl implements Initializable {
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
             ListCtrl controller = loader.getKey();
+            controller.setListId(i);
             controller.setWorkspaceCtrl(this);
             controller.setBoardKey(shownBoard.getKey());
             controller.setHelperMethod(helperMethods);
@@ -311,27 +316,24 @@ public class WorkspaceCtrl implements Initializable {
             }
             controller.setCardList(cardList);
             controller.displayCards();
-            int finalI = i;
             list.setOnMouseEntered(event -> {
                 list.requestFocus();
                 list.setOnKeyPressed(keyEvent -> {
                     {
                         if (keyEvent.getCode() == KeyCode.UP) {
-                            setCardFocused(cardFocused-1);
-                            refreshBoard(listFocused, cardfocused, false);
+                           setFocusUp(controller);
                         }
                         if (keyEvent.getCode() == KeyCode.DOWN) {
-                            setCardFocused(cardFocused+1);
-                            refreshBoard(listFocused, cardfocused , false);
+                           setFocusDown(controller);
                         }
                         if (keyEvent.getCode() == KeyCode.ENTER) {
-                            refreshBoard(listFocused, cardfocused, true);
+                            //refreshBoard(listFocused, cardfocused, true);
                         }
                         if (keyEvent.getCode() == KeyCode.LEFT) {
-                            refreshBoard(listFocused - 1, cardfocused, false);
+                            setFocusLeft(controller);
                         }
                         if (keyEvent.getCode() == KeyCode.RIGHT) {
-                            refreshBoard(listFocused + 1, cardfocused, false);
+                            setFocusRight(controller);
                         }
                     }
 
@@ -351,25 +353,30 @@ public class WorkspaceCtrl implements Initializable {
         if (!listContainer.isVisible())
             listContainer.setVisible(true);
     }
-    public void setFocusUp()
+    public void setFocusUp(ListCtrl listCtrl)
     {
-
+        cardfocused=cardfocused-1;
+        refreshBoard(listfocused, cardfocused , false);
     }
-    public void setFocusDown()
+    public void setFocusDown(ListCtrl listCtrl)
     {
-
+       cardfocused=cardfocused+1;
+        refreshBoard(listfocused, cardfocused , false);
     }
-    public void setFocusLeft()
+    public void setFocusLeft(ListCtrl listCtrl)
     {
-
+        listfocused=listfocused-1;
+        refreshBoard(listfocused, cardfocused , false);
     }
-    public void setFocusRight()
+    public void setFocusRight(ListCtrl listCtrl)
     {
-
+        listfocused=listfocused+1;
+        refreshBoard(listfocused, cardfocused , false);
     }
-    public void setCardFocused(int index)
+    public void setFocused(int cardIndex,int listIndex)
     {
-        cardfocused = index;
+        cardfocused = cardIndex;
+        listfocused=listIndex;
     }
 
     /**
