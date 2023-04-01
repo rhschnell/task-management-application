@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="layout" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.customize.CustomizeOverviewCtrl">
+<VBox fx:id="layout" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.customize.CustomizeCtrl">
     <children>
         <Label prefHeight="37.0" prefWidth="220.0" text="Customization">
             <font>
