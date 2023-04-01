@@ -41,12 +41,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -203,12 +200,15 @@ public class WorkspaceCtrl implements Initializable {
                 boardName.setText(shownBoard.getTitle());
             }
         }
+        updateBoardColours();
+    }
 
+    public void updateBoardColours()
+    {
         if(shownBoard!=null){
             listContainer.setStyle("-fx-background-color: #"+shownBoard.getBackgroundColour());
             boardName.setTextFill(Color.web(shownBoard.getFontColour()));
         }
-
     }
 
     public void showBoard(String targetKey) {
