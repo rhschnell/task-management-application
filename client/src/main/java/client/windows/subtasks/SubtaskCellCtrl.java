@@ -72,4 +72,12 @@ public class SubtaskCellCtrl {
         trashIcon.setDisable(true);
         trashIcon.setVisible(false);
     }
+
+    /**
+     * Gets the task associated to this controller
+     * @return The task associated to this controller
+     */
+    public Task getTask() {
+        return task;
+    }
 }

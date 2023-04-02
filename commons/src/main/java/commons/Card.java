@@ -128,6 +128,20 @@ public class Card implements Serializable {
     }
 
     /**
+     * Add new subtask by index
+     *
+     * @param index   The index at which the new subtask should appear
+     * @param newTask The subtask to add
+     */
+    public void addSubTask(int index, Task newTask) {
+        if (this.subTasks == null) {
+            this.subTasks = new ArrayList<>();
+        }
+        this.subTasks.add(index, newTask);
+    }
+
+
+    /**
      * Delete tag by index
      *
      * @param index Index of the tag to be deleted
