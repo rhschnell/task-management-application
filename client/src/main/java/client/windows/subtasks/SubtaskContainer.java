@@ -80,8 +80,6 @@ public abstract class SubtaskContainer {
             }
             event.consume();
         });
-
-
     }
 
     /**

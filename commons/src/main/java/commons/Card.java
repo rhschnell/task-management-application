@@ -17,6 +17,8 @@ public class Card implements Serializable {
     private String backgroundColour;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
+    @OrderBy("priority ASC")
     private List<Task> subTasks;
 
     @Id
@@ -24,7 +26,7 @@ public class Card implements Serializable {
     private long id;
 
 
-    private long priority ;
+    private long priority;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "Card_Tag",
             joinColumns = {
@@ -76,7 +78,6 @@ public class Card implements Serializable {
     }
 
     /**
-     *
      * @param title            Title of the card
      * @param description      Description of the card
      * @param backgroundColour Background colour of the card
@@ -124,6 +125,7 @@ public class Card implements Serializable {
         if (this.subTasks == null) {
             this.subTasks = new ArrayList<>();
         }
+        newTask.setPriority(this.subTasks.size() + 1);
         this.subTasks.add(newTask);
     }
 
@@ -137,7 +139,17 @@ public class Card implements Serializable {
         if (this.subTasks == null) {
             this.subTasks = new ArrayList<>();
         }
+        if (index > subTasks.size()) index = (subTasks.size());
         this.subTasks.add(index, newTask);
+
+        // Update priorities
+        if (subTasks.size() == 1)
+            subTasks.get(0).setPriority(1);
+
+        // Each subtask after this inserted one has to raise the priority
+        for (int i = index + 1; i < subTasks.size() - 1; i++) {
+            subTasks.get(i).setPriority(subTasks.get(i + 1).getPriority());
+        }
     }
 
 

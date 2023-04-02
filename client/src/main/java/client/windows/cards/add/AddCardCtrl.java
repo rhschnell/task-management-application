@@ -177,6 +177,7 @@ public class AddCardCtrl extends SubtaskContainer {
         Task newTask = new Task();
         newTask.setCompleted(false);
         newTask.setTitle(addSubtaskTitle.getText());
+        newTask.setPriority(taskList.size() + 1);
         taskList.add(newTask);
         addSubtaskTitle.clear();
         displayTasks();
@@ -227,9 +228,10 @@ public class AddCardCtrl extends SubtaskContainer {
 
                     taskList.remove(draggedTask);
 
-                    int newIndex = ((VBox) oldParent).getChildren().indexOf(fxComponent);
-                    taskList.add(newIndex - 1, draggedTask);
+                    int newIndex = ((VBox) oldParent).getChildren().indexOf(fxComponent) - 1;
+                    taskList.add(newIndex, draggedTask);
                     ((VBox) oldParent).getChildren().add(newIndex, draggedNode);
+                    service.reorderTasks(draggedTask, newIndex, taskList);
                 }
                 success = true;
             }

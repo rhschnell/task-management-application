@@ -2,6 +2,7 @@ package client.windows.cards.edit;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.TaskUtils;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
@@ -28,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -35,6 +37,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private final EditCardService service;
+    private TaskUtils taskUtils;
 
     @FXML
     private TextField cardTitle;
@@ -59,23 +62,28 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     private Card newCard;
 
+    private List<Long> deletedSubtaskIDs;
+
     /**
      * Injects the service , the Helper Methods and the viewCardCtrl
      *
      * @param service           The EditCardService to use
+     * @param taskUtils         The TaskUtils to use
      * @param helperMethods     Instance of HelperMethods
      * @param viewCardCtrl      The controller that links back to the ViewCard window
      * @param dataFormatManager The DataFormatManager to use
      */
     @Inject
-    public EditCardCtrl(EditCardService service, HelperMethods helperMethods,
+    public EditCardCtrl(EditCardService service, TaskUtils taskUtils, HelperMethods helperMethods,
                         ViewCardCtrl viewCardCtrl, DataFormatManager dataFormatManager) {
         super(dataFormatManager);
         this.service = service;
+        this.taskUtils = taskUtils;
         this.helperMethods = helperMethods;
         this.viewCardCtrl = viewCardCtrl;
         appliedTagsVbox = new VBox();
         newCard = new Card();
+        deletedSubtaskIDs = new ArrayList<>();
     }
 
     /**
@@ -127,16 +135,22 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Saves the changes and closes the pop-up
      */
     public void save() {
+        ((Stage) saveButton.getScene().getWindow()).close();
         Card editedCard = service.getCard();
         String title = cardTitle.getText();
         String description = cardDescription.getText();
         editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(description);
-        editedCard.setSubTasks(newCard.getSubTasks());
+
+        // Delete the tasks from the database
+        for (long taskID : deletedSubtaskIDs){
+            taskUtils.deleteTask(taskID);
+        }
+        deletedSubtaskIDs.clear();
+
         service.insertCard(editedCard);
         viewCardCtrl.applyTag();
-        ((Stage) saveButton.getScene().getWindow()).close();
         viewCardCtrl.displayTasks();
 
     }
@@ -219,6 +233,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     @Override
     public void deleteSubtask(Task task) {
+        deletedSubtaskIDs.add(task.getId());
         newCard.getSubTasks().remove(task);
         displayTasks();
     }
@@ -245,8 +260,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                     // Add it again to the local card at the right index
                     // NOTE! Since the tasks are managed entities, they automatically get updated.
                     // Therefore, there is no need to save them to the database again manually
-                    int newIndex = ((VBox) oldParent).getChildren().indexOf(fxComponent);
-                    newCard.addSubTask(newIndex - 1, draggedTask);
+                    int newIndex = ((VBox) oldParent).getChildren().indexOf(fxComponent) - 1;
+                    newCard.addSubTask(newIndex, draggedTask);
+                    service.dragAndDropDB(draggedTask, newIndex);
 
                     // Update the UI
                     ((VBox) oldParent).getChildren().add(newIndex, draggedNode);

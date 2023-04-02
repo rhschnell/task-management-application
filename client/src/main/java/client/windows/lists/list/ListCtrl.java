@@ -47,7 +47,6 @@ public class ListCtrl {
     private HelperMethods hm;
     private final ListService service;
 
-
     private DataFormat cardFormat;
 
     @FXML

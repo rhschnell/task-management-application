@@ -1,7 +1,7 @@
 package client.windows.subtasks;
 
 import client.utils.HelperMethods;
-import client.windows.subtasks.SubtaskContainer;
+import client.windows.cards.edit.EditCardCtrl;
 import com.google.inject.Inject;
 import commons.Task;
 import javafx.fxml.FXML;
@@ -28,9 +28,14 @@ public class SubtaskCellCtrl {
 
     private Task task;
 
+    private EditCardCtrl editCardCtrl;
     @Inject
     public SubtaskCellCtrl(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
+    }
+
+    public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
+        this.editCardCtrl = editCardCtrl;
     }
 
     public void setSubtaskContainer(SubtaskContainer subtaskContainer) {

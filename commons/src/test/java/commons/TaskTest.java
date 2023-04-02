@@ -12,7 +12,7 @@ class TaskTest {
     @BeforeEach
     public void before()
     {
-        task = new Task(0, false, "Task");
+        task = new Task(0, false, "Task", 0);
     }
 
     @Test
@@ -60,5 +60,16 @@ class TaskTest {
     void setTitle() {
         task.setTitle("Test");
         assertEquals("Test", task.getTitle());
+    }
+
+    @Test
+    void getPriority() {
+        assertEquals(0, task.getPriority());
+    }
+
+    @Test
+    void setPriority() {
+        task.setPriority(12);
+        assertEquals(12, task.getPriority());
     }
 }
