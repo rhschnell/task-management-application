@@ -78,6 +78,15 @@ public class EditCardService {
             appliedTags.add(tag);
     }
 
+    /**
+     * Returns a list of tags that are applied on this card
+     * @return Applied tags for this card
+     */
+    public List<Tag> getAppliedTags() {
+        return appliedTags;
+    }
+
+
 
     public String getBoardKey() {
         return boardKey;
