@@ -21,7 +21,7 @@ class AdminUtilsTest {
     {
         serverUtils = Mockito.mock(ServerUtils.class);
         adminUtils = new AdminUtils(serverUtils);
-        mocker = new HTTPMocker();
+        mocker = new HTTPMocker(AdminUtils.class);
         adminUtils.setClient(mocker.clientMock);
         when(serverUtils.getServer()).thenReturn("http://nonexisting:123/");
     }

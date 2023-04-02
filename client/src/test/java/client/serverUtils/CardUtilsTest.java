@@ -25,7 +25,7 @@ class CardUtilsTest {
     {
         serverUtils = Mockito.mock(ServerUtils.class);
         cardUtils = new CardUtils(serverUtils);
-        mocker = new HTTPMocker();
+        mocker = new HTTPMocker(Card.class);
         cardUtils.setClient(mocker.clientMock);
         when(serverUtils.getServer()).thenReturn("http://nonexisting:123/");
     }

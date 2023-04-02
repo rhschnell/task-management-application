@@ -27,7 +27,7 @@ class TagUtilsTest {
     void setup() {
         serverUtils = Mockito.mock(ServerUtils.class);
         tagUtils = new TagUtils(serverUtils);
-        mocker = new HTTPMocker();
+        mocker = new HTTPMocker(Tag.class);
         tagUtils.setClient(mocker.clientMock);
         when(serverUtils.getServer()).thenReturn("http://nonexisting:123/");
     }

@@ -1,9 +1,11 @@
 package client.serverUtils;
 
+import commons.Board;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -16,23 +18,20 @@ public class HTTPMocker {
     protected final Invocation.Builder builderMock;
     protected final Invocation invocationMock;
 
-    public HTTPMocker(){
+    public HTTPMocker(Class<?> classType){
         clientMock = Mockito.mock(Client.class);
         targetMock = Mockito.mock(WebTarget.class);
         builderMock = Mockito.mock(Invocation.Builder.class);
         invocationMock = Mockito.mock(Invocation.class);
-        initialize();
+        initialize(classType);
     }
 
-    public void initialize(){
+    public void initialize(Class<?> something){
         when(clientMock.target(anyString())).thenReturn(targetMock);
         when(targetMock.path(anyString())).thenReturn(targetMock);
         when(targetMock.request(anyString())).thenReturn(builderMock);
         when(targetMock.queryParam(anyString(), any(Object.class))).thenReturn(targetMock);
         when(builderMock.accept(anyString())).thenReturn(builderMock);
-        when(builderMock.post(any(Entity.class), any(Class.class))).thenReturn(invocationMock);
+        when(builderMock.post(any(Entity.class), any(Class.class))).thenReturn(Mockito.mock(something));
     }
-
-
-
 }

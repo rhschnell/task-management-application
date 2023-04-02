@@ -28,7 +28,7 @@ class BoardUtilsTest {
     {
         serverUtils = Mockito.mock(ServerUtils.class);
         boardUtils = new BoardUtils(serverUtils);
-        mocker = new HTTPMocker();
+        mocker = new HTTPMocker(Board.class);
         boardUtils.setClient(mocker.clientMock);
         when(serverUtils.getServer()).thenReturn("http://nonexisting:123/");
     }
@@ -68,17 +68,17 @@ class BoardUtilsTest {
         verify(serverUtils).getServer();
     }
 
-//    @Test
-//    void insertBoard() {
-//        Board board = new Board();
-//        boardUtils.insertBoard(board);
-//        verify(mocker.clientMock).target("http://nonexisting:123/");
-//        verify(mocker.targetMock).path(Route.BOARD);
-//        verify(mocker.targetMock).request(APPLICATION_JSON);
-//        verify(mocker.builderMock).accept(APPLICATION_JSON);
-//        verify(mocker.builderMock).post(Entity.entity(board, APPLICATION_JSON), Board.class);
-//        verify(serverUtils).getServer();
-//    }
+    @Test
+    void insertBoard() {
+        Board board = new Board();
+        boardUtils.insertBoard(board);
+        verify(mocker.clientMock).target("http://nonexisting:123/");
+        verify(mocker.targetMock).path(Route.BOARD);
+        verify(mocker.targetMock).request(APPLICATION_JSON);
+        verify(mocker.builderMock).accept(APPLICATION_JSON);
+        verify(mocker.builderMock).post(Entity.entity(board, APPLICATION_JSON), Board.class);
+        verify(serverUtils).getServer();
+    }
 
     @Test
     void getServer()
