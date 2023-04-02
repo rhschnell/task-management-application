@@ -110,7 +110,7 @@
                            <Font name="Arial Bold" size="18.0" />
                         </font>
                      </Label>
-                     <Button fx:id="personalizeButton" mnemonicParsing="false" onAction="#customizeBoard" text="Personalize">
+                     <Button fx:id="personalizeButton" mnemonicParsing="false" onAction="#customizeBoard" text="Personalize" styleClass="green-button">
                         <font>
                            <Font name="System Bold" size="12.0" />
                         </font>
