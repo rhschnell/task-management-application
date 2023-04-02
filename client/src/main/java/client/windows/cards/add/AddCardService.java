@@ -123,32 +123,23 @@ public class AddCardService {
 
     /**
      * In-place algorithm to swap tasks around and update their priorities
+     *
      * @param draggedTask The task to insert at a new place
-     * @param newIndex The index of the new place to insert the dragged task
-     * @param subtasks The list in which the inserting should take place
+     * @param newIndex    The index of the new place to insert the dragged task
+     * @param subtasks    The list in which the inserting should take place
      * @throws NotFoundException if the task to drag is not part of the provided list
      */
     public void reorderTasks(Task draggedTask, int newIndex, List<Task> subtasks) {
-        // Reflect the priority shift on a list
-
-        // Check if the draggedTask is inside the list
-        if (!subtasks.contains(draggedTask)) throw new NotFoundException();
-
-        // Shift the tasks around
+        // Assert direction of drag-drop:
         int oldIndex = subtasks.indexOf(draggedTask);
-        long priorityOfPredecessor = subtasks.get(newIndex).getPriority();
+        if (oldIndex == newIndex) return;
 
         subtasks.remove(draggedTask);
         subtasks.add(newIndex, draggedTask);
 
-        // Assign the priority of the newly inserted task
-        draggedTask.setPriority(priorityOfPredecessor + 1);
-
-        // All tasks that are after the inserted one need to update their priorities
-        for (int i = newIndex + 1; i < subtasks.size(); i++){
-            long oldPriority = subtasks.get(i).getPriority();
-            subtasks.get(i).setPriority(oldPriority + 1);
+        // Most naive implementation. Prone for optimizing
+        for (int i = 0; i < subtasks.size(); i++) {
+            subtasks.get(i).setPriority(i + 1);
         }
     }
 }
-

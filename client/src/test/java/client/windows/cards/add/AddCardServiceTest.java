@@ -13,6 +13,8 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -151,9 +153,14 @@ class AddCardServiceTest {
         card.setSubTasks(taskList);
 
         addCardService.reorderTasks(task1, 2, taskList);
-        assertEquals(List.of(task2, task3, task1), taskList);
-        assertEquals(List.of((long) 2, (long) 3, (long) 4),
-                taskList.stream().map(Task::getPriority).collect(Collectors.toList()));
+        List<Task> expectedOrder = List.of(task2, task3, task1);
+        assertEquals(expectedOrder, taskList);
+
+        List<Long> expectedPriorities =
+                LongStream.range(1, (taskList.size() + 1)).boxed().collect(Collectors.toList());
+        assertEquals(expectedOrder.stream().map(Task::getPriority).collect(Collectors.toList()),
+                expectedPriorities);
+
 
     }
 }

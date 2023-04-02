@@ -198,7 +198,7 @@ public class AddCardCtrl extends SubtaskContainer {
                     "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
             loader.getKey().setSubtaskContainer(this);
-            makeTaskDraggable(loader);
+            makeTaskDraggable(loader, subtasks);
             subtasks.getChildren().add(loader.getValue());
         }
     }
@@ -213,26 +213,28 @@ public class AddCardCtrl extends SubtaskContainer {
      * Sets the action for when a dragged subtask is dropped
      *
      * @param fxComponent The JavaFX UI component of a subtask
+     * @param taskVBox    The VBox holding the subtasks
      */
     @Override
-    public void setOnDragDropped(Parent fxComponent) {
+    public void setOnDragDropped(Parent fxComponent, VBox taskVBox) {
         fxComponent.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasContent(getDataFormatManager().getSubtaskFormat())) {
+                // Remove the task from the VBox
                 Node draggedNode = (Node) event.getGestureSource();
-                Parent oldParent = draggedNode.getParent();
-                if (oldParent instanceof VBox) {
-                    ((VBox) oldParent).getChildren().remove(draggedNode);
-                    Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
+                taskVBox.getChildren().remove(draggedNode);
 
-                    taskList.remove(draggedTask);
+                // Insert the new task into the data object
+                Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
+                int newIndex = taskVBox.getChildren().indexOf(fxComponent) - 1;
+                service.reorderTasks(draggedTask, newIndex, taskList);
 
-                    int newIndex = ((VBox) oldParent).getChildren().indexOf(fxComponent) - 1;
-                    taskList.add(newIndex, draggedTask);
-                    ((VBox) oldParent).getChildren().add(newIndex, draggedNode);
-                    service.reorderTasks(draggedTask, newIndex, taskList);
-                }
+                // Insert the new task into the UI
+                taskVBox.getChildren().add(newIndex, draggedNode);
+
+                // Refresh the controllers with the correct task objects
+                displayTasks();
                 success = true;
             }
             event.setDropCompleted(success);

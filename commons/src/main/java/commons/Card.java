@@ -142,13 +142,9 @@ public class Card implements Serializable {
         if (index > subTasks.size()) index = (subTasks.size());
         this.subTasks.add(index, newTask);
 
-        // Update priorities
-        if (subTasks.size() == 1)
-            subTasks.get(0).setPriority(1);
-
-        // Each subtask after this inserted one has to raise the priority
-        for (int i = index + 1; i < subTasks.size() - 1; i++) {
-            subTasks.get(i).setPriority(subTasks.get(i + 1).getPriority());
+        // Update priorities (naive)
+        for (int i = 0; i < this.subTasks.size(); i++) {
+            this.subTasks.get(i).setPriority(i + 1);
         }
     }
 

@@ -23,14 +23,16 @@ public abstract class SubtaskContainer {
     }
 
     public abstract void deleteSubtask(Task task);
+
     public abstract void displayTasks();
 
     /**
      * This method adds eventListeners related to dragging and dropping subtasks
      *
      * @param subtaskCell The loader containing the SubtaskCellCtrl and the JavaFX ui component
+     * @param taskVBox    The VBox holding the subtasks
      */
-    public void makeTaskDraggable(Pair<SubtaskCellCtrl, Parent> subtaskCell) {
+    public void makeTaskDraggable(Pair<SubtaskCellCtrl, Parent> subtaskCell, VBox taskVBox) {
         SubtaskCellCtrl ctrl = subtaskCell.getKey();
         Parent fxComponent = subtaskCell.getValue();
 
@@ -40,9 +42,9 @@ public abstract class SubtaskContainer {
 
         setOnDragDetected(ctrl, fxComponent);
         setOnDragOver(fxComponent);
-        setOnDragEntered(fxComponent, separator);
-        setOnDragExited(fxComponent, separator);
-        setOnDragDropped(fxComponent);
+        setOnDragEntered(fxComponent, taskVBox, separator);
+        setOnDragExited(fxComponent, taskVBox, separator);
+        setOnDragDropped(fxComponent, taskVBox);
     }
 
 
@@ -86,16 +88,15 @@ public abstract class SubtaskContainer {
      * Sets the action for when a subtask is being entered while dragged
      *
      * @param fxComponent The JavaFX UI component
+     * @param taskVBox    The VBox holding the subtasks
      * @param separator   The UI separator
      */
-    private void setOnDragEntered(Parent fxComponent, Separator separator) {
+    private void setOnDragEntered(Parent fxComponent, VBox taskVBox, Separator separator) {
         fxComponent.setOnDragEntered(event -> {
             if (event.getGestureSource() != fxComponent &&
                 event.getDragboard().hasContent(dataFormatManager.getSubtaskFormat())) {
-                int index =
-                        ((VBox) fxComponent.getParent())
-                                .getChildren().indexOf(fxComponent);
-                ((VBox) fxComponent.getParent()).getChildren().add(index, separator);
+                int index = taskVBox.getChildren().indexOf(fxComponent);
+                taskVBox.getChildren().add(index, separator);
 
             }
             event.consume();
@@ -107,12 +108,13 @@ public abstract class SubtaskContainer {
      * Sets the action for when a dragged gesture exits the component
      *
      * @param fxComponent The JavaFX UI component
+     * @param taskVBox    The VBox holding the subtasks
      * @param separator   The UI separator
      */
-    private void setOnDragExited(Parent fxComponent, Separator separator) {
+    private void setOnDragExited(Parent fxComponent, VBox taskVBox, Separator separator) {
         fxComponent.setOnDragExited(event -> {
             {
-                ((VBox) fxComponent.getParent()).getChildren().remove(separator);
+                taskVBox.getChildren().remove(separator);
                 event.consume();
             }
         });
@@ -122,12 +124,15 @@ public abstract class SubtaskContainer {
 
     /**
      * Sets the action for when a dragged subtask is dropped
+     *
      * @param fxComponent The JavaFX UI component of a subtask
+     * @param taskVBox    The VBox holding the tasks
      */
-    public abstract void setOnDragDropped(Parent fxComponent);
+    public abstract void setOnDragDropped(Parent fxComponent, VBox taskVBox);
 
     /**
      * Returns the data format manager used by this container
+     *
      * @return This container's data format manager
      */
     public DataFormatManager getDataFormatManager() {

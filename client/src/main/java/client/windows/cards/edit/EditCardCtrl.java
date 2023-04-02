@@ -144,7 +144,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setDescription(description);
 
         // Delete the tasks from the database
-        for (long taskID : deletedSubtaskIDs){
+        for (long taskID : deletedSubtaskIDs) {
             taskUtils.deleteTask(taskID);
         }
         deletedSubtaskIDs.clear();
@@ -226,7 +226,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                     "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
             loader.getKey().setSubtaskContainer(this);
-            makeTaskDraggable(loader);
+            makeTaskDraggable(loader, subtasks);
             subtasks.getChildren().add(loader.getValue());
         }
     }
@@ -242,34 +242,29 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Sets the action for when a dragged subtask is dropped
      *
      * @param fxComponent The JavaFX UI component of a subtask
+     * @param taskVBox    The VBox holding the subtasks
      */
     @Override
-    public void setOnDragDropped(Parent fxComponent) {
+    public void setOnDragDropped(Parent fxComponent, VBox taskVBox) {
         fxComponent.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
-            boolean success = false;
             if (db.hasContent(getDataFormatManager().getSubtaskFormat())) {
                 Node draggedNode = (Node) event.getGestureSource();
-                Parent oldParent = draggedNode.getParent();
-                if (oldParent instanceof VBox) {
-                    ((VBox) oldParent).getChildren().remove(draggedNode);
-                    Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
-                    // Delete it from the local card
-                    newCard.deleteSubTask(draggedTask);
 
-                    // Add it again to the local card at the right index
-                    // NOTE! Since the tasks are managed entities, they automatically get updated.
-                    // Therefore, there is no need to save them to the database again manually
-                    int newIndex = ((VBox) oldParent).getChildren().indexOf(fxComponent) - 1;
-                    newCard.addSubTask(newIndex, draggedTask);
-                    service.dragAndDropDB(draggedTask, newIndex);
+                // Remove the task from the VBox
+                taskVBox.getChildren().remove(draggedNode);
 
-                    // Update the UI
-                    ((VBox) oldParent).getChildren().add(newIndex, draggedNode);
-                }
-                success = true;
+                // Insert the new task into the data object
+                Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
+                int newIndex = taskVBox.getChildren().indexOf(fxComponent) - 1;
+                service.dragAndDropDB(draggedTask, newIndex);
+
+                // Update the UI
+                taskVBox.getChildren().add(newIndex, draggedNode);
+                displayTasks();
             }
-            event.setDropCompleted(success);
+
+            event.setDropCompleted(true);
             event.consume();
         });
 
