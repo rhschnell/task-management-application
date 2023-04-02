@@ -79,6 +79,10 @@ public class BoardUtils {
     public void setServer(String server) {
         serverUtils.setServer(server);
     }
+    public String getServer()
+    {
+        return serverUtils.getServer();
+    }
 
     public void setClient(Client client)
     {

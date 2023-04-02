@@ -2,6 +2,7 @@ package client.serverUtils;
 
 import commons.Board;
 import commons.Route;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.mockito.Mockito;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -78,6 +81,17 @@ class BoardUtilsTest {
 //    }
 
     @Test
+    void getServer()
+    {
+        BoardUtils utils = new BoardUtils(new ServerUtils());
+        assertNotNull(utils.getServer());
+    }
+
+    @Test
     void setServer() {
+        String server = "Test";
+        BoardUtils utils = new BoardUtils(new ServerUtils());
+        utils.setServer(server);
+        assertEquals(server, utils.getServer());
     }
 }
