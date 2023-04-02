@@ -1,11 +1,9 @@
 package client.serverUtils;
 
-import commons.Board;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Response;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;
