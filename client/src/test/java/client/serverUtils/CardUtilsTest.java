@@ -1,9 +1,9 @@
 package client.serverUtils;
 
-import commons.Board;
+import commons.Card;
 import commons.Route;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,70 +14,67 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class BoardUtilsTest {
+class CardUtilsTest {
 
     private ServerUtils serverUtils;
-    private BoardUtils boardUtils;
+    private CardUtils cardUtils;
     private HTTPMocker mocker;
 
     @BeforeEach
     void setup()
     {
         serverUtils = Mockito.mock(ServerUtils.class);
-        boardUtils = new BoardUtils(serverUtils);
+        cardUtils = new CardUtils(serverUtils);
         mocker = new HTTPMocker();
-        boardUtils.setClient(mocker.clientMock);
+        cardUtils.setClient(mocker.clientMock);
         when(serverUtils.getServer()).thenReturn("http://nonexisting:123/");
     }
 
     @Test
-    void deleteBoard() {
-        String key = "1";
-        boardUtils.deleteBoard(key);
+    void insertCard() {
+        Card card = new Card();
+        cardUtils.insertCard(card);
         verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.BOARD + "/" + key);
+        verify(mocker.targetMock).path(Route.CARD);
         verify(mocker.targetMock).request(APPLICATION_JSON);
         verify(mocker.builderMock).accept(APPLICATION_JSON);
-        verify(mocker.builderMock).delete(Response.class);
+        verify(mocker.builderMock).post(Entity.entity(card, APPLICATION_JSON), Card.class);
         verify(serverUtils).getServer();
     }
 
     @Test
-    void getBoard() {
-        String key = "1";
-        boardUtils.getBoard(key);
+    void deleteCard() {
+        long id = 1;
+        cardUtils.deleteCard(id);
         verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.BOARD + "/" + key);
+        verify(mocker.targetMock).path(Route.CARD + "/" + id);
         verify(mocker.targetMock).request(APPLICATION_JSON);
         verify(mocker.builderMock).accept(APPLICATION_JSON);
-        verify(mocker.builderMock).get(Board.class);
+        verify(mocker.builderMock).delete(Card.class);
         verify(serverUtils).getServer();
     }
 
     @Test
-    void getBoards() {
-        boardUtils.getBoards();
+    void deleteFromCardList() {
+        Card card = new Card();
+        cardUtils.deleteFromCardList(card);
         verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.BOARD);
+        verify(mocker.targetMock).path(Route.CARD_LIST + "/removeFromCardList/");
         verify(mocker.targetMock).request(APPLICATION_JSON);
         verify(mocker.builderMock).accept(APPLICATION_JSON);
-        verify(mocker.builderMock).get(new GenericType<List<Board>>(){});
+        verify(mocker.builderMock).post(Entity.entity(card, APPLICATION_JSON), Card.class);
         verify(serverUtils).getServer();
     }
 
-//    @Test
-//    void insertBoard() {
-//        Board board = new Board();
-//        boardUtils.insertBoard(board);
-//        verify(mocker.clientMock).target("http://nonexisting:123/");
-//        verify(mocker.targetMock).path(Route.BOARD);
-//        verify(mocker.targetMock).request(APPLICATION_JSON);
-//        verify(mocker.builderMock).accept(APPLICATION_JSON);
-//        verify(mocker.builderMock).post(Entity.entity(board, APPLICATION_JSON), Board.class);
-//        verify(serverUtils).getServer();
-//    }
-
     @Test
-    void setServer() {
+    void getCards() {
+        cardUtils.getCards();
+        verify(mocker.clientMock).target("http://nonexisting:123/");
+        verify(mocker.targetMock).path(Route.CARD);
+        verify(mocker.targetMock).request(APPLICATION_JSON);
+        verify(mocker.builderMock).accept(APPLICATION_JSON);
+        verify(mocker.builderMock).get(new GenericType<List<Card>>() {
+        });
+        verify(serverUtils).getServer();
     }
 }
