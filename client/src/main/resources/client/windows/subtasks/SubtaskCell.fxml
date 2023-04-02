@@ -30,13 +30,20 @@
                   <Font size="11.0" />
                </font>
               </TextField>
-              <ImageView fx:id="trashIcon" fitHeight="21.0" fitWidth="21.0" onMouseClicked="#delete" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+              <ImageView fx:id="dragAndDropIcon" fitHeight="21.0" fitWidth="21.0"
+                         onMouseClicked="#delete"
+                         pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                   <image>
-                      <Image url="@/client/icons/trash-can.png" />
+                      <Image url="/client/icons/drag-drop.png" />
                   </image>
                   <cursor>
                       <Cursor fx:constant="OPEN_HAND" />
                   </cursor>
+              </ImageView>
+              <ImageView fx:id="trashIcon" fitHeight="21.0" fitWidth="21.0" onMouseClicked="#delete" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+                  <image>
+                      <Image url="/client/icons/trash-can.png" />
+                  </image>
               </ImageView>
           </children>
          <opaqueInsets>

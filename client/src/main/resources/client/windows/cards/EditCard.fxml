@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="620.0" prefHeight="500.0" prefWidth="332.0" spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.cards.edit.EditCardCtrl">
+
+<VBox spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.cards.edit.EditCardCtrl">
    <children>
        <TextField fx:id="cardTitle" maxWidth="-Infinity" prefHeight="25.0" prefWidth="310.0" promptText="Edit Title..." style="-fx-control-inner-background: #f0f0f0; -fx-background-radius: 10; -fx-border-color: transparent;">
            <font>
@@ -19,67 +20,79 @@
            </font>
        </TextField>
       <Separator prefWidth="200.0" />
-      <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="310.0">
+      <HBox spacing="15.0">
          <children>
-            <Label prefHeight="16.0" prefWidth="252.0" text="Tags">
-               <font>
-                  <Font name="Arial Bold" size="13.0" />
-               </font>
-            </Label>
-            <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#editTagPopup" prefHeight="12.0" prefWidth="85.0" styleClass="gray-button" text="Manage Tags">
-               <font>
-                  <Font name="Arial Bold" size="11.0" />
-               </font></Button>
+            <VBox spacing="10.0" stylesheets="/client/style/stylesheet.css">
+               <children>
+                  <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="310.0" />
+                  <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="310.0">
+                     <children>
+                        <Label prefHeight="16.0" prefWidth="252.0" text="Tags">
+                           <font>
+                              <Font name="Arial Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#editTagPopup" prefHeight="12.0" prefWidth="85.0" styleClass="gray-button" text="Manage Tags">
+                           <font>
+                              <Font name="Arial Bold" size="11.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0">
+                     <content>
+                        <VBox fx:id="appliedTagsVbox" maxHeight="1.7976931348623157E308" prefWidth="305.0" spacing="5.0" />
+                     </content>
+                     <VBox.margin>
+                        <Insets right="-8.0" />
+                     </VBox.margin>
+                  </ScrollPane>
+                  <Separator prefWidth="200.0" />
+                  <Label text="Description">
+                     <font>
+                        <Font name="Arial Bold" size="13.0" />
+                     </font>
+                  </Label>
+                   <TextArea fx:id="cardDescription" maxHeight="136.0" maxWidth="-Infinity" minHeight="80.0" prefHeight="136.0" prefWidth="310.0" promptText="Add description..." style="-fx-control-inner-background: #f0f0f0;" wrapText="true" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <VBox spacing="10.0">
+               <children>
+                  <Label text="Task List">
+                     <font>
+                        <Font name="Arial Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <HBox maxWidth="310.0" prefWidth="310.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="addTaskField" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="270.0" promptText="Add task..." style="-fx-background-radius: 10; -fx-control-inner-background: #f0f0f0;" />
+                        <Button fx:id="addTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addTask" prefHeight="25.0" prefWidth="40.0" styleClass="green-button" text="Add">
+                           <font>
+                              <Font name="Arial Bold" size="11.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="231.0" prefWidth="288.0">
+                     <content>
+                        <VBox fx:id="subtasks" maxHeight="1.7976931348623157E308" prefWidth="305.0" spacing="10.0" />
+                     </content>
+                     <VBox.margin>
+                        <Insets right="-8.0" />
+                     </VBox.margin>
+                  </ScrollPane>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
          </children>
       </HBox>
-      <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" VBox.vgrow="ALWAYS">
-         <content>
-            <VBox fx:id="appliedTagsVbox" maxHeight="1.7976931348623157E308" prefWidth="305.0" spacing="5.0" />
-         </content>
-         <VBox.margin>
-            <Insets right="-8.0" />
-         </VBox.margin>
-      </ScrollPane>
-      <Separator prefWidth="200.0">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin></Separator>
-       <Label text="Description">
-           <font>
-               <Font name="Arial Bold" size="13.0" />
-           </font>
-       </Label>
-       <TextArea fx:id="cardDescription" maxHeight="80.0" maxWidth="-Infinity" minHeight="80.0" prefWidth="310.0" promptText="Add description..." style="-fx-control-inner-background: #f0f0f0;" wrapText="true" VBox.vgrow="ALWAYS" />
       <Separator prefWidth="200.0" />
-       <Label text="Task List">
-           <font>
-               <Font name="Arial Bold" size="13.0" />
-           </font>
-       </Label>
-      <HBox maxWidth="310.0" prefWidth="310.0" spacing="10.0">
-         <children>
-            <TextField fx:id="addTaskField" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="270.0" promptText="Add task..." style="-fx-background-radius: 10; -fx-control-inner-background: #f0f0f0;" />
-            <Button fx:id="addTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addTask" prefHeight="25.0" prefWidth="40.0" styleClass="green-button" text="Add">
-               <font>
-                  <Font name="Arial Bold" size="11.0" />
-               </font></Button>
-         </children>
-         <VBox.margin>
-            <Insets bottom="10.0" />
-         </VBox.margin>
-      </HBox>
-      <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" VBox.vgrow="ALWAYS">
-         <content>
-            <VBox fx:id="subtasks" maxHeight="1.7976931348623157E308" prefWidth="305.0" spacing="10.0" />
-         </content>
-         <VBox.margin>
-            <Insets right="-8.0" />
-         </VBox.margin>
-      </ScrollPane>
-      <Separator prefWidth="200.0">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin></Separator>
       <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="310.0" spacing="10.0">
          <children>
             <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="23.0" prefWidth="87.0" styleClass="gray-button" text="Personalize">
@@ -87,7 +100,7 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
                <HBox.margin>
-                  <Insets right="100.0" />
+                  <Insets right="445.0" />
                </HBox.margin>
             </Button>
             <Button fx:id="saveButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#save" prefHeight="23.0" prefWidth="47.0" styleClass="blue-button" text="Save">

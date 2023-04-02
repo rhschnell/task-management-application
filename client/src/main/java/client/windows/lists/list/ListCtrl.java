@@ -17,17 +17,16 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
-import client.windows.lists.cells.QuickAddCardCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
+import client.windows.lists.cells.QuickAddCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -113,7 +112,7 @@ public class ListCtrl {
 
     /**
      * Constructor for ListCtrl
-     *
+     * @param service The ListService for this controller
      */
     @Inject
     public ListCtrl(ListService service) {
@@ -163,7 +162,7 @@ public class ListCtrl {
 
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
-        cardCell.getValue().setCursor(Cursor.HAND);
+//        cardCell.getValue().setCursor(Cursor.HAND);
         cardCell.getValue().setOnDragDetected(event -> {
             Dragboard db = cardCell.getValue().startDragAndDrop(TransferMode.MOVE);
             Image dragImage = new Image("client/icons/DragFile.png");
@@ -250,7 +249,7 @@ public class ListCtrl {
 
     /**
      * Returns the CardList of the Controller
-     * @return
+     * @return The card list associated to this controller
      */
     public CardList getCardList()
     {
@@ -259,7 +258,7 @@ public class ListCtrl {
 
     private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
         Separator separator = new Separator();
-        cardCell.getValue().setCursor(Cursor.HAND);
+//        cardCell.getValue().setCursor(Cursor.HAND);
 
 
         cardCell.getValue().setOnDragOver(event -> {
