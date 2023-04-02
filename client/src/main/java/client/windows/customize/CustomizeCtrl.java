@@ -1,0 +1,82 @@
+package client.windows.customize;
+
+import client.serverUtils.BoardUtils;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
+import com.google.inject.Inject;
+import commons.Board;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+public class CustomizeCtrl {
+    @FXML
+    private VBox layout;
+    private WorkspaceCtrl workspaceCtrl;
+    private Board board;
+    private BoardUtils utils;
+
+    @FXML
+    private Button resetBoardColorButton;
+    @FXML
+    private Button resetListColorButton;
+    @FXML
+    private Button closeButton;
+
+    @FXML
+    private ColorPicker boardBackgroundColor;
+    @FXML
+    private ColorPicker boardFontColor;
+    @FXML
+    private ColorPicker listBackgroundColor;
+    @FXML
+    private ColorPicker listFontColor;
+
+    @FXML
+    private VBox cardColors;
+
+    @Inject
+    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, BoardUtils utils){
+        this.workspaceCtrl = workspaceCtrl;
+        this.utils = utils;
+    }
+
+    @FXML
+    public void setBoardBackgroundColor(){
+        board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2,8));
+    }
+
+    @FXML
+    public void setBoardFontColor() {
+        board.setFontColour(boardFontColor.getValue().toString().substring(2,8));
+    }
+
+    @FXML
+    public void resetBoard()
+    {
+        board.setFontColour("000000");
+        board.setBackgroundColour("FFFFFF");
+        utils.insertBoard(board);
+        boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
+        boardFontColor.setValue(Color.web(board.getFontColour()));
+    }
+
+    public void close(){
+        ((Stage)closeButton.getScene().getWindow()).close();
+    }
+
+    public void save()
+    {
+        utils.insertBoard(board);
+        ((Stage)closeButton.getScene().getWindow()).close();
+    }
+
+    public void setBoard(Board shownBoard) {
+        board = shownBoard;
+        boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
+        boardFontColor.setValue(Color.web(board.getFontColour()));
+    }
+}
+

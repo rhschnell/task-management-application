@@ -50,7 +50,7 @@ public class ViewCardCtrl {
     private Text cardDescription;
 
     @FXML
-    private Button deleteButton;
+    private Button cancelButton;
 
     @FXML
     private Button editButton;
@@ -65,6 +65,9 @@ public class ViewCardCtrl {
 
     /**
      * Constructor for ViewCardCtrl
+     * @param service The service to use in this controller
+     * @param mainCtrl The main controller to use in this controller
+     * @param myFXML The MyFXML injector to use in this controller
      */
     @Inject
     public ViewCardCtrl(ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
@@ -85,6 +88,9 @@ public class ViewCardCtrl {
     }
 
 
+    /**
+     * Adds a tag to the card view
+     */
     public void applyTag() {
         appliedTagsVbox.getChildren().clear();
         if(card.getTags()!=null) {
@@ -118,7 +124,7 @@ public class ViewCardCtrl {
      * Method to delete the current card
      */
     public void delete() {
-        ((Stage)deleteButton.getScene().getWindow()).close();
+        ((Stage)cancelButton.getScene().getWindow()).close();
         service.deleteCard(card);
     }
 
@@ -126,7 +132,7 @@ public class ViewCardCtrl {
      * Escapes the window
      */
     public void escape() {
-        ((Stage)deleteButton.getScene().getWindow()).close();
+        ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
     public void edit() {
@@ -143,15 +149,31 @@ public class ViewCardCtrl {
         HelperMethods.popUp(scene,"Edit Card");
         displayTasks();
     }
+
+    /**
+     * Gets the key of the board associated to this card
+     * @return The associated board's key
+     */
     public String getBoardKey() {
         return service.getBoardKey();
     }
 
+    /**
+     * Sets the key of the board associated to this card
+     * @param boardKey New key
+     */
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
     }
 
+    /**
+     * Sets the edit button to be invisible
+     */
+    public void onlyForViewing()
+    {
+        editButton.setVisible(false);
+    }
     /**
      * Allows us to add subtasks to a list
      */
