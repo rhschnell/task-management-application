@@ -22,7 +22,7 @@ Is there something that we need to discuss not in the agenda yet?
   - Proudct pitch meeting on Friday. When are you available that day, so we can book a project room? (April 7)
   - Repository turns read-only this Friday. Per team what is their progress.
 - This week's focus. For each of them, we're gonna ask who does what:
-  - Incorporating web sockets and long polling into at least one of our features.
+  - Incorporating web sockets and long polling into at least one of our features. This can be done by taking an hour to watch the self-study and implement them as shown there.
   - Resolving all bugs/things that still need to be added to make sure the entire app is consistent and in conformity with all backlog requirements. Specifically:
     - Add alerts before deleting cards, boards & closing the entire app (Are you sure you want to ……)
     - Force the titles of the cards, boards, and server address not be null through the UI and to have at most N characters, depending on how many characters can be visible on the screen (the number “N” is taken from the database constraints)
