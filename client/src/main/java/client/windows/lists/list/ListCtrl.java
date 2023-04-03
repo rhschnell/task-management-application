@@ -19,14 +19,17 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
+import client.windows.cards.edit.EditCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
+import client.windows.tags.view.TagListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -41,6 +44,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
+
+import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -63,6 +68,7 @@ public class ListCtrl {
     private Pair<CardCtrl, Parent> cardCell;
 
     private WorkspaceCtrl workspaceCtrl;
+    private EditCardCtrl editCardCtrl;
     private Separator separator;
 
 
@@ -82,6 +88,8 @@ public class ListCtrl {
             }
 
             if (event.getCode() == KeyCode.E) handleRenameShortcut();
+
+            if (event.getCode() == KeyCode.T) handleTagShortcut();
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
@@ -93,6 +101,32 @@ public class ListCtrl {
             });
         });
     }
+
+    /**
+     * Method for handling the shortcut to add tags to the card
+     */
+    private void handleTagShortcut() {
+        Card card = getCardList().getCard(workspaceCtrl.getFocusedCardIndex()-1);
+
+        var loaderEditCard = new MyFXML(createInjector(new MainModules()))
+                .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
+        var loaderTagOverview = new MyFXML(createInjector(new MainModules()))
+                .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
+
+        TagListCtrl ctrl = loaderTagOverview.getKey();
+        List<Tag> available = workspaceCtrl.getShownBoard().getTagList();
+        available.removeAll(card.getTags());
+        ctrl.setAvailableTags(available);
+        ctrl.setAppliedTags(card.getTags());
+        ctrl.setEditCardCtrl(loaderEditCard.getKey());
+        ctrl.setType("edit");
+
+        Parent root = loaderTagOverview.getValue();
+        Scene scene = new Scene(root);
+        String title = "Add tag";
+        hm.popUp(scene, title);
+    }
+
     public void setKeyEventListeners(KeyEvent keyEvent)
     {
         if (keyEvent.getCode() == KeyCode.ENTER) {
@@ -149,10 +183,12 @@ public class ListCtrl {
      * Constructor for ListCtrl
      *
      * @param service The ListService for this controller
+     * @param editCardCtrl The editCardController for handling tag popups
      */
     @Inject
-    public ListCtrl(ListService service) {
+    public ListCtrl(ListService service, EditCardCtrl editCardCtrl) {
         this.service = service;
+        this.editCardCtrl = editCardCtrl;
         focusedCardIndex = -1;
     }
 
