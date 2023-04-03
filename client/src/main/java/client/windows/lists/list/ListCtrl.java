@@ -82,6 +82,9 @@ public class ListCtrl {
             }
 
             if (event.getCode() == KeyCode.E) handleRenameShortcut();
+            if (event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.BACK_SPACE) {
+                handleDeleteShortCut();
+            }
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
@@ -93,6 +96,19 @@ public class ListCtrl {
             });
         });
     }
+
+    /**
+     * Method for handling the deletion of the highlighted card
+     */
+    private void handleDeleteShortCut() {
+        // Get the highlighted card
+        int toDeleteIndex = workspaceCtrl.getFocusedCardIndex() - 1;
+        Card toDelete = getCardList().getCard(toDeleteIndex);
+        // Delete it from the list and refresh
+        service.deleteFromCardList(toDelete);
+//        workspaceCtrl.refreshWorkspace();
+    }
+
     public void setKeyEventListeners(KeyEvent keyEvent)
     {
         if (keyEvent.getCode() == KeyCode.ENTER) {
