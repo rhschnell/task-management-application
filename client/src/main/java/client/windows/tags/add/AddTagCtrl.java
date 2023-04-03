@@ -21,6 +21,8 @@ public class AddTagCtrl {
 
     @FXML
     private ColorPicker tagColor;
+    @FXML
+    private ColorPicker fontColor;
 
     @FXML
     private Button cancelButton;
@@ -36,6 +38,7 @@ public class AddTagCtrl {
         this.service = service;
         this.tagOverviewCtrl = tagOverviewCtrl;
         tagColor=new ColorPicker();
+        fontColor=new ColorPicker();
     }
 
     /**
@@ -45,8 +48,7 @@ public class AddTagCtrl {
      */
     public void save() {
         ((Stage)addTagButton.getScene().getWindow()).close();
-        Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString());
-
+        Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString(),fontColor.getValue().toString());
         Board shownBoard = tagOverviewCtrl.getBoard();
         if (shownBoard == null) {
             return;

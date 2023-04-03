@@ -45,6 +45,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private TextArea cardDescription;
     @FXML
     private Button saveButton;
+    @FXML
+    private Button cancelButton;
     private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
 
@@ -125,11 +127,12 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     }
 
     /**
-     * Escapes the window
+     * This method cancels editing the card and return to the previous window
      */
     public void escape() {
-        ((Stage) saveButton.getScene().getWindow()).close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
+
 
     /**
      * Saves the changes and closes the pop-up

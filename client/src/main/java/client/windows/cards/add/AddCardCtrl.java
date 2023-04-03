@@ -93,10 +93,18 @@ public class AddCardCtrl extends SubtaskContainer {
         service.setCardList(cardList);
     }
 
+    /**
+     * Sets the boardKey
+     * @param boardKey the boardKey to be set
+     */
     public void setBoardKey(String boardKey) {
         service.setBoardKey(boardKey);
     }
 
+    /**
+     * Gets the boardKey
+     * @return the boardKey
+     */
     public String getBoardKey() {
         return service.getBoardKey();
     }
@@ -126,12 +134,9 @@ public class AddCardCtrl extends SubtaskContainer {
     }
 
     /**
-     * Escapes the window
+     * Sets the applied tags to the VBOX of the displayed cards
+     * @param appliedTags the Array of tags that needs to be displayed
      */
-    public void escape() {
-        ((Stage) saveButton.getScene().getWindow()).close();
-    }
-
     public void setAppliedTags(List<Tag> appliedTags) {
         service.setAppliedTags(new ArrayList<>());
         appliedTagsVbox.getChildren().clear();
