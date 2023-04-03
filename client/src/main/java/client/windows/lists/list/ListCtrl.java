@@ -71,7 +71,7 @@ public class ListCtrl {
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocused();
+                workspaceCtrl.openFocusedCard();
             }
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
                     || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
@@ -93,19 +93,19 @@ public class ListCtrl {
     public void setKeyEventListeners(KeyEvent keyEvent)
     {
         if (keyEvent.getCode() == KeyCode.ENTER) {
-            workspaceCtrl.openFocused();
+            workspaceCtrl.openFocusedCard();
         }
         if (keyEvent.getCode() == KeyCode.UP) {
-            workspaceCtrl.setFocusUp();
+            workspaceCtrl.moveFocusUp();
         }
         if (keyEvent.getCode() == KeyCode.DOWN) {
-            workspaceCtrl.setFocusDown();
+            workspaceCtrl.moveFocusDown();
         }
         if (keyEvent.getCode() == KeyCode.LEFT) {
-            workspaceCtrl.setFocusLeft();
+            workspaceCtrl.moveFocusLeft();
         }
         if (keyEvent.getCode() == KeyCode.RIGHT) {
-            workspaceCtrl.setFocusRight();
+            workspaceCtrl.moveFocusRight();
         }
     }
 
@@ -185,11 +185,11 @@ public class ListCtrl {
     {
         destination.getValue().setOnMouseEntered(event ->{
             focusedCardIndex=destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocused((int)focusedCardIndex, listId+1);
+            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
             event.consume();
         });
         destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocusAndCancelOpening();
+            workspaceCtrl.resetFocus();
         });
     }
 
