@@ -16,6 +16,7 @@
 package client.modules;
 
 import client.MainCtrl;
+import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
 import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.cards.add.AddCardCtrl;
@@ -52,5 +53,6 @@ public class MainModules implements Module {
         binder.bind(BoardCellCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DataFormatManager.class).in(Scopes.SINGLETON);
     }
 }
