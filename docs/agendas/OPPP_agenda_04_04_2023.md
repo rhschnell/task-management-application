@@ -36,15 +36,17 @@ Is there something that we need to discuss not in the agenda yet?
 Anything anyone would still like to add?
 
 ## Summary (~1 min)
-Quickly go over what we talked about again and make sure everyone is on the same page.
+I will kindly ask the team if they agree to skip this section and directly do to the questions part, since we have limited time. :)
 
 ## Questions for the TA (~9 min)
-- How can we ask Sebastian to take a look at our app? He mentioned he is always happy to do this whenever he is at labs :)
-Product pitch: can we “show” all the features in the video but only “talk” about what we did better and unique than the backlog requirements?
-- Testing: coverage is wanted to be 80% in the grading rubric. However, there is a lot of JavaFX in our app and this can be seen considering the design is very fluid. If we had only implemented the functionality and didn’t care about the user’s perspective, then obviously 80% coverage would have been attainable. But otherwise, since Sebastian specifically mentioned that only services in the client can be tested (which we did), is our app going to receive a full mark for testing? Are manual testing plans just as good?
-- Heuristic usability evaluation: would you be open to take a quick look on our remade heuristic usability evaluation after we finish writing it? Just to make sure that we improved on the points you made.
+- How can we ask Sebastian to take a look at our app? He mentioned he is always happy to do so. :)
+- Product pitch: can we “show” all the features in the video but only “talk” about what we did better and unique than the backlog requirements?
 - Backlog clarifications: Whether closed and reopened clients need to keep the user data locally and reload them when reconnecting.
-- Other questions allowed.
+- Testing: coverage is wanted to be 80% in the grading rubric. However, there is a lot of JavaFX in our app and this can be seen considering the design is very fluid. If we had only implemented the functionality and didn’t care about the user’s perspective, then obviously 80% coverage would have been attainable. But otherwise, since Sebastian specifically mentioned that only services in the client can be tested (which we did), is our app going to receive a full mark for testing? Are manual testing plans just as good?
+- Heuristic usability evaluation:
+  - What did you mean that it is not replicable? We described it exactly as seen in the lecture and in the article. What would you suggest we improve? Would a form of how easy/difficult it is to add boards/cards etc. be fine?
+  - Would you be open to take a quick look on our updated heuristic usability evaluation after we finish writing it? Just to make sure that we improved on the points you made.
+- Other questions if time allows it.
 
 ## Feedback round (~1 min)
 What went well and what can still be improved?
