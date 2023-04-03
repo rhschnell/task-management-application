@@ -14,13 +14,11 @@ public class HTTPMocker {
     protected final Client clientMock;
     protected final WebTarget targetMock;
     protected final Invocation.Builder builderMock;
-    protected final Invocation invocationMock;
 
     public HTTPMocker(Class<?> classType){
         clientMock = Mockito.mock(Client.class);
         targetMock = Mockito.mock(WebTarget.class);
         builderMock = Mockito.mock(Invocation.Builder.class);
-        invocationMock = Mockito.mock(Invocation.class);
         initialize(classType);
     }
 
