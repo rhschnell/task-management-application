@@ -134,10 +134,10 @@ public class ListCtrl {
         var loader = new MyFXML(createInjector())
                 .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
                                                                                    ".fxml");
-        loader.getKey().setCard(selectedCard);
+        loader.getKey().setData(selectedCard);
         loader.getKey().setListCtrl(this);
         Scene scene = new Scene(loader.getValue());
-        hm.popUp(scene, String.format("Rename \"%s\"",selectedCard.getTitle()));
+        hm.popUp(scene, "Rename card");
         // Instantiate a new rename window
     }
 

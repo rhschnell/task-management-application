@@ -41,12 +41,18 @@ public class RenameCardCtrl implements Initializable {
     }
 
     /**
-     * Sets the card to rename using this rename component
+     * Sets the card to rename using this rename component. It sets the title in the textfield
+     * and selects all the text in the textfield
+     *
      * MUST be intitalized!
      * @param card The card to rename
      */
-    public void setCard(Card card) {
+    public void setData(Card card) {
+
         this.card = card;
+        inputField.setText(this.card.getTitle());
+        inputField.selectAll();
+
     }
 
     /**
@@ -95,7 +101,6 @@ public class RenameCardCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Platform.runLater(() -> inputField.requestFocus());
         inputField.setOnKeyPressed(event -> {
             switch (event.getCode()){
                 case ENTER:
@@ -106,5 +111,7 @@ public class RenameCardCtrl implements Initializable {
                     break;
             }
         });
+        Platform.runLater(() -> inputField.requestFocus());
     }
+
 }
