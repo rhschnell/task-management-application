@@ -43,7 +43,7 @@ public class LockPopUpCtrl {
             // If correct password entered, close the popUp and unlock the board
             if (correctPassword) {
                 cancel();
-                board.setProtected(false);
+                service.setProtected(false);
             }
             // If incorrect password entered, show error message.
             else {
@@ -53,8 +53,8 @@ public class LockPopUpCtrl {
         // If board is NOT protected, add the entered password to the board
         else {
             cancel();
-            board.setPassword(inputField.getText());
-            board.setProtected(true);
+            service.setPassword(inputField.getText());
+            service.setProtected(true);
         }
     }
 
@@ -66,7 +66,8 @@ public class LockPopUpCtrl {
      * @param board board
      */
     public void setBoard(Board board) {
-        this.board = board;
+        this.board = (board);
+        service.setBoard(board);
     }
 
     /**

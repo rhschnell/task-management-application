@@ -168,6 +168,8 @@ public class WorkspaceCtrl implements Initializable {
         try {
             key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
+            // TODO: disable buttons instead of making them invisible
+            boardControls.setVisible(!shownBoard.isProtected());
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
             }
