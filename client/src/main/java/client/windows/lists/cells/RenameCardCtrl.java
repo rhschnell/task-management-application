@@ -3,9 +3,9 @@ package client.windows.lists.cells;
 import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -16,13 +16,6 @@ public class RenameCardCtrl implements Initializable {
 
     @FXML
     private TextField inputField;
-
-    @FXML
-    private Button cancel;
-
-    @FXML
-    private Button save;
-
     private Card card;
     private RenameCardService service;
     private ListCtrl listCtrl;
@@ -102,7 +95,7 @@ public class RenameCardCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        inputField.requestFocus();
+        Platform.runLater(() -> inputField.requestFocus());
         inputField.setOnKeyPressed(event -> {
             switch (event.getCode()){
                 case ENTER:

@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
+import static java.lang.Math.abs;
 
 public class WorkspaceCtrl implements Initializable {
     private final WorkspaceService service;
@@ -81,6 +82,10 @@ public class WorkspaceCtrl implements Initializable {
     private int focusedCardIndex;
     private int focusedListIndex;
     private Board shownBoard;
+    private double oldMouseXPosition;
+    private double oldMouseYPosition;
+    private double newMouseXPosition;
+    private double newMouseYPosition;
 
     /**
      * Constructor for WorkspaceCtrl
@@ -93,6 +98,8 @@ public class WorkspaceCtrl implements Initializable {
         this.helperMethods = helperMethods;
         focusedCardIndex =1;
         focusedListIndex =1;
+        oldMouseXPosition =-1;
+        oldMouseYPosition =-1;
     }
 
 
@@ -230,7 +237,7 @@ public class WorkspaceCtrl implements Initializable {
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-        fillBoard();
+        displayLists();
         if (!boardControls.isVisible())
             boardControls.setVisible(true);
         if (!boardName.isVisible())
@@ -238,7 +245,11 @@ public class WorkspaceCtrl implements Initializable {
         if (!listContainer.isVisible())
             listContainer.setVisible(true);
     }
-    public void fillBoard()
+
+    /**
+     * Displays the lists into the Hbox list container
+     */
+    public void displayLists()
     {
         listContainer.getChildren().clear();
         boardName.setText(shownBoard.getTitle());
@@ -257,41 +268,54 @@ public class WorkspaceCtrl implements Initializable {
             setMoveShortcutListeners(loader.getKey().getCardVBox());
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
+            listContainer.setOnMouseMoved(event -> {
+                newMouseXPosition = event.getSceneX();
+                newMouseYPosition = event.getSceneY();
+                System.out.println("moved "+event.getSceneX()+" "+event.getSceneY());});
         }
     }
-    public void setMoveShortcutListeners(VBox list)
+
+    /**
+     * Set listener on the listVbox so that we can know when and where to move the focus
+     * @param listVbox A VBOX containing cards
+     */
+    public void setMoveShortcutListeners(VBox listVbox)
     {
-        list.requestFocus();
-        list.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
-                    || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
-                {
-                    {
-                        if (event.getCode() == KeyCode.UP) {
-                            setFocusUp();
-                        }
-                        if (event.getCode() == KeyCode.DOWN) {
-                            setFocusDown();
-                        }
-                        if (event.getCode() == KeyCode.LEFT) {
-                            setFocusLeft();
-                        }
-                        if (event.getCode() == KeyCode.RIGHT) {
-                            setFocusRight();
-                        }
-                    }
-                }
+        listVbox.requestFocus();
+        listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.UP) {
+                moveFocusUp();
+            }
+            if (event.getCode() == KeyCode.DOWN) {
+                moveFocusDown();
+            }
+            if (event.getCode() == KeyCode.LEFT) {
+                moveFocusLeft();
+            }
+            if (event.getCode() == KeyCode.RIGHT) {
+                moveFocusRight();
             }
             event.consume();
         });
     }
 
+    /**
+     * Returns the ListVbox in which the focusedCard is located
+     * @return the ListBox that contains the focused card
+     */
     public VBox getFocusPosition()
     {
         return (VBox) ((ScrollPane)((VBox)(listContainer.getChildren().get(focusedListIndex-1))).
                getChildren().get(1)).getContent();
     }
-    public boolean condition()
+
+    /**
+     * Verifies if the focused indices actually contain cards or are not valid
+     * Example: left keypad on the first list won't make the list focused index
+     * valid
+     * @return If the condition is valid
+     */
+    public boolean focusedIndicesAreValid()
     {
         if(focusedCardIndex>0 && focusedListIndex>0 && focusedListIndex<=shownBoard.getCardLists().size()
                 && focusedCardIndex<=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size() &&
@@ -299,100 +323,160 @@ public class WorkspaceCtrl implements Initializable {
             return true;
         return false;
     }
+
+    /**
+     * Removes the focus from the card that is now focused
+     */
+    public void removeFocus()
+    {
+        if(focusedIndicesAreValid()) {
+            VBox vbox = getFocusPosition();
+            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
+        }
+    }
+
+    /**
+     * Resets the focus and sets the indices back to their default value.
+     */
     public void resetFocus()
     {
-        if(condition()) {
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
+        if(abs(newMouseXPosition - oldMouseXPosition)>0.1 || abs(newMouseYPosition - oldMouseYPosition)>0.1) {
+            if(focusedIndicesAreValid()) {
+                VBox vbox = getFocusPosition();
+                vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
+            }
+            System.out.println("resetFocused before "+ oldMouseXPosition +" "+ oldMouseYPosition);
+            System.out.println("reset Focused after "+ newMouseXPosition +" "+ newMouseYPosition);
+            oldMouseXPosition =-1;
+            oldMouseYPosition =-1;
+            focusedCardIndex=-1;
+            focusedListIndex=-1;
         }
     }
-    public void resetFocusAndCancelOpening()
+
+    /**
+     * Moves the focused one place up
+     */
+    public void moveFocusUp()
     {
-        if(condition()) {
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex-1).setOpacity(1);
-        }
-        focusedCardIndex=-1;
-        focusedListIndex=-1;
-    }
-    public void setFocusUp()
-    {
-        resetFocus();
+        removeFocus();
         focusedCardIndex = focusedCardIndex -1;
         if(focusedCardIndex<=0)
             focusedCardIndex=1;
-        if(condition())
+        if(focusedIndicesAreValid())
         {
+            oldMouseXPosition = newMouseXPosition;
+            oldMouseYPosition = newMouseYPosition;
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
-        verifyHeight(focusedCardIndex,focusedListIndex);
+        autoScroll(focusedCardIndex,focusedListIndex);
 
     }
-    public void setFocusDown()
+
+    /**
+     * Moves the focus one place down
+     */
+    public void moveFocusDown()
     {
-        resetFocus();
+        removeFocus();
         focusedCardIndex = focusedCardIndex +1;
         if(focusedCardIndex>0 && focusedListIndex>0 && focusedCardIndex>=shownBoard.getCardLists().
                 get(focusedListIndex-1).getCards().size())
             focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
-        if(condition())
+        if(focusedIndicesAreValid())
         {
+            oldMouseXPosition = newMouseXPosition;
+            oldMouseYPosition = newMouseYPosition;
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
         }
-        verifyHeight(focusedCardIndex,focusedListIndex);
+        autoScroll(focusedCardIndex,focusedListIndex);
     }
-    public void setFocusLeft()
+
+    /**
+     * Moves the focus one place left
+     */
+    public void moveFocusLeft()
     {
-        resetFocus();
+        removeFocus();
         focusedListIndex = focusedListIndex -1;
         if(focusedListIndex<=0)
             focusedListIndex=1;
         if(focusedCardIndex>0 && focusedListIndex>0 && shownBoard.getCardLists().
                 get(focusedListIndex-1).getCards().size()<=focusedCardIndex)
             focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
-        if(condition())
+        if(focusedIndicesAreValid())
         {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
-            verifyHeight(focusedCardIndex,focusedListIndex);
+            autoScroll(focusedCardIndex,focusedListIndex);
         }
     }
-    public void setFocusRight()
+
+    /**
+     * Moves the focus one place right
+     */
+    public void moveFocusRight()
     {
-        resetFocus();
+        removeFocus();
         focusedListIndex = focusedListIndex +1;
         if(focusedListIndex>=shownBoard.getCardLists().size())
             focusedListIndex=shownBoard.getCardLists().size();
         if(focusedCardIndex>0 && focusedListIndex>0 && shownBoard.getCardLists().
                 get(focusedListIndex-1).getCards().size()<=focusedCardIndex)
             focusedCardIndex=shownBoard.getCardLists().get(focusedListIndex-1).getCards().size();
-        if(condition())
+        if(focusedIndicesAreValid())
         {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex-1).setOpacity(0.6);
-            verifyHeight(focusedCardIndex,focusedListIndex);
+            autoScroll(focusedCardIndex,focusedListIndex);
         }
     }
-    public void setFocused(int cardIndex,int listIndex)
-    {
-        focusedCardIndex = cardIndex;
-        focusedListIndex =listIndex;
-        if(condition()){
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
-        }
-    }
-    public void verifyHeight(int cardIndex,int listIndex)
-    {
-        ScrollPane scrollPane = ((ScrollPane) ((VBox) (listContainer.getChildren().get(listIndex-1))).
-                    getChildren().get(1));
-        scrollPane.setVvalue((double) (cardIndex - 1) * 25 / (315 - 25));
 
+    /**
+     * Sets the card that needs to be focused
+     * @param cardIndex the Index of the card that needs to be focused
+     * @param listIndex the Index of the list that contains the card that needs
+     *                  to be focused
+     */
+    public void setFocusedCard(int cardIndex, int listIndex)
+    {
+        if(abs(newMouseXPosition - oldMouseXPosition)>0.1 || abs(newMouseYPosition - oldMouseYPosition)>0.1) {
+            focusedCardIndex = cardIndex;
+            focusedListIndex = listIndex;
+            if (focusedIndicesAreValid()) {
+                VBox vbox = getFocusPosition();
+                vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            }
+            System.out.println("setFocused before "+ oldMouseXPosition +" "+ oldMouseYPosition);
+            System.out.println("set Focused after "+ newMouseXPosition +" "+ newMouseYPosition);
+            oldMouseXPosition = newMouseXPosition;
+            oldMouseYPosition = newMouseYPosition;
+        }
     }
-    public void openFocused()
-    {if(condition()) {
+
+    /**
+     * Auto-Scrolls the list that contains the focused card if the list is scrollable
+     * in order to have the focused card visible
+     * @param cardIndex the index of the card that is focused
+     * @param listIndex the index of the list that contains the focused card
+     */
+    public void autoScroll(int cardIndex, int listIndex)
+    {
+
+        if(focusedIndicesAreValid()) {
+            ScrollPane scrollPane = ((ScrollPane) ((VBox) (listContainer.getChildren().get(listIndex - 1))).
+                    getChildren().get(1));
+            scrollPane.setVvalue((double) (cardIndex - 1) * 30 / (315 - 30));
+        }
+    }
+
+    /**
+     * Opens a pop-up that displays the information that the focused card contains
+     */
+    public void openFocusedCard()
+    {if(focusedIndicesAreValid()) {
             var loader = new MyFXML(createInjector(new MainModules()))
                 .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
@@ -443,6 +527,11 @@ public class WorkspaceCtrl implements Initializable {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
     }
+
+    /**
+     * Gets the board key
+     * @return the board key
+     */
     public String getBoardKey()
     {
         return shownBoard.getKey();
@@ -450,7 +539,6 @@ public class WorkspaceCtrl implements Initializable {
     public Board getShownBoard(){
         return shownBoard;
     }
-
 
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))

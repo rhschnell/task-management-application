@@ -72,7 +72,7 @@ public class ListCtrl {
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocused();
+                workspaceCtrl.openFocusedCard();
             }
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
                 || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
@@ -93,23 +93,22 @@ public class ListCtrl {
             });
         });
     }
-
-    public void setKeyEventListeners(KeyEvent keyEvent) {
-        System.out.println(keyEvent);
+    public void setKeyEventListeners(KeyEvent keyEvent)
+    {
         if (keyEvent.getCode() == KeyCode.ENTER) {
-            workspaceCtrl.openFocused();
+            workspaceCtrl.openFocusedCard();
         }
         if (keyEvent.getCode() == KeyCode.UP) {
-            workspaceCtrl.setFocusUp();
+            workspaceCtrl.moveFocusUp();
         }
         if (keyEvent.getCode() == KeyCode.DOWN) {
-            workspaceCtrl.setFocusDown();
+            workspaceCtrl.moveFocusDown();
         }
         if (keyEvent.getCode() == KeyCode.LEFT) {
-            workspaceCtrl.setFocusLeft();
+            workspaceCtrl.moveFocusLeft();
         }
         if (keyEvent.getCode() == KeyCode.RIGHT) {
-            workspaceCtrl.setFocusRight();
+            workspaceCtrl.moveFocusRight();
         }
     }
 
@@ -121,7 +120,7 @@ public class ListCtrl {
     public boolean isSelected() {
         // The selected indices must be valid (condition()) and the focused list VBox must be the
         // one associated to this controller
-        return workspaceCtrl.condition() && workspaceCtrl.getFocusPosition() == this.cardVBox;
+        return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
 
 
@@ -194,8 +193,7 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {
-        });
+        quickAddCard.getValue().setOnDragDetected(event -> {});
     }
 
     /**
@@ -218,14 +216,15 @@ public class ListCtrl {
      *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
-        destination.getValue().setOnMouseEntered(event -> {
-            focusedCardIndex = destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocused((int) focusedCardIndex, listId + 1);
+    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
+    {
+        destination.getValue().setOnMouseEntered(event ->{
+            focusedCardIndex=destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
             event.consume();
         });
         destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocusAndCancelOpening();
+            workspaceCtrl.resetFocus();
         });
     }
 
