@@ -21,6 +21,7 @@ import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
+import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -59,7 +60,7 @@ public class ListCtrl {
     private TextField renameTitle;
     private int listId;
     private long focusedCardIndex;
-    private  Pair<CardCtrl, Parent> cardCell;
+    private Pair<CardCtrl, Parent> cardCell;
 
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
@@ -74,11 +75,13 @@ public class ListCtrl {
                 workspaceCtrl.openFocused();
             }
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
-                    || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+                || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
 
                 setKeyEventListeners(event);
 
             }
+
+            if (event.getCode() == KeyCode.E) handleRenameShortcut();
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
@@ -90,8 +93,9 @@ public class ListCtrl {
             });
         });
     }
-    public void setKeyEventListeners(KeyEvent keyEvent)
-    {
+
+    public void setKeyEventListeners(KeyEvent keyEvent) {
+        System.out.println(keyEvent);
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocused();
         }
@@ -109,18 +113,48 @@ public class ListCtrl {
         }
     }
 
+    /**
+     * Returns whether the currently selected list in the workspace is this list
+     *
+     * @return whether the currently selected list in the workspace is this list
+     */
+    public boolean isSelected() {
+        // The selected indices must be valid (condition()) and the focused list VBox must be the
+        // one associated to this controller
+        return workspaceCtrl.condition() && workspaceCtrl.getFocusPosition() == this.cardVBox;
+    }
+
+
+    /**
+     * Handles the shortcut associated to quick-renaming cards, "E"
+     */
+    public void handleRenameShortcut() {
+        if (!isSelected()) return;
+        // Get the highlighted card
+        Card selectedCard = this.getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
+        var loader = new MyFXML(createInjector())
+                .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
+                                                                                   ".fxml");
+        loader.getKey().setCard(selectedCard);
+        loader.getKey().setListCtrl(this);
+        Scene scene = new Scene(loader.getValue());
+        hm.popUp(scene, String.format("Rename \"%s\"",selectedCard.getTitle()));
+        // Instantiate a new rename window
+    }
+
     public VBox getCardVBox() {
         return cardVBox;
     }
 
     /**
      * Constructor for ListCtrl
+     *
      * @param service The ListService for this controller
      */
     @Inject
     public ListCtrl(ListService service) {
         this.service = service;
-        focusedCardIndex=-1;
+        focusedCardIndex = -1;
     }
 
     public void setCardList(CardList cardList) {
@@ -128,9 +162,9 @@ public class ListCtrl {
     }
 
 
-
     /**
      * Setter for the list title
+     *
      * @param title the title of the list
      */
     public void setListTitle(String title) {
@@ -142,7 +176,7 @@ public class ListCtrl {
      */
     public void displayCards() {
         cardVBox.getChildren().clear();
-        for (Card card: service.getCardList().getCards()) {
+        for (Card card : service.getCardList().getCards()) {
             cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
@@ -160,14 +194,16 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {});
+        quickAddCard.getValue().setOnDragDetected(event -> {
+        });
     }
 
     /**
      * Sets the cardCell draggable by setting events to the listeners
+     *
      * @param cardCell the cardCell that needs to be draggable
      */
-    private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
+    private void makeCardDraggable(Pair<CardCtrl, Parent> cardCell) {
         setDragOver(cardCell);
         setDragDetected(cardCell);
         setDragOver(cardCell);
@@ -179,13 +215,13 @@ public class ListCtrl {
 
     /**
      * Sets mouse events to the card so that focused can be reseted
+     *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
-    {
-        destination.getValue().setOnMouseEntered(event ->{
-            focusedCardIndex=destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocused((int)focusedCardIndex, listId+1);
+    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
+        destination.getValue().setOnMouseEntered(event -> {
+            focusedCardIndex = destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocused((int) focusedCardIndex, listId + 1);
             event.consume();
         });
         destination.getValue().setOnMouseExited(event -> {
@@ -195,9 +231,10 @@ public class ListCtrl {
 
     /**
      * Sets the drag exited listener to the destination, a separator being removed when exiting the card
+     *
      * @param destination to set the listener
      */
-    private void setDragExited(Pair<CardCtrl,Parent> destination) {
+    private void setDragExited(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragExited(event -> {
             {
                 ((VBox) destination.getValue().getParent()).getChildren().remove(separator);
@@ -208,12 +245,13 @@ public class ListCtrl {
 
     /**
      * Sets the drag over listener to the destination, the destination accepting the information if dropped
+     *
      * @param destination to set the listener
      */
-    private void setDragOver(Pair<CardCtrl,Parent> destination) {
+    private void setDragOver(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != destination.getValue() &&
-                    event.getDragboard().hasContent(cardFormat)) {
+                event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -222,16 +260,17 @@ public class ListCtrl {
 
     /**
      * Sets the listener to the destination so that when drag is detected content is put on the drag board
+     *
      * @param destination to set the destination
      */
-    private void setDragDetected(Pair<CardCtrl,Parent> destination) {
+    private void setDragDetected(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragDetected(event -> {
             Dragboard db = destination.getValue().startDragAndDrop(TransferMode.MOVE);
             Image dragImage = new Image("client/icons/DragFile.png");
             ImageView dragView = new ImageView(dragImage);
-            db.setDragView(dragView.getImage(), -20 ,-10);
+            db.setDragView(dragView.getImage(), -20, -10);
             ClipboardContent content = new ClipboardContent();
-            content.put(cardFormat,destination.getKey().getCard());
+            content.put(cardFormat, destination.getKey().getCard());
             db.setContent(content);
             event.consume();
         });
@@ -240,16 +279,16 @@ public class ListCtrl {
     /**
      * Sets the drag entered listener so that a separator is displayed in order to
      * display the index where the card will drop
+     *
      * @param destination
      */
-    private void setDragEntered(Pair<CardCtrl,Parent> destination)
-    {
+    private void setDragEntered(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragEntered(event -> {
             if (event.getGestureSource() != destination.getValue() && event.getDragboard().
                     hasContent(cardFormat)) {
                 int index = ((VBox) destination.getValue().getParent()).getChildren().
                         indexOf(destination.getValue());
-                ((VBox) destination.getValue().getParent()).getChildren().add(index,separator);
+                ((VBox) destination.getValue().getParent()).getChildren().add(index, separator);
             }
             event.consume();
         });
@@ -258,10 +297,10 @@ public class ListCtrl {
     /**
      * Sets the listener so that when the card is dropped the content is also dropped and added to the server
      * in order to perform the change
+     *
      * @param destination to set the listener
      */
-    private void setOnDragDropped(Pair<CardCtrl,Parent> destination)
-    {
+    private void setOnDragDropped(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -269,10 +308,10 @@ public class ListCtrl {
                 Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
                 if (oldParent instanceof VBox) {
-                    Card draggedCard =(Card)db.getContent(cardFormat);
+                    Card draggedCard = (Card) db.getContent(cardFormat);
                     int position = (((VBox) destination.getValue().getParent()).getChildren().
-                            indexOf(destination.getValue()))-1;
-                    service.dragAndDrop(draggedCard,position);
+                            indexOf(destination.getValue())) - 1;
+                    service.dragAndDrop(draggedCard, position);
                 }
                 success = true;
             }
@@ -283,47 +322,48 @@ public class ListCtrl {
 
     /**
      * Sets the list id in order to know the index of the list displayed in the workspace container
+     *
      * @param index
      */
-    public void setListId(int index)
-    {
+    public void setListId(int index) {
         listId = index;
     }
 
     /**
      * Sets the key of the board the list is in
+     *
      * @param key
      */
-    public void setBoardKey(String key)
-    {
+    public void setBoardKey(String key) {
         service.setBoardKey(key);
     }
 
     /**
      * Gets the board key
+     *
      * @return the key
      */
-    public String getBoardKey()
-    {
+    public String getBoardKey() {
         return service.getBoardKey();
     }
 
 
     /**
      * Returns the CardList of the Controller
+     *
      * @return The card list associated to this controller
      */
-    public CardList getCardList()
-    {
+    public CardList getCardList() {
         return service.getCardList();
     }
 
     /**
      * Sets the cardCell listeners in order to receive dragAndDrop and send the information
      * to the server
+     *
      * @param cardCell the cardCell we need to put the listeners to
      */
-    private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl,Parent> cardCell) {
+    private void makeQuickCardReceiveDrag(Pair<QuickAddCardCtrl, Parent> cardCell) {
         cardCell.getValue().setCursor(Cursor.HAND);
         quickCardDragOver(cardCell);
         quickCardDragEntered(cardCell);
@@ -333,12 +373,13 @@ public class ListCtrl {
 
     /**
      * Sets the Drag Over listener to the destination
+     *
      * @param destination to set the listener
      */
-    private void quickCardDragOver(Pair<QuickAddCardCtrl,Parent> destination) {
+    private void quickCardDragOver(Pair<QuickAddCardCtrl, Parent> destination) {
         destination.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != destination.getValue() &&
-                    event.getDragboard().hasContent(cardFormat)) {
+                event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -347,15 +388,16 @@ public class ListCtrl {
 
     /**
      * Sets the dragEntered listener to the destination
+     *
      * @param destination to set the listener
      */
-    private void quickCardDragEntered(Pair<QuickAddCardCtrl,Parent> destination) {
+    private void quickCardDragEntered(Pair<QuickAddCardCtrl, Parent> destination) {
         destination.getValue().setOnDragEntered(event -> {
             if (event.getGestureSource() != destination.getValue() &&
-                    event.getDragboard().hasContent(cardFormat)) {
+                event.getDragboard().hasContent(cardFormat)) {
                 int index = ((VBox) destination.getValue().getParent()).getChildren().
                         indexOf(destination.getValue());
-                ((VBox) destination.getValue().getParent()).getChildren().add(index,separator);
+                ((VBox) destination.getValue().getParent()).getChildren().add(index, separator);
             }
             event.consume();
         });
@@ -363,9 +405,10 @@ public class ListCtrl {
 
     /**
      * Sets the DragExited listener to the destination
+     *
      * @param destination to set the listener
      */
-    private void quickCardDragExited(Pair<QuickAddCardCtrl,Parent> destination) {
+    private void quickCardDragExited(Pair<QuickAddCardCtrl, Parent> destination) {
         destination.getValue().setOnDragExited(event -> {
             {
                 ((VBox) destination.getValue().getParent()).getChildren().remove(separator);
@@ -376,9 +419,10 @@ public class ListCtrl {
 
     /**
      * Sets the dragDropped listener to the destination
+     *
      * @param destination to set the listener
      */
-    private void quickCardDragDropped(Pair<QuickAddCardCtrl,Parent> destination) {
+    private void quickCardDragDropped(Pair<QuickAddCardCtrl, Parent> destination) {
         destination.getValue().setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -386,10 +430,10 @@ public class ListCtrl {
                 Node draggedNode = (Node) event.getGestureSource();
                 Parent oldParent = draggedNode.getParent();
                 if (oldParent instanceof VBox) {
-                    Card draggedCard =(Card)db.getContent(cardFormat);
+                    Card draggedCard = (Card) db.getContent(cardFormat);
                     int position = (((VBox) destination.getValue().getParent()).getChildren().
-                            indexOf(destination.getValue()))-1;
-                    service.dragAndDrop(draggedCard,position);
+                            indexOf(destination.getValue())) - 1;
+                    service.dragAndDrop(draggedCard, position);
                 }
                 success = true;
             }
@@ -419,7 +463,7 @@ public class ListCtrl {
      */
     public void deleteScreen() {
         var loader = new MyFXML(createInjector(new MainModules()))
-                .load(DeleteListCtrl.class,"client", "windows", "lists", "delete", "DeleteList.fxml");
+                .load(DeleteListCtrl.class, "client", "windows", "lists", "delete", "DeleteList.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -432,8 +476,7 @@ public class ListCtrl {
     public void rename() {
         renameTitle.setVisible(true);
         renameTitle.setOnKeyPressed(event -> {
-            if(event.getCode().equals(KeyCode.ENTER))
-            {
+            if (event.getCode().equals(KeyCode.ENTER)) {
                 listTitle.setText(renameTitle.getText());
                 service.renameCardList(renameTitle.getText());
                 renameTitle.setVisible(false);
