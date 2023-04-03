@@ -81,17 +81,17 @@ public class CardCtrl implements Initializable {
         tagCircle2.setVisible(false);
         tagCircle3.setVisible(false);
         if (tags!=null && tags.size() > 0) {
-            tagCircle1.setFill(Paint.valueOf(tags.get(0).getColor()));
+            tagCircle1.setFill(Paint.valueOf(tags.get(0).getTagColor()));
             tagCircle1.setVisible(true);
 
         }
         if (tags!=null && tags.size() > 1) {
-            tagCircle2.setFill(Paint.valueOf(tags.get(1).getColor()));
+            tagCircle2.setFill(Paint.valueOf(tags.get(1).getTagColor()));
             tagCircle2.setVisible(true);
 
         }
         if (tags!=null && tags.size() > 2) {
-            tagCircle3.setFill(Paint.valueOf(tags.get(2).getColor()));
+            tagCircle3.setFill(Paint.valueOf(tags.get(2).getTagColor()));
             tagCircle3.setVisible(true);
 
         }
@@ -105,7 +105,7 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * This functions is called when clicking, and when double clicking within 300ms the viewCard is opened
+     * This function is called when clicking, and when double-clicking within 300ms, the viewCard is opened
      */
     public void click() {
         long clickTime = System.currentTimeMillis();

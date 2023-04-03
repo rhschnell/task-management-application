@@ -18,7 +18,8 @@ import java.util.Objects;
 public class Tag implements Serializable {
     private String name;
 
-    private String color;
+    private String tagColor;
+    private String fontColor;
 
 
     @Id
@@ -35,13 +36,27 @@ public class Tag implements Serializable {
      * Creates a new tag
      *
      * @param name The name of the tag
-     * @param color The color of this tag
+     * @param tagColor The color of this tag
      */
 
-    public Tag(String name, String color) {
+    public Tag(String name, String tagColor) {
         this.name = name;
-        this.color = color;
+        this.tagColor = tagColor;
         this.cards = new ArrayList<>();
+        this.fontColor="Black";
+    }
+    /**
+     * Creates a new tag
+     *
+     * @param name The name of the tag
+     * @param backgroundColor The color of this tag
+     * @param fontColor The fot color
+     */
+    public Tag(String name, String backgroundColor,String fontColor) {
+        this.name = name;
+        this.tagColor = backgroundColor;
+        this.cards = new ArrayList<>();
+        this.fontColor=fontColor;
     }
 
     /**
@@ -55,7 +70,7 @@ public class Tag implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return id == tag.id && Objects.equals(name, tag.name) && Objects.equals(color, tag.color);
+        return id == tag.id && Objects.equals(name, tag.name) && Objects.equals(tagColor, tag.tagColor)&& Objects.equals(fontColor, tag.fontColor);
     }
 
     /**
@@ -65,7 +80,7 @@ public class Tag implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(name, color, id);
+        return Objects.hash(name, fontColor, id,tagColor);
     }
 
     /**
@@ -75,8 +90,11 @@ public class Tag implements Serializable {
     @Override
     public String toString() {
         return "Tag{" +
-               "name='" + name + '\'' +
-               ", color='" + color + '\'' +
-               '}';
+                "name='" + name + '\'' +
+                ", backgroundColor='" + tagColor + '\'' +
+                ", fontColor='" + fontColor + '\'' +
+                ", id=" + id +
+                ", cards=" + cards +
+                '}';
     }
 }

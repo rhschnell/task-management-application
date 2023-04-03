@@ -9,7 +9,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class CustomTagCellCtrl {
     private TagListCtrl tagListCtrl;
@@ -52,9 +55,9 @@ public class CustomTagCellCtrl {
     public void setTagObject(Tag tag, String type){
         this.tag = tag;
         this.type=type;
-
+        tagTitle.setTextFill(Paint.valueOf(tag.getFontColor()));
         tagTitle.setText(tag.getName());
-        tagColor.setFill(Color.web(tag.getColor()));
+        tagColor.setFill(Color.web(tag.getTagColor()));
 
         if(type.equals("addFromTagList") || type.equals("editAddFromTagList"))  {
             actionButton.setText("Add");

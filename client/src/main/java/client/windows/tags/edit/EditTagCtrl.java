@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class EditTagCtrl {
@@ -23,6 +24,8 @@ public class EditTagCtrl {
 
     @FXML
     private ColorPicker tagColor;
+    @FXML
+    private ColorPicker fontColor;
 
     @FXML
     private Button cancelButton;
@@ -46,7 +49,8 @@ public class EditTagCtrl {
     public void setTag(Tag tag){
         this.tag = tag;
         setTagTitle(tag.getName());
-        setTagColor(Color.web(tag.getColor()));
+        setTagColor(Color.web(tag.getTagColor()));
+        setFontColor(Color.web(tag.getFontColor()));
     }
 
     /**
@@ -66,10 +70,20 @@ public class EditTagCtrl {
     }
 
     /**
+     * Setter for the color of font of the tag
+     * @param  color The new color of the font
+     */
+    public void setFontColor(Color color){
+        fontColor.setId(color.toString());
+    }
+    /**
      * Method to set the colorpicker in the edit tag popup
      */
     public void setColorPicker(){
-        tagColor.setValue(Color.web(tag.getColor()));
+        tagColor.setValue(Color.web(tag.getTagColor()));
+    }
+    public void setFontColorPicker(){
+        fontColor.setValue(Color.web(tag.getFontColor()));
     }
 
     /**
@@ -77,11 +91,12 @@ public class EditTagCtrl {
      */
     public void save() {
         String title = tagTitle.getText();
-        Color color = tagColor.getValue();
-
+        Color newTagColor = tagColor.getValue();
+        Color newFontColor = fontColor.getValue();
+        tagTitle.setText(tag.getName());
         tag.setName(title);
-        tag.setColor(color.toString());
-
+        tag.setTagColor(newTagColor.toString());
+        tag.setFontColor(newFontColor.toString());
         service.insertTag(tag);
         customEditTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
 
