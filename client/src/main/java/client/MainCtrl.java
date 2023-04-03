@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -57,6 +58,8 @@ public class MainCtrl {
         primary.setTitle("Talio");
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
+        //Temporarily disabled resizing because of full screen problems
+        primary.setResizable(false);
         this.hm = hm;
         hm.setScenes(this.startUp, this.adminLogin, null, this.userLogin, null);
         hm.setPrimaryStage(primaryStage);
