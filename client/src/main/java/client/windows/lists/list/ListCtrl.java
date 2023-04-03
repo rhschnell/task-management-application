@@ -21,6 +21,7 @@ import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
+import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -71,7 +72,7 @@ public class ListCtrl {
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocused();
+                workspaceCtrl.openFocusedCard();
             }
             if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
                 || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
@@ -79,6 +80,8 @@ public class ListCtrl {
                 setKeyEventListeners(event);
 
             }
+
+            if (event.getCode() == KeyCode.E) handleRenameShortcut();
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
@@ -90,6 +93,37 @@ public class ListCtrl {
             });
         });
     }
+    public void setKeyEventListeners(KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            workspaceCtrl.openFocusedCard();
+        }
+        if (keyEvent.getCode() == KeyCode.UP) {
+            workspaceCtrl.moveFocusUp();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                handleReorderingShortcut(true);
+            } else {
+                workspaceCtrl.moveFocusUp();
+            }
+
+        }
+        if (keyEvent.getCode() == KeyCode.DOWN) {
+            workspaceCtrl.moveFocusDown();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                handleReorderingShortcut(false);
+            } else {
+                workspaceCtrl.moveFocusDown();
+            }
+        }
+        if (keyEvent.getCode() == KeyCode.LEFT) {
+            workspaceCtrl.moveFocusLeft();
+        }
+        if (keyEvent.getCode() == KeyCode.RIGHT) {
+            workspaceCtrl.moveFocusRight();
+        }
+    }
 
     /**
      * Returns whether the currently selected list in the workspace is this list
@@ -99,36 +133,25 @@ public class ListCtrl {
     public boolean isSelected() {
         // The selected indices must be valid (condition()) and the focused list VBox must be the
         // one associated to this controller
-        return workspaceCtrl.condition() && workspaceCtrl.getFocusPosition() == this.cardVBox;
+        return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
 
-    public void setKeyEventListeners(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.ENTER) {
-            workspaceCtrl.openFocused();
-        }
-        if (keyEvent.getCode() == KeyCode.UP) {
-            // If shift is down, reorder cards, otherwise move focus
-            if (keyEvent.isShiftDown()) {
-                handleReorderingShortcut(true);
-            } else {
-                workspaceCtrl.setFocusUp();
-            }
 
-        }
-        if (keyEvent.getCode() == KeyCode.DOWN) {
-            // If shift is down, reorder cards, otherwise move focus
-            if (keyEvent.isShiftDown()) {
-                handleReorderingShortcut(false);
-            } else {
-                workspaceCtrl.setFocusDown();
-            }
-        }
-        if (keyEvent.getCode() == KeyCode.LEFT) {
-            workspaceCtrl.setFocusLeft();
-        }
-        if (keyEvent.getCode() == KeyCode.RIGHT) {
-            workspaceCtrl.setFocusRight();
-        }
+    /**
+     * Handles the shortcut associated to quick-renaming cards, "E"
+     */
+    public void handleRenameShortcut() {
+        if (!isSelected()) return;
+        // Get the highlighted card
+        Card selectedCard = this.getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
+        var loader = new MyFXML(createInjector())
+                .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
+                                                                                   ".fxml");
+        loader.getKey().setData(selectedCard);
+        loader.getKey().setListCtrl(this);
+        Scene scene = new Scene(loader.getValue());
+        hm.popUp(scene, "Rename card");
+        // Instantiate a new rename window
     }
 
     /**
@@ -160,7 +183,7 @@ public class ListCtrl {
                 // Also keep the focus on this card | Note that these indices are 1-based, and so
                 // we have to add 1 to both 0-based destIndex and listId
 
-                workspaceCtrl.setFocused(destIndex + 1, listId + 1);
+                workspaceCtrl.setFocusedCard(destIndex + 1, listId + 1);
                 service.dragAndDrop(cardToMove, destIndex);
 
             }
@@ -219,8 +242,7 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {
-        });
+        quickAddCard.getValue().setOnDragDetected(event -> {});
     }
 
     /**
@@ -243,21 +265,17 @@ public class ListCtrl {
      *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
-        destination.getValue().setOnMouseEntered(event -> {
-            if (!workspaceCtrl.mouseWasHereBefore(destination.getValue())) {
-                focusedCardIndex = destination.getKey().getCard().getPriority();
-                workspaceCtrl.setFocused((int) focusedCardIndex, listId + 1);
-                event.consume();
-                workspaceCtrl.setCurrentCardFxUnderMouse(destination.getValue());
-            }
-
+    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
+    {
+        destination.getValue().setOnMouseEntered(event ->{
+            focusedCardIndex=destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
+            event.consume();
         });
         destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocusAndCancelOpening();
+            workspaceCtrl.resetFocus();
         });
     }
-
 
     /**
      * Sets the drag exited listener to the destination, a separator being removed when exiting the card

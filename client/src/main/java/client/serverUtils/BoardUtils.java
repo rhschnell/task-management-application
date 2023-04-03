@@ -2,6 +2,7 @@ package client.serverUtils;
 
 import commons.Board;
 import commons.Route;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -15,6 +16,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class BoardUtils {
     private final ServerUtils serverUtils;
+    private Client client;
 
     /**
      * Creates a new BoardUtils object
@@ -23,6 +25,7 @@ public class BoardUtils {
     @Inject
     public BoardUtils(ServerUtils serverUtils){
         this.serverUtils = serverUtils;
+        this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
     /**
@@ -30,8 +33,7 @@ public class BoardUtils {
      * @param key of board to delete
      */
     public void deleteBoard(String key) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
+        client.target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(Response.class);
@@ -43,8 +45,7 @@ public class BoardUtils {
      * @return the desired board
      */
     public Board getBoard(String key) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
+        return client.target(serverUtils.getServer()).path(Route.BOARD + "/" + key)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Board.class);
@@ -55,8 +56,7 @@ public class BoardUtils {
      * @return List of all boards in the database
      */
     public List<Board> getBoards() {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD)
+        return client.target(serverUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Board>>() {});
@@ -70,8 +70,7 @@ public class BoardUtils {
      */
 
     public Board insertBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.BOARD)
+        return client.target(serverUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -79,6 +78,15 @@ public class BoardUtils {
 
     public void setServer(String server) {
         serverUtils.setServer(server);
+    }
+    public String getServer()
+    {
+        return serverUtils.getServer();
+    }
+
+    public void setClient(Client client)
+    {
+        this.client = client;
     }
 
 }
