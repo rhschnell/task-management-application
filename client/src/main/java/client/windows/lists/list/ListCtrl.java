@@ -22,7 +22,6 @@ import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
-import client.windows.workspace.boardSpace.CardInListPosition;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
@@ -134,6 +133,7 @@ public class ListCtrl {
 
     /**
      * Method for handling the shortcut Shift + Up/Down
+     *
      * @param shiftUpWards If true, the reordering will shift the selected cards upwards.
      *                     If false, it will go downwards
      */
@@ -143,11 +143,26 @@ public class ListCtrl {
             focusedCardIndex = workspaceCtrl.getFocusedCardIndex() - 1;
             // Can only move up/down if it is not already at the top/bottom
             if (focusedCardIndex != (shiftUpWards ? 0 : getCardList().getCards().size() - 1)) {
-                Card cardToMoveUp = getCardList().getCard((int) focusedCardIndex);
-                int destIndex = (int) (focusedCardIndex + (shiftUpWards ? - 1 : 1));
-                service.dragAndDrop(cardToMoveUp, destIndex);
-                // Also keep the focus on this card // NOTE it is one based
+
+                Card cardToMove = getCardList().getCard((int) focusedCardIndex);
+                int destIndex = (int) (focusedCardIndex + (shiftUpWards ? -1 : 1));
+
+                // If the card that gets reordered is a card underneath the mouse, then we
+                // need to update the card that ends up under the mouse
+
+                int currentCardUnderMouseIdx =
+                        cardVBox.getChildren().indexOf(workspaceCtrl.getCurrentCardFxUnderMouse());
+                if (focusedCardIndex == currentCardUnderMouseIdx) {
+                    Parent cardEndsUpUnderMouse = (Parent) cardVBox.getChildren().get(destIndex);
+                    workspaceCtrl.setCurrentCardFxUnderMouse(cardEndsUpUnderMouse);
+                }
+
+                // Also keep the focus on this card | Note that these indices are 1-based, and so
+                // we have to add 1 to both 0-based destIndex and listId
+
                 workspaceCtrl.setFocused(destIndex + 1, listId + 1);
+                service.dragAndDrop(cardToMove, destIndex);
+
             }
         }
     }
@@ -230,21 +245,11 @@ public class ListCtrl {
      */
     private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnMouseEntered(event -> {
-
-            // Construct the position
-            // <index of the UI card that triggered this event,
-            // index of the card list that this component belongs to>
-            int destinationVBoxPos =
-                    destination.getValue().getParent()
-                            .getChildrenUnmodifiable().indexOf(destination.getValue());
-
-            CardInListPosition currentMousePosition = new CardInListPosition(destinationVBoxPos, listId);
-
-            if (!workspaceCtrl.mouseWasHereBefore(currentMousePosition)) {
+            if (!workspaceCtrl.mouseWasHereBefore(destination.getValue())) {
                 focusedCardIndex = destination.getKey().getCard().getPriority();
                 workspaceCtrl.setFocused((int) focusedCardIndex, listId + 1);
                 event.consume();
-                workspaceCtrl.setCurrentCardUnderMousePos(currentMousePosition);
+                workspaceCtrl.setCurrentCardFxUnderMouse(destination.getValue());
             }
 
         });

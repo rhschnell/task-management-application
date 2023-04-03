@@ -83,6 +83,8 @@ public class WorkspaceCtrl implements Initializable {
     private int focusedListIndex;
 
     private CardInListPosition currentCardUnderMousePos;
+
+    private Parent currentCardFxUnderMouse;
     private Board shownBoard;
 
 
@@ -559,21 +561,29 @@ public class WorkspaceCtrl implements Initializable {
         return focusedCardIndex;
     }
 
+    /**
+     * Gets the position of the card that is supposed to be under the mouse
+     * @return The card ui component that is under the mouse
+     */
+    public Parent getCurrentCardFxUnderMouse() {
+        return currentCardFxUnderMouse;
+    }
 
     /**
-     * Sets the position of the card that is supposed to be under the mouse
-     * @param currentCardUnderMousePos The new position of the card under the mouse
+     * Sets the card ui component that is supposed to be under the mouse
+     * @param currentCardFxUnderMouse The card under the mouse currently
      */
-    public void setCurrentCardUnderMousePos(CardInListPosition currentCardUnderMousePos) {
-        this.currentCardUnderMousePos = currentCardUnderMousePos;
+    public void setCurrentCardFxUnderMouse(Parent currentCardFxUnderMouse) {
+        this.currentCardFxUnderMouse = currentCardFxUnderMouse;
     }
 
     /**
      * Returns whether the mouse was on the same UI component compared to when it was last updated
-     * @param comparePosition The position to check against
-     * @return Whether the last stored (current) index is the same as the given id
+     * @param cardFx The ui component to check against
+     * @return Whether the mouse was on the same UI component compared to when it was last updated
      */
-    public boolean mouseWasHereBefore(CardInListPosition comparePosition) {
-        return Objects.equals(this.currentCardUnderMousePos, comparePosition);
+    public boolean mouseWasHereBefore(Parent cardFx) {
+        // Use Objects.equals to make it null-proof
+        return Objects.equals(currentCardFxUnderMouse, cardFx);
     }
 }
