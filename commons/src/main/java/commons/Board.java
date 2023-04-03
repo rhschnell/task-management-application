@@ -17,6 +17,7 @@ public class Board {
     private String key;
 
     private String title;
+    private boolean locked;
 
     private String backgroundColour = "FFFFFF";
     private String fontColour = "000000";
@@ -47,6 +48,7 @@ public class Board {
         if(tagList == null){
             this.tagList = new ArrayList<>();
         }
+        this.locked = false;
     }
 
     /**
