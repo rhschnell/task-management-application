@@ -1,22 +1,28 @@
 package client.windows.workspace.lock;
 
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LockPopUpCtrl {
+    private final LockPopUpService service;
+
     private Board board;
     private BoardCellCtrl caller;
 
-    @FXML
-    private TextField inputField;
+    @FXML private TextField inputField;
+    @FXML private Label errorMsg;
 
     /**
      * Constructor
      */
-    public LockPopUpCtrl() {
+    @Inject
+    public LockPopUpCtrl(LockPopUpService service) {
+        this.service = service;
     }
 
     /**
@@ -30,12 +36,31 @@ public class LockPopUpCtrl {
      * Method called when confirm button pressed
      */
     public void confirm() {
-        ((Stage)inputField.getScene().getWindow()).close();
+        // If board is protected, verify the right password was entered
+        if (board.isProtected()) {
+            boolean correctPassword = service.verifyPassword(board, inputField.getText());
 
+            // If correct password entered, close the popUp and unlock the board
+            if (correctPassword) {
+                cancel();
+                board.setProtected(false);
+            }
+            // If incorrect password entered, show error message.
+            else {
+                errorMsg.setVisible(true);
+            }
+        }
+        // If board is NOT protected, add the entered password to the board
+        else {
+            cancel();
+            board.setPassword(inputField.getText());
+            board.setProtected(true);
+        }
     }
 
-    // SETTERS AND GETTERS
 
+
+    // SETTERS AND GETTERS
     /**
      * Setter for the board this popUp applies to
      * @param board board

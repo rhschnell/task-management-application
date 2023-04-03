@@ -105,20 +105,21 @@ public class BoardCellCtrl implements Initializable {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(LockPopUpCtrl.class, "client", "windows", "workspace", "lock", "Lock.fxml");
 
+        // Setter Injection
         LockPopUpCtrl ctrl = loader.getKey();
-        ctrl.setBoard(this.board); // Setter Injection
+        ctrl.setBoard(this.board);
         ctrl.setCaller(this);
 
-        // Create popup through helpermetod
-        helperMethods.popUp(new Scene(loader.getValue()), "Enter password");
+        // Set title depending on if board locket
+        String title = board.isProtected() ? "Unlock board" : "Lock board";
 
+        // Create popup through helper method
+        helperMethods.popUp(new Scene(loader.getValue()), title);
 
-        if (board.isProtected()) {
-
-        } else {
-
-        }
-
+        /*
+        This popUp is going to be used both for locking and unlocking.
+        We make use of two-faced methods for this that all start with an if(board.isProtected())
+         */
     }
 
 //
