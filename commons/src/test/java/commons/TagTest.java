@@ -26,7 +26,7 @@ class TagTest {
     @Test
     void testAllArgsConstructor() {
         // Just testing object creation
-        new Tag("Name", "Color", 1, new ArrayList<>());
+        new Tag("Name", "tagColor", "fontColor", 1, new ArrayList<>());
     }
 
     @Test
@@ -41,14 +41,25 @@ class TagTest {
     }
 
     @Test
-    void testGetColor() {
-        assertEquals("Blue", tag.getColor());
+    void testGetTagColor() {
+        assertEquals("Blue", tag.getTagColor());
     }
 
     @Test
-    void testSetColor() {
-        tag.setColor("Orange");
-        assertEquals("Orange", tag.getColor());
+    void testSetTagColor() {
+        tag.setTagColor("Orange");
+        assertEquals("Orange", tag.getTagColor());
+    }
+
+    @Test
+    void testGetFontColor() {
+        assertEquals("Blue", tag.getTagColor());
+    }
+
+    @Test
+    void testSetFontColor() {
+        tag.setFontColor("Orange");
+        assertEquals("Orange", tag.getFontColor());
     }
 
     @Test
@@ -68,7 +79,7 @@ class TagTest {
     }
 
     @Test
-    void testSetCardList(){
+    void testSetCardList() {
         Card card1 = new Card();
         Card card2 = new Card();
 
@@ -118,6 +129,6 @@ class TagTest {
 
     @Test
     void testToString() {
-        assertEquals("Tag{name='Frontend', color='Blue'}", tag.toString());
+        assertEquals("Tag{name='Frontend', tagColor='Blue', fontColor='Black', id=0, cards=[]}", tag.toString());
     }
 }

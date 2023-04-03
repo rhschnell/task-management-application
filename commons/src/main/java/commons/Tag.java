@@ -49,12 +49,12 @@ public class Tag implements Serializable {
      * Creates a new tag
      *
      * @param name The name of the tag
-     * @param backgroundColor The color of this tag
+     * @param tagColor The color of this tag
      * @param fontColor The fot color
      */
-    public Tag(String name, String backgroundColor,String fontColor) {
+    public Tag(String name, String tagColor,String fontColor) {
         this.name = name;
-        this.tagColor = backgroundColor;
+        this.tagColor = tagColor;
         this.cards = new ArrayList<>();
         this.fontColor=fontColor;
     }
@@ -70,7 +70,8 @@ public class Tag implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return id == tag.id && Objects.equals(name, tag.name) && Objects.equals(tagColor, tag.tagColor)&& Objects.equals(fontColor, tag.fontColor);
+        return id == tag.id && Objects.equals(name, tag.name) && Objects.equals(tagColor, tag.tagColor)&&
+                Objects.equals(fontColor, tag.fontColor);
     }
 
     /**
@@ -91,7 +92,7 @@ public class Tag implements Serializable {
     public String toString() {
         return "Tag{" +
                 "name='" + name + '\'' +
-                ", backgroundColor='" + tagColor + '\'' +
+                ", tagColor='" + tagColor + '\'' +
                 ", fontColor='" + fontColor + '\'' +
                 ", id=" + id +
                 ", cards=" + cards +
