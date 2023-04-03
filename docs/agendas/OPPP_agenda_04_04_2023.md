@@ -22,8 +22,15 @@ Is there something that we need to discuss not in the agenda yet?
   - Proudct pitch meeting on Friday. When are you available that day, so we can book a project room? (April 7)
   - Repository turns read-only this Friday. Per team what is their progress.
 - This week's focus:
-  - Incorporating web sockets into at least one of our features.
-  - Resolving all bugs/things that still need to be added to make sure the entire app is consistent and in conformity with all backlog requirements.
+  - Incorporating web sockets and long polling into at least one of our features. Who wants to do what?
+  - Resolving all bugs/things that still need to be added to make sure the entire app is consistent and in conformity with all backlog requirements. Specifically:
+    - Add alerts before deleting cards, boards & closing the entire app (Are you sure you want to ……)
+    - Force the titles of the cards, boards, and server address not be null through the UI and to have at most N characters, depending on how many characters can be visible on the screen (the number “N” is taken from the database constraints)
+    - Add (read-only, just UI) trash icons to every delete button, add pencil icon to edit buttons, add door icons to leave buttons, etc. —> increases recognition —> better user design according to our heuristics
+    - Make it possible to update text by pressing enter instead of only by clicking the corresponding buttons
+    - Backspace doesn’t work in quick add card
+    - Leave doesn’t work after adding a card or a list
+  Who does what?
 
 ## Last check (~1 min)
 Anything anyone would still like to add?
@@ -32,7 +39,11 @@ Anything anyone would still like to add?
 Quickly go over what we talked about again and make sure everyone is on the same page.
 
 ## Questions for the TA (~9 min)
-Do we have any questions for the TA?
+- Product pitch: can we “show” all the features in the video but only “talk” about what we did better and unique than the backlog requirements?
+- Testing: coverage is wanted to be 80% in the grading rubric. However, there is a lot of JavaFX in our app and this can be seen considering the design is very fluid. If we had only implemented the functionality and didn’t care about the user’s perspective, then obviously 80% coverage would have been attainable. But otherwise, since Sebastian specifically mentioned that only services in the client can be tested (which we did), is our app going to receive a full mark for testing? Are manual testing plans just as good?
+- Heuristic usability evaluation: would you be open to take a quick look on our remade heuristic usability evaluation after we finish writing it? Just to make sure that we improved on the points you made.
+- Backlog clarifications: Whether closed and reopened clients need to keep the user data locally and reload them when reconnecting.
+- Other questions allowed.
 
 ## Feedback round (~1 min)
 What went well and what can still be improved?
