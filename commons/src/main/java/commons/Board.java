@@ -3,6 +3,7 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,7 +18,8 @@ public class Board {
     private String key;
 
     private String title;
-    private boolean locked;
+    private String password;
+    private boolean secured; //could not use protected as it is a keyword in java
 
     private String backgroundColour = "FFFFFF";
     private String fontColour = "000000";
@@ -48,7 +50,7 @@ public class Board {
         if(tagList == null){
             this.tagList = new ArrayList<>();
         }
-        this.locked = false;
+        this.password = "";
     }
 
     /**
@@ -97,5 +99,33 @@ public class Board {
 
     public void removeTag(Tag tag) {
         tagList.remove(tag);
+    }
+
+    /**
+     * Returns whether the board is protected or not
+     * @return true/false
+     */
+    public boolean isProtected() {
+        return secured;
+    }
+
+    /**
+     * Setter for protected true/false
+     * @param secured state of protection
+     */
+    public void setProtected(boolean secured) {
+        this.secured = secured;
+    }
+
+    /**
+     * Setter for password
+     * @param password the new password
+     */
+    public void setPassword(@NotNull String password) {
+        this.password = password;
+    }
+
+    public boolean verifyPassword(String password) {
+        return this.password.equals(password);
     }
 }
