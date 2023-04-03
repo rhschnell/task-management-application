@@ -69,7 +69,9 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private HBox listContainer;
     @FXML
-    private HBox boardControls;
+    private VBox boardControls;
+    @FXML
+    private HBox titleBar;
     @FXML
     private TextField keyField;
     @FXML
@@ -159,12 +161,29 @@ public class WorkspaceCtrl implements Initializable {
      * Method to clear the workspace
      */
     public void clearWorkspace() {
-        shownBoard = null;
+        //Hide title bar
         boardName.setText("");
+        titleBar.getChildren().forEach(c -> c.setVisible(false));
+        //Hide right bar
+        shownBoard = null;
         listContainer.getChildren().clear();
-        boardName.setVisible(false);
         listContainer.setVisible(false);
+        //Hide right bar
         boardControls.setVisible(false);
+        boardControls.setManaged(false);
+    }
+
+    /**
+     * Method to unhide the workspace; the opposite of clearWorkspace()
+     */
+    public void unhideWorkspace() {
+        //Unhide title bar
+        titleBar.getChildren().forEach(c -> c.setVisible(true));
+        //Unhide right bar
+        listContainer.setVisible(true);
+        //Unhide right bar
+        boardControls.setVisible(true);
+        boardControls.setManaged(true);
     }
 
     public void refreshWorkspace(boolean... forced) {
@@ -238,12 +257,7 @@ public class WorkspaceCtrl implements Initializable {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
         displayLists();
-        if (!boardControls.isVisible())
-            boardControls.setVisible(true);
-        if (!boardName.isVisible())
-            boardName.setVisible(true);
-        if (!listContainer.isVisible())
-            listContainer.setVisible(true);
+        unhideWorkspace();
     }
 
     /**
