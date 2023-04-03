@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -167,7 +168,6 @@ public class ListCtrl {
      * @param cardCell the cardCell that needs to be draggable
      */
     private void makeCardDraggable(Pair<CardCtrl,Parent> cardCell) {
-        cardCell.getValue().setCursor(Cursor.HAND);
         setDragOver(cardCell);
         setDragDetected(cardCell);
         setDragOver(cardCell);
