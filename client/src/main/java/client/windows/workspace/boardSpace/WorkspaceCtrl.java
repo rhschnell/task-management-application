@@ -646,4 +646,12 @@ public class WorkspaceCtrl implements Initializable {
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
     }
+
+    /**
+     * Gets the index of the currently focused card
+     * @return The current focusedCardIndex
+     */
+    public int getFocusedCardIndex() {
+        return focusedCardIndex;
+    }
 }
