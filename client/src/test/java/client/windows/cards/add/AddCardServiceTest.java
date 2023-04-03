@@ -5,12 +5,17 @@ import client.serverUtils.TagUtils;
 import commons.Card;
 import commons.CardList;
 import commons.Tag;
+import commons.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -131,5 +136,31 @@ class AddCardServiceTest {
         addCardService.setCardList(cardListMock);
         addCardService.addCard(card);
         verify(cardListMock).addCard(card);
+    }
+
+    @Test
+    void dragAndDrop() {
+        Task task1 = new Task();
+        Task task2 = new Task();
+        Task task3 = new Task();
+
+        task1.setPriority(1);
+        task2.setPriority(2);
+        task3.setPriority(3);
+
+        Card card = new Card();
+        List<Task> taskList = Stream.of(task1, task2, task3).collect(Collectors.toList());
+        card.setSubTasks(taskList);
+
+        addCardService.reorderTasks(task1, 2, taskList);
+        List<Task> expectedOrder = List.of(task2, task3, task1);
+        assertEquals(expectedOrder, taskList);
+
+        List<Long> expectedPriorities =
+                LongStream.range(1, (taskList.size() + 1)).boxed().collect(Collectors.toList());
+        assertEquals(expectedOrder.stream().map(Task::getPriority).collect(Collectors.toList()),
+                expectedPriorities);
+
+
     }
 }

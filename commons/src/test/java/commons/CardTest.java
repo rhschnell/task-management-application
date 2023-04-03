@@ -75,6 +75,17 @@ class CardTest {
     }
 
     @Test
+    void addSubTaskByIndex(){
+        Task task = new Task(false, "Task title");
+        Task task2 = new Task(true, "Second task");
+
+        card.addSubTask(task);
+        card.addSubTask(0, task2);
+        assertEquals(List.of(task2, task), card.getSubTasks());
+    }
+
+
+    @Test
     void deleteTagByName() {
         Tag tag1 = new Tag("Tag 1", "Blue");
         Tag tag2 = new Tag("Tag 2", "Black");

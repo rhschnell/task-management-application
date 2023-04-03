@@ -9,9 +9,10 @@ import commons.Card;
 import commons.Tag;
 import commons.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,17 +20,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
-public class CardCtrl {
+public class CardCtrl implements Initializable {
     @FXML
     private AnchorPane pane;
     @FXML
     private Label cardTitle;
     @FXML
-    private Button deleteButton;
+    private ImageView deleteButton;
     @FXML
     private Circle tagCircle1;
     @FXML
@@ -97,9 +100,8 @@ public class CardCtrl {
     /**
      * Sets the event to happen when interacting with the delete button
      */
-    public void cardDeleteButton() {
+    public void delete() {
         service.deleteCard(card);
-
     }
 
     /**
@@ -205,6 +207,20 @@ public class CardCtrl {
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
+    }
+
+    /**
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        deleteButton.setCursor(Cursor.HAND);
     }
 }
 
