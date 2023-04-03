@@ -82,37 +82,35 @@ public class ListCtrl {
             }
 
             if (event.getCode() == KeyCode.E) handleRenameShortcut();
+            if (event.getCode() == KeyCode.D) {
+                System.out.printf("<%d,%d>", workspaceCtrl.getFocusedCardIndex(),
+                        workspaceCtrl.getFocusedListIndex());
+            }
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
             scrollPane.requestFocus();
-            scrollPane.setOnKeyPressed(keyEvent -> {
-                {
-                    setKeyEventListeners(keyEvent);
-                }
-            });
+            scrollPane.setOnKeyPressed(this::setKeyEventListeners);
         });
     }
-    public void setKeyEventListeners(KeyEvent keyEvent)
-    {
+
+    public void setKeyEventListeners(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocusedCard();
         }
         if (keyEvent.getCode() == KeyCode.UP) {
-            workspaceCtrl.moveFocusUp();
             // If shift is down, reorder cards, otherwise move focus
             if (keyEvent.isShiftDown()) {
-                handleReorderingShortcut(true);
+                workspaceCtrl.handleReorderingShortcut(true);
             } else {
                 workspaceCtrl.moveFocusUp();
             }
 
         }
         if (keyEvent.getCode() == KeyCode.DOWN) {
-            workspaceCtrl.moveFocusDown();
             // If shift is down, reorder cards, otherwise move focus
             if (keyEvent.isShiftDown()) {
-                handleReorderingShortcut(false);
+                workspaceCtrl.handleReorderingShortcut(false);
             } else {
                 workspaceCtrl.moveFocusDown();
             }
@@ -154,41 +152,6 @@ public class ListCtrl {
         // Instantiate a new rename window
     }
 
-    /**
-     * Method for handling the shortcut Shift + Up/Down
-     *
-     * @param shiftUpWards If true, the reordering will shift the selected cards upwards.
-     *                     If false, it will go downwards
-     */
-    private void handleReorderingShortcut(boolean shiftUpWards) {
-        if (this.isSelected()) {
-            // Use the existing drag and drop in the service
-            focusedCardIndex = workspaceCtrl.getFocusedCardIndex() - 1;
-            // Can only move up/down if it is not already at the top/bottom
-            if (focusedCardIndex != (shiftUpWards ? 0 : getCardList().getCards().size() - 1)) {
-
-                Card cardToMove = getCardList().getCard((int) focusedCardIndex);
-                int destIndex = (int) (focusedCardIndex + (shiftUpWards ? -1 : 1));
-
-                // If the card that gets reordered is a card underneath the mouse, then we
-                // need to update the card that ends up under the mouse
-
-                int currentCardUnderMouseIdx =
-                        cardVBox.getChildren().indexOf(workspaceCtrl.getCurrentCardFxUnderMouse());
-                if (focusedCardIndex == currentCardUnderMouseIdx) {
-                    Parent cardEndsUpUnderMouse = (Parent) cardVBox.getChildren().get(destIndex);
-                    workspaceCtrl.setCurrentCardFxUnderMouse(cardEndsUpUnderMouse);
-                }
-
-                // Also keep the focus on this card | Note that these indices are 1-based, and so
-                // we have to add 1 to both 0-based destIndex and listId
-
-                workspaceCtrl.setFocusedCard(destIndex + 1, listId + 1);
-                service.dragAndDrop(cardToMove, destIndex);
-
-            }
-        }
-    }
 
     public VBox getCardVBox() {
         return cardVBox;
@@ -242,7 +205,8 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {});
+        quickAddCard.getValue().setOnDragDetected(event -> {
+        });
     }
 
     /**
@@ -265,16 +229,13 @@ public class ListCtrl {
      *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
-    {
-        destination.getValue().setOnMouseEntered(event ->{
-            focusedCardIndex=destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
+    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
+        destination.getValue().setOnMouseEntered(event -> {
+            focusedCardIndex = destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocusedCard((int) focusedCardIndex, listId + 1);
             event.consume();
         });
-        destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocus();
-        });
+        destination.getValue().setOnMouseExited(event -> workspaceCtrl.resetFocus());
     }
 
     /**
@@ -535,5 +496,14 @@ public class ListCtrl {
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;
         this.cardFormat = this.hm.getCardFormat();
+    }
+
+    /**
+     * Shifts a card to a new index
+     * @param card The card to shift
+     * @param newIndex The destination index of the card
+     */
+    public void shiftCard(Card card, int newIndex){
+        service.dragAndDrop(card,newIndex);
     }
 }
