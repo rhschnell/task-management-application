@@ -53,6 +53,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -80,7 +81,10 @@ public class WorkspaceCtrl implements Initializable {
     private List<String> joinedKeys;
     private int focusedCardIndex;
     private int focusedListIndex;
+
+    private CardInListPosition currentCardUnderMousePos;
     private Board shownBoard;
+
 
     /**
      * Constructor for WorkspaceCtrl
@@ -113,6 +117,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param resources The resources used to localize the root object, or {@code null} if
      *                  the root object was not localized.
      */
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new ArrayList<>();
         clearWorkspace(); // No board -> board controls
@@ -384,7 +389,8 @@ public class WorkspaceCtrl implements Initializable {
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
         }
     }
-    public void verifyHeight(int cardIndex,int listIndex)
+
+    public void verifyHeight(int cardIndex, int listIndex)
     {
         ScrollPane scrollPane = ((ScrollPane) ((VBox) (listContainer.getChildren().get(listIndex-1))).
                     getChildren().get(1));
@@ -543,5 +549,31 @@ public class WorkspaceCtrl implements Initializable {
 
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
+    }
+
+    /**
+     * Returns the index of the currently focused card
+     * @return The focused card index
+     */
+    public int getFocusedCardIndex() {
+        return focusedCardIndex;
+    }
+
+
+    /**
+     * Sets the position of the card that is supposed to be under the mouse
+     * @param currentCardUnderMousePos The new position of the card under the mouse
+     */
+    public void setCurrentCardUnderMousePos(CardInListPosition currentCardUnderMousePos) {
+        this.currentCardUnderMousePos = currentCardUnderMousePos;
+    }
+
+    /**
+     * Returns whether the mouse was on the same UI component compared to when it was last updated
+     * @param comparePosition The position to check against
+     * @return Whether the last stored (current) index is the same as the given id
+     */
+    public boolean mouseWasHereBefore(CardInListPosition comparePosition) {
+        return Objects.equals(this.currentCardUnderMousePos, comparePosition);
     }
 }
