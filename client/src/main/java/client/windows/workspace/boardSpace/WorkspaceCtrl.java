@@ -297,8 +297,12 @@ public class WorkspaceCtrl implements Initializable {
             listContainer.setOnMouseMoved(event -> {
                 newMouseXPosition = event.getSceneX();
                 newMouseYPosition = event.getSceneY();
-                System.out.println("moved " + event.getSceneX() + " " + event.getSceneY());
             });
+        }
+        if(focusedIndicesAreValid())
+        {
+            VBox vbox = getFocusPosition();
+            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.4);
         }
     }
 
@@ -500,8 +504,8 @@ public class WorkspaceCtrl implements Initializable {
      *                  to be focused
      */
     public void setFocusedCard(int cardIndex, int listIndex) {
-        if (abs(newMouseXPosition - oldMouseXPosition) > mouseMoveThreshold
-            && abs(newMouseYPosition - oldMouseYPosition) > mouseMoveThreshold) return;
+        if (abs(newMouseXPosition - oldMouseXPosition) < mouseMoveThreshold
+            && abs(newMouseYPosition - oldMouseYPosition) < mouseMoveThreshold) return;
 
         focusedCardIndex = cardIndex;
         focusedListIndex = listIndex;
