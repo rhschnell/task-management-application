@@ -15,7 +15,8 @@ public class AddTagService {
         this.server = server;
     }
 
-    public void insertBoard(Board board){
+    public Board insertBoard(Board board){
         server.insertBoard(board);
+        return server.getBoard(board.getKey());
     }
 }

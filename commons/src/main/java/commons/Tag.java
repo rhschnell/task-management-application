@@ -27,7 +27,7 @@ public class Tag implements Serializable {
     private long id;
 
     @JsonIgnore
-    @ManyToMany(cascade ={CascadeType.PERSIST,CascadeType.REMOVE},
+    @ManyToMany(cascade ={CascadeType.PERSIST, CascadeType.DETACH},
             mappedBy = "tags", fetch = FetchType.EAGER)
     private List<Card> cards;
 
@@ -57,6 +57,18 @@ public class Tag implements Serializable {
         this.tagColor = tagColor;
         this.cards = new ArrayList<>();
         this.fontColor=fontColor;
+    }
+
+
+    /**
+     * Method that removes all associations between this tag and the associated cards.
+     * Automatically runs before tag deletion in the database
+     */
+    @PreRemove
+    private void removeTagInAssociatedCards() {
+        for (Card card : this.cards) {
+            card.deleteTag(this);
+        }
     }
 
     /**
