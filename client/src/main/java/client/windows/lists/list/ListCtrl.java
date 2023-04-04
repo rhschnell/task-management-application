@@ -475,7 +475,14 @@ public class ListCtrl {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setDeleteId(service.getCardList().getId());
-
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().delete();
+            }
+        });
         String title = "Delete a list";
         HelperMethods.popUp(scene, title);
     }
