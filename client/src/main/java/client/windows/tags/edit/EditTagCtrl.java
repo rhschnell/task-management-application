@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -100,6 +102,15 @@ public class EditTagCtrl {
         customEditTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
 
         ((Stage)saveButton.getScene().getWindow()).close();
+    }
+
+    @FXML
+    public void saveOnEnter(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            save();
+        }
     }
 
     /**

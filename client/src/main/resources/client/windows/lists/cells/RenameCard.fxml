@@ -8,6 +8,6 @@
    <children>
        <Button layoutX="14.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#cancel" prefHeight="25.0" prefWidth="88.0" styleClass="red-button" text="Cancel" />
        <Button layoutX="230.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#save" prefHeight="25.0" prefWidth="88.0" styleClass="blue-button" text="Save" />
-       <TextField fx:id="inputField" layoutX="14.0" layoutY="14.0" prefHeight="39.0" prefWidth="305.0" promptText="New title" style="-fx-background-radius: 10;" />
+       <TextField fx:id="inputField" layoutX="14.0" layoutY="14.0" onKeyPressed="#saveOnEnter" prefHeight="39.0" prefWidth="305.0" promptText="New title" style="-fx-background-radius: 10;" />
    </children>
 </AnchorPane>

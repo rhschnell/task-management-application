@@ -5,6 +5,8 @@ import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 
@@ -34,6 +36,15 @@ public class QuickAddCardCtrl {
     public void addCard() {
         service.insertCard(new Card(cardTitle.getText()),listCtrl.getCardList());
         listCtrl.displayCards();
+    }
+
+    public void addCardOnEnter(KeyEvent event)
+    {
+        System.out.println("HELLO??");
+        if(event.getCode() == KeyCode.ENTER)
+        {
+            addCard();
+        }
     }
 
     /**

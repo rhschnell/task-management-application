@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class AddTagCtrl {
@@ -56,6 +58,15 @@ public class AddTagCtrl {
         shownBoard.addTag(tag);
         service.insertBoard(shownBoard);
         tagOverviewCtrl.updateDisplayedTags();
+    }
+
+    @FXML
+    public void saveOnEnter(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            save();
+        }
     }
 
     /**
