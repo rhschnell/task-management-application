@@ -81,8 +81,14 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button copyButton;
 
-    @FXML
-    private Button personalizeButton;
+    @FXML private Button renameButton;
+    @FXML private Button personalizeButton;
+    @FXML private Button tagsButton;
+    @FXML private Button deleteButton;
+    private Button[] lockButtonArray = new Button[] {renameButton,
+                                                        personalizeButton,
+                                                        tagsButton,
+                                                        deleteButton};
 
     private List<String> joinedKeys;
     private int focusedCardIndex;
@@ -214,6 +220,12 @@ public class WorkspaceCtrl implements Initializable {
         boardControls.setManaged(true);
     }
 
+    public void lockButtons() {
+        for (Button b : lockButtonArray) {
+            b.setDisable(true);
+        }
+    }
+
     public void refreshWorkspace(boolean... forced) {
         if (forced.length == 0) {
             forced = new boolean[]{false};
@@ -223,8 +235,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
-            // TODO: disable buttons instead of making them invisible
-            boardControls.setVisible(!shownBoard.isProtected());
+            if (shownBoard.isProtected()) {lockButtons();}
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
             }
@@ -285,8 +296,9 @@ public class WorkspaceCtrl implements Initializable {
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-        displayLists();
+        if (shownBoard.isProtected()) {lockButtons();}
         unhideWorkspace();
+        displayLists();
     }
 
     /**

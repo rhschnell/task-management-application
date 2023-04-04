@@ -146,7 +146,7 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
             </Label>
-            <Button maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#renameBoard" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Rename">
+            <Button fx:id="renameButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#renameBoard" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Rename">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -156,7 +156,7 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Button>
-            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="30.0" styleClass="green-button" text="Tags">
+            <Button fx:id="tagsButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="30.0" styleClass="green-button" text="Tags">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -183,7 +183,7 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Button>
-            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#deleteScreen" prefHeight="30.0" prefWidth="133.0" styleClass="red-button" text="Delete">
+            <Button fx:id="deleteButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#deleteScreen" prefHeight="30.0" prefWidth="133.0" styleClass="red-button" text="Delete">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
