@@ -176,6 +176,15 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
 
+    @FXML
+    public void connectOnEnter(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            connect();
+        }
+    }
+
     /**
      * Method to clear the workspace
      */

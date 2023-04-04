@@ -36,6 +36,7 @@ public class QuickAddCardCtrl {
         listCtrl.displayCards();
     }
 
+
     /**
      * Set the ListCtrl the QuickAdd is on
      * @param listCtrl the listCtrl that needs to be setted

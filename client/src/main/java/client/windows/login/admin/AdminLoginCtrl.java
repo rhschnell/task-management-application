@@ -28,6 +28,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -68,6 +71,8 @@ public class AdminLoginCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.serverAddress.setText("http://localhost:8080");
+        this.serverAddress.setOnKeyPressed(this::connectOnEnter);
+        this.passwordField.setOnKeyPressed(this::connectOnEnter);
         showWelcome();
     }
 
@@ -102,6 +107,14 @@ public class AdminLoginCtrl implements Initializable {
         } catch (ForbiddenException e) {
             showPasswordIncorrect();
             passwordField.clear();
+        }
+    }
+
+    public void connectOnEnter(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            connect();
         }
     }
 
