@@ -301,7 +301,6 @@ public class WorkspaceCtrl implements Initializable {
         }
         if(focusedIndicesAreValid())
         {
-            System.out.println("Doing some highlighting");
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.4);
         }
