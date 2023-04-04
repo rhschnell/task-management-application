@@ -5,6 +5,8 @@ import client.serverUtils.TagUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
+import commons.Task;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +80,15 @@ public class EditCardService {
             appliedTags.add(tag);
     }
 
+    /**
+     * Returns a list of tags that are applied on this card
+     * @return Applied tags for this card
+     */
+    public List<Tag> getAppliedTags() {
+        return appliedTags;
+    }
+
+
 
     public String getBoardKey() {
         return boardKey;
@@ -85,5 +96,23 @@ public class EditCardService {
 
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
+    }
+
+    /**
+     * Updates the card to reflect a drag-and-drop action, where tasks are reordered. Their
+     * priorities are reordered and reflected in the card.
+     * @param draggedTask The task to insert at a new place
+     * @param newIndex The index of the new place to insert the dragged task
+     * @throws NotFoundException if the task to drag is not part of the provided list
+     */
+    public void dragAndDropDB(Task draggedTask, int newIndex) {
+        // Reflect the priority shift on a list
+
+        // Check if the draggedTask is inside the list
+        if (!card.getSubTasks().contains(draggedTask)) throw new NotFoundException();
+
+        // Shift the tasks around (implicitly done by addSubTask)
+        card.deleteSubTask(draggedTask);
+        card.addSubTask(newIndex, draggedTask);
     }
 }

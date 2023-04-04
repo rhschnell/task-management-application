@@ -1,6 +1,7 @@
 package client.serverUtils;
 
 import commons.Route;
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import org.glassfish.jersey.client.ClientConfig;
@@ -11,6 +12,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class AdminUtils {
     private final ServerUtils serverUtils;
+    private Client client;
 
     /**
      * Creates a new BoardUtils object
@@ -19,6 +21,16 @@ public class AdminUtils {
     @Inject
     public AdminUtils(ServerUtils serverUtils){
         this.serverUtils = serverUtils;
+        this.client = ClientBuilder.newClient(new ClientConfig());
+    }
+
+    /**
+     * Sets a new client
+     * @param client The new client
+     */
+    public void setClient(Client client)
+    {
+        this.client = client;
     }
 
     /**
@@ -27,8 +39,7 @@ public class AdminUtils {
      * @param pass The password
      */
     public void sendPassword(String pass) {
-        ClientBuilder.newClient(new ClientConfig())
-            .target(serverUtils.getServer()).path(Route.ADMIN)
+        client.target(serverUtils.getServer()).path(Route.ADMIN)
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .post(Entity.entity(pass, APPLICATION_JSON), Void.class);

@@ -35,6 +35,30 @@ class CardTest {
         assertNotNull(card);
     }
 
+    @Test
+    void constructorWithID(){
+        assertNotNull(card);
+    }
+
+    @Test
+    void constructorWithPriority(){
+        Long priority = 5L;
+        card = new Card(
+                "My card",
+                "Fancy despription",
+                "White",
+                null,
+                null,
+                priority
+        );
+        assertNotNull(card);
+    }
+
+    @Test
+    void createCardWithTitle(){
+        card = new Card("New card");
+        assertNotNull(card);
+    }
 
     @Test
     void addTag() {
@@ -49,6 +73,17 @@ class CardTest {
         card.addSubTask(task);
         assertEquals(List.of(task), card.getSubTasks());
     }
+
+    @Test
+    void addSubTaskByIndex(){
+        Task task = new Task(false, "Task title");
+        Task task2 = new Task(true, "Second task");
+
+        card.addSubTask(task);
+        card.addSubTask(0, task2);
+        assertEquals(List.of(task2, task), card.getSubTasks());
+    }
+
 
     @Test
     void deleteTagByName() {
@@ -106,6 +141,16 @@ class CardTest {
         assertEquals(List.of(task2), card.getSubTasks());
     }
 
+    @Test
+    void hasDescription(){
+        assertTrue(card.hasDescription());
+    }
+
+    @Test
+    void noDescription(){
+        card.setDescription(null);
+        assertFalse(card.hasDescription());
+    }
 
     @Test
     void getTitle() {
@@ -137,6 +182,19 @@ class CardTest {
         assertEquals(0, card.getId());
     }
 
+    @Test
+    void getPriority(){
+        Long priority = 500L;
+        card = new Card(
+                "My card",
+                "Fancy despription",
+                "White",
+                null,
+                null,
+                priority
+        );
+        assertEquals(priority, card.getPriority());
+    }
     @Test
     void setTitle() {
         card.setTitle("New title");
@@ -179,6 +237,12 @@ class CardTest {
     }
 
     @Test
+    void setPriority() {
+        card.setPriority(102);
+        assertEquals(102, card.getPriority());
+    }
+
+    @Test
     void testEquals() {
         Card c1 = new Card(
                 "Some card",
@@ -203,7 +267,6 @@ class CardTest {
         );
         assertNotEquals(card, c1);
     }
-
 
     @Test
     void testHashCode() {

@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 import static com.google.inject.Guice.createInjector;
@@ -54,8 +55,8 @@ public class CustomEditTagCellCtrl {
     public void setTagObject(Tag tag){
         this.tag = tag;
         tagTitle.setText(tag.getName());
-        tagColor.setFill(Color.web(tag.getColor()));
-
+        tagColor.setFill(Color.web(tag.getTagColor()));
+        tagTitle.setTextFill(Paint.valueOf(tag.getFontColor()));
         editButton.getStyleClass().add("blue-button");
         deleteButton.getStyleClass().add("red-button");
 
@@ -86,6 +87,7 @@ public class CustomEditTagCellCtrl {
         EditTagCtrl controller = loader.getKey();
         controller.setTag(tag);
         controller.setColorPicker();
+        controller.setFontColorPicker();
         controller.setCustomTagCellCtrl(this);
 
         String title = "Edit Tag";

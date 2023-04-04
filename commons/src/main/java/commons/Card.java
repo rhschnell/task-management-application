@@ -14,10 +14,13 @@ import java.util.List;
 public class Card implements Serializable {
     private String title;
     private String description;
+    
     private String backgroundColor;
     private String fontColor;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
+    @OrderBy("priority ASC")
     private List<Task> subTasks;
 
     @Id
@@ -25,7 +28,7 @@ public class Card implements Serializable {
     private long id;
 
 
-    private long priority ;
+    private long priority;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "Card_Tag",
             joinColumns = {
@@ -81,7 +84,6 @@ public class Card implements Serializable {
     }
 
     /**
-     *
      * @param title            Title of the card
      * @param description      Description of the card
      * @param backgroundColor Background colour of the card
@@ -89,8 +91,9 @@ public class Card implements Serializable {
      * @param subTasks         Subtasks for this card
      * @param priority         The priority of the card
      */
+
     public Card(String title, String description, String backgroundColor, String fontColor, List<Tag> tags,
-                List<Task> subTasks,Long priority) {
+                List<Task> subTasks, Long priority) {
         this.title = title;
         this.description = description;
         this.backgroundColor = backgroundColor;
@@ -121,7 +124,6 @@ public class Card implements Serializable {
         this.tags.add(newTag);
     }
 
-
     /**
      * Add new subtask to the list
      *
@@ -131,8 +133,29 @@ public class Card implements Serializable {
         if (this.subTasks == null) {
             this.subTasks = new ArrayList<>();
         }
+        newTask.setPriority(this.subTasks.size() + 1);
         this.subTasks.add(newTask);
     }
+
+    /**
+     * Add new subtask by index
+     *
+     * @param index   The index at which the new subtask should appear
+     * @param newTask The subtask to add
+     */
+    public void addSubTask(int index, Task newTask) {
+        if (this.subTasks == null) {
+            this.subTasks = new ArrayList<>();
+        }
+        if (index > subTasks.size()) index = (subTasks.size());
+        this.subTasks.add(index, newTask);
+
+        // Update priorities (naive)
+        for (int i = 0; i < this.subTasks.size(); i++) {
+            this.subTasks.get(i).setPriority(i + 1);
+        }
+    }
+
 
     /**
      * Delete tag by index
@@ -162,7 +185,6 @@ public class Card implements Serializable {
         tags.remove(toRemove);
     }
 
-
     /**
      * Delete subtask by index
      *
@@ -182,7 +204,6 @@ public class Card implements Serializable {
     public void deleteSubTask(Task task) {
         this.subTasks.remove(task);
     }
-
 
     /**
      * Check if this card has a description

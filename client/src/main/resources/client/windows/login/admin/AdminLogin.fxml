@@ -13,71 +13,98 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="548.0" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.login.admin.AdminLoginCtrl">
-   <children>
-      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="1024.0" spacing="20.0">
-         <children>
-              <ImageView fitHeight="28.0" fitWidth="150.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../images/Logo.png" />
-               </image>
+<VBox prefHeight="548.0" prefWidth="1024.0"
+      style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);"
+      stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.login.admin.AdminLoginCtrl">
+    <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0"
+          prefWidth="1024.0" spacing="20.0">
+        <children>
+            <ImageView fitHeight="28.0" fitWidth="150.0" opacity="0.8" pickOnBounds="true"
+                       preserveRatio="true">
+                <image>
+                    <Image url="/client/images/Logo.png"/>
+                </image>
             </ImageView>
-              <Line endX="10.19305419921875" endY="20.5" startX="10.193061828613281" startY="3.814697265625E-6" stroke="#1a1a1a" strokeWidth="2.0" />
-              <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-font-weight: bold;" text="Your personal task list organizer" textAlignment="CENTER">
-                  <font>
-                      <Font name="Arial" size="18.0" />
-                  </font>
-              </Label>
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets left="20.0" />
-         </padding>
-      </HBox>
-        <HBox alignment="CENTER" fillHeight="false" prefHeight="500.0" prefWidth="1024.0" spacing="20.0" VBox.vgrow="ALWAYS">
-            <AnchorPane maxHeight="-Infinity" prefHeight="208.0" prefWidth="242.0" style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
-            <VBox layoutX="-86.0" prefHeight="168.0" prefWidth="318.0" spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
-               <children>
-                      <TextField fx:id="serverAddress" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="276.0" promptText="Server address" style="-fx-background-radius: 10;">
-                          <font>
-                              <Font name="Arial" size="12.0" />
-                          </font>
-                      </TextField>
-                  <PasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" promptText="Password" style="-fx-background-radius: 10;">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                  </PasswordField>
-                      <Button alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#connect" prefHeight="30.0" prefWidth="250.0" styleClass="green-button" text="Connect" textAlignment="CENTER">
-                          <font>
-                              <Font name="Arial Bold" size="12.0" />
-                          </font>
-                      </Button>
-                  <Button maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#back" onMouseClicked="#back" prefHeight="30.0" prefWidth="250.0" styleClass="gray-button" text="Back" textAlignment="CENTER">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
+            <Line endX="10.19305419921875" endY="20.5" startX="10.193061828613281"
+                  startY="3.814697265625E-6" stroke="#1a1a1a" strokeWidth="2.0"/>
+            <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-font-weight: bold;"
+                   text="Your personal task list organizer" textAlignment="CENTER">
+                <font>
+                    <Font name="Arial" size="18.0"/>
+                </font>
+            </Label>
+        </children>
+        <opaqueInsets>
+            <Insets/>
+        </opaqueInsets>
+        <padding>
+            <Insets left="20.0"/>
+        </padding>
+    </HBox>
+    <HBox alignment="CENTER" fillHeight="false" prefHeight="500.0" prefWidth="1024.0" spacing="20.0"
+          VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-Infinity" prefHeight="208.0" prefWidth="242.0"
+                    style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 5.0);">
+            <VBox layoutX="-86.0" prefHeight="168.0" prefWidth="318.0" spacing="15.0"
+                  AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0"
+                  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                <children>
+                    <TextField fx:id="serverAddress" maxHeight="-Infinity" minHeight="-Infinity"
+                               prefHeight="30.0" prefWidth="276.0" promptText="Server address"
+                               style="-fx-background-radius: 10;">
+                        <font>
+                            <Font name="Arial" size="12.0"/>
+                        </font>
+                    </TextField>
+                    <PasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity"
+                                   prefHeight="30.0" prefWidth="250.0" promptText="Password"
+                                   style="-fx-background-radius: 10;">
+                        <font>
+                            <Font size="12.0"/>
+                        </font>
+                    </PasswordField>
+                    <Button alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity"
+                            minWidth="-Infinity" mnemonicParsing="false" onAction="#connect"
+                            prefHeight="30.0" prefWidth="250.0" styleClass="green-button"
+                            text="Connect" textAlignment="CENTER">
+                        <font>
+                            <Font name="Arial Bold" size="12.0"/>
+                        </font>
+                    </Button>
+                    <Button maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                            mnemonicParsing="false" onAction="#back" onMouseClicked="#back"
+                            prefHeight="30.0" prefWidth="250.0" styleClass="gray-button" text="Back"
+                            textAlignment="CENTER">
+                        <font>
+                            <Font name="Arial Bold" size="12.0"/>
+                        </font>
+                        <VBox.margin>
+                            <Insets top="20.0"/>
+                        </VBox.margin>
+                    </Button>
+                </children>
             </VBox>
-            </AnchorPane>
-         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="200.0" style="-fx-border-radius: 15; -fx-background-radius: 15; -fx-background-color: rgba(0, 100, 100, 0.5);" HBox.hgrow="NEVER">
+        </AnchorPane>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                    minWidth="-Infinity" prefHeight="70.0" prefWidth="200.0"
+                    style="-fx-border-radius: 15; -fx-background-radius: 15; -fx-background-color: rgba(0, 100, 100, 0.5);"
+                    HBox.hgrow="NEVER">
             <children>
-               <Label fx:id="message" alignment="CENTER" focusTraversable="false" graphicTextGap="0.0" layoutX="5.0" layoutY="7.0" prefHeight="87.0" prefWidth="188.0" text="Enter the address and the password of the server." textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                  <font>
-                     <Font name="Arial Italic" size="12.0" />
-                  </font>
-               </Label>
+                <Label fx:id="message" alignment="CENTER" focusTraversable="false"
+                       graphicTextGap="0.0" layoutX="5.0" layoutY="7.0" prefHeight="87.0"
+                       prefWidth="188.0" text="Enter the address and the password of the server."
+                       textAlignment="CENTER" textFill="WHITE" wrapText="true"
+                       AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                       AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                    <font>
+                        <Font name="Arial Italic" size="12.0"/>
+                    </font>
+                </Label>
             </children>
-         </AnchorPane>
-         <padding>
-            <Insets bottom="50.0" />
-         </padding>
-        </HBox>
-   </children>
+        </AnchorPane>
+        <padding>
+            <Insets bottom="50.0"/>
+        </padding>
+    </HBox>
 </VBox>

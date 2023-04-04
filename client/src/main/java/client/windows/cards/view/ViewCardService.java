@@ -1,16 +1,16 @@
 package client.windows.cards.view;
 
 import client.serverUtils.CardUtils;
-import client.serverUtils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
 
 public class ViewCardService {
-    private CardUtils server;
+
+    private final CardUtils server;
     private String boardKey;
     @Inject
-    public ViewCardService(ServerUtils server) {
-        this.server = new CardUtils(server);
+    public ViewCardService(CardUtils server) {
+        this.server = server;
     }
 
     public void deleteCard(Card card)

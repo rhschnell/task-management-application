@@ -85,5 +85,10 @@ public class BoardCellCtrl implements Initializable {
         });
         // TODO: else
     }
+//
+//    public void setLabelColour()
+//    {
+//        this.boardTitle.setTextFill(Color.web(board.getFontColour()));
+//    }
 }
 

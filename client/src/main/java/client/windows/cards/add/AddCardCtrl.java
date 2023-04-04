@@ -17,6 +17,7 @@ package client.windows.cards.add;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
@@ -28,15 +29,18 @@ import commons.CardList;
 import commons.Tag;
 import commons.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,29 +73,39 @@ public class AddCardCtrl extends SubtaskContainer {
     private List<Task> taskList;
 
 
-    private HelperMethods hm;
+    private HelperMethods helperMethods;
 
     /**
      * Constructor for AddCardCtrl
      *
-     * @param service corresponding service
+     * @param service           corresponding service
+     * @param helperMethods     Instance of HelperMethods
+     * @param dataFormatManager Instance of DataFormatManager that gets passed to the super class
      */
     @Inject
-    public AddCardCtrl(AddCardService service, HelperMethods hm) {
+    public AddCardCtrl(AddCardService service, HelperMethods helperMethods, DataFormatManager dataFormatManager) {
+        super(dataFormatManager);
         this.service = service;
-        this.hm=hm;
+        this.helperMethods = helperMethods;
     }
 
     public void setCardList(CardList cardList) {
         service.setCardList(cardList);
     }
 
-    public void setBoardKey(String boardKey)
-    {
+    /**
+     * Sets the boardKey
+     * @param boardKey the boardKey to be set
+     */
+    public void setBoardKey(String boardKey) {
         service.setBoardKey(boardKey);
     }
-    public String getBoardKey()
-    {
+
+    /**
+     * Gets the boardKey
+     * @return the boardKey
+     */
+    public String getBoardKey() {
         return service.getBoardKey();
     }
 
@@ -99,14 +113,14 @@ public class AddCardCtrl extends SubtaskContainer {
      * This method cancels adding the created card to the list
      */
     public void cancel() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method adds the created card to the list and closes the pop-up. Moreover, it refreshed the workspace.
      */
     public void save() {
-        ((Stage)saveButton.getScene().getWindow()).close();
+        ((Stage) saveButton.getScene().getWindow()).close();
         Card card = new Card(
                 cardTitle.getText(),
                 cardDescription.getText(),
@@ -114,22 +128,20 @@ public class AddCardCtrl extends SubtaskContainer {
                 "black",
                 service.getAppliedTags(),
                 taskList);
-        card.setPriority(service.getCardList().getCards().size()+1);
+        card.setPriority(service.getCardList().getCards().size() + 1);
         service.setAppliedTags(new ArrayList<>());
         service.addCard(card);
         service.insertCardList();
     }
+
     /**
-     * Escapes the window
+     * Sets the applied tags to the VBOX of the displayed cards
+     * @param appliedTags the Array of tags that needs to be displayed
      */
-    public void escape() {
-        ((Stage)saveButton.getScene().getWindow()).close();
-    }
-    public void setAppliedTags(List<Tag> appliedTags)
-    {
+    public void setAppliedTags(List<Tag> appliedTags) {
         service.setAppliedTags(new ArrayList<>());
         appliedTagsVbox.getChildren().clear();
-        for(int i=0;i<appliedTags.size();i++) {
+        for (int i = 0; i < appliedTags.size(); i++) {
             service.applyTag(appliedTags.get(i));
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
@@ -146,7 +158,7 @@ public class AddCardCtrl extends SubtaskContainer {
      */
     public void addTagPopup() {
         var loader = new MyFXML(createInjector(new MainModules()))
-                .load(TagListCtrl.class, "client", "windows", "tags","TagList.fxml");
+                .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         ctrl.setAvailableTags(service.getAvailableTags());
         ctrl.setAppliedTags(service.getAppliedTags());
@@ -155,7 +167,7 @@ public class AddCardCtrl extends SubtaskContainer {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
-        hm.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
@@ -171,6 +183,7 @@ public class AddCardCtrl extends SubtaskContainer {
         Task newTask = new Task();
         newTask.setCompleted(false);
         newTask.setTitle(addSubtaskTitle.getText());
+        newTask.setPriority(taskList.size() + 1);
         taskList.add(newTask);
         addSubtaskTitle.clear();
         displayTasks();
@@ -182,6 +195,7 @@ public class AddCardCtrl extends SubtaskContainer {
         }
     }
 
+    @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
         for (Task task : taskList) {
@@ -190,13 +204,49 @@ public class AddCardCtrl extends SubtaskContainer {
                     "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
             loader.getKey().setSubtaskContainer(this);
+            makeTaskDraggable(loader, subtasks);
             subtasks.getChildren().add(loader.getValue());
         }
     }
+
     @Override
     public void deleteSubtask(Task task) {
         taskList.remove(task);
         displayTasks();
+    }
+
+    /**
+     * Sets the action for when a dragged subtask is dropped
+     *
+     * @param fxComponent The JavaFX UI component of a subtask
+     * @param taskVBox    The VBox holding the subtasks
+     */
+    @Override
+    public void setOnDragDropped(Parent fxComponent, VBox taskVBox) {
+        fxComponent.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasContent(getDataFormatManager().getSubtaskFormat())) {
+                // Remove the task from the VBox
+                Node draggedNode = (Node) event.getGestureSource();
+                taskVBox.getChildren().remove(draggedNode);
+
+                // Insert the new task into the data object
+                Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
+                int newIndex = taskVBox.getChildren().indexOf(fxComponent) - 1;
+                service.reorderTasks(draggedTask, newIndex, taskList);
+
+                // Insert the new task into the UI
+                taskVBox.getChildren().add(newIndex, draggedNode);
+
+                // Refresh the controllers with the correct task objects
+                displayTasks();
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
     }
 
 }
