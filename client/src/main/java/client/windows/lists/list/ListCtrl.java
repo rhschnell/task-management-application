@@ -20,9 +20,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
-import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.QuickAddCardCtrl;
-import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -48,7 +46,6 @@ import static com.google.inject.Guice.createInjector;
 public class ListCtrl {
     private HelperMethods hm;
     private final ListService service;
-    private final CardService cardService;
 
     private DataFormat cardFormat;
 
@@ -89,9 +86,9 @@ public class ListCtrl {
             workspaceCtrl.openFocusedCard();
         }
 
-        if (keyEvent.getCode() == KeyCode.E) handleRenameShortcut();
+        if (keyEvent.getCode() == KeyCode.E) workspaceCtrl.handleRenameShortcut();
         if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-            handleDeleteShortCut();
+            workspaceCtrl.handleDeleteShortCut();
         }
     }
 
@@ -137,35 +134,6 @@ public class ListCtrl {
         return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
 
-
-    /**
-     * Handles the shortcut associated to quick-renaming cards, "E"
-     */
-    public void handleRenameShortcut() {
-        if (!isSelected()) return;
-        // Get the highlighted card
-        Card selectedCard = this.getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
-        var loader = new MyFXML(createInjector())
-                .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
-                                                                                   ".fxml");
-        loader.getKey().setData(selectedCard);
-        loader.getKey().setListCtrl(this);
-        Scene scene = new Scene(loader.getValue());
-        hm.popUp(scene, "Rename card");
-        // Instantiate a new rename window
-    }
-
-    /**
-     * Method for handling the deletion of the highlighted card
-     */
-    private void handleDeleteShortCut() {
-        // Get the highlighted card
-        int toDeleteIndex = workspaceCtrl.getFocusedCardIndex() - 1;
-        Card toDelete = getCardList().getCard(toDeleteIndex);
-        // Delete it from the card database
-        cardService.deleteCard(toDelete);
-    }
-
     public VBox getCardVBox() {
         return cardVBox;
     }
@@ -173,13 +141,11 @@ public class ListCtrl {
     /**
      * Constructor for ListCtrl
      *
-     * @param service     The ListService for this controller
-     * @param cardService The cardService for this controller
+     * @param service The ListService for this controller
      */
     @Inject
-    public ListCtrl(ListService service, CardService cardService) {
+    public ListCtrl(ListService service) {
         this.service = service;
-        this.cardService = cardService;
         focusedCardIndex = -1;
     }
 

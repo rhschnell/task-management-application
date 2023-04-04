@@ -17,10 +17,13 @@ package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.CardUtils;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.CustomizeCtrl;
+import client.windows.lists.cells.CardService;
+import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
@@ -92,17 +95,21 @@ public class WorkspaceCtrl implements Initializable {
     private double mouseMoveThreshold;
 
     private List<ListCtrl> listControllers;
+    private final CardService cardService;
 
 
     /**
      * Constructor for WorkspaceCtrl
      *
      * @param service       corresponding service
+     * @param cardService   injected cardService instance
      * @param helperMethods corresponding helper methods
      */
     @Inject
-    public WorkspaceCtrl(WorkspaceService service, HelperMethods helperMethods) {
+    public WorkspaceCtrl(WorkspaceService service,
+                         CardService cardService, HelperMethods helperMethods) {
         this.service = service;
+        this.cardService = cardService;
         this.helperMethods = helperMethods;
         this.listControllers = new ArrayList<>();
         focusedCardIndex = -1;
@@ -356,6 +363,39 @@ public class WorkspaceCtrl implements Initializable {
         // Shift the card to the new position in the controller
         focusedListController.shiftCard(cardToMove, destIndex);
     }
+
+    /**
+     * Handles the shortcut associated to quick-renaming cards, "E"
+     */
+    public void handleRenameShortcut() {
+        if (!focusedIndicesAreValid()) return;
+        ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
+        // Get the highlighted card
+        Card selectedCard = focusedListController.getCardList().getCard(focusedCardIndex - 1);
+        var loader = new MyFXML(createInjector())
+                .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
+                                                                                   ".fxml");
+        loader.getKey().setData(selectedCard);
+        loader.getKey().setListCtrl(focusedListController);
+        Scene scene = new Scene(loader.getValue());
+        helperMethods.popUp(scene, "Rename card");
+        // Instantiate a new rename window
+    }
+
+    /**
+     * Method for handling the deletion of the highlighted card
+     */
+    public void handleDeleteShortCut() {
+        if (!focusedIndicesAreValid()) return;
+        ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
+
+        // Get the highlighted card
+        int toDeleteIndex = focusedCardIndex - 1;
+        Card toDelete = focusedListController.getCardList().getCard(toDeleteIndex);
+        // Delete it from the card database
+        cardService.deleteCard(toDelete);
+    }
+
 
     /**
      * Returns the ListVbox in which the focusedCard is located
