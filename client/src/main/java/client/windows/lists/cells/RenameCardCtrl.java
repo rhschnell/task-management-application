@@ -69,14 +69,6 @@ public class RenameCardCtrl implements Initializable {
         listCtrl.displayCards();
     }
 
-    public void saveOnEnter(KeyEvent event)
-    {
-        if(event.getCode().equals(KeyCode.ENTER))
-        {
-            save();
-        }
-    }
-
     /**
      * Closes the window
      */
