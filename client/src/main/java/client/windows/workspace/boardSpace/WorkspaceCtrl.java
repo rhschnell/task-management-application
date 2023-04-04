@@ -24,6 +24,7 @@ import client.windows.customize.CustomizeCtrl;
 import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.tags.view.TagListFromShortcutCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import client.windows.workspace.delete.DeleteBoardCtrl;
@@ -315,8 +316,7 @@ public class WorkspaceCtrl implements Initializable {
                 newMouseYPosition = event.getSceneY();
             });
         }
-        if(focusedIndicesAreValid())
-        {
+        if (focusedIndicesAreValid()) {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.4);
         }
@@ -405,6 +405,34 @@ public class WorkspaceCtrl implements Initializable {
         cardService.deleteCard(toDelete);
     }
 
+    /**
+     * Method for handling the shortcuts that lets users manage tags for the highlighted card
+     */
+    public void handleTagShortcut() {
+        if (!focusedIndicesAreValid()) return;
+        ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
+        Card highlightedCard = focusedListController.getCardList().getCard(focusedCardIndex - 1);
+        // Get the highlighted card from the database, because we get merge conflicts in
+        // Hibernate otherwise <a url="">
+        highlightedCard = cardService.getCardByID(highlightedCard.getId());
+
+        // Instantiate the popup that controls the tag for this card
+        var loader = new MyFXML(createInjector(new MainModules())).load(
+                TagListFromShortcutCtrl.class, "client", "windows", "tags", "TagListFromShortCut.fxml");
+
+        TagListFromShortcutCtrl tagListCtrl = loader.getKey();
+
+        // Set the appropriate field for the controller
+        tagListCtrl.setAvailableTags(shownBoard.getTagList());
+        tagListCtrl.setAppliedTags(highlightedCard.getTags());
+        tagListCtrl.setCard(highlightedCard);
+        tagListCtrl.setCardList(focusedListController.getCardList());
+
+        tagListCtrl.setType("edit");
+
+        Scene scene = new Scene(loader.getValue());
+        helperMethods.popUp(scene, "Manage card tags");
+    }
 
     /**
      * Returns the ListVbox in which the focusedCard is located
@@ -522,7 +550,7 @@ public class WorkspaceCtrl implements Initializable {
         if (focusedListIndex <= 0)
             focusedListIndex = 1;
         if (focusedCardIndex > 0 && shownBoard.getCardLists()
-                    .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
+                                            .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
             focusedCardIndex = shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size();
         if (focusedIndicesAreValid()) {
             highlightSelectedCard();

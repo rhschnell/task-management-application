@@ -35,7 +35,7 @@ public class CardService {
 
 
     /**
-     * Inserts a card into the database
+     * Inserts a new card into the database
      *
      * @param card     the Card that needs to be inserted
      * @param cardList the card list to update
@@ -44,6 +44,14 @@ public class CardService {
         card.setPriority(cardList.getCards().size() + 1);
         cardList.addCard(card);
         insertCardList(cardList);
+    }
+
+    /**
+     * Updates a card by inserting it again into the database
+     * @param card the Card that needs to be updated
+     */
+    public void updateCard(Card card){
+        cardUtils.insertCard(card);
     }
 
     /**
@@ -72,5 +80,9 @@ public class CardService {
 
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
+    }
+
+    public Card getCardByID(long id) {
+        return cardUtils.getCardById(id);
     }
 }
