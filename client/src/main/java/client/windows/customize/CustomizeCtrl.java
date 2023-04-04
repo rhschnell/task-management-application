@@ -136,25 +136,6 @@ public class CustomizeCtrl {
         ((Stage)closeButton.getScene().getWindow()).close();
     }
 
-    public void displayPresetList() {
-        List<CardColorPreset> presetList = getBoard().getPresetList();
-
-        for(CardColorPreset preset : presetList){
-            var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomCardPresetCellCtrl.class, "client", "windows", "customize", "cards", "CustomCardPresetCell.fxml");
-            CustomCardPresetCellCtrl ctrl = loader.getKey();
-            ctrl.setPresetObject(preset);
-            ctrl.setCustomizeCtrl(this);
-
-            cardPresets.getChildren().add(loader.getValue());
-        }
-    }
-
-    public void updateDisplayedPresets() {
-        cardPresets.getChildren().clear();
-        displayPresetList();
-    }
-
     public Board getBoard() {
         return this.board;
     }
@@ -175,20 +156,6 @@ public class CustomizeCtrl {
             listBackgroundColor.setValue(Color.web(lists.get(0).getBackgroundColor()));
             listFontColor.setValue(Color.web(lists.get(0).getFontColor()));
         }
-    }
-
-    public void addCardPreset() {
-        var loader =  new MyFXML(createInjector(new MainModules()))
-                .load(AddCardPresetCtrl.class, "client", "windows", "customize", "cards", "add", "AddCardPreset.fxml");
-
-        loader.getKey().setCustomizeCtrl(this);
-        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        String title = "Create Preset";
-        HelperMethods.popUp(scene, title);
     }
 }
 
