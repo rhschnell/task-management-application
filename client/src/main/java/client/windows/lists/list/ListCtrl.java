@@ -492,8 +492,8 @@ public class ListCtrl {
     public void updateListColors() {
         String backgroundColor = getCardList().getBackgroundColor();
         String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" 
-        + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
-        "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+            + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+            "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
         cardVBox.setStyle("-fx-background-color: #" + backgroundColor);
         completeList.setStyle(style);
         listTitle.setTextFill(Color.web(getCardList().getFontColor()));
