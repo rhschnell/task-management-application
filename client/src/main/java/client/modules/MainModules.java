@@ -21,6 +21,9 @@ import client.windows.adminview.boardCell.BoardCellCtrl;
 import client.windows.adminview.boardCell.BoardCellService;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.customize.CustomizeCtrl;
+import client.windows.customize.cards.add.AddCardPresetCtrl;
+import client.windows.customize.cards.add.AddCardPresetService;
 import client.windows.lists.cells.CardService;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
@@ -54,5 +57,8 @@ public class MainModules implements Module {
         binder.bind(BoardCellService.class).in(Scopes.SINGLETON);
         binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CustomizeCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardPresetCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardPresetService.class).in(Scopes.SINGLETON);
     }
 }

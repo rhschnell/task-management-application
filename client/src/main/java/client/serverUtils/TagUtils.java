@@ -16,7 +16,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class TagUtils {
     private ServerUtils serverUtils;
 
-
     /**
      * Creates a new TagUtils object
      * @param serverUtils The ServerUtils object (injected) to use in requests.

@@ -200,7 +200,7 @@ public class AdminCtrl implements Initializable {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null, null);
+            shownBoard = new Board(targetKey, targetKey, null, null, null);
             service.insertBoard(shownBoard);
         }
 

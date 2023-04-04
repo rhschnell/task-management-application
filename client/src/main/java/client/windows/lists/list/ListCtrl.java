@@ -37,6 +37,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
 import static com.google.inject.Guice.createInjector;
@@ -47,6 +48,8 @@ public class ListCtrl {
 
     private DataFormat cardFormat;
 
+    @FXML
+    private VBox completeList;
     @FXML
     private Label listTitle;
     @FXML
@@ -68,8 +71,6 @@ public class ListCtrl {
         service.setCardList(cardList);
     }
 
-
-
     /**
      * Setter for the list title
      * @param title the title of the list
@@ -82,7 +83,7 @@ public class ListCtrl {
      * Displays the cards onto the list's inner VBox
      */
     public void displayCards() {
-
+        updateListColors();
 
         for (Card card: service.getCardList().getCards()) {
             var cardCell = new MyFXML(createInjector(new MainModules()))
@@ -180,7 +181,6 @@ public class ListCtrl {
     {
         return service.getBoardKey();
     }
-
 
     /**
      * Returns the CardList of the Controller
@@ -287,6 +287,17 @@ public class ListCtrl {
                 renameTitle.setVisible(false);
             }
         });
+    }
+
+    /**
+     * Method to update the list colors
+     */
+    public void updateListColors() {
+        String backgroundColor = getCardList().getBackgroundColor();
+        String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" + backgroundColor + "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+        cardVBox.setStyle("-fx-background-color: #" + backgroundColor);
+        completeList.setStyle(style);
+        listTitle.setTextFill(Color.web(getCardList().getFontColor()));
     }
 
     public void setHelperMethod(HelperMethods hm) {
