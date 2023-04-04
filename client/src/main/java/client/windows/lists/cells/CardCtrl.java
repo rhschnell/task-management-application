@@ -4,6 +4,7 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.lists.delete.DeleteCardCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
@@ -98,11 +99,27 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * Sets the event to happen when interacting with the delete button
+     * Displays the DeleteList FXML into a new window (Popup).
      */
+
     public void delete() {
-        service.deleteCard(card);
+        var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setDeleteCard(card);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().delete();
+            }
+        });
+        String title = "Delete a card";
+        HelperMethods.popUp(scene, title);
     }
+
 
     /**
      * This function is called when clicking, and when double-clicking within 300ms, the viewCard is opened
