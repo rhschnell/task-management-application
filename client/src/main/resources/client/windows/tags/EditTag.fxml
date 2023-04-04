@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <VBox spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.edit.EditTagCtrl">
@@ -18,12 +19,36 @@
          </font>
       </TextField>
       <Separator prefWidth="200.0" />
-      <Label text="Color">
-         <font>
-            <Font name="Arial Bold" size="13.0" />
-         </font>
-      </Label>
-      <ColorPicker fx:id="tagColor" prefHeight="26.0" prefWidth="105.0" style="-fx-background-radius: 10;" />
+      <HBox prefHeight="61.0" prefWidth="312.0">
+         <children>
+            <VBox prefHeight="61.0" prefWidth="317.0">
+               <children>
+                  <Label text="Tag Color">
+                     <font>
+                        <Font name="Arial Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Separator prefHeight="12.0" prefWidth="312.0" visible="false" />
+                  <ColorPicker fx:id="tagColor" prefHeight="26.0" prefWidth="105.0" style="-fx-background-radius: 10;" />
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label text="Font Color">
+                     <font>
+                        <Font name="Arial Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Separator prefHeight="12.0" prefWidth="312.0" visible="false" />
+                  <ColorPicker fx:id="fontColor" prefHeight="26.0" prefWidth="105.0" style="-fx-background-radius: 10;">
+                     <value>
+                        <Color />
+                     </value>
+                  </ColorPicker>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
       <Separator prefWidth="200.0" />
       <HBox prefHeight="0.0" prefWidth="310.0">
          <children>

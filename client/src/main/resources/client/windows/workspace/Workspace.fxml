@@ -38,50 +38,32 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" style="-fx-background-color: F6F6F6;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.boardSpace.WorkspaceCtrl">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="1025.0" style="-fx-background-color: F6F6F6;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.boardSpace.WorkspaceCtrl">
    <center>
       <VBox>
          <children>
-            <AnchorPane blendMode="DARKEN" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: B7CEC4;">
+            <HBox fx:id="titleBar" fillHeight="false" prefHeight="47.0" prefWidth="820.0" spacing="15.0" style="-fx-background-color: B7CEC4;">
+               <padding>
+                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+               </padding>
                <children>
-                  <HBox fx:id="boardControls" fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="820.0" spacing="15.0">
-                     <padding>
-                        <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-                     </padding>
-                     <children>
-                        <Label fx:id="boardName" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="34.0" prefWidth="1276.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font name="Arial Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="copyButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#copyKey" prefHeight="27.0" prefWidth="85.0" styleClass="green-button" text="Copy Key">
-                           <font>
-                              <Font name="Arial Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#renameBoard" prefHeight="46.0" prefWidth="70.0" styleClass="green-button" text="Rename">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                           <font>
-                              <Font name="Arial Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="addListButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addList" prefHeight="38.0" prefWidth="70.0" styleClass="green-button" text="Add list">
-                           <font>
-                              <Font name="Arial Bold" size="12.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
+                  <Label fx:id="boardName" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="34.0" prefWidth="1276.0" textAlignment="RIGHT" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Arial Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="addListButton" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addList" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Add list">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
-            </AnchorPane>
+            </HBox>
             <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="502.0" prefWidth="822.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                <HBox fx:id="listContainer" prefHeight="450.0" prefWidth="820.0" spacing="30.0" style="-fx-background-color: transparent;">
                   <padding>
@@ -93,99 +75,123 @@
       </VBox>
    </center>
    <left>
-      <AnchorPane prefHeight="548.0" prefWidth="271.0" style="-fx-effect: dropshadow( three-pass-box , gray, 2, 0.0 , 1, 0); -fx-background-color: ACC7BB;" BorderPane.alignment="CENTER">
-         <VBox layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="231.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
-            <opaqueInsets>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="239.0" prefWidth="231.0" spacing="10.0" style="-fx-effect: dropshadow( three-pass-box , gray, 2, 0.0 , 1, 0); -fx-background-color: ACC7BB;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="231.0" text="Workspace" textAlignment="CENTER">
+            <font>
+               <Font name="Arial Bold" size="18.0" />
+            </font>
+         </Label>
+         <Separator prefWidth="200.0" />
+         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <content>
+               <VBox fx:id="boardList" fillWidth="false" maxWidth="1.7976931348623157E308">
+                  <opaqueInsets>
+                     <Insets />
+                  </opaqueInsets>
+               </VBox>
+            </content>
+            <VBox.margin>
                <Insets />
-            </opaqueInsets>
-            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="My boards" textAlignment="CENTER">
+            </VBox.margin>
+         </ScrollPane>
+         <Separator prefWidth="200.0" />
+         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Join/create a board" textAlignment="CENTER">
+            <font>
+               <Font name="Arial Bold" size="14.0" />
+            </font>
+         </Label>
+         <HBox prefHeight="11.0" prefWidth="231.0" spacing="10.0">
+            <TextField fx:id="keyField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="180.0" promptText="Board Key" style="-fx-background-radius: 10;">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </TextField>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="30.0" prefWidth="41.0" styleClass="green-button" text="Add">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+         </HBox>
+         <Separator prefWidth="200.0" />
+         <Button maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="241.0" styleClass="red-button" text="Disconnect">
+            <font>
+               <Font name="Arial Bold" size="12.0" />
+            </font>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </Button>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </VBox>
+   </left>
+   <right>
+      <VBox fx:id="boardControls" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="170.0" spacing="10.0" style="-fx-effect: dropshadow( three-pass-box , gray, 2, 0.0 , -1, 0); -fx-background-color: ACC7BB;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="231.0" text="Board actions" textAlignment="CENTER">
                <font>
                   <Font name="Arial Bold" size="18.0" />
                </font>
             </Label>
             <Separator prefWidth="200.0" />
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-               <content>
-                  <VBox fx:id="boardList" fillWidth="false" maxWidth="1.7976931348623157E308">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </VBox>
-               </content>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </ScrollPane>
-            <Separator prefWidth="200.0" />
-            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Join/create a board" textAlignment="CENTER">
+            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Customization" textAlignment="CENTER">
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
             </Label>
-            <HBox prefHeight="11.0" prefWidth="231.0" spacing="10.0">
-               <TextField fx:id="keyField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="180.0" promptText="Board Key" style="-fx-background-radius: 10;">
-                  <font>
-                     <Font name="Arial" size="12.0" />
-                  </font>
-               </TextField>
-               <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="30.0" prefWidth="41.0" styleClass="green-button" text="Add">
-                  <font>
-                     <Font name="Arial Bold" size="12.0" />
-                  </font>
-               </Button>
-            </HBox>
-            <Separator prefWidth="200.0" />
-            <Button maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#disconnect" prefHeight="30.0" prefWidth="241.0" styleClass="red-button" text="Disconnect">
+            <Button maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#renameBoard" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Rename">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
             </Button>
-         </VBox>
-      </AnchorPane>
-   </left>
-   <right>
-      <AnchorPane minWidth="0.0" style="-fx-effect: dropshadow( three-pass-box , gray, 2, 0.0 , -1, 0); -fx-background-color: ACC7BB;" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="TOP_CENTER" layoutX="118.0" layoutY="310.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="133.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <children>
-                  <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Controls" textAlignment="CENTER">
-                     <font>
-                        <Font name="Arial Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Separator prefWidth="200.0" />
-                  <Button fx:id="personalizeButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#customizeBoard" prefHeight="30.0" styleClass="green-button" text="Personalize">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="30.0" styleClass="green-button" text="Tags">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#deleteBoard" prefHeight="30.0" prefWidth="133.0" styleClass="red-button" text="Delete">
-                     <font>
-                        <Font name="Arial Bold" size="12.0" />
-                     </font>
-                  </Button>
-               </children>
-               <padding>
-                  <Insets left="15.0" right="15.0" />
-               </padding>
-            </VBox>
+            <Button fx:id="personalizeButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#customizeBoard" prefHeight="30.0" styleClass="green-button" text="Personalize">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="30.0" styleClass="green-button" text="Tags">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+            <Separator prefWidth="200.0" />
+            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Sharing" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="copyButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#copyKey" prefHeight="30.0" prefWidth="85.0" styleClass="green-button" text="Copy Key">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+            <Separator prefWidth="200.0" />
+            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Exit options" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#deleteBoard" prefHeight="30.0" prefWidth="133.0" styleClass="red-button" text="Delete">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
          </children>
-      </AnchorPane>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </VBox>
    </right>
 </BorderPane>
