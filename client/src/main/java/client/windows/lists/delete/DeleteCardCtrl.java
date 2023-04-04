@@ -16,28 +16,28 @@
 package client.windows.lists.delete;
 
 import com.google.inject.Inject;
+import commons.Card;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class DeleteListCtrl{
-    private final DeleteListService service;
-    private long deleteId;
-
-    @FXML
-    private Button cancelButton;
+public class DeleteCardCtrl{
+    private final DeleteCardService service;
+    private Card deleteCard;
 
     @FXML
     private Button deleteButton;
+
+    @FXML
+    private Button cancelButton;
 
     /**
      * Constructor for DeleteListCtrl
      * @param service corresponding service
      */
     @Inject
-    public DeleteListCtrl(DeleteListService service) {
+    public DeleteCardCtrl(DeleteCardService service) {
         this.service = service;
     }
 
@@ -47,21 +47,25 @@ public class DeleteListCtrl{
      * This method cancels deleting the list from the board
      */
     public void cancel(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
-    }
-    public void escape(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method deletes the list from the board
      */
     public void delete(){
-        ((Stage)deleteButton.getScene().getWindow()).close();
-        service.deleteCardList(this.deleteId);
+        ((Stage) deleteButton.getScene().getWindow()).close();
+        service.deleteCard(this.deleteCard);
+    }
+    public void escape(){
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
-    public void setDeleteId(long deleteId) {
-        this.deleteId = deleteId;
+    /**
+     * Sets the card to be deleted
+     * @param deleteCard the card
+     */
+    public void setDeleteCard(Card deleteCard) {
+        this.deleteCard = deleteCard;
     }
 }

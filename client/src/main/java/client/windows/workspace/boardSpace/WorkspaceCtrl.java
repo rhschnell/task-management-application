@@ -21,9 +21,11 @@ import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.CustomizeCtrl;
+import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.delete.DeleteBoardCtrl;
 import client.windows.workspace.leave.LeaveCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
@@ -518,6 +520,24 @@ public class WorkspaceCtrl implements Initializable {
         joinedKeys.remove(shownBoard.getKey());
         refreshWorkspace(true);
         clearWorkspace();
+    }
+    public void deleteScreen() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteBoardCtrl.class, "client", "windows", "workspace", "delete", "deleteBoard.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setWorkspaceCtrl(this);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().delete();
+            }
+        });
+        String title = "Delete a board";
+        HelperMethods.popUp(scene, title);
     }
 
     public void leaveBoard() {

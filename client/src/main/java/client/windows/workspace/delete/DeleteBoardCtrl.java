@@ -1,4 +1,4 @@
-/*
+package client.windows.workspace.delete;/*
  * Copyright 2021 Delft University of Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,55 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package client.windows.lists.delete;
 
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
+import commons.Card;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class DeleteListCtrl{
-    private final DeleteListService service;
-    private long deleteId;
-
-    @FXML
-    private Button cancelButton;
+public class DeleteBoardCtrl{
 
     @FXML
     private Button deleteButton;
 
-    /**
-     * Constructor for DeleteListCtrl
-     * @param service corresponding service
-     */
-    @Inject
-    public DeleteListCtrl(DeleteListService service) {
-        this.service = service;
+    @FXML
+    private Button cancelButton;
+
+    private WorkspaceCtrl workspaceCtrl;
+
+
+    public void setWorkspaceCtrl (WorkspaceCtrl workspaceCtrl)
+    {
+        this.workspaceCtrl=workspaceCtrl;
     }
-
-
 
     /**
      * This method cancels deleting the list from the board
      */
     public void cancel(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
-    }
-    public void escape(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method deletes the list from the board
      */
     public void delete(){
-        ((Stage)deleteButton.getScene().getWindow()).close();
-        service.deleteCardList(this.deleteId);
+        ((Stage) deleteButton.getScene().getWindow()).close();
+         workspaceCtrl.deleteBoard();
     }
-
-    public void setDeleteId(long deleteId) {
-        this.deleteId = deleteId;
+    public void escape(){
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 }

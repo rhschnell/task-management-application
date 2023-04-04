@@ -7,23 +7,17 @@ import commons.Card;
 import commons.CardList;
 
 public class CardService {
-    private final CardUtils cardUtils;
     private final CardListUtils cardListUtils;
     private String boardKey;
 
+    /**
+     * Inject the servers
+     * @param cardUtils
+     * @param cardListUtils
+     */
     @Inject
     public CardService(CardUtils cardUtils, CardListUtils cardListUtils) {
-        this.cardUtils = cardUtils;
         this.cardListUtils = cardListUtils;
-    }
-
-    /**
-     * Deletes the card
-     * @param card , the card that needs to be deleted
-     */
-    public void deleteCard(Card card) {
-        cardUtils.deleteFromCardList(card);
-        cardUtils.deleteCard(card.getId());
     }
 
     /**
@@ -44,9 +38,18 @@ public class CardService {
         cardListUtils.insertCardList(cardList);
     }
 
+    /**
+     * Gets the boardKey
+     * @return
+     */
     public String getBoardKey() {
         return boardKey;
     }
+
+    /**
+     * Sets the boardKey
+     * @param boardKey
+     */
 
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
