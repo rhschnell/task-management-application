@@ -125,6 +125,7 @@ public class AddCardCtrl extends SubtaskContainer {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 "white",
+                "black",
                 service.getAppliedTags(),
                 taskList);
         card.setPriority(service.getCardList().getCards().size() + 1);

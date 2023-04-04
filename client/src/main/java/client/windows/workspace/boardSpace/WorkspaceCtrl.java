@@ -41,6 +41,7 @@ import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -263,6 +264,31 @@ public class WorkspaceCtrl implements Initializable {
             }
         }
         updateBoardColours();
+        updateListColors();
+    }
+
+    public void updateListColors(){
+        if(shownBoard == null){
+            return;
+        }
+        for (int i = 0; i < listContainer.getChildren().size(); i++) {
+            String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
+            String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" + backgroundColor + "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+            listContainer.getChildren().get(i).setStyle(style);
+            ((Label) ((VBox) listContainer.getChildren().get(i)).getChildren().get(0)).setTextFill(
+                    Color.web(shownBoard.getCardLists().get(i).getFontColor()));
+        }
+
+        listContainer.getChildren().clear();
+        for (CardList list : shownBoard.getCardLists()) {
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
+            ListCtrl ctrl = loader.getKey();
+            ctrl.setCardList(list);
+            ctrl.updateListColors();
+
+            listContainer.getChildren().add(loader.getValue());
+        }
     }
 
     public void updateBoardColours() {
@@ -276,7 +302,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null, null);
+            shownBoard = new Board(targetKey, targetKey, null, null, null);
             service.insertBoard(shownBoard);
         }
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
@@ -294,11 +320,13 @@ public class WorkspaceCtrl implements Initializable {
         listContainer.getChildren().clear();
         listControllers.clear();
         boardName.setText(shownBoard.getTitle());
+
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
             VBox list = (VBox) loader.getValue();
+
             ListCtrl controller = loader.getKey();
             listControllers.add(controller);
             controller.setWorkspaceCtrl(this);
@@ -658,8 +686,16 @@ public class WorkspaceCtrl implements Initializable {
         helperMethods.popUp(new Scene(loader.getValue()), "Leave Board");
     }
 
+    /**
+     * Adds a new list to the currently shown board
+     */
     public void addList() {
-        shownBoard.addList(new CardList("New List", new ArrayList<>()));
+        CardList newCardList = new CardList("New List", new ArrayList<>());
+        if(!getShownBoard().getCardLists().isEmpty()){
+            newCardList.setBackgroundColor(getShownBoard().getCardLists().get(0).getBackgroundColor());
+            newCardList.setFontColor(getShownBoard().getCardLists().get(0).getFontColor());
+        }
+        shownBoard.addList(newCardList);
         service.insertBoard(shownBoard);
     }
 
@@ -672,10 +708,17 @@ public class WorkspaceCtrl implements Initializable {
         return shownBoard.getKey();
     }
 
-    public Board getShownBoard() {
+    /**
+     * Method to get the currently shown board
+     * @return The board that is shown
+     */
+    public Board getShownBoard(){
         return shownBoard;
     }
 
+    /**
+     * Method to load the tag-overview window in a new popup screen
+     */
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
@@ -752,11 +795,17 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
 
+    /**
+     * Method to open the customize window in a new popup
+     */
     public void customizeBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");
 
         loader.getKey().setBoard(shownBoard);
+        loader.getKey().setLists(shownBoard.getCardLists());
+        loader.getKey().displayPresetList();
+
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 

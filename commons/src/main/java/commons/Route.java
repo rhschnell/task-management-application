@@ -7,4 +7,5 @@ public class Route {
     public final static String TASK = "api/tasks";
     public final static String TAG = "api/tags";
     public final static String ADMIN = "api/admin";
+    public final static String CARD_COLOR_PRESET = "api/card_color_preset";
 }

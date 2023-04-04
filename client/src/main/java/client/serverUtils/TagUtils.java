@@ -18,7 +18,6 @@ public class TagUtils {
     private final ServerUtils serverUtils;
     private Client client;
 
-
     /**
      * Creates a new TagUtils object
      *
