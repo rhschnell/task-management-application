@@ -105,8 +105,8 @@ public class WorkspaceCtrl implements Initializable {
         this.service = service;
         this.helperMethods = helperMethods;
         this.listControllers = new ArrayList<>();
-        focusedCardIndex = 1;
-        focusedListIndex = 1;
+        focusedCardIndex = -1;
+        focusedListIndex = -1;
         oldMouseXPosition = -1;
         oldMouseYPosition = -1;
         mouseMoveThreshold = 0.5;
@@ -301,6 +301,7 @@ public class WorkspaceCtrl implements Initializable {
         }
         if(focusedIndicesAreValid())
         {
+            System.out.println("Doing some highlighting");
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.4);
         }
@@ -341,7 +342,7 @@ public class WorkspaceCtrl implements Initializable {
 
         // Can only move up/down if the focused card is not already at the top/bottom
         if (focusedCardIndex == (shiftUpWards ? 0 :
-                focusedListController.getCardList().getCards().size() - 1)) return;
+                focusedListController.getCardList().getCards().size())) return;
 
 
         Card cardToMove = focusedListController.getCardList().getCard(focusedCardIndex - 1);
@@ -433,11 +434,18 @@ public class WorkspaceCtrl implements Initializable {
         if (focusedIndicesAreValid()) {
             oldMouseXPosition = newMouseXPosition;
             oldMouseYPosition = newMouseYPosition;
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            highlightSelectedCard();
         }
         autoScroll(focusedCardIndex, focusedListIndex);
 
+    }
+
+    /**
+     * Highlights the currently selected card
+     */
+    private void highlightSelectedCard() {
+        VBox vbox = getFocusPosition();
+        vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
     }
 
     /**
@@ -452,8 +460,7 @@ public class WorkspaceCtrl implements Initializable {
         if (focusedIndicesAreValid()) {
             oldMouseXPosition = newMouseXPosition;
             oldMouseYPosition = newMouseYPosition;
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            highlightSelectedCard();
         }
         autoScroll(focusedCardIndex, focusedListIndex);
     }
@@ -470,8 +477,7 @@ public class WorkspaceCtrl implements Initializable {
                     .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
             focusedCardIndex = shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size();
         if (focusedIndicesAreValid()) {
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            highlightSelectedCard();
             autoScroll(focusedCardIndex, focusedListIndex);
         }
     }
@@ -490,8 +496,7 @@ public class WorkspaceCtrl implements Initializable {
             focusedCardIndex = shownBoard.getCardLists()
                     .get(focusedListIndex - 1).getCards().size();
         if (focusedIndicesAreValid()) {
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            highlightSelectedCard();
             autoScroll(focusedCardIndex, focusedListIndex);
         }
     }
@@ -510,8 +515,7 @@ public class WorkspaceCtrl implements Initializable {
         focusedCardIndex = cardIndex;
         focusedListIndex = listIndex;
         if (focusedIndicesAreValid()) {
-            VBox vbox = getFocusPosition();
-            vbox.getChildren().get(focusedCardIndex - 1).setOpacity(0.6);
+            highlightSelectedCard();
         }
         System.out.println("setFocused before " + oldMouseXPosition + " " + oldMouseYPosition);
         System.out.println("set Focused after " + newMouseXPosition + " " + newMouseYPosition);

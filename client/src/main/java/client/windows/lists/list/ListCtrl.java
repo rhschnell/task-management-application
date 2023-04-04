@@ -71,21 +71,7 @@ public class ListCtrl {
         this.workspaceCtrl = workspaceCtrl;
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocusedCard();
-            }
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
-                || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
-
-                setKeyEventListeners(event);
-
-            }
-
-            if (event.getCode() == KeyCode.E) handleRenameShortcut();
-            if (event.getCode() == KeyCode.D) {
-                System.out.printf("<%d,%d>", workspaceCtrl.getFocusedCardIndex(),
-                        workspaceCtrl.getFocusedListIndex());
-            }
+            setKeyEventListeners(event);
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
@@ -95,9 +81,21 @@ public class ListCtrl {
     }
 
     public void setKeyEventListeners(KeyEvent keyEvent) {
+        handleArrowKeys(keyEvent);
+
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocusedCard();
         }
+
+        if (keyEvent.getCode() == KeyCode.E) handleRenameShortcut();
+    }
+
+    /**
+     * Method that checks a keyEvent and handles cases of the arrow keys
+     *
+     * @param keyEvent The keyEvent fired
+     */
+    private void handleArrowKeys(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.UP) {
             // If shift is down, reorder cards, otherwise move focus
             if (keyEvent.isShiftDown()) {
@@ -500,10 +498,11 @@ public class ListCtrl {
 
     /**
      * Shifts a card to a new index
-     * @param card The card to shift
+     *
+     * @param card     The card to shift
      * @param newIndex The destination index of the card
      */
-    public void shiftCard(Card card, int newIndex){
-        service.dragAndDrop(card,newIndex);
+    public void shiftCard(Card card, int newIndex) {
+        service.dragAndDrop(card, newIndex);
     }
 }
