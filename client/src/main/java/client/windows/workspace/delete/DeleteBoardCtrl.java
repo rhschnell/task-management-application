@@ -15,8 +15,6 @@ package client.windows.workspace.delete;/*
  */
 
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
-import com.google.inject.Inject;
-import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -50,7 +48,7 @@ public class DeleteBoardCtrl{
      */
     public void delete(){
         ((Stage) deleteButton.getScene().getWindow()).close();
-         workspaceCtrl.deleteBoard();
+        workspaceCtrl.deleteBoard();
     }
     public void escape(){
         ((Stage) cancelButton.getScene().getWindow()).close();

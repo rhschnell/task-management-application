@@ -103,11 +103,11 @@ public class CardCtrl implements Initializable {
      */
 
     public void delete() {
-            var loader = new MyFXML(createInjector(new MainModules()))
+        var loader = new MyFXML(createInjector(new MainModules()))
                     .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
-            Parent root = loader.getValue();
-            Scene scene = new Scene(root);
-            loader.getKey().setDeleteCard(card);
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setDeleteCard(card);
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();
@@ -116,9 +116,9 @@ public class CardCtrl implements Initializable {
                 loader.getKey().delete();
             }
         });
-            String title = "Delete a card";
-            HelperMethods.popUp(scene, title);
-        }
+        String title = "Delete a card";
+        HelperMethods.popUp(scene, title);
+    }
 
 
     /**

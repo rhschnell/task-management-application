@@ -21,7 +21,6 @@ import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.CustomizeCtrl;
-import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;

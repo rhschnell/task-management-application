@@ -1,6 +1,5 @@
 package client.windows.lists.delete;
 
-import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import com.google.inject.Inject;
 import commons.Card;

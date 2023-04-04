@@ -17,7 +17,6 @@ package client.windows.lists.delete;
 
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
