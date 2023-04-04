@@ -804,7 +804,6 @@ public class WorkspaceCtrl implements Initializable {
 
         loader.getKey().setBoard(shownBoard);
         loader.getKey().setLists(shownBoard.getCardLists());
-        loader.getKey().displayPresetList();
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
