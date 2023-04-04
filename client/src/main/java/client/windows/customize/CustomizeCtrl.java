@@ -1,20 +1,12 @@
 package client.windows.customize;
 
-import client.MyFXML;
-import client.modules.MainModules;
 import client.serverUtils.BoardUtils;
 import client.serverUtils.CardListUtils;
-import client.utils.HelperMethods;
-import client.windows.customize.cards.CustomCardPresetCellCtrl;
-import client.windows.customize.cards.add.AddCardPresetCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
-import commons.CardColorPreset;
 import commons.CardList;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
@@ -22,8 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.List;
-
-import static com.google.inject.Guice.createInjector;
 
 public class CustomizeCtrl {
     private WorkspaceCtrl workspaceCtrl;
@@ -121,16 +111,13 @@ public class CustomizeCtrl {
     /**
      * Method to reset the font and background colors of the lists
      */
-    @FXML
     public void resetLists(){
         for(CardList list : lists){
             list.setFontColor("000000");
             list.setBackgroundColor("FFFFFF");
-            cardListUtils.insertCardList(list);
         }
         listBackgroundColor.setValue(Color.web("FFFFFF"));
         listFontColor.setValue(Color.web("000000"));
-        workspaceCtrl.refreshWorkspace();
     }
 
     public void close(){
@@ -145,6 +132,7 @@ public class CustomizeCtrl {
             cardListUtils.insertCardList(list);
         }
         boardUtils.insertBoard(board);
+        workspaceCtrl.refreshWorkspace();
         ((Stage)closeButton.getScene().getWindow()).close();
     }
 

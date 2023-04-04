@@ -23,7 +23,6 @@ class CardListTest {
         card = new Card(
                 "My Card",
                 "Text",
-                "White",
                 null,
                 null
         );
@@ -119,7 +118,6 @@ class CardListTest {
         Card card2 = new Card(
                 "My Card 2",
                 "Text",
-                "White",
                 null,
                 null
         );
@@ -133,7 +131,6 @@ class CardListTest {
         Card card2 = new Card(
                 "My Card 2",
                 "Text",
-                "White",
                 null,
                 null
         );

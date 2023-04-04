@@ -14,9 +14,6 @@ import java.util.List;
 public class Card implements Serializable {
     private String title;
     private String description;
-    
-    private String backgroundColor;
-    private String fontColor;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
@@ -45,18 +42,14 @@ public class Card implements Serializable {
      *
      * @param title            Title of the card
      * @param description      Description of the card
-     * @param backgroundColor  Background color of the card
-     * @param fontColor        Color of the font on the card
      * @param tags             Tags associated with this card
      * @param subTasks         Subtasks for this card
      * @param id               id
      */
-    public Card(String title, String description, String backgroundColor, String fontColor, List<Tag> tags,
+    public Card(String title, String description, List<Tag> tags,
                 List<Task> subTasks, long id) {
         this.title = title;
         this.description = description;
-        this.backgroundColor = backgroundColor;
-        this.fontColor = fontColor;
         this.tags = tags;
         this.subTasks = subTasks;
         this.id = id;
@@ -68,17 +61,13 @@ public class Card implements Serializable {
      *
      * @param title            Title of the card
      * @param description      Description of the card
-     * @param backgroundColor Background color of the card
-     * @param fontColor        Color of the font
      * @param tags             Tags associated with this card
      * @param subTasks         Subtasks for this card
      */
-    public Card(String title, String description, String backgroundColor, String fontColor, List<Tag> tags,
+    public Card(String title, String description, List<Tag> tags,
                 List<Task> subTasks) {
         this.title = title;
         this.description = description;
-        this.backgroundColor = backgroundColor;
-        this.fontColor = fontColor;
         this.tags = tags;
         this.subTasks = subTasks;
     }
@@ -86,18 +75,15 @@ public class Card implements Serializable {
     /**
      * @param title            Title of the card
      * @param description      Description of the card
-     * @param backgroundColor Background colour of the card
      * @param tags             Tags associated with this card
      * @param subTasks         Subtasks for this card
      * @param priority         The priority of the card
      */
 
-    public Card(String title, String description, String backgroundColor, String fontColor, List<Tag> tags,
+    public Card(String title, String description, List<Tag> tags,
                 List<Task> subTasks, Long priority) {
         this.title = title;
         this.description = description;
-        this.backgroundColor = backgroundColor;
-        this.fontColor = fontColor;
         this.tags = tags;
         this.subTasks = subTasks;
         this.priority = priority;

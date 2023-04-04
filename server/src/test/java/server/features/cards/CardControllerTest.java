@@ -29,7 +29,7 @@ class CardControllerTest {
 
     @Test
     void insertValid() {
-        Card toAdd = new Card("A card", "This is a card", "White",
+        Card toAdd = new Card("A card", "This is a card", 
                 null, null, 3);
 
         ResponseEntity<Void> response = sut.insert(toAdd);
@@ -40,9 +40,9 @@ class CardControllerTest {
 
     @Test
     void findAll() {
-        Card card1 = new Card("Card 1", "This is a card", "White",
+        Card card1 = new Card("Card 1", "This is a card", 
                 null, null, 0);
-        Card card2 = new Card("Card2", "This is a card", "White",
+        Card card2 = new Card("Card2", "This is a card", 
                 null, null, 0);
 
         sut.insert(card1);
@@ -96,7 +96,6 @@ class CardControllerTest {
         Card card = new Card(
                 "My Card",
                 "Chocolate",
-                "White",
                 new ArrayList<>(),
                 new ArrayList<>()
                 );

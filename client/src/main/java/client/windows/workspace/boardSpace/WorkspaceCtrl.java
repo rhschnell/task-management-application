@@ -41,7 +41,6 @@ import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -234,7 +233,6 @@ public class WorkspaceCtrl implements Initializable {
         if (joinedKeys == null) {
             return;
         }
-
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) {
             try {
@@ -273,22 +271,24 @@ public class WorkspaceCtrl implements Initializable {
         }
         for (int i = 0; i < listContainer.getChildren().size(); i++) {
             String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
-            String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" + backgroundColor + "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+            String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" 
+            + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+            "   dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
             listContainer.getChildren().get(i).setStyle(style);
             ((Label) ((VBox) listContainer.getChildren().get(i)).getChildren().get(0)).setTextFill(
                     Color.web(shownBoard.getCardLists().get(i).getFontColor()));
         }
 
-        listContainer.getChildren().clear();
-        for (CardList list : shownBoard.getCardLists()) {
-            var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
-            ListCtrl ctrl = loader.getKey();
-            ctrl.setCardList(list);
-            ctrl.updateListColors();
+        // listContainer.getChildren().clear();
+        // for (CardList list : shownBoard.getCardLists()) {
+        //     var loader = new MyFXML(createInjector(new MainModules()))
+        //             .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
+        //     ListCtrl ctrl = loader.getKey();
+        //     ctrl.setCardList(list);
+        //     ctrl.updateListColors();
 
-            listContainer.getChildren().add(loader.getValue());
-        }
+        //     listContainer.getChildren().add(loader.getValue());
+        // }
     }
 
     public void updateBoardColours() {
@@ -302,7 +302,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null, null, null);
+            shownBoard = new Board(targetKey, targetKey, null, null);
             service.insertBoard(shownBoard);
         }
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
