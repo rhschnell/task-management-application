@@ -19,17 +19,13 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
-import client.windows.cards.edit.EditCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
-import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
-import client.windows.tags.view.TagListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
-import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -44,8 +40,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
-
-import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -68,7 +62,6 @@ public class ListCtrl {
     private Pair<CardCtrl, Parent> cardCell;
 
     private WorkspaceCtrl workspaceCtrl;
-    private EditCardCtrl editCardCtrl;
     private Separator separator;
 
 
@@ -77,70 +70,50 @@ public class ListCtrl {
         this.workspaceCtrl = workspaceCtrl;
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocusedCard();
-            }
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
-                || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
-
-                setKeyEventListeners(event);
-
-            }
-
-            if (event.getCode() == KeyCode.E) handleRenameShortcut();
-
-            if (event.getCode() == KeyCode.T) handleTagShortcut();
+            setKeyEventListeners(event);
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
             scrollPane.requestFocus();
-            scrollPane.setOnKeyPressed(keyEvent -> {
-                {
-                    setKeyEventListeners(keyEvent);
-                }
-            });
+            scrollPane.setOnKeyPressed(this::setKeyEventListeners);
         });
     }
 
-    /**
-     * Method for handling the shortcut to add tags to the card
-     */
-    private void handleTagShortcut() {
-        Card selectedCard = getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
+    public void setKeyEventListeners(KeyEvent keyEvent) {
+        handleArrowKeys(keyEvent);
 
-        var loaderEditCard = new MyFXML(createInjector(new MainModules()))
-                .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
-        var loaderTagOverview = new MyFXML(createInjector(new MainModules()))
-                .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
-
-        TagListCtrl ctrl = loaderTagOverview.getKey();
-        EditCardCtrl editCardCtrl = loaderEditCard.getKey();
-        editCardCtrl.setCard(selectedCard);
-
-        List<Tag> available = workspaceCtrl.getShownBoard().getTagList();
-        available.removeAll(selectedCard.getTags());
-
-        ctrl.setEditCardCtrl(editCardCtrl);
-        ctrl.setAvailableTags(available);
-        ctrl.setAppliedTags(selectedCard.getTags());
-        ctrl.setType("edit");
-
-        Parent root = loaderTagOverview.getValue();
-        Scene scene = new Scene(root);
-        String title = "Add tag";
-        hm.popUp(scene, title);
-    }
-
-    public void setKeyEventListeners(KeyEvent keyEvent)
-    {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocusedCard();
         }
+
+        if (keyEvent.getCode() == KeyCode.E) workspaceCtrl.handleRenameShortcut();
+        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+            workspaceCtrl.handleDeleteShortCut();
+        }
+    }
+
+    /**
+     * Method that checks a keyEvent and handles cases of the arrow keys
+     *
+     * @param keyEvent The keyEvent fired
+     */
+    private void handleArrowKeys(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.UP) {
-            workspaceCtrl.moveFocusUp();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                workspaceCtrl.handleReorderingShortcut(true);
+            } else {
+                workspaceCtrl.moveFocusUp();
+            }
+
         }
         if (keyEvent.getCode() == KeyCode.DOWN) {
-            workspaceCtrl.moveFocusDown();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                workspaceCtrl.handleReorderingShortcut(false);
+            } else {
+                workspaceCtrl.moveFocusDown();
+            }
         }
         if (keyEvent.getCode() == KeyCode.LEFT) {
             workspaceCtrl.moveFocusLeft();
@@ -161,24 +134,6 @@ public class ListCtrl {
         return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
 
-
-    /**
-     * Handles the shortcut associated to quick-renaming cards, "E"
-     */
-    public void handleRenameShortcut() {
-        if (!isSelected()) return;
-        // Get the highlighted card
-        Card selectedCard = this.getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
-        var loader = new MyFXML(createInjector())
-                .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
-                                                                                   ".fxml");
-        loader.getKey().setData(selectedCard);
-        loader.getKey().setListCtrl(this);
-        Scene scene = new Scene(loader.getValue());
-        hm.popUp(scene, "Rename card");
-        // Instantiate a new rename window
-    }
-
     public VBox getCardVBox() {
         return cardVBox;
     }
@@ -187,12 +142,10 @@ public class ListCtrl {
      * Constructor for ListCtrl
      *
      * @param service The ListService for this controller
-     * @param editCardCtrl The editCardController for handling tag popups
      */
     @Inject
-    public ListCtrl(ListService service, EditCardCtrl editCardCtrl) {
+    public ListCtrl(ListService service) {
         this.service = service;
-        this.editCardCtrl = editCardCtrl;
         focusedCardIndex = -1;
     }
 
@@ -233,7 +186,8 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {});
+        quickAddCard.getValue().setOnDragDetected(event -> {
+        });
     }
 
     /**
@@ -256,16 +210,13 @@ public class ListCtrl {
      *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
-    {
-        destination.getValue().setOnMouseEntered(event ->{
-            focusedCardIndex=destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
+    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
+        destination.getValue().setOnMouseEntered(event -> {
+            focusedCardIndex = destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocusedCard((int) focusedCardIndex, listId + 1);
             event.consume();
         });
-        destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocus();
-        });
+        destination.getValue().setOnMouseExited(event -> workspaceCtrl.resetFocus());
     }
 
     /**
@@ -526,5 +477,15 @@ public class ListCtrl {
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;
         this.cardFormat = this.hm.getCardFormat();
+    }
+
+    /**
+     * Shifts a card to a new index
+     *
+     * @param card     The card to shift
+     * @param newIndex The destination index of the card
+     */
+    public void shiftCard(Card card, int newIndex) {
+        service.dragAndDrop(card, newIndex);
     }
 }

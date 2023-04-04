@@ -81,9 +81,6 @@
     -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);
 }
 
-.card:hover {
-    -fx-background-color:  derive(-light_green_color, -10.0%);
-}
 
 .card:pressed {
     -fx-background-color:  derive(-light_green_color, -20.0%);
