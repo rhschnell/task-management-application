@@ -106,7 +106,7 @@ public class ListCtrl {
      * Method for handling the shortcut to add tags to the card
      */
     private void handleTagShortcut() {
-        Card card = getCardList().getCard(workspaceCtrl.getFocusedCardIndex()-1);
+        Card selectedCard = getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
 
         var loaderEditCard = new MyFXML(createInjector(new MainModules()))
                 .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
@@ -114,11 +114,15 @@ public class ListCtrl {
                 .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
 
         TagListCtrl ctrl = loaderTagOverview.getKey();
+        EditCardCtrl editCardCtrl = loaderEditCard.getKey();
+        editCardCtrl.setCard(selectedCard);
+
         List<Tag> available = workspaceCtrl.getShownBoard().getTagList();
-        available.removeAll(card.getTags());
+        available.removeAll(selectedCard.getTags());
+
+        ctrl.setEditCardCtrl(editCardCtrl);
         ctrl.setAvailableTags(available);
-        ctrl.setAppliedTags(card.getTags());
-        ctrl.setEditCardCtrl(loaderEditCard.getKey());
+        ctrl.setAppliedTags(selectedCard.getTags());
         ctrl.setType("edit");
 
         Parent root = loaderTagOverview.getValue();
