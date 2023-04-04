@@ -38,14 +38,6 @@ public class QuickAddCardCtrl {
         listCtrl.displayCards();
     }
 
-    public void addCardOnEnter(KeyEvent event)
-    {
-        System.out.println("HELLO??");
-        if(event.getCode() == KeyCode.ENTER)
-        {
-            addCard();
-        }
-    }
 
     /**
      * Set the ListCtrl the QuickAdd is on

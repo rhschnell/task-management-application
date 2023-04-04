@@ -10,7 +10,7 @@
 <AnchorPane prefHeight="40.0" prefWidth="442.0" style="-fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0); -fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.lists.cells.QuickAddCardCtrl">
    <children>
         <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <TextField fx:id="cardTitle" maxWidth="-Infinity" onAction="#addCardOnEnter" onMouseClicked="#setAddButtonVisible" prefHeight="50.0" prefWidth="500.0" promptText="+ Add new card" style="-fx-background-color: transparent;">
+         <TextField fx:id="cardTitle" maxWidth="-Infinity" onMouseClicked="#setAddButtonVisible" prefHeight="50.0" prefWidth="500.0" promptText="+ Add new card" style="-fx-background-color: transparent;">
             <font>
                <Font name="System Italic" size="12.0" />
             </font>
