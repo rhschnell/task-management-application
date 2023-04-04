@@ -73,52 +73,50 @@ public class ListCtrl {
         this.workspaceCtrl = workspaceCtrl;
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocusedCard();
-            }
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
-                || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
-
-                setKeyEventListeners(event);
-
-            }
-
-            if (event.getCode() == KeyCode.E) handleRenameShortcut();
-            if (event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.BACK_SPACE) {
-                handleDeleteShortCut();
-            }
+            setKeyEventListeners(event);
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
             scrollPane.requestFocus();
-            scrollPane.setOnKeyPressed(keyEvent -> {
-                {
-                    setKeyEventListeners(keyEvent);
-                }
-            });
+            scrollPane.setOnKeyPressed(this::setKeyEventListeners);
         });
     }
 
-    /**
-     * Method for handling the deletion of the highlighted card
-     */
-    private void handleDeleteShortCut() {
-        // Get the highlighted card
-        int toDeleteIndex = workspaceCtrl.getFocusedCardIndex() - 1;
-        Card toDelete = getCardList().getCard(toDeleteIndex);
-        // Delete it from the card database
-        cardService.deleteCard(toDelete);
-    }
-
     public void setKeyEventListeners(KeyEvent keyEvent) {
+        handleArrowKeys(keyEvent);
+
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocusedCard();
         }
+
+        if (keyEvent.getCode() == KeyCode.E) handleRenameShortcut();
+        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+            handleDeleteShortCut();
+        }
+    }
+
+    /**
+     * Method that checks a keyEvent and handles cases of the arrow keys
+     *
+     * @param keyEvent The keyEvent fired
+     */
+    private void handleArrowKeys(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.UP) {
-            workspaceCtrl.moveFocusUp();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                workspaceCtrl.handleReorderingShortcut(true);
+            } else {
+                workspaceCtrl.moveFocusUp();
+            }
+
         }
         if (keyEvent.getCode() == KeyCode.DOWN) {
-            workspaceCtrl.moveFocusDown();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                workspaceCtrl.handleReorderingShortcut(false);
+            } else {
+                workspaceCtrl.moveFocusDown();
+            }
         }
         if (keyEvent.getCode() == KeyCode.LEFT) {
             workspaceCtrl.moveFocusLeft();
@@ -155,6 +153,17 @@ public class ListCtrl {
         Scene scene = new Scene(loader.getValue());
         hm.popUp(scene, "Rename card");
         // Instantiate a new rename window
+    }
+
+    /**
+     * Method for handling the deletion of the highlighted card
+     */
+    private void handleDeleteShortCut() {
+        // Get the highlighted card
+        int toDeleteIndex = workspaceCtrl.getFocusedCardIndex() - 1;
+        Card toDelete = getCardList().getCard(toDeleteIndex);
+        // Delete it from the card database
+        cardService.deleteCard(toDelete);
     }
 
     public VBox getCardVBox() {
@@ -241,9 +250,7 @@ public class ListCtrl {
             workspaceCtrl.setFocusedCard((int) focusedCardIndex, listId + 1);
             event.consume();
         });
-        destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocus();
-        });
+        destination.getValue().setOnMouseExited(event -> workspaceCtrl.resetFocus());
     }
 
     /**
@@ -504,5 +511,15 @@ public class ListCtrl {
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;
         this.cardFormat = this.hm.getCardFormat();
+    }
+
+    /**
+     * Shifts a card to a new index
+     *
+     * @param card     The card to shift
+     * @param newIndex The destination index of the card
+     */
+    public void shiftCard(Card card, int newIndex) {
+        service.dragAndDrop(card, newIndex);
     }
 }
