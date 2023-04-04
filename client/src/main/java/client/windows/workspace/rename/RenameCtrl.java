@@ -6,6 +6,8 @@ import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class RenameCtrl {
@@ -45,6 +47,14 @@ public class RenameCtrl {
         board.setTitle(inputField.getText());
         service.insertBoard(board);
         close();
+    }
+
+    public void saveOnEnter(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            save();
+        }
     }
 
     /**

@@ -7,8 +7,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
-  <HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="89.0" prefHeight="10.0" prefWidth="290.0" spacing="5.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.view.CustomTagCellCtrl">
+<HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="89.0" prefHeight="10.0" prefWidth="290.0" spacing="5.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.view.CustomTagCellCtrl">
    <Circle fx:id="tagColor" fill="DODGERBLUE" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
       <HBox.margin>
          <Insets />
@@ -25,7 +24,7 @@
          <Insets />
       </HBox.margin>
    </Label>
-   <Button fx:id="actionButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#chooseAndClose" prefHeight="21.0" prefWidth="60.0" text="Add">
+   <Button fx:id="actionButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#chooseAndClose" prefHeight="21.0" prefWidth="103.0" text="Add">
       <HBox.margin>
          <Insets />
       </HBox.margin>

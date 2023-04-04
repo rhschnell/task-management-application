@@ -84,7 +84,7 @@
                         <Insets right="542.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="cancelButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Close">
+                  <Button fx:id="cancelButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#escape" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Close">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>

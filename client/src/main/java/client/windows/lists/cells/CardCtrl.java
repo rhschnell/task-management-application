@@ -4,6 +4,7 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.lists.delete.DeleteCardCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.Tag;
@@ -81,31 +82,47 @@ public class CardCtrl implements Initializable {
         tagCircle2.setVisible(false);
         tagCircle3.setVisible(false);
         if (tags!=null && tags.size() > 0) {
-            tagCircle1.setFill(Paint.valueOf(tags.get(0).getColor()));
+            tagCircle1.setFill(Paint.valueOf(tags.get(0).getTagColor()));
             tagCircle1.setVisible(true);
 
         }
         if (tags!=null && tags.size() > 1) {
-            tagCircle2.setFill(Paint.valueOf(tags.get(1).getColor()));
+            tagCircle2.setFill(Paint.valueOf(tags.get(1).getTagColor()));
             tagCircle2.setVisible(true);
 
         }
         if (tags!=null && tags.size() > 2) {
-            tagCircle3.setFill(Paint.valueOf(tags.get(2).getColor()));
+            tagCircle3.setFill(Paint.valueOf(tags.get(2).getTagColor()));
             tagCircle3.setVisible(true);
 
         }
     }
 
     /**
-     * Sets the event to happen when interacting with the delete button
+     * Displays the DeleteList FXML into a new window (Popup).
      */
+
     public void delete() {
-        service.deleteCard(card);
+        var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setDeleteCard(card);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().delete();
+            }
+        });
+        String title = "Delete a card";
+        HelperMethods.popUp(scene, title);
     }
 
+
     /**
-     * This functions is called when clicking, and when double clicking within 300ms the viewCard is opened
+     * This function is called when clicking, and when double-clicking within 300ms, the viewCard is opened
      */
     public void click() {
         long clickTime = System.currentTimeMillis();

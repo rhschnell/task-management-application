@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class AddTagCtrl {
@@ -21,6 +23,8 @@ public class AddTagCtrl {
 
     @FXML
     private ColorPicker tagColor;
+    @FXML
+    private ColorPicker fontColor;
 
     @FXML
     private Button cancelButton;
@@ -36,6 +40,7 @@ public class AddTagCtrl {
         this.service = service;
         this.tagOverviewCtrl = tagOverviewCtrl;
         tagColor=new ColorPicker();
+        fontColor=new ColorPicker();
     }
 
     /**
@@ -45,8 +50,7 @@ public class AddTagCtrl {
      */
     public void save() {
         ((Stage)addTagButton.getScene().getWindow()).close();
-        Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString());
-
+        Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString(),fontColor.getValue().toString());
         Board shownBoard = tagOverviewCtrl.getBoard();
         if (shownBoard == null) {
             return;
@@ -54,6 +58,15 @@ public class AddTagCtrl {
         shownBoard.addTag(tag);
         service.insertBoard(shownBoard);
         tagOverviewCtrl.updateDisplayedTags();
+    }
+
+    @FXML
+    public void saveOnEnter(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            save();
+        }
     }
 
     /**

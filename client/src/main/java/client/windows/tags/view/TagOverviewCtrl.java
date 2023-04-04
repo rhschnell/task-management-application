@@ -61,9 +61,6 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-//        workspaceCtrl.refreshWorkspace();
-//        Board shownBoard = workspaceCtrl.getShownBoard();
-        
         List<Tag> tagList = getBoard().getTagList();
 
         for (Tag tag : tagList) {
