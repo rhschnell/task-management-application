@@ -17,7 +17,6 @@ package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
 import client.modules.MainModules;
-import client.serverUtils.CardUtils;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
