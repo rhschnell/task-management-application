@@ -59,6 +59,7 @@ public class BoardCellCtrl implements Initializable {
     public void setBoard(Board board) {
         this.board = board;
         this.boardTitle.setText(board.getTitle());
+        updateProtectionIcon();
     }
 
     /**
@@ -81,43 +82,51 @@ public class BoardCellCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         leaveIcon.setCursor(Cursor.HAND);
         protectionIcon.setCursor(Cursor.HAND);
+    }
 
-        // TODO: if(board.isProtected())
-        protectionIcon.setOnMouseEntered(l -> {
-            Image lockSymbol = new Image("/client/icons/lock.png");
-            protectionIcon.setImage(lockSymbol);
-        });
+    public void updateProtectionIcon() {
+        if (board.isProtected()) {
+            protectionIcon.setOnMouseEntered(l -> {
+                Image lockSymbol = new Image("/client/icons/unlock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
 
-        protectionIcon.setOnMouseExited(l -> {
-            Image lockSymbol = new Image("/client/icons/unlock.png");
-            protectionIcon.setImage(lockSymbol);
-        });
-        // TODO: else
+            protectionIcon.setOnMouseExited(l -> {
+                Image lockSymbol = new Image("/client/icons/lock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+        } else {
+            protectionIcon.setOnMouseEntered(l -> {
+                Image lockSymbol = new Image("/client/icons/lock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+
+            protectionIcon.setOnMouseExited(l -> {
+                Image lockSymbol = new Image("/client/icons/unlock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+        }
     }
 
     /**
      * Method to change locked state of board
      */
     public void swapLock() {
-        // Load new instance of popup
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(LockPopUpCtrl.class, "client", "windows", "workspace", "lock", "Lock.fxml");
+        if (board.isProtected()) {
+            unlock();
+        } else {
+            lock();
+        }
+    }
 
-        // Setter Injection
-        LockPopUpCtrl ctrl = loader.getKey();
-        ctrl.setBoard(this.board);
-        ctrl.setCaller(this);
+    public void unlock() {
+        workspaceCtrl.lockUnlock(board, "unlock");
+        updateProtectionIcon();
+    }
 
-        // Set title depending on if board locket
-        String title = board.isProtected() ? "Unlock board" : "Lock board";
-
-        // Create popup through helper method
-        helperMethods.popUp(new Scene(loader.getValue()), title);
-
-        /*
-        This popUp is going to be used both for locking and unlocking.
-        We make use of two-faced methods for this that all start with an if(board.isProtected())
-         */
+    public void lock() {
+        workspaceCtrl.lockUnlock(board, "lock");
+        updateProtectionIcon();
     }
 
 //

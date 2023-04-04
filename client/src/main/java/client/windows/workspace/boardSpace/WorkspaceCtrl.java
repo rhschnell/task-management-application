@@ -28,6 +28,7 @@ import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import client.windows.workspace.delete.DeleteBoardCtrl;
 import client.windows.workspace.leave.LeaveCtrl;
+import client.windows.workspace.lock.LockPopUpCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
@@ -85,7 +86,12 @@ public class WorkspaceCtrl implements Initializable {
     @FXML private Button personalizeButton;
     @FXML private Button tagsButton;
     @FXML private Button deleteButton;
+    @FXML private Button removePasswordButton;
+    @FXML private Button setPasswordButton;
+    @FXML private Button addListButton;
     private Button[] lockButtonArray;
+
+    @FXML private Button unlockBoardButton;
 
     private List<String> joinedKeys;
     private int focusedCardIndex;
@@ -126,7 +132,6 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Return's to the main screen
      */
-    @FXML
     public void disconnect() {
         helperMethods.setScene(Scenes.USER);
     }
@@ -144,13 +149,17 @@ public class WorkspaceCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new ArrayList<>();
         clearWorkspace(); // No board -> board controls
+
+        // Initialize array of buttons that need to be disabled if board is locked
         this.lockButtonArray = new Button[] {
             renameButton,
             personalizeButton,
             tagsButton,
-            deleteButton
+            deleteButton,
+            removePasswordButton,
+            setPasswordButton,
+            addListButton
         };
-
 
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
@@ -186,7 +195,6 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
 
-    @FXML
     public void connectOnEnter(KeyEvent event)
     {
         if(event.getCode().equals(KeyCode.ENTER))
@@ -224,11 +232,84 @@ public class WorkspaceCtrl implements Initializable {
         boardControls.setManaged(true);
     }
 
+    /*
+     START OF LOCK / UNLOCK METHODS
+     */
+    /**
+     * Method used for locking the buttons when the board gets set to locked
+     */
     public void lockButtons() {
         for (Button b : lockButtonArray) {
             b.setDisable(true);
         }
     }
+
+    /**
+     * Method used for unlocking the buttons when the board gets set to unlocked
+     */
+    public void unlockButtons() {
+        for (Button b: lockButtonArray) {
+            b.setDisable(false);
+        }
+    }
+
+    /**
+     * Method for setting the password on a board.
+     * Called by the set password button or the lock icon.
+     */
+    public void setPassword() {
+        lockUnlock(shownBoard, "lock");
+    }
+
+    /**
+     * Method for removing the password from a board.
+     * Called by remove password button.
+     */
+    public void remPassword() {
+        shownBoard.setProtected(false);
+        shownBoard.setPassword("");
+        service.insertBoard(shownBoard);
+    }
+
+    /**
+     * Method for unlocking shown board.
+     * Called by unlock button
+     */
+    public void unlock() {
+        lockUnlock(shownBoard, "unlock");
+    }
+
+    /**
+     * Method to either add a password onto current board or unlock it while shown
+     * @param board board to be changed
+     * @param mode "lock" or "unlock"
+     */
+    public void lockUnlock(Board board, String mode) {
+        // Load new instance of popup
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(LockPopUpCtrl.class, "client", "windows", "workspace", "lock", "Lock.fxml");
+
+        // Setter Injection
+        LockPopUpCtrl ctrl = loader.getKey();
+        ctrl.setBoard(shownBoard);
+        ctrl.setMode(mode);
+
+        // Set title depending on if board locket
+        String title = board.isProtected() ? "Unlock board" : "Lock board";
+
+        // Create popup through helper method
+        helperMethods.popUp(new Scene(loader.getValue()), title);
+
+        // Fix lock button state in workspace
+        if (shownBoard.equals(board) && mode.equals("unlock")) {
+            unlockBoardButton.setDisable(true);
+            unlockButtons();
+        }
+    }
+
+    /*
+    END OF LOCK / UNLOCK METHODS
+     */
 
     public void refreshWorkspace(boolean... forced) {
         if (forced.length == 0) {
@@ -239,17 +320,24 @@ public class WorkspaceCtrl implements Initializable {
         try {
             key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
-            if (shownBoard.isProtected()) {lockButtons();}
+            if (!serverBoard.getPassword().equals(shownBoard.getPassword())) {shownBoard.setProtected(true);}
+            // If shown board is locked
+            if (shownBoard.isProtected() && !lockButtonArray[0].isDisable()){
+                lockButtons();
+                unlockBoardButton.setDisable(false);
+            }
+            // else if its not locked
+            else if (!shownBoard.isProtected() && lockButtonArray[0].isDisable()) {
+                unlockButtons();
+                unlockBoardButton.setDisable(true);
+            }
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
         // Refresh the board list (joined boards)
         boolean removed = false;
-        if (joinedKeys == null) {
-            return;
-        }
+        if (joinedKeys == null) {return;}
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) {
             try {
@@ -299,7 +387,8 @@ public class WorkspaceCtrl implements Initializable {
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-        if (shownBoard.isProtected()) {lockButtons();}
+        if (!shownBoard.getPassword().equals("")) {lockButtons();shownBoard.setProtected(true);}
+        else {unlockBoardButton.setDisable(true);}
         unhideWorkspace();
         displayLists();
     }

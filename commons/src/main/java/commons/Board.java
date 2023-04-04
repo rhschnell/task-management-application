@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -127,5 +128,16 @@ public class Board {
 
     public boolean verifyPassword(String password) {
         return this.password.equals(password);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return Objects.equals(key, board.key) && Objects.equals(title, board.title) &&
+                Objects.equals(password, board.password) && Objects.equals(backgroundColour, board.backgroundColour) &&
+                Objects.equals(fontColour, board.fontColour) && Objects.equals(cardLists, board.cardLists) &&
+                Objects.equals(tagList, board.tagList);
     }
 }

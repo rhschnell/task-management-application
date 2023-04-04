@@ -12,10 +12,10 @@ public class LockPopUpCtrl {
     private final LockPopUpService service;
 
     private Board board;
-    private BoardCellCtrl caller;
 
     @FXML private TextField inputField;
     @FXML private Label errorMsg;
+    private String mode;
 
     /**
      * Constructor
@@ -37,24 +37,26 @@ public class LockPopUpCtrl {
      */
     public void confirm() {
         // If board is protected, verify the right password was entered
-        if (board.isProtected()) {
+        if (mode.equals("unlock")) {
             boolean correctPassword = service.verifyPassword(board, inputField.getText());
 
             // If correct password entered, close the popUp and unlock the board
             if (correctPassword) {
                 cancel();
-                service.setProtected(false);
+                board.setProtected(false);
+
             }
             // If incorrect password entered, show error message.
             else {
                 errorMsg.setVisible(true);
             }
         }
+
         // If board is NOT protected, add the entered password to the board
         else {
             cancel();
             service.setPassword(inputField.getText());
-            service.setProtected(true);
+            board.setProtected(false);
         }
     }
 
@@ -70,11 +72,7 @@ public class LockPopUpCtrl {
         service.setBoard(board);
     }
 
-    /**
-     * Setter for original creator
-     * @param caller the creator
-     */
-    public void setCaller(BoardCellCtrl caller) {
-        this.caller = caller;
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }
