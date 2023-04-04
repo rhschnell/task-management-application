@@ -71,38 +71,47 @@ public class ListCtrl {
         this.workspaceCtrl = workspaceCtrl;
         scrollPane.requestFocus();
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                workspaceCtrl.openFocusedCard();
-            }
-            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN
-                || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
-
-                setKeyEventListeners(event);
-
-            }
-
-            if (event.getCode() == KeyCode.E) handleRenameShortcut();
+            setKeyEventListeners(event);
             event.consume();
         });
         scrollPane.setOnMouseEntered(event -> {
             scrollPane.requestFocus();
-            scrollPane.setOnKeyPressed(keyEvent -> {
-                {
-                    setKeyEventListeners(keyEvent);
-                }
-            });
+            scrollPane.setOnKeyPressed(this::setKeyEventListeners);
         });
     }
-    public void setKeyEventListeners(KeyEvent keyEvent)
-    {
+
+    public void setKeyEventListeners(KeyEvent keyEvent) {
+        handleArrowKeys(keyEvent);
+
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocusedCard();
         }
+
+        if (keyEvent.getCode() == KeyCode.E) handleRenameShortcut();
+    }
+
+    /**
+     * Method that checks a keyEvent and handles cases of the arrow keys
+     *
+     * @param keyEvent The keyEvent fired
+     */
+    private void handleArrowKeys(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.UP) {
-            workspaceCtrl.moveFocusUp();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                workspaceCtrl.handleReorderingShortcut(true);
+            } else {
+                workspaceCtrl.moveFocusUp();
+            }
+
         }
         if (keyEvent.getCode() == KeyCode.DOWN) {
-            workspaceCtrl.moveFocusDown();
+            // If shift is down, reorder cards, otherwise move focus
+            if (keyEvent.isShiftDown()) {
+                workspaceCtrl.handleReorderingShortcut(false);
+            } else {
+                workspaceCtrl.moveFocusDown();
+            }
         }
         if (keyEvent.getCode() == KeyCode.LEFT) {
             workspaceCtrl.moveFocusLeft();
@@ -140,6 +149,7 @@ public class ListCtrl {
         hm.popUp(scene, "Rename card");
         // Instantiate a new rename window
     }
+
 
     public VBox getCardVBox() {
         return cardVBox;
@@ -193,7 +203,8 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {});
+        quickAddCard.getValue().setOnDragDetected(event -> {
+        });
     }
 
     /**
@@ -216,16 +227,13 @@ public class ListCtrl {
      *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
-    {
-        destination.getValue().setOnMouseEntered(event ->{
-            focusedCardIndex=destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
+    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
+        destination.getValue().setOnMouseEntered(event -> {
+            focusedCardIndex = destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocusedCard((int) focusedCardIndex, listId + 1);
             event.consume();
         });
-        destination.getValue().setOnMouseExited(event -> {
-            workspaceCtrl.resetFocus();
-        });
+        destination.getValue().setOnMouseExited(event -> workspaceCtrl.resetFocus());
     }
 
     /**
@@ -486,5 +494,15 @@ public class ListCtrl {
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;
         this.cardFormat = this.hm.getCardFormat();
+    }
+
+    /**
+     * Shifts a card to a new index
+     *
+     * @param card     The card to shift
+     * @param newIndex The destination index of the card
+     */
+    public void shiftCard(Card card, int newIndex) {
+        service.dragAndDrop(card, newIndex);
     }
 }
