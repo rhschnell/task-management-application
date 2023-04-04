@@ -21,7 +21,6 @@ import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
-import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -87,7 +86,10 @@ public class ListCtrl {
             workspaceCtrl.openFocusedCard();
         }
 
-        if (keyEvent.getCode() == KeyCode.E) handleRenameShortcut();
+        if (keyEvent.getCode() == KeyCode.E) workspaceCtrl.handleRenameShortcut();
+        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+            workspaceCtrl.handleDeleteShortCut();
+        }
     }
 
     /**
@@ -131,25 +133,6 @@ public class ListCtrl {
         // one associated to this controller
         return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
-
-
-    /**
-     * Handles the shortcut associated to quick-renaming cards, "E"
-     */
-    public void handleRenameShortcut() {
-        if (!isSelected()) return;
-        // Get the highlighted card
-        Card selectedCard = this.getCardList().getCard(workspaceCtrl.getFocusedCardIndex() - 1);
-        var loader = new MyFXML(createInjector())
-                .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
-                                                                                   ".fxml");
-        loader.getKey().setData(selectedCard);
-        loader.getKey().setListCtrl(this);
-        Scene scene = new Scene(loader.getValue());
-        hm.popUp(scene, "Rename card");
-        // Instantiate a new rename window
-    }
-
 
     public VBox getCardVBox() {
         return cardVBox;
