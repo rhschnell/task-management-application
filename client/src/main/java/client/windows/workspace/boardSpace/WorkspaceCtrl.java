@@ -85,10 +85,7 @@ public class WorkspaceCtrl implements Initializable {
     @FXML private Button personalizeButton;
     @FXML private Button tagsButton;
     @FXML private Button deleteButton;
-    private Button[] lockButtonArray = new Button[] {renameButton,
-                                                        personalizeButton,
-                                                        tagsButton,
-                                                        deleteButton};
+    private Button[] lockButtonArray;
 
     private List<String> joinedKeys;
     private int focusedCardIndex;
@@ -147,6 +144,13 @@ public class WorkspaceCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new ArrayList<>();
         clearWorkspace(); // No board -> board controls
+        this.lockButtonArray = new Button[] {
+            renameButton,
+            personalizeButton,
+            tagsButton,
+            deleteButton
+        };
+
 
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
@@ -246,7 +250,6 @@ public class WorkspaceCtrl implements Initializable {
         if (joinedKeys == null) {
             return;
         }
-
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) {
             try {

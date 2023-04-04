@@ -1,6 +1,5 @@
 package client.windows.workspace.boardCell;
 
-import client.Main;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
@@ -15,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
