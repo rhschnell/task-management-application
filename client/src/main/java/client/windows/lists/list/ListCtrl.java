@@ -20,6 +20,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
+import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
@@ -47,6 +48,7 @@ import static com.google.inject.Guice.createInjector;
 public class ListCtrl {
     private HelperMethods hm;
     private final ListService service;
+    private final CardService cardService;
 
     private DataFormat cardFormat;
 
@@ -104,13 +106,11 @@ public class ListCtrl {
         // Get the highlighted card
         int toDeleteIndex = workspaceCtrl.getFocusedCardIndex() - 1;
         Card toDelete = getCardList().getCard(toDeleteIndex);
-        // Delete it from the list and refresh
-        service.deleteFromCardList(toDelete);
-//        workspaceCtrl.refreshWorkspace();
+        // Delete it from the card database
+        cardService.deleteCard(toDelete);
     }
 
-    public void setKeyEventListeners(KeyEvent keyEvent)
-    {
+    public void setKeyEventListeners(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ENTER) {
             workspaceCtrl.openFocusedCard();
         }
@@ -164,11 +164,13 @@ public class ListCtrl {
     /**
      * Constructor for ListCtrl
      *
-     * @param service The ListService for this controller
+     * @param service     The ListService for this controller
+     * @param cardService The cardService for this controller
      */
     @Inject
-    public ListCtrl(ListService service) {
+    public ListCtrl(ListService service, CardService cardService) {
         this.service = service;
+        this.cardService = cardService;
         focusedCardIndex = -1;
     }
 
@@ -209,7 +211,8 @@ public class ListCtrl {
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {});
+        quickAddCard.getValue().setOnDragDetected(event -> {
+        });
     }
 
     /**
@@ -232,11 +235,10 @@ public class ListCtrl {
      *
      * @param destination to set the listener
      */
-    private void setMouseEvents(Pair<CardCtrl,Parent> destination)
-    {
-        destination.getValue().setOnMouseEntered(event ->{
-            focusedCardIndex=destination.getKey().getCard().getPriority();
-            workspaceCtrl.setFocusedCard((int)focusedCardIndex, listId+1);
+    private void setMouseEvents(Pair<CardCtrl, Parent> destination) {
+        destination.getValue().setOnMouseEntered(event -> {
+            focusedCardIndex = destination.getKey().getCard().getPriority();
+            workspaceCtrl.setFocusedCard((int) focusedCardIndex, listId + 1);
             event.consume();
         });
         destination.getValue().setOnMouseExited(event -> {
