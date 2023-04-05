@@ -135,9 +135,12 @@ public class Board {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board board = (Board) o;
-        return Objects.equals(key, board.key) && Objects.equals(title, board.title) &&
-                Objects.equals(password, board.password) && Objects.equals(backgroundColour, board.backgroundColour) &&
-                Objects.equals(fontColour, board.fontColour) && Objects.equals(cardLists, board.cardLists) &&
+        return Objects.equals(key, board.key) &&
+                Objects.equals(title, board.title) &&
+                Objects.equals(password, board.password) &&
+                Objects.equals(backgroundColour, board.backgroundColour) &&
+                Objects.equals(fontColour, board.fontColour) &&
+                Objects.equals(cardLists, board.cardLists) &&
                 Objects.equals(tagList, board.tagList);
     }
 }

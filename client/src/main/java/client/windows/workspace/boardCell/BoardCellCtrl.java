@@ -1,24 +1,18 @@
 package client.windows.workspace.boardCell;
 
-import client.MyFXML;
-import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
-import client.windows.workspace.lock.LockPopUpCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static com.google.inject.Guice.createInjector;
 
 public class BoardCellCtrl implements Initializable {
     private WorkspaceCtrl workspaceCtrl;

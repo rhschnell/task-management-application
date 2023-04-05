@@ -1,6 +1,5 @@
 package client.windows.workspace.lock;
 
-import client.windows.workspace.boardCell.BoardCellCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
