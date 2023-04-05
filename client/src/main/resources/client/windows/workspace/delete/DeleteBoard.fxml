@@ -18,7 +18,7 @@
             <String fx:value="gray-button" />
          </styleClass>
       </Button>
-      <TextField fx:id="listTitle1" layoutX="16.0" layoutY="10.0" prefHeight="26.0" prefWidth="287.0" style="-fx-background-insets: 0, 0 0 0 0; -fx-background-color: none; -fx-padding: 0px;" text="Are you sure you want to delete this card?">
+      <TextField fx:id="listTitle1" layoutX="16.0" layoutY="10.0" prefHeight="26.0" prefWidth="287.0" style="-fx-background-insets: 0, 0 0 0 0; -fx-background-color: none; -fx-padding: 0px;" text="Are you sure you want to delete this board?">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>

@@ -1,6 +1,7 @@
 package client.windows.workspace.lock;
 
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ public class LockPopUpCtrl {
     private final LockPopUpService service;
 
     private Board board;
+    private WorkspaceCtrl workspace;
 
     @FXML private TextField inputField;
     @FXML private Label errorMsg;
@@ -44,7 +46,7 @@ public class LockPopUpCtrl {
             if (correctPassword) {
                 cancel();
                 board.setProtected(false);
-
+                workspace.getPwdMap().put(board.getKey(), inputField.getText());
             }
             // If incorrect password entered, show error message.
             else {
@@ -56,6 +58,7 @@ public class LockPopUpCtrl {
         else {
             cancel();
             service.setPassword(inputField.getText());
+            workspace.getPwdMap().put(board.getKey(), inputField.getText());
             board.setProtected(false);
         }
     }
@@ -74,5 +77,9 @@ public class LockPopUpCtrl {
 
     public void setMode(String mode) {
         this.mode = mode;
+    }
+
+    public void setWorkspace(WorkspaceCtrl workspace) {
+        this.workspace = workspace;
     }
 }

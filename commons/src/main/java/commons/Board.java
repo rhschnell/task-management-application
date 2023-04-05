@@ -127,7 +127,7 @@ public class Board {
     }
 
     public boolean verifyPassword(String password) {
-        return this.password.equals(password);
+        return this.password.equals(password) || "".equals(this.password);
     }
 
     @Override

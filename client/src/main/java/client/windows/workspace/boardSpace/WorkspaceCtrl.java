@@ -56,9 +56,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Math.abs;
@@ -82,6 +80,7 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button copyButton;
 
+    // Locking needs
     @FXML private Button renameButton;
     @FXML private Button personalizeButton;
     @FXML private Button tagsButton;
@@ -92,6 +91,8 @@ public class WorkspaceCtrl implements Initializable {
     private Button[] lockButtonArray;
 
     @FXML private Button unlockBoardButton;
+
+    private Map<String, String> pwdMap;
 
     private List<String> joinedKeys;
     private int focusedCardIndex;
@@ -126,6 +127,7 @@ public class WorkspaceCtrl implements Initializable {
         oldMouseXPosition = -1;
         oldMouseYPosition = -1;
         mouseMoveThreshold = 0.5;
+        this.pwdMap = new HashMap<>();
     }
 
 
@@ -242,6 +244,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(true);
         }
+        unlockBoardButton.setDisable(false);
     }
 
     /**
@@ -251,6 +254,8 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b: lockButtonArray) {
             b.setDisable(false);
         }
+        unlockBoardButton.setDisable(true
+        );
     }
 
     /**
@@ -293,6 +298,7 @@ public class WorkspaceCtrl implements Initializable {
         LockPopUpCtrl ctrl = loader.getKey();
         ctrl.setBoard(shownBoard);
         ctrl.setMode(mode);
+        ctrl.setWorkspace(this);
 
         // Set title depending on if board locket
         String title = board.isProtected() ? "Unlock board" : "Lock board";
@@ -305,6 +311,10 @@ public class WorkspaceCtrl implements Initializable {
             unlockBoardButton.setDisable(true);
             unlockButtons();
         }
+    }
+
+    public Map<String, String> getPwdMap() {
+        return pwdMap;
     }
 
     /*
@@ -321,15 +331,20 @@ public class WorkspaceCtrl implements Initializable {
             key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
             if (!serverBoard.getPassword().equals(shownBoard.getPassword())) {shownBoard.setProtected(true);}
-            // If shown board is locked
-            if (shownBoard.isProtected() && !lockButtonArray[0].isDisable()){
-                lockButtons();
-                unlockBoardButton.setDisable(false);
-            }
-            // else if its not locked
-            else if (!shownBoard.isProtected() && lockButtonArray[0].isDisable()) {
+            // If shown board is locked client side, and we remember the password
+            if (shownBoard.verifyPassword("") || (
+                    pwdMap.containsKey(shownBoard.getKey())
+                    && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
+                    && shownBoard.isProtected())) {
                 unlockButtons();
-                unlockBoardButton.setDisable(true);
+                shownBoard.setProtected(false);
+            } else if (!pwdMap.containsKey(shownBoard.getKey())
+                    || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+                lockButtons();
+                shownBoard.setProtected(true);
+            }
+            if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+                pwdMap.remove(shownBoard.getKey());
             }
             if (!shownBoard.equals(serverBoard)) {
                 showBoard(key);
@@ -387,8 +402,13 @@ public class WorkspaceCtrl implements Initializable {
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-        if (!shownBoard.getPassword().equals("")) {lockButtons();shownBoard.setProtected(true);}
-        else {unlockBoardButton.setDisable(true);}
+        if (!shownBoard.getPassword().equals("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+            lockButtons();
+            shownBoard.setProtected(true);
+        } else {
+            unlockButtons();
+            shownBoard.setProtected(false);
+        }
         unhideWorkspace();
         displayLists();
     }
