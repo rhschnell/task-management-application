@@ -2,6 +2,8 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.BoardUtils;
+import client.serverUtils.ServerUtils;
 import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.add.AddTagCtrl;
@@ -9,6 +11,7 @@ import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -79,17 +82,9 @@ public class TagOverviewCtrl {
     }
 
     /**
-     * Method to update the displayed tags from the board in the VBox
-     */
-    public void updateDisplayedTags(){
-        displayedTags.getChildren().clear();
-        displayTagList();
-    }
-
-    /**
      * Method to close the popup window when the cancel button is pressed
      */
-    public void close(){
+    public void close() {
         stop();
         ((Stage)closeButton.getScene().getWindow()).close();
     }
@@ -106,11 +101,11 @@ public class TagOverviewCtrl {
         tagUtils.stop();
     }
 
-    public void poll() {
+    public synchronized void poll() {
         tagList = tagUtils.getBoardTags(board.getKey());
         displayTagList();
-        tagUtils.registerForUpdates(board.getKey(), t -> {
-            tagList.add(t);
+        tagUtils.registerForUpdates(board.getKey(), tagList, t -> {
+            Platform.runLater(this::displayTagList);
         });
     }
 

@@ -87,14 +87,14 @@ public class BoardController {
     }
 
     @PostMapping("/addBoardTag/{key}")
-    public ResponseEntity<Board> addBoardTag(@PathVariable("key") String key,@RequestBody Tag tag) {
+    public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
             Board updateBoard = service.getByID(key);
             updateBoard.addTag(tag);
             service.insert(updateBoard);
-            listeners.forEach((k, l) -> l.accept(tag));
+            listeners.forEach((k, l) -> l.accept(updateBoard.getTagList().get(updateBoard.getTagList().size()-1)));
 
-            return ResponseEntity.ok(updateBoard);
+            return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException e) {
@@ -119,7 +119,7 @@ public class BoardController {
     @GetMapping("/{key}/tagUpdates")
     public DeferredResult<ResponseEntity<Tag>> getTagUpdates(@PathVariable("key") String key) {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<Tag>>(500L, noContent);
+        var res = new DeferredResult<ResponseEntity<Tag>>(5000L, noContent);
 
         var k = new Object();
         listeners.put(k, t -> {

@@ -21,7 +21,7 @@ public class AddTagService {
         return server.getBoard(board.getKey());
     }
 
-    public void insertCard(String key, Tag tag){
+    public void insertTag(String key, Tag tag){
         server.insertNewTag(key, tag);
     }
 }

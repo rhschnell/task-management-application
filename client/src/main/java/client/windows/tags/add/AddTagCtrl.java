@@ -55,12 +55,11 @@ public class AddTagCtrl {
         if (shownBoard == null) {
             return;
         }
-        shownBoard.addTag(tag);
-        service.insertCard(shownBoard.getKey(),tag);
-        tagOverviewCtrl.updateDisplayedTags();
+        service.insertTag(shownBoard.getKey(), tag);
+        tagOverviewCtrl.displayTagList();
     }
 
-    @FXML
+
     public void saveOnEnter(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             save();

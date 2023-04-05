@@ -71,7 +71,7 @@ public class CustomEditTagCellCtrl {
         Board shownBoard = tagOverviewCtrl.getBoard();
         shownBoard.removeTag(tag);
 
-        tagOverviewCtrl.updateDisplayedTags();
+        tagOverviewCtrl.displayTagList();
     }
 
     /**

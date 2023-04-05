@@ -222,6 +222,7 @@ public class WorkspaceCtrl implements Initializable {
         }
         // Refresh the board
         String key = "";
+
         try {
             key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);

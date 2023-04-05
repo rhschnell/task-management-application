@@ -9,6 +9,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -81,18 +82,21 @@ public class TagUtils {
                 });
     }
 
-    private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
-    public void registerForUpdates(String key, Consumer<Tag> consumer) {
+    private ExecutorService EXEC;
+    public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
+        EXEC = Executors.newSingleThreadExecutor();
         EXEC.submit(() -> {
-            while(!Thread.interrupted()) {
-                var res = client.target(serverUtils.getServer()).path(Route.BOARD + "/" + key + "/tagUpdates")
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(serverUtils.getServer()).path(Route.BOARD + "/" + key + "/tagUpdates")
                         .request(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .get(Response.class);
-                if(res.getStatus() == 204) {
+                        .get();
+                if (res.getStatus() == HttpStatus.NO_CONTENT.value()) {
                     continue;
                 }
                 var t = res.readEntity(Tag.class);
+                tagList.add(t);
                 consumer.accept(t);
             }
         });

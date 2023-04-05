@@ -99,7 +99,7 @@ public class EditTagCtrl {
         tag.setTagColor(newTagColor.toString());
         tag.setFontColor(newFontColor.toString());
         service.insertTag(tag);
-        customEditTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
+        customEditTagCellCtrl.getTagOverviewCtrl().displayTagList();
 
         ((Stage)saveButton.getScene().getWindow()).close();
     }
