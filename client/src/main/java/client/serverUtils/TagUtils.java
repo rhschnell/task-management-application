@@ -92,7 +92,7 @@ public class TagUtils {
                 if(res.getStatus() == 204) {
                     continue;
                 }
-                var t = res. readEntity(Tag.class);
+                var t = res.readEntity(Tag.class);
                 consumer.accept(t);
             }
         });

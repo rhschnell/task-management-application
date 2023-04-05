@@ -714,8 +714,7 @@ public class WorkspaceCtrl implements Initializable {
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
         loader.getKey().setBoard(shownBoard);
-
-        loader.getKey().displayTagList();
+        loader.getKey().poll();
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);

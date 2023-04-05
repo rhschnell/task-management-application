@@ -25,7 +25,6 @@ import java.util.ResourceBundle;
 import static com.google.inject.Guice.createInjector;
 
 public class TagOverviewCtrl {
-    private WorkspaceCtrl workspaceCtrl;
     private TagUtils tagUtils;
     private Board board;
     private List<Tag> tagList;
@@ -39,16 +38,13 @@ public class TagOverviewCtrl {
     @FXML
     private Button closeButton;
 
-
     /**
      * Constructor for the TagOverviewCtrl
      */
     @Inject
-    public TagOverviewCtrl(WorkspaceCtrl workspaceCtrl, TagUtils tagUtils) {
-        this.workspaceCtrl = workspaceCtrl;
+    public TagOverviewCtrl(TagUtils tagUtils) {
         this.tagUtils = tagUtils;
         this.tagList = new ArrayList<>();
-        this.board = workspaceCtrl.getShownBoard();
     }
 
     /**
@@ -58,7 +54,6 @@ public class TagOverviewCtrl {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(AddTagCtrl.class, "client", "windows", "tags", "AddTag.fxml");
         loader.getKey().set(this);
-        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -95,8 +90,8 @@ public class TagOverviewCtrl {
      * Method to close the popup window when the cancel button is pressed
      */
     public void close(){
-        ((Stage)closeButton.getScene().getWindow()).close();
         stop();
+        ((Stage)closeButton.getScene().getWindow()).close();
     }
 
     /**
@@ -105,23 +100,21 @@ public class TagOverviewCtrl {
      */
     public void setBoard(Board board) {
         this.board = board;
-
-        tagUtils.registerForUpdates(board.getKey(), t -> {
-            tagList.add(t);
-            displayTagList();
-            System.out.println("A new tag was added in pizda matii");
-        });
-    }
-
-    /**
-     * Getter for the board
-     * @return The board used
-     */
-    public Board getBoard(){
-        return this.board;
     }
 
     public void stop() {
         tagUtils.stop();
+    }
+
+    public void poll() {
+        tagList = tagUtils.getBoardTags(board.getKey());
+        displayTagList();
+        tagUtils.registerForUpdates(board.getKey(), t -> {
+            tagList.add(t);
+        });
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }
