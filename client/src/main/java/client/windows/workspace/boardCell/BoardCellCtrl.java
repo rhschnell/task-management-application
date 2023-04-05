@@ -79,26 +79,28 @@ public class BoardCellCtrl implements Initializable {
     }
 
     public void updateProtectionIcon() {
-        if (board.isProtected()) {
+        if (board.verifyPassword("")) {
             protectionIcon.setOnMouseEntered(l -> {
-                Image lockSymbol = new Image("/client/icons/unlock.png");
+                Image lockSymbol = new Image("/client/icons/lock.png");
                 protectionIcon.setImage(lockSymbol);
             });
 
             protectionIcon.setOnMouseExited(l -> {
-                Image lockSymbol = new Image("/client/icons/lock.png");
+                Image lockSymbol = new Image("/client/icons/unlock.png");
                 protectionIcon.setImage(lockSymbol);
             });
+            protectionIcon.setImage(new Image("/client/icons/unlock.png"));
         } else {
             protectionIcon.setOnMouseEntered(l -> {
-                Image lockSymbol = new Image("/client/icons/lock.png");
+                Image lockSymbol = new Image("/client/icons/unlock.png");
                 protectionIcon.setImage(lockSymbol);
             });
 
             protectionIcon.setOnMouseExited(l -> {
-                Image lockSymbol = new Image("/client/icons/unlock.png");
+                Image lockSymbol = new Image("/client/icons/lock.png");
                 protectionIcon.setImage(lockSymbol);
             });
+            protectionIcon.setImage(new Image("/client/icons/lock.png"));
         }
     }
 

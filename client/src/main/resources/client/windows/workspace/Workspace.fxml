@@ -183,7 +183,7 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="setPasswordButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#setPassword" prefHeight="30.0" prefWidth="85.0" styleClass="red-button" text="Set Password">
+            <Button fx:id="setPasswordButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#setPassword" prefHeight="30.0" prefWidth="85.0" styleClass="red-button" text="Set/Change Password">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>

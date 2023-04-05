@@ -183,6 +183,8 @@ public class WorkspaceCtrl implements Initializable {
 
         showBoard(keyField.getText());
 
+        pwdMap.computeIfAbsent(keyField.getText(), k -> "");
+
         if (!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             var boardCell = new MyFXML(createInjector(new MainModules()))
@@ -301,7 +303,7 @@ public class WorkspaceCtrl implements Initializable {
         ctrl.setWorkspace(this);
 
         // Set title depending on if board locket
-        String title = board.isProtected() ? "Unlock board" : "Lock board";
+        String title = board.isProtected() ? "Unlock board" : "Set password";
 
         // Create popup through helper method
         helperMethods.popUp(new Scene(loader.getValue()), title);
@@ -311,6 +313,7 @@ public class WorkspaceCtrl implements Initializable {
             unlockBoardButton.setDisable(true);
             unlockButtons();
         }
+        refreshWorkspace(true);
     }
 
     public Map<String, String> getPwdMap() {
@@ -343,7 +346,8 @@ public class WorkspaceCtrl implements Initializable {
                 lockButtons();
                 shownBoard.setProtected(true);
             }
-            if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+            if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
+                    && !"".equals(pwdMap.get(shownBoard.getKey()))) {
                 pwdMap.remove(shownBoard.getKey());
             }
             if (!shownBoard.equals(serverBoard)) {
@@ -356,7 +360,11 @@ public class WorkspaceCtrl implements Initializable {
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) {
             try {
-                service.getBoard(k);
+                Board b = service.getBoard(k);
+                if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))) {
+                    forced[0] = true;
+                    pwdMap.put(k, "");
+                }
             } catch (NotFoundException e) {
                 removed = true;
                 joinedKeys.remove(k);
@@ -402,7 +410,7 @@ public class WorkspaceCtrl implements Initializable {
         if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
-        if (!shownBoard.getPassword().equals("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+        if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
             lockButtons();
             shownBoard.setProtected(true);
         } else {
