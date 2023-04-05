@@ -35,6 +35,7 @@ import com.sun.istack.NotNull;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
@@ -416,14 +417,18 @@ public class WorkspaceCtrl implements Initializable {
         // Hibernate otherwise <a url="">
         highlightedCard = cardService.getCardByID(highlightedCard.getId());
 
-        // Instantiate the popup that controls the tag for this card
+        // Instantiate the popup that controls the tags for this card
         var loader = new MyFXML(createInjector(new MainModules())).load(
                 TagListFromShortcutCtrl.class, "client", "windows", "tags", "TagListFromShortCut.fxml");
 
         TagListFromShortcutCtrl tagListCtrl = loader.getKey();
 
+        List<Tag> appliedTags = highlightedCard.getTags();
+        List<Tag> availableTags = shownBoard.getTagList();
+        availableTags.removeAll(appliedTags);
+
         // Set the appropriate field for the controller
-        tagListCtrl.setAvailableTags(shownBoard.getTagList());
+        tagListCtrl.setAvailableTags(availableTags);
         tagListCtrl.setAppliedTags(highlightedCard.getTags());
         tagListCtrl.setCard(highlightedCard);
         tagListCtrl.setCardList(focusedListController.getCardList());
