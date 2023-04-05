@@ -3,6 +3,7 @@ package client.windows.tags.add;
 import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Tag;
 
 public class AddTagService {
     private final BoardUtils server;
@@ -18,5 +19,9 @@ public class AddTagService {
     public Board insertBoard(Board board){
         server.insertBoard(board);
         return server.getBoard(board.getKey());
+    }
+
+    public void insertCard(String key, Tag tag){
+        server.insertNewTag(key, tag);
     }
 }

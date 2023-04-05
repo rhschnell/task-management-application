@@ -56,7 +56,7 @@ public class AddTagCtrl {
             return;
         }
         shownBoard.addTag(tag);
-        tagOverviewCtrl.setBoard(service.insertBoard(shownBoard));
+        service.insertCard(shownBoard.getKey(),tag);
         tagOverviewCtrl.updateDisplayedTags();
     }
 

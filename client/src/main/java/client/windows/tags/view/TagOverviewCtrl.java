@@ -2,6 +2,7 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.add.AddTagCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
@@ -9,19 +10,25 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.Tag;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
 public class TagOverviewCtrl {
     private WorkspaceCtrl workspaceCtrl;
+    private TagUtils tagUtils;
     private Board board;
+    private List<Tag> tagList;
 
     @FXML
     private VBox displayedTags;
@@ -37,8 +44,11 @@ public class TagOverviewCtrl {
      * Constructor for the TagOverviewCtrl
      */
     @Inject
-    public TagOverviewCtrl(WorkspaceCtrl workspaceCtrl) {
+    public TagOverviewCtrl(WorkspaceCtrl workspaceCtrl, TagUtils tagUtils) {
         this.workspaceCtrl = workspaceCtrl;
+        this.tagUtils = tagUtils;
+        this.tagList = new ArrayList<>();
+        this.board = workspaceCtrl.getShownBoard();
     }
 
     /**
@@ -61,8 +71,7 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-        List<Tag> tagList = getBoard().getTagList();
-
+        displayedTags.getChildren().clear();
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomEditTagCellCtrl.class, "client", "windows", "tags", "CustomEditTagCell.fxml");
@@ -87,6 +96,7 @@ public class TagOverviewCtrl {
      */
     public void close(){
         ((Stage)closeButton.getScene().getWindow()).close();
+        stop();
     }
 
     /**
@@ -95,6 +105,12 @@ public class TagOverviewCtrl {
      */
     public void setBoard(Board board) {
         this.board = board;
+
+        tagUtils.registerForUpdates(board.getKey(), t -> {
+            tagList.add(t);
+            displayTagList();
+            System.out.println("A new tag was added in pizda matii");
+        });
     }
 
     /**
@@ -103,5 +119,9 @@ public class TagOverviewCtrl {
      */
     public Board getBoard(){
         return this.board;
+    }
+
+    public void stop() {
+        tagUtils.stop();
     }
 }
