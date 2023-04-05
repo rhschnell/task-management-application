@@ -24,12 +24,4 @@ public class AddTagServiceTest {
         assertNotNull(addTagService);
     }
 
-    @Test
-    public void insertBoardTest(){
-        Board b = new Board("Test Key", "Test Board", null, null);
-        addTagService.insertBoard(b);
-
-        verify(server, times(1)).insertBoard(b);
-    }
-
 }
