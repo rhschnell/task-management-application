@@ -49,6 +49,11 @@ public class RenameCtrl {
         close();
     }
 
+    /**
+     * Listener for the ENTER KeyEvent so when pressed the change of name can be
+     * saved
+     * @param event
+     */
     public void saveOnEnter(KeyEvent event)
     {
         if(event.getCode().equals(KeyCode.ENTER))

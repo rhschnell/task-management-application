@@ -222,7 +222,6 @@ public class WorkspaceCtrl implements Initializable {
         }
         // Refresh the board
         String key = "";
-
         try {
             key = shownBoard.getKey();
             Board serverBoard = service.getBoard(key);
@@ -714,7 +713,7 @@ public class WorkspaceCtrl implements Initializable {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
-        loader.getKey().setBoard(shownBoard);
+        loader.getKey().setBoardKey(shownBoard.getKey());
         loader.getKey().poll();
 
         Parent root = loader.getValue();

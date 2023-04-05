@@ -1,9 +1,7 @@
 package client.windows.tags.add;
 
 import client.windows.tags.view.TagOverviewCtrl;
-import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
-import commons.Board;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -15,7 +13,6 @@ import javafx.stage.Stage;
 
 public class AddTagCtrl {
     private final AddTagService service;
-    private WorkspaceCtrl workspaceCtrl;
     private TagOverviewCtrl tagOverviewCtrl;
 
     @FXML
@@ -51,11 +48,7 @@ public class AddTagCtrl {
     public void save() {
         ((Stage) addTagButton.getScene().getWindow()).close();
         Tag tag = new Tag(tagTitle.getText(), tagColor.getValue().toString(), fontColor.getValue().toString());
-        Board shownBoard = tagOverviewCtrl.getBoard();
-        if (shownBoard == null) {
-            return;
-        }
-        service.insertTag(shownBoard.getKey(), tag);
+        service.insertTag(tagOverviewCtrl.getBoardKey(), tag);
         tagOverviewCtrl.displayTagList();
     }
 
@@ -80,14 +73,5 @@ public class AddTagCtrl {
      */
     public void set(TagOverviewCtrl tagOverviewCtrl) {
         this.tagOverviewCtrl = tagOverviewCtrl;
-    }
-
-    /**
-     * Setter to set the workSpaceCtrl
-     *
-     * @param workspaceCtrl The new workspaceCtrl
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
     }
 }

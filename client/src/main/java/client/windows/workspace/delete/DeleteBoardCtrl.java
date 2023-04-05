@@ -31,6 +31,10 @@ public class DeleteBoardCtrl{
     private WorkspaceCtrl workspaceCtrl;
 
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl the workspaceCtrl to be set
+     */
     public void setWorkspaceCtrl (WorkspaceCtrl workspaceCtrl)
     {
         this.workspaceCtrl=workspaceCtrl;
@@ -50,6 +54,10 @@ public class DeleteBoardCtrl{
         ((Stage) deleteButton.getScene().getWindow()).close();
         workspaceCtrl.deleteBoard();
     }
+
+    /**
+     * Escapes the deleteBoardCtrl pop-up
+     */
     public void escape(){
         ((Stage) cancelButton.getScene().getWindow()).close();
     }

@@ -35,6 +35,12 @@ public class TagListFromShortcutCtrl extends TagListCtrl {
     private CardList cardList;
     private final CardService cardService;
 
+    /**
+     * Constructor for the TagListFromShortcutCtrl
+     * @param addCardCtrl the addCardCtrl
+     * @param editCardCtrl the editCardCtrl
+     * @param cardService the cardService
+     */
     @Inject
     public TagListFromShortcutCtrl(AddCardCtrl addCardCtrl, EditCardCtrl editCardCtrl,
                                    CardService cardService) {

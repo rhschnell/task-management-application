@@ -10,17 +10,29 @@ public class ListService {
     private final CardListUtils listServer;
     private final CardUtils cardServer;
     private String boardKey;
+    private CardList cardList;
 
-
+    /**
+     * Sets the boardKey
+     * @param boardKey to set
+     */
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
     }
 
+    /**
+     * Gets the boardKey
+     * @return the boardKey
+     */
     public String getBoardKey() {
         return boardKey;
     }
 
-    private CardList cardList;
+    /**
+     * Constructor for the ListService
+     * @param listServer
+     * @param cardServer
+     */
     @Inject
     public ListService(CardListUtils listServer, CardUtils cardServer) {
         this.listServer = listServer;

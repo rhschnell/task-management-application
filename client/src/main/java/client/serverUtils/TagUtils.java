@@ -21,7 +21,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class TagUtils {
     private final ServerUtils serverUtils;
     private Client client;
-
+    private ExecutorService execution;
 
     /**
      * Creates a new TagUtils object
@@ -35,6 +35,10 @@ public class TagUtils {
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
+    /**
+     * Sets the client
+     * @param client the client
+     */
     public void setClient(Client client) {
         this.client = client;
     }
@@ -73,6 +77,11 @@ public class TagUtils {
                 .delete(Response.class);
     }
 
+    /**
+     * Gets the tags from the board with a key
+     * @param key the key from which to get the tags
+     * @return the list of tags from the board with that key
+     */
     public List<Tag> getBoardTags(String key) {
         return client
                 .target(serverUtils.getServer()).path(Route.BOARD + "/getBoardTags/" + key)
@@ -82,10 +91,15 @@ public class TagUtils {
                 });
     }
 
-    private ExecutorService EXEC;
+    /**
+     * Register for the updated
+     * @param key the key of the board od which we need to receive tag updates
+     * @param tagList the tagList which contains the last version of the tags we need to display on the board
+     * @param consumer the consumer that needs to receive updates
+     */
     public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
-        EXEC = Executors.newSingleThreadExecutor();
-        EXEC.submit(() -> {
+        execution = Executors.newSingleThreadExecutor();
+        execution.submit(() -> {
             while (!Thread.interrupted()) {
                 var res = ClientBuilder.newClient(new ClientConfig())
                         .target(serverUtils.getServer()).path(Route.BOARD + "/" + key + "/tagUpdates")
@@ -102,7 +116,10 @@ public class TagUtils {
         });
     }
 
+    /**
+     * Stop the execution of the thread
+     */
     public void stop() {
-        EXEC.shutdownNow();
+        execution.shutdownNow();
     }
 }

@@ -39,20 +39,20 @@ public class MainModules implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(UserLoginCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(UserLoginCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AdminLoginCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(WorkspaceCtrl.class).in(Scopes.SINGLETON);
         binder.bind(HelperMethods.class).in(Scopes.SINGLETON);
-//        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(DeleteListCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(CardService.class).in(Scopes.SINGLETON);
-//        binder.bind(BoardCellCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
-//        binder.bind(DataFormatManager.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ViewCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(TagListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DeleteListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardService.class).in(Scopes.SINGLETON);
+        binder.bind(BoardCellCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddTagCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(TagOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DataFormatManager.class).in(Scopes.SINGLETON);
     }
 }

@@ -92,7 +92,8 @@ public class BoardController {
             Board updateBoard = service.getByID(key);
             updateBoard.addTag(tag);
             service.insert(updateBoard);
-            listeners.forEach((k, l) -> l.accept(updateBoard.getTagList().get(updateBoard.getTagList().size()-1)));
+            listeners.forEach((k, l) -> l.accept(updateBoard.getTagList().
+                    get(updateBoard.getTagList().size()-1)));
 
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
