@@ -74,4 +74,11 @@ public class CardUtils {
     {
         this.client = client;
     }
+
+    public Card getCardById(long id) {
+        return client.target(serverUtils.getServer()).path(Route.CARD + "/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Card.class);
+    }
 }

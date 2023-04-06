@@ -17,7 +17,7 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
-import client.windows.cards.add.AddCardCtrl;;
+import client.windows.cards.add.AddCardCtrl;
 import client.windows.cards.edit.EditCardCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
+
+;
 
 
 public class TagListCtrl {
@@ -50,19 +52,17 @@ public class TagListCtrl {
     private List<Tag> appliedTags;
 
 
-
     @Inject
     public TagListCtrl(AddCardCtrl addCardCtrl, EditCardCtrl editCardCtrl) {
         this.addCardCtrl = addCardCtrl;
         this.editCardCtrl = editCardCtrl;
-        availableTagsBox=new VBox();
-        availableTags=new ArrayList<>();
-        appliedTags=new ArrayList<>();
-        appliedTagsBox=new VBox();
+        availableTagsBox = new VBox();
+        availableTags = new ArrayList<>();
+        appliedTags = new ArrayList<>();
+        appliedTagsBox = new VBox();
     }
 
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -72,22 +72,22 @@ public class TagListCtrl {
 
     /**
      * Sets the tagList VBOX contain all the tags that are available in the board
+     *
      * @param tagList
      */
-    public void setAvailableTags(List<Tag> tagList)
-    {
-        this.availableTags=new ArrayList<>();
+    public void setAvailableTags(List<Tag> tagList) {
+        this.availableTags = new ArrayList<>();
         this.availableTags.addAll(tagList);
         displayAvailableTags();
     }
-    public void displayAvailableTags()
-    {
+
+    public void displayAvailableTags() {
         availableTagsBox.getChildren().clear();
-        for(int i=0; i<availableTags.size(); i++) {
+        for (int i = 0; i < availableTags.size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(availableTags.get(i),"addFromTagList");
+            ctrl.setTagObject(availableTags.get(i), "addFromTagList");
             ctrl.setTagListCtrl(this);
             availableTagsBox.getChildren().add(loader.getValue());
         }
@@ -95,42 +95,50 @@ public class TagListCtrl {
 
     /**
      * sets the AppliedTags VBOX contian all the tags that are applied on the card
+     *
      * @param tagList
      */
-    public void setAppliedTags(List<Tag> tagList)
-    {
+    public void setAppliedTags(List<Tag> tagList) {
         this.appliedTags = new ArrayList<>();
         this.appliedTags.addAll(tagList);
         displayAppliedTags();
     }
-    public void displayAppliedTags()
-    {
+
+    /**
+     * Returns the currently applied tags
+     * @return The currently applied tags
+     */
+    public List<Tag> getAppliedTags() {
+        return appliedTags;
+    }
+
+    public void displayAppliedTags() {
         appliedTagsBox.getChildren().clear();
-        for(int i=0; i<appliedTags.size(); i++) {
+        for (int i = 0; i < appliedTags.size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(appliedTags.get(i),"removeFromTagList");
+            ctrl.setTagObject(appliedTags.get(i), "removeFromTagList");
             ctrl.setTagListCtrl(this);
             appliedTagsBox.getChildren().add(loader.getValue());
         }
     }
-    public void refreshRemove(Tag tag)
-    {
+
+    public void refreshRemove(Tag tag) {
         appliedTags.remove(tag);
         availableTags.add(tag);
         displayAppliedTags();
         displayAvailableTags();
     }
-    public void refreshAdd(Tag tag)
-    {
+
+    public void refreshAdd(Tag tag) {
         availableTags.remove(tag);
         appliedTags.add(tag);
         displayAppliedTags();
         displayAvailableTags();
     }
 
-    public void setAddCardCtrl(AddCardCtrl addCardCtrl){
+    public void setAddCardCtrl(AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
     }
 
@@ -143,11 +151,11 @@ public class TagListCtrl {
      * Escapes the pop-up in which the AvailableCard and the AppliedTags are displayed
      */
     public void escapeWindow() {
-        if(type.equals("add"))
+        if (type.equals("add"))
             addCardCtrl.setAppliedTags(appliedTags);
-        if(type.equals("edit"))
+        if (type.equals("edit"))
             editCardCtrl.setAppliedTags(appliedTags);
-        ((Stage)cancelButton.getScene().getWindow()).close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
 }

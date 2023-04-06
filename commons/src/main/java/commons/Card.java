@@ -199,4 +199,12 @@ public class Card implements Serializable {
     public boolean hasDescription() {
         return this.description != null && !this.description.isEmpty();
     }
+
+    /**
+     * Deletes a tag from this card
+     * @param tag The tag to delete
+     */
+    public void deleteTag(Tag tag) {
+        this.tags.remove(tag);
+    }
 }

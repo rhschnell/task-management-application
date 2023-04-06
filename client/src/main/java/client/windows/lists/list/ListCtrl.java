@@ -87,14 +87,11 @@ public class ListCtrl {
     public void setKeyEventListeners(KeyEvent keyEvent) {
         handleArrowKeys(keyEvent);
 
-        if (keyEvent.getCode() == KeyCode.ENTER) {
-            workspaceCtrl.openFocusedCard();
-        }
-
+        if (keyEvent.getCode() == KeyCode.ENTER) workspaceCtrl.openFocusedCard();
         if (keyEvent.getCode() == KeyCode.E) workspaceCtrl.handleRenameShortcut();
-        if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-            workspaceCtrl.handleDeleteShortCut();
-        }
+        if (keyEvent.getCode() == KeyCode.DELETE
+            || keyEvent.getCode() == KeyCode.BACK_SPACE) workspaceCtrl.handleDeleteShortCut();
+        if (keyEvent.getCode() == KeyCode.T) workspaceCtrl.handleTagShortcut();
     }
 
     /**
