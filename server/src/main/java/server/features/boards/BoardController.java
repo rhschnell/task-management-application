@@ -104,19 +104,16 @@ public class BoardController {
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
-            //System.out.println("update 1");
             Board updateBoard = service.getByID(key);
             updateBoard.addTag(tag);
             service.insert(updateBoard);
             Pair<String, Tag> updatePair = Pair.of("Add",
                     updateBoard.getTagList().get(updateBoard.getTagList().size()-1));
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-            listeners.get(key).forEach(l -> {
-                if (l != null) {
-                    l.getSecond().accept(updatePair);
-                    System.out.println("Sent update"+ updateBoard.getTagList().get(updateBoard.getTagList().size()-1));
-                }
-            });
+             for(int i = 0;i<listeners.get(key).size();i++)
+                    {
+                        listeners.get(key).get(i).getSecond().accept(updatePair);
+                    }
 
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
@@ -126,20 +123,17 @@ public class BoardController {
         }
     }
     @PostMapping("/removeBoardTag/{key}")
-    public ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
+    public synchronized ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
             Board updateBoard = service.getByID(key);
             updateBoard.removeTag(tag);
             service.insert(updateBoard);
             Pair<String, Tag> removePair = Pair.of("Remove", tag);
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-
-            listeners.get(key).forEach(l -> {
-                if (l != null) {
-                    l.getSecond().accept(removePair);
+                for(int i = 0;i<listeners.get(key).size();i++)
+                {
+                    listeners.get(key).get(i).getSecond().accept(removePair);
                 }
-            });
-
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -150,7 +144,7 @@ public class BoardController {
 
 
     @GetMapping("/{key}/tagUpdates")
-    public DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key") String key) {
+    public synchronized DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key") String key) {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         var res = new DeferredResult<ResponseEntity<Pair<String,Tag>>>(5000L, noContent);
 
