@@ -112,7 +112,8 @@ public class BoardController {
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
              for(int i = 0;i<listeners.get(key).size();i++)
                     {
-                        listeners.get(key).get(i).getSecond().accept(updatePair);
+                        if( listeners.get(key).get(i)!=null)
+                            listeners.get(key).get(i).getSecond().accept(updatePair);
                     }
 
             return ResponseEntity.ok(tag);
@@ -132,7 +133,8 @@ public class BoardController {
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
                 for(int i = 0;i<listeners.get(key).size();i++)
                 {
-                    listeners.get(key).get(i).getSecond().accept(removePair);
+                    if( listeners.get(key).get(i)!=null)
+                      listeners.get(key).get(i).getSecond().accept(removePair);
                 }
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
