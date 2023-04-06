@@ -3,18 +3,17 @@ package client.serverUtils;
 import com.google.inject.Inject;
 import commons.Route;
 import commons.Tag;
-import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
-import javafx.application.Platform;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -112,19 +111,19 @@ public class TagUtils {
                 if (res.getStatus() == HttpStatus.NO_CONTENT.value()) {
                     continue;
                 }
-                System.out.println("update");
                 var t = res.readEntity(Pair.class);
 
+                Tag displayTag = new Tag(((LinkedHashMap) t.getSecond()).get("name").toString(),
+                        ((LinkedHashMap) t.getSecond()).get("tagColor").toString(),
+                        ((LinkedHashMap) t.getSecond()).get("fontColor").toString(),
+                        Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
                 if(t.getFirst().equals("Add")) {
-                    Tag displayTag = new Tag(((LinkedHashMap) t.getSecond()).get("name").toString(), ((LinkedHashMap) t.getSecond()).get("tagColor").toString(), ((LinkedHashMap) t.getSecond()).get("fontColor").toString(), Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
                     tagList.add((Tag) displayTag);
                     consumer.accept(displayTag);
                 }
                 if(t.getFirst().equals("Remove")) {
-                    Tag displayTag = new Tag(((LinkedHashMap) t.getSecond()).get("name").toString(), ((LinkedHashMap) t.getSecond()).get("tagColor").toString(), ((LinkedHashMap) t.getSecond()).get("fontColor").toString(), Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
                     tagList.remove((Tag) displayTag);
                     consumer.accept(displayTag);
-                    System.out.println(t.getSecond());
                 }
             }
         });

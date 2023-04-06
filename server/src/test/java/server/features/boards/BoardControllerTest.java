@@ -64,7 +64,7 @@ class BoardControllerTest {
         ArrayList <Tag> tagResult = new ArrayList<>();
         tagResult.add(new Tag("First Tag","White"));
         tagResult.add(new Tag("Second Tag","Black"));
-        sut.addBoardTag(board.getKey(),new Tag("Second Tag","Black"));
+        sut.addBoardTag(board.getKey(), new Tag("Second Tag","Black"));
         assertEquals(tagResult,sut.getBoardTags("000000").getBody());
     }
 
