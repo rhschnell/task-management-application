@@ -27,6 +27,9 @@ public class HelpWindowCtrl {
     private Button closeButton;
 
 
+    /**
+     * Constructor for the HelpWindowCtrl
+     */
     @Inject
     public HelpWindowCtrl() {
     }

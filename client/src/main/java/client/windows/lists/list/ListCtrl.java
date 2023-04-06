@@ -51,7 +51,11 @@ public class ListCtrl {
     private DataFormat cardFormat;
 
     @FXML
+    private VBox completeList;
+
+    @FXML
     private ScrollPane scrollPane;
+
     @FXML
     private Label listTitle;
     @FXML
@@ -72,7 +76,10 @@ public class ListCtrl {
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
 
-
+    /**
+     * Sets the workspace control
+     * @param workspaceCtrl the workspace to set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         separator = new Separator();
         this.workspaceCtrl = workspaceCtrl;
@@ -87,6 +94,10 @@ public class ListCtrl {
         });
     }
 
+    /**
+     * Sets the keyEvent listeners
+     * @param keyEvent
+     */
     public void setKeyEventListeners(KeyEvent keyEvent) {
         handleArrowKeys(keyEvent);
 
@@ -155,10 +166,13 @@ public class ListCtrl {
         focusedCardIndex = -1;
     }
 
+    /**
+     * Sets the cardList
+     * @param cardList to set
+     */
     public void setCardList(CardList cardList) {
         service.setCardList(cardList);
     }
-
 
     /**
      * Setter for the list title
@@ -173,6 +187,8 @@ public class ListCtrl {
      * Displays the cards onto the list's inner VBox
      */
     public void displayCards() {
+        updateListColors();
+
         cardVBox.getChildren().clear();
         for (Card card : service.getCardList().getCards()) {
             cardCell = new MyFXML(createInjector(new MainModules()))
@@ -346,7 +362,6 @@ public class ListCtrl {
         return service.getBoardKey();
     }
 
-
     /**
      * Returns the CardList of the Controller
      *
@@ -490,6 +505,23 @@ public class ListCtrl {
         });
     }
 
+    /**
+     * Method to update the list colors
+     */
+    public void updateListColors() {
+        String backgroundColor = getCardList().getBackgroundColor();
+        String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
+                       + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+                       "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+        cardVBox.setStyle("-fx-background-color: #" + backgroundColor);
+        completeList.setStyle(style);
+        listTitle.setTextFill(Color.web(getCardList().getFontColor()));
+    }
+
+    /**
+     * Sets the helperMethod
+     * @param hm
+     */
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;
         this.cardFormat = this.hm.getCardFormat();

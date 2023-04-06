@@ -23,7 +23,6 @@ class BoardTest {
         Card card = new Card(
                 "My Card",
                 "Text",
-                "White",
                 null,
                 null
         );
@@ -55,7 +54,6 @@ class BoardTest {
         Card card = new Card(
                 "My Card",
                 "Text",
-                "White",
                 null,
                 null
         );

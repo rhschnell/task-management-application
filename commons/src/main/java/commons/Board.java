@@ -33,7 +33,6 @@ public class Board {
     @JoinColumn(referencedColumnName = "key")
     private List<Tag> tagList; // Use a list here to make the annotation work
 
-
     /**
      * Constructor for board class
      * @param key key

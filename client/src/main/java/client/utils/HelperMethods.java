@@ -59,10 +59,18 @@ public class HelperMethods {
         popUp.showAndWait();
     }
 
+    /**
+     * Gets the card format
+     * @return the card format
+     */
     public DataFormat getCardFormat() {
         return cardFormat;
     }
 
+    /**
+     * Sets the scene
+     * @param s the scene to set
+     */
     public void setScene(Scenes s) {
         int scene;
         switch (s) {
@@ -87,14 +95,26 @@ public class HelperMethods {
         primaryStage.setScene(scenes[scene]);
     }
 
+    /**
+     * Sets the primary stage
+     * @param scene the scene to set as a primary stage
+     */
     public void setScene(Scene scene) {
         primaryStage.setScene(scene);
     }
 
+    /**
+     * Sets the scenes
+     * @param scenes the secenes to set
+     */
     public void setScenes(Scene... scenes) {
         this.scenes = scenes;
     }
 
+    /**
+     * Sets the primary stage
+     * @param primaryStage the primary stage to set
+     */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
         primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {

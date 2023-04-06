@@ -25,8 +25,8 @@ class ListServiceTest {
         testList.setListTitle("Test List");
         testList.setId(2);
 
-        testCard1 = new Card("Test Card1","Test Description","White",new ArrayList<>(),new ArrayList<>(),1);
-        Card testCard2 = new Card("Test Card2","Test Description","White",new ArrayList<>(),new ArrayList<>(),2);
+        testCard1 = new Card("Test Card1","Test Description",new ArrayList<>(),new ArrayList<>(),1);
+        Card testCard2 = new Card("Test Card2","Test Description",new ArrayList<>(),new ArrayList<>(),2);
 
         testList.addCard(testCard1);
         testList.addCard(testCard2);

@@ -2,6 +2,7 @@ package client.serverUtils;
 
 import commons.Board;
 import commons.Route;
+import commons.Tag;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -74,6 +75,21 @@ public class BoardUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    public void insertNewTag(String key, Tag tag) {
+        client
+                .target(serverUtils.getServer()).path(Route.BOARD+"/addBoardTag/"+key)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
+    }
+    public void removeBoardTag(String key, Tag tag) {
+        client
+                .target(serverUtils.getServer()).path(Route.BOARD+"/removeBoardTag/"+key)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
     }
 
     public void setServer(String server) {

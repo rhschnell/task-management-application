@@ -44,6 +44,7 @@ import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -108,6 +109,9 @@ public class WorkspaceCtrl implements Initializable {
 
     private List<ListCtrl> listControllers;
     private final CardService cardService;
+
+    private String initialListColor;
+    private String initialListFontColor;
 
 
     /**
@@ -176,6 +180,16 @@ public class WorkspaceCtrl implements Initializable {
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
+
+        setDefaultListColors();
+    }
+
+    /**
+     * Sets the list colors to the default
+     */
+    private void setDefaultListColors() {
+        this.initialListColor = "FFFFFF"; // White
+        this.initialListFontColor = "000000"; // Black
     }
 
     public void connect() {
@@ -390,7 +404,9 @@ public class WorkspaceCtrl implements Initializable {
 
     public void refreshBoardList(String key, boolean... forced) {
         boolean removed = false;
-        if (joinedKeys == null) {return;}
+        if (joinedKeys == null) {
+            return;
+        }
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) {
             try {
@@ -423,6 +439,43 @@ public class WorkspaceCtrl implements Initializable {
                 boardName.setText(shownBoard.getTitle());
             }
         }
+        updateBoardColours();
+        updateListColors();
+    }
+
+    public void updateListColors(){
+        if(shownBoard == null){
+            return;
+        }
+        for (int i = 0; i < listContainer.getChildren().size(); i++) {
+            String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
+            String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
+                + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+                "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+
+            VBox listInUI = (VBox) listContainer.getChildren().get(i);
+
+
+            // Set the color of the lists (background)
+            listInUI.setStyle(style);
+
+            // Set the title label of each list (font color)
+            // This is inside the Group containing (Label, Line,TextField)
+            Group group = (Group) listInUI.getChildren().get(0);
+            Label listTitle = (Label) group.getChildren().get(0);
+            listTitle.setTextFill(Color.web(shownBoard.getCardLists().get(i).getFontColor()));
+        }
+
+        // listContainer.getChildren().clear();
+        // for (CardList list : shownBoard.getCardLists()) {
+        //     var loader = new MyFXML(createInjector(new MainModules()))
+        //             .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
+        //     ListCtrl ctrl = loader.getKey();
+        //     ctrl.setCardList(list);
+        //     ctrl.updateListColors();
+
+        //     listContainer.getChildren().add(loader.getValue());
+        // }
     }
 
     public void updateBoardColours() {
@@ -463,11 +516,17 @@ public class WorkspaceCtrl implements Initializable {
         listContainer.getChildren().clear();
         listControllers.clear();
         boardName.setText(shownBoard.getTitle());
+
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
+
+            cardList.setBackgroundColor(initialListColor);
+            cardList.setFontColor(initialListFontColor);
+
             VBox list = (VBox) loader.getValue();
+
             ListCtrl controller = loader.getKey();
             listControllers.add(controller);
             controller.setWorkspaceCtrl(this);
@@ -853,8 +912,16 @@ public class WorkspaceCtrl implements Initializable {
         helperMethods.popUp(new Scene(loader.getValue()), "Leave Board");
     }
 
+    /**
+     * Adds a new list to the currently shown board
+     */
     public void addList() {
-        shownBoard.addList(new CardList("New List", new ArrayList<>()));
+        CardList newCardList = new CardList("New List", new ArrayList<>());
+        if(!getShownBoard().getCardLists().isEmpty()){
+            newCardList.setBackgroundColor(getShownBoard().getCardLists().get(0).getBackgroundColor());
+            newCardList.setFontColor(getShownBoard().getCardLists().get(0).getFontColor());
+        }
+        shownBoard.addList(newCardList);
         service.insertBoard(shownBoard);
     }
 
@@ -867,17 +934,23 @@ public class WorkspaceCtrl implements Initializable {
         return shownBoard.getKey();
     }
 
-    public Board getShownBoard() {
+    /**
+     * Method to get the currently shown board
+     * @return The board that is shown
+     */
+    public Board getShownBoard(){
         return shownBoard;
     }
 
+    /**
+     * Method to load the tag-overview window in a new popup screen
+     */
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
-        loader.getKey().setBoard(shownBoard);
-
-        loader.getKey().displayTagList();
+        loader.getKey().setBoardKey(shownBoard.getKey());
+        loader.getKey().poll();
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -947,11 +1020,17 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
 
+    /**
+     * Method to open the customize window in a new popup
+     */
     public void customizeBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");
 
         loader.getKey().setBoard(shownBoard);
+        loader.getKey().setLists(shownBoard.getCardLists());
+        loader.getKey().setWorkspaceCtrl(this);
+
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
 
@@ -976,4 +1055,35 @@ public class WorkspaceCtrl implements Initializable {
         return focusedCardIndex;
     }
 
+    /**
+     * Sets the color for all newly created lists
+     * @param initialListColor The color (string) for the lists
+     */
+    public void setInitialListColor(String initialListColor) {
+        this.initialListColor = initialListColor;
+    }
+
+    /**
+     * Getter for the initial list color
+     * @return The initial list color
+     */
+    public String getInitialListColor() {
+        return initialListColor;
+    }
+
+    /**
+     * Sets the color of the font for all the newly created lists.
+     * @param initialListFontColor The color (string) for the list text
+     */
+    public void setInitialListFontColor(String initialListFontColor) {
+        this.initialListFontColor = initialListFontColor;
+    }
+
+    /**
+     * Getter for the list font color
+     * @return The set list font color
+     */
+    public String getInitialListFontColor() {
+        return initialListFontColor;
+    }
 }

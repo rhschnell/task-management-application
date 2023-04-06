@@ -2,6 +2,7 @@ package server.features.boards;
 
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ class BoardControllerTest {
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
         Board board = new Board("000000", "My Board", cardLists, null);
-
+        board.addTag(new Tag("New Tag","White"));
         ResponseEntity<Void> response = sut.insert(board);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -38,6 +39,33 @@ class BoardControllerTest {
     @Test
     void insertBadRequest() {
         assertEquals(HttpStatus.BAD_REQUEST, sut.insert(null).getStatusCode());
+    }
+
+    @Test
+    void getBoardTags() {
+        CardList cardList = new CardList();
+        List<CardList> cardLists = new ArrayList<>();
+        cardLists.add(cardList);
+        Board board = new Board("000000", "My Board", cardLists, null);
+        board.addTag(new Tag("New Tag","White"));
+        sut.insert(board);
+        ArrayList <Tag> tagResult = new ArrayList<>();
+        tagResult.add(new Tag("New Tag","White"));
+        assertEquals(tagResult,sut.getBoardTags("000000").getBody());
+    }
+    @Test
+    void addBoardTag() {
+        CardList cardList = new CardList();
+        List<CardList> cardLists = new ArrayList<>();
+        cardLists.add(cardList);
+        Board board = new Board("000000", "My Board", cardLists, null);
+        board.addTag(new Tag("First Tag","White"));
+        sut.insert(board);
+        ArrayList <Tag> tagResult = new ArrayList<>();
+        tagResult.add(new Tag("First Tag","White"));
+        tagResult.add(new Tag("Second Tag","Black"));
+        sut.addBoardTag(board.getKey(), new Tag("Second Tag","Black"));
+        assertEquals(tagResult,sut.getBoardTags("000000").getBody());
     }
 
     @Test
