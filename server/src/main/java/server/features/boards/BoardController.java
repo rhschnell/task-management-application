@@ -99,18 +99,24 @@ public class BoardController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    private final Map<String, List<Consumer<Pair<String,Tag>>>> listeners = new HashMap<>();
+    private final Map<String, List<Pair<Object, Consumer<Pair<String, Tag>>>>> listeners  = new HashMap<>();
+   //private final Map<String, List<Consumer<Pair<String,Tag>>>> listeners = new HashMap<>();
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
+            //System.out.println("update 1");
             Board updateBoard = service.getByID(key);
             updateBoard.addTag(tag);
             service.insert(updateBoard);
             Pair<String, Tag> updatePair = Pair.of("Add",
                     updateBoard.getTagList().get(updateBoard.getTagList().size()-1));
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-            listeners.get(key).forEach(l -> l.accept(updatePair));
+            listeners.get(key).forEach(l -> {
+                if (l != null) {
+                    l.getSecond().accept(updatePair);
+                    System.out.println("Sent update"+ updateBoard.getTagList().get(updateBoard.getTagList().size()-1));
+                }
+            });
 
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
@@ -128,7 +134,11 @@ public class BoardController {
             Pair<String, Tag> removePair = Pair.of("Remove", tag);
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
 
-            listeners.get(key).forEach(l -> l.accept(removePair));
+            listeners.get(key).forEach(l -> {
+                if (l != null) {
+                    l.getSecond().accept(removePair);
+                }
+            });
 
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
@@ -146,11 +156,11 @@ public class BoardController {
 
         listeners.computeIfAbsent(key, k -> new ArrayList<>());
 
-        int remIdx = listeners.get(key).size();
-        listeners.get(key).add(t -> res.setResult(ResponseEntity.ok(t)));
+        Object o = new Object();
+        listeners.get(key).add(Pair.of(o, t -> res.setResult(ResponseEntity.ok(t))));
 
         res.onCompletion(() -> {
-            listeners.get(key).remove(remIdx);
+            listeners.get(key).removeIf(pair -> pair.getFirst().equals(o));
         });
 
         return res;

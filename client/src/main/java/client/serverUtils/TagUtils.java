@@ -118,10 +118,12 @@ public class TagUtils {
                         ((LinkedHashMap) t.getSecond()).get("fontColor").toString(),
                         Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
                 if(t.getFirst().equals("Add")) {
+                    System.out.println("adding"+displayTag);
                     tagList.add((Tag) displayTag);
                     consumer.accept(displayTag);
                 }
                 if(t.getFirst().equals("Remove")) {
+                    System.out.println("remove"+displayTag);
                     tagList.remove((Tag) displayTag);
                     consumer.accept(displayTag);
                 }
