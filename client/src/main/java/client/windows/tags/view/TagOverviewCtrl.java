@@ -2,12 +2,12 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.add.AddTagCtrl;
-import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
-import commons.Board;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,13 +15,15 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
 public class TagOverviewCtrl {
-    private WorkspaceCtrl workspaceCtrl;
-    private Board board;
+    private TagUtils tagUtils;
+    private String boardKey;
+    private List<Tag> tagList;
 
     @FXML
     private VBox displayedTags;
@@ -32,13 +34,13 @@ public class TagOverviewCtrl {
     @FXML
     private Button closeButton;
 
-
     /**
      * Constructor for the TagOverviewCtrl
      */
     @Inject
-    public TagOverviewCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
+    public TagOverviewCtrl(TagUtils tagUtils) {
+        this.tagUtils = tagUtils;
+        this.tagList = new ArrayList<>();
     }
 
     /**
@@ -48,11 +50,8 @@ public class TagOverviewCtrl {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(AddTagCtrl.class, "client", "windows", "tags", "AddTag.fxml");
         loader.getKey().set(this);
-        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
-
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
-
         String title = "Add Tag";
         HelperMethods.popUp(scene, title);
     }
@@ -61,47 +60,59 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-        List<Tag> tagList = getBoard().getTagList();
-
+        tagList = tagUtils.getBoardTags(boardKey);
+        displayedTags.getChildren().clear();
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomEditTagCellCtrl.class, "client", "windows", "tags", "CustomEditTagCell.fxml");
             CustomEditTagCellCtrl ctrl = loader.getKey();
             ctrl.setTagObject(tag);
             ctrl.setTagOverviewCtrl(this);
-
             displayedTags.getChildren().add(loader.getValue());
         }
     }
 
     /**
-     * Method to update the displayed tags from the board in the VBox
-     */
-    public void updateDisplayedTags(){
-        displayedTags.getChildren().clear();
-        displayTagList();
-    }
-
-    /**
      * Method to close the popup window when the cancel button is pressed
      */
-    public void close(){
+    public void close() {
+        stop();
         ((Stage)closeButton.getScene().getWindow()).close();
     }
 
     /**
      * Setter for the board
-     * @param board The new board to be set
+     * @param boardKey The new board to be set
      */
-    public void setBoard(Board board) {
-        this.board = board;
+    public void setBoardKey(String boardKey) {
+        this.boardKey = boardKey;
     }
 
     /**
-     * Getter for the board
-     * @return The board used
+     * Calls the stop method from tagUtils, closing the execution of the
+     * thread
      */
-    public Board getBoard(){
-        return this.board;
+    public void stop() {
+        tagUtils.stop();
+    }
+
+    /**
+     * Calls the poll method that subscribes to the long polling so that the client
+     * can receive updates when another tag is added on the board
+     */
+    public synchronized void poll() {
+        tagList = tagUtils.getBoardTags(boardKey);
+        displayTagList();
+        tagUtils.registerForUpdates(boardKey, tagList, t -> {
+            Platform.runLater(this::displayTagList);
+        });
+    }
+
+    /**
+     * Gets the boardKey
+     * @return the boardKey
+     */
+    public String getBoardKey() {
+        return boardKey;
     }
 }

@@ -9,15 +9,19 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class TagUtils {
     private final ServerUtils serverUtils;
     private Client client;
-
+    private ExecutorService execution;
 
     /**
      * Creates a new TagUtils object
@@ -31,6 +35,10 @@ public class TagUtils {
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
+    /**
+     * Sets the client
+     * @param client the client
+     */
     public void setClient(Client client) {
         this.client = client;
     }
@@ -69,6 +77,11 @@ public class TagUtils {
                 .delete(Response.class);
     }
 
+    /**
+     * Gets the tags from the board with a key
+     * @param key the key from which to get the tags
+     * @return the list of tags from the board with that key
+     */
     public List<Tag> getBoardTags(String key) {
         return client
                 .target(serverUtils.getServer()).path(Route.BOARD + "/getBoardTags/" + key)
@@ -76,5 +89,37 @@ public class TagUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<List<Tag>>() {
                 });
+    }
+
+    /**
+     * Register for the updated
+     * @param key the key of the board od which we need to receive tag updates
+     * @param tagList the tagList which contains the last version of the tags we need to display on the board
+     * @param consumer the consumer that needs to receive updates
+     */
+    public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
+        execution = Executors.newSingleThreadExecutor();
+        execution.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig())
+                        .target(serverUtils.getServer()).path(Route.BOARD + "/" + key + "/tagUpdates")
+                        .request(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .get();
+                if (res.getStatus() == HttpStatus.NO_CONTENT.value()) {
+                    continue;
+                }
+                var t = res.readEntity(Tag.class);
+                tagList.add(t);
+                consumer.accept(t);
+            }
+        });
+    }
+
+    /**
+     * Stop the execution of the thread
+     */
+    public void stop() {
+        execution.shutdownNow();
     }
 }

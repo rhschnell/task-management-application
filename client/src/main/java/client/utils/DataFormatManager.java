@@ -28,10 +28,18 @@ public class DataFormatManager {
 
     }
 
+    /**
+     * Gets the card format
+     * @return the card fromat
+     */
     public DataFormat getCardFormat() {
         return cardFormat;
     }
 
+    /**
+     * Gets the subtask format
+     * @return the subtask format
+     */
     public DataFormat getSubtaskFormat() {
         return subtaskFormat;
     }

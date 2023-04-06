@@ -75,6 +75,9 @@ public class SubtaskCellCtrl implements Initializable {
         }
     }
 
+    /**
+     * Deletes the subtask
+     */
     public void delete() {
         subtaskContainer.deleteSubtask(task);
     }
