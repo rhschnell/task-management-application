@@ -43,6 +43,7 @@ import javafx.animation.Timeline;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -98,6 +99,9 @@ public class WorkspaceCtrl implements Initializable {
 
     private List<ListCtrl> listControllers;
     private final CardService cardService;
+
+    private String initialListColor;
+    private String initialListFontColor;
 
 
     /**
@@ -155,6 +159,16 @@ public class WorkspaceCtrl implements Initializable {
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
+
+        setDefaultListColors();
+    }
+
+    /**
+     * Sets the list colors to the default
+     */
+    private void setDefaultListColors() {
+        this.initialListColor = "FFFFFF"; // White
+        this.initialListFontColor = "000000"; // Black
     }
 
     public void connect() {
@@ -276,9 +290,18 @@ public class WorkspaceCtrl implements Initializable {
             String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" 
                 + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
                 "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
-            listContainer.getChildren().get(i).setStyle(style);
-            ((Label) ((VBox) listContainer.getChildren().get(i)).getChildren().get(0)).setTextFill(
-                    Color.web(shownBoard.getCardLists().get(i).getFontColor()));
+
+            VBox listInUI = (VBox) listContainer.getChildren().get(i);
+
+
+            // Set the color of the lists (background)
+            listInUI.setStyle(style);
+
+            // Set the title label of each list (font color)
+            // This is inside the Group containing (Label, Line,TextField)
+            Group group = (Group) listInUI.getChildren().get(0);
+            Label listTitle = (Label) group.getChildren().get(0);
+            listTitle.setTextFill(Color.web(shownBoard.getCardLists().get(i).getFontColor()));
         }
 
         // listContainer.getChildren().clear();
@@ -327,6 +350,10 @@ public class WorkspaceCtrl implements Initializable {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
+
+            cardList.setBackgroundColor(initialListColor);
+            cardList.setFontColor(initialListFontColor);
+
             VBox list = (VBox) loader.getValue();
 
             ListCtrl controller = loader.getKey();
@@ -837,6 +864,7 @@ public class WorkspaceCtrl implements Initializable {
 
         loader.getKey().setBoard(shownBoard);
         loader.getKey().setLists(shownBoard.getCardLists());
+        loader.getKey().setWorkspaceCtrl(this);
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -862,4 +890,35 @@ public class WorkspaceCtrl implements Initializable {
         return focusedCardIndex;
     }
 
+    /**
+     * Sets the color for all newly created lists
+     * @param initialListColor The color (string) for the lists
+     */
+    public void setInitialListColor(String initialListColor) {
+        this.initialListColor = initialListColor;
+    }
+
+    /**
+     * Getter for the initial list color
+     * @return The initial list color
+     */
+    public String getInitialListColor() {
+        return initialListColor;
+    }
+
+    /**
+     * Sets the color of the font for all the newly created lists.
+     * @param initialListFontColor The color (string) for the list text
+     */
+    public void setInitialListFontColor(String initialListFontColor) {
+        this.initialListFontColor = initialListFontColor;
+    }
+
+    /**
+     * Getter for the list font color
+     * @return The set list font color
+     */
+    public String getInitialListFontColor() {
+        return initialListFontColor;
+    }
 }
