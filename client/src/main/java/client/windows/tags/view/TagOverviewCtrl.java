@@ -60,7 +60,7 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-        tagList = tagUtils.getBoardTags(boardKey);
+        //tagList = tagUtils.getBoardTags(boardKey);
         displayedTags.getChildren().clear();
         for (Tag tag : tagList) {
             var loader = new MyFXML(createInjector(new MainModules()))

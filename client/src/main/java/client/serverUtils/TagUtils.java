@@ -3,15 +3,18 @@ package client.serverUtils;
 import com.google.inject.Inject;
 import commons.Route;
 import commons.Tag;
+import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
+import javafx.application.Platform;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -97,7 +100,7 @@ public class TagUtils {
      * @param tagList the tagList which contains the last version of the tags we need to display on the board
      * @param consumer the consumer that needs to receive updates
      */
-    public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
+    public  void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
         execution = Executors.newSingleThreadExecutor();
         execution.submit(() -> {
             while (!Thread.interrupted()) {
@@ -109,9 +112,20 @@ public class TagUtils {
                 if (res.getStatus() == HttpStatus.NO_CONTENT.value()) {
                     continue;
                 }
-                var t = res.readEntity(Tag.class);
-                tagList.add(t);
-                consumer.accept(t);
+                System.out.println("update");
+                var t = res.readEntity(Pair.class);
+
+                if(t.getFirst().equals("Add")) {
+                    Tag displayTag = new Tag(((LinkedHashMap) t.getSecond()).get("name").toString(), ((LinkedHashMap) t.getSecond()).get("tagColor").toString(), ((LinkedHashMap) t.getSecond()).get("fontColor").toString(), Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
+                    tagList.add((Tag) displayTag);
+                    consumer.accept(displayTag);
+                }
+                if(t.getFirst().equals("Remove")) {
+                    Tag displayTag = new Tag(((LinkedHashMap) t.getSecond()).get("name").toString(), ((LinkedHashMap) t.getSecond()).get("tagColor").toString(), ((LinkedHashMap) t.getSecond()).get("fontColor").toString(), Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
+                    tagList.remove((Tag) displayTag);
+                    consumer.accept(displayTag);
+                    System.out.println(t.getSecond());
+                }
             }
         });
     }

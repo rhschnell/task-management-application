@@ -2,6 +2,7 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.BoardUtils;
 import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.edit.EditTagCtrl;
@@ -37,14 +38,16 @@ public class CustomEditTagCellCtrl {
     private Circle tagColor;
 
     private Tag tag;
+    private BoardUtils boardUtils;
 
     /**
      * Constructor for the CustomEditTagCellCtrl
      */
     @Inject
-    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl){
+    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, BoardUtils boardUtils){
         this.server = server;
         this.tagOverviewCtrl = tagOverviewCtrl;
+        this.boardUtils=boardUtils;
     }
 
     /**
@@ -65,8 +68,11 @@ public class CustomEditTagCellCtrl {
      * Method to delete a tag from the board
      */
     public void deleteTag(){
-        server.deleteTag(tag.getId());
-        tagOverviewCtrl.displayTagList();
+       // server.deleteTag(tag.getId());
+        //tagOverviewCtrl.displayTagList();
+
+        boardUtils.removeBoardTag(tagOverviewCtrl.getBoardKey(),tag);
+
     }
 
     /**

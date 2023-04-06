@@ -84,6 +84,13 @@ public class BoardUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
     }
+    public void removeBoardTag(String key, Tag tag) {
+        client
+                .target(serverUtils.getServer()).path(Route.BOARD+"/removeBoardTag/"+key)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
+    }
 
     public void setServer(String server) {
         serverUtils.setServer(server);
