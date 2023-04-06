@@ -110,11 +110,11 @@ public class BoardController {
             Pair<String, Tag> updatePair = Pair.of("Add",
                     updateBoard.getTagList().get(updateBoard.getTagList().size()-1));
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-             for(int i = 0;i<listeners.get(key).size();i++)
-                    {
-                        if( listeners.get(key).get(i)!=null)
+            for(int i = 0;i<listeners.get(key).size();i++)
+            {
+                if( listeners.get(key).get(i)!=null)
                             listeners.get(key).get(i).getSecond().accept(updatePair);
-                    }
+            }
 
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
@@ -124,18 +124,18 @@ public class BoardController {
         }
     }
     @PostMapping("/removeBoardTag/{key}")
-    public synchronized ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
+    public synchronized ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key,@RequestBody Tag tag) {
         try {
             Board updateBoard = service.getByID(key);
             updateBoard.removeTag(tag);
             service.insert(updateBoard);
             Pair<String, Tag> removePair = Pair.of("Remove", tag);
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-                for(int i = 0;i<listeners.get(key).size();i++)
-                {
-                    if( listeners.get(key).get(i)!=null)
+            for(int i = 0;i<listeners.get(key).size();i++)
+            {
+                if( listeners.get(key).get(i)!=null)
                       listeners.get(key).get(i).getSecond().accept(removePair);
-                }
+            }
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -146,7 +146,8 @@ public class BoardController {
 
 
     @GetMapping("/{key}/tagUpdates")
-    public synchronized DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key") String key) {
+    public synchronized DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key")
+                                                                                           String key) {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         var res = new DeferredResult<ResponseEntity<Pair<String,Tag>>>(5000L, noContent);
 
