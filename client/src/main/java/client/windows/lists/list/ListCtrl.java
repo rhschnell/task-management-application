@@ -23,6 +23,7 @@ import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.QuickAddCardCtrl;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
+import client.windows.workspace.lock.AccessDeniedCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -31,15 +32,15 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -57,9 +58,16 @@ public class ListCtrl {
     private VBox cardVBox;
     @FXML
     private TextField renameTitle;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button createCardButton;
+    @FXML
+    private Button renameButton;
     private int listId;
     private long focusedCardIndex;
     private Pair<CardCtrl, Parent> cardCell;
+    private List<CardCtrl> cardControllers;
 
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
@@ -143,6 +151,7 @@ public class ListCtrl {
     @Inject
     public ListCtrl(ListService service) {
         this.service = service;
+        cardControllers = new ArrayList<>();
         focusedCardIndex = -1;
     }
 
@@ -169,6 +178,9 @@ public class ListCtrl {
             cardCell = new MyFXML(createInjector(new MainModules()))
                     .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
             CardCtrl controller = cardCell.getKey();
+
+            cardControllers.add(controller);
+
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
             makeCardDraggable(cardCell);
@@ -491,5 +503,60 @@ public class ListCtrl {
      */
     public void shiftCard(Card card, int newIndex) {
         service.dragAndDrop(card, newIndex);
+    }
+
+
+    public void lock() {
+        for(int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
+            CardCtrl ctrl = cardControllers.get(i);
+
+            ctrl.getEditButton().setOnMouseClicked(e -> {
+                accessDeniedPopUp();
+            });
+            ctrl.getDeleteButton().setOnMouseClicked(e -> {
+                accessDeniedPopUp();
+            });
+        }
+        renameButton.setOnMouseClicked(e -> {
+            accessDeniedPopUp();
+        });
+        deleteButton.setOnMouseClicked(e -> {
+            accessDeniedPopUp();
+        });
+        createCardButton.setOnMouseClicked(e -> {
+            accessDeniedPopUp();
+        });
+    }
+
+    public void unlock() {
+        for(int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
+            CardCtrl ctrl = cardControllers.get(i);
+
+            ctrl.getEditButton().setOnMouseClicked(e -> {
+                ctrl.edit();
+            });
+            ctrl.getDeleteButton().setOnMouseClicked(e -> {
+                ctrl.delete();
+            });
+        }
+        renameButton.setOnMouseClicked(e -> {
+            rename();
+        });
+        deleteButton.setOnMouseClicked(e -> {
+            deleteScreen();
+        });
+        createCardButton.setOnMouseClicked(e -> {
+            addCardScreen();
+        });
+    }
+
+    public void accessDeniedPopUp() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "lock", "AccessDenied.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Access denied!";
+        HelperMethods.popUp(scene, title);
     }
 }

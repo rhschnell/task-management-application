@@ -241,6 +241,17 @@ public class WorkspaceCtrl implements Initializable {
     /*
      START OF LOCK / UNLOCK METHODS
      */
+
+    /**
+     * Method used for locking the lists when the board gets set to locked
+     */
+    public void lockLists() {
+        for (int i = 0; i < listControllers.size(); ++i) {
+            ListCtrl listCtrl = listControllers.get(i);
+            listCtrl.lock();
+        }
+    }
+
     /**
      * Method used for locking the buttons when the board gets set to locked
      */
@@ -252,14 +263,23 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
+     * Method used for unlocking the lists when the board gets set to unlocked
+     */
+    public void unlockLists() {
+        for (int i = 0; i < listControllers.size(); ++i) {
+            ListCtrl listCtrl = listControllers.get(i);
+            listCtrl.unlock();
+        }
+    }
+
+    /**
      * Method used for unlocking the buttons when the board gets set to unlocked
      */
     public void unlockButtons() {
         for (Button b: lockButtonArray) {
             b.setDisable(false);
         }
-        unlockBoardButton.setDisable(true
-        );
+        unlockBoardButton.setDisable(true);
     }
 
     /**
@@ -313,6 +333,7 @@ public class WorkspaceCtrl implements Initializable {
         // Fix lock button state in workspace
         if (shownBoard.equals(board) && mode.equals("unlock")) {
             unlockBoardButton.setDisable(true);
+            unlockLists();
             unlockButtons();
         }
         refreshWorkspace(true);
@@ -334,29 +355,40 @@ public class WorkspaceCtrl implements Initializable {
         String key = "";
         try {
             key = shownBoard.getKey();
-            Board serverBoard = service.getBoard(key);
-            if (!serverBoard.getPassword().equals(shownBoard.getPassword())) {shownBoard.setProtected(true);}
-            // If shown board is locked client side, and we remember the password
-            if (shownBoard.verifyPassword("") || (
-                    pwdMap.containsKey(shownBoard.getKey())
-                    && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
-                    && shownBoard.isProtected())) {
-                unlockButtons();
-                shownBoard.setProtected(false);
-            } else if (!pwdMap.containsKey(shownBoard.getKey())
-                    || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
-                lockButtons();
-                shownBoard.setProtected(true);
-            }
-            if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
-                    && !"".equals(pwdMap.get(shownBoard.getKey()))) {
-                pwdMap.remove(shownBoard.getKey());
-            }
-            if (!shownBoard.equals(serverBoard)) {
-                showBoard(key);
-            }
+            refreshBoard(key);
         } catch (Exception ignored) {}
         // Refresh the board list (joined boards)
+        refreshBoardList(key, forced);
+        updateBoardColours();
+    }
+
+    public void refreshBoard(String key) {
+        Board serverBoard = service.getBoard(key);
+        if (!serverBoard.getPassword().equals(shownBoard.getPassword())) {shownBoard.setProtected(true);}
+        // If shown board is locked client side, and we remember the password
+        if (shownBoard.verifyPassword("") || (
+                pwdMap.containsKey(shownBoard.getKey())
+                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
+                        && shownBoard.isProtected())) {
+            unlockButtons();
+            unlockLists();
+            shownBoard.setProtected(false);
+        } else if (!pwdMap.containsKey(shownBoard.getKey())
+                || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+            lockLists();
+            lockButtons();
+            shownBoard.setProtected(true);
+        }
+        if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
+                && !"".equals(pwdMap.get(shownBoard.getKey()))) {
+            pwdMap.remove(shownBoard.getKey());
+        }
+        if (!shownBoard.equals(serverBoard)) {
+            showBoard(key);
+        }
+    }
+
+    public void refreshBoardList(String key, boolean... forced) {
         boolean removed = false;
         if (joinedKeys == null) {return;}
         List<String> tempList = new ArrayList<>(joinedKeys);
@@ -391,7 +423,6 @@ public class WorkspaceCtrl implements Initializable {
                 boardName.setText(shownBoard.getTitle());
             }
         }
-        updateBoardColours();
     }
 
     public void updateBoardColours() {
@@ -414,9 +445,11 @@ public class WorkspaceCtrl implements Initializable {
         }
         if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
             lockButtons();
+            lockLists();
             shownBoard.setProtected(true);
         } else {
             unlockButtons();
+            unlockLists();
             shownBoard.setProtected(false);
         }
         unhideWorkspace();
@@ -629,8 +662,6 @@ public class WorkspaceCtrl implements Initializable {
             VBox vbox = getFocusPosition();
             vbox.getChildren().get(focusedCardIndex - 1).setOpacity(1);
         }
-        System.out.println("resetFocused before " + oldMouseXPosition + " " + oldMouseYPosition);
-        System.out.println("reset Focused after " + newMouseXPosition + " " + newMouseYPosition);
         oldMouseXPosition = -1;
         oldMouseYPosition = -1;
         focusedCardIndex = -1;
@@ -732,8 +763,6 @@ public class WorkspaceCtrl implements Initializable {
         if (focusedIndicesAreValid()) {
             highlightSelectedCard();
         }
-        System.out.println("setFocused before " + oldMouseXPosition + " " + oldMouseYPosition);
-        System.out.println("set Focused after " + newMouseXPosition + " " + newMouseYPosition);
         oldMouseXPosition = newMouseXPosition;
         oldMouseYPosition = newMouseYPosition;
 
@@ -770,7 +799,6 @@ public class WorkspaceCtrl implements Initializable {
                 if (event.getCode() == KeyCode.ESCAPE)
                     loader.getKey().escape();
             });
-            controller.onlyForViewing();
             controller.setCard(shownBoard.getCardLists().get(focusedListIndex - 1).
                     getCards().get(focusedCardIndex - 1));
             controller.setBoardKey(getBoardKey());

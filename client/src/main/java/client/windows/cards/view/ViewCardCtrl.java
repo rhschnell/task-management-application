@@ -53,9 +53,6 @@ public class ViewCardCtrl {
     private Button cancelButton;
 
     @FXML
-    private Button editButton;
-
-    @FXML
     private VBox appliedTagsVbox;
 
     @FXML
@@ -167,13 +164,6 @@ public class ViewCardCtrl {
         service.setBoardKey(boardKey);
     }
 
-    /**
-     * Sets the edit button to be invisible
-     */
-    public void onlyForViewing()
-    {
-        editButton.setVisible(false);
-    }
     /**
      * Allows us to add subtasks to a list
      */

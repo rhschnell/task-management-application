@@ -41,17 +41,17 @@
       <Group>
          <children>
             <Line endX="300.0" endY="-0.707122802734375" startY="-0.707122802734375" stroke="#808080" />
-            <Button layoutX="101.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addCardScreen" prefHeight="23.0" prefWidth="72.0" styleClass="blue-button" text="Add card">
+            <Button fx:id="createCardButton" layoutX="70.0" layoutY="15.0" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addCardScreen" styleClass="blue-button" text="Create card">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Button>
-            <Button cancelButton="true" layoutX="245.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#deleteScreen" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Delete">
+            <Button fx:id="deleteButton" cancelButton="true" layoutX="245.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#deleteScreen" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Delete">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="renameButton" layoutX="0.7071075439453125" layoutY="14.707122802734375" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#rename" prefHeight="23.0" prefWidth="87.0" styleClass="gray-button" text="Rename">
+            <Button fx:id="renameButton" layoutX="0.7071075439453125" layoutY="14.707122802734375" mnemonicParsing="false" onMouseClicked="#rename" styleClass="gray-button" text="Rename">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
