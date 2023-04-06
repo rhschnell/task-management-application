@@ -60,13 +60,13 @@ public class TagOverviewCtrl {
      * Method to display the tags that are currently added to the board by the user
      */
     public void displayTagList() {
-        tagList = tagUtils.getBoardTags(boardKey);
+        //tagList = tagUtils.getBoardTags(boardKey);
         displayedTags.getChildren().clear();
-        for (Tag tag : tagList) {
+        for (int i = 0; i < tagList.size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomEditTagCellCtrl.class, "client", "windows", "tags", "CustomEditTagCell.fxml");
             CustomEditTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(tag);
+            ctrl.setTagObject(tagList.get(i));
             ctrl.setTagOverviewCtrl(this);
             displayedTags.getChildren().add(loader.getValue());
         }

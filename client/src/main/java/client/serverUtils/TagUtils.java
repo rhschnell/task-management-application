@@ -9,8 +9,10 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -97,7 +99,7 @@ public class TagUtils {
      * @param tagList the tagList which contains the last version of the tags we need to display on the board
      * @param consumer the consumer that needs to receive updates
      */
-    public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
+    public  void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
         execution = Executors.newSingleThreadExecutor();
         execution.submit(() -> {
             while (!Thread.interrupted()) {
@@ -109,9 +111,20 @@ public class TagUtils {
                 if (res.getStatus() == HttpStatus.NO_CONTENT.value()) {
                     continue;
                 }
-                var t = res.readEntity(Tag.class);
-                tagList.add(t);
-                consumer.accept(t);
+                var t = res.readEntity(Pair.class);
+
+                Tag displayTag = new Tag(((LinkedHashMap) t.getSecond()).get("name").toString(),
+                        ((LinkedHashMap) t.getSecond()).get("tagColor").toString(),
+                        ((LinkedHashMap) t.getSecond()).get("fontColor").toString(),
+                        Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
+                if(t.getFirst().equals("Add")) {
+                    tagList.add((Tag) displayTag);
+                    consumer.accept(displayTag);
+                }
+                if(t.getFirst().equals("Remove")) {
+                    tagList.remove((Tag) displayTag);
+                    consumer.accept(displayTag);
+                }
             }
         });
     }

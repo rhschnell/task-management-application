@@ -58,7 +58,13 @@ public class Tag implements Serializable {
         this.cards = new ArrayList<>();
         this.fontColor=fontColor;
     }
-
+    public Tag(String name, String tagColor,String fontColor,Long id) {
+        this.name = name;
+        this.tagColor = tagColor;
+        this.cards = new ArrayList<>();
+        this.fontColor=fontColor;
+        this.id = id;
+    }
 
     /**
      * Method that removes all associations between this tag and the associated cards.
