@@ -23,7 +23,6 @@ class CardListTest {
         card = new Card(
                 "My Card",
                 "Text",
-                "White",
                 null,
                 null
         );
@@ -119,7 +118,6 @@ class CardListTest {
         Card card2 = new Card(
                 "My Card 2",
                 "Text",
-                "White",
                 null,
                 null
         );
@@ -133,7 +131,6 @@ class CardListTest {
         Card card2 = new Card(
                 "My Card 2",
                 "Text",
-                "White",
                 null,
                 null
         );
@@ -159,6 +156,16 @@ class CardListTest {
     }
 
     @Test
+    void getBackgroundColor(){
+        assertEquals("FFFFFF", cardList.getBackgroundColor());
+    }
+
+    @Test
+    void getFontColor(){
+        assertEquals("000000", cardList.getFontColor());
+    }
+
+    @Test
     void setId() {
         cardList.setId(0);
         assertEquals(0, cardList.getId());
@@ -174,5 +181,17 @@ class CardListTest {
     void setCards() {
         cardList.setCards(cards);
         assertEquals(cards, cardList.getCards());
+    }
+
+    @Test
+    void setBackgroundColor() {
+        cardList.setBackgroundColor("000000");
+        assertEquals("000000", cardList.getBackgroundColor());
+    }
+
+    @Test
+    void setFontColor() {
+        cardList.setFontColor("FFFFFF");
+        assertEquals("FFFFFF", cardList.getBackgroundColor());
     }
 }

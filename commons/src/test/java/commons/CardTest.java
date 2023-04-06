@@ -16,7 +16,6 @@ class CardTest {
         card = new Card(
                 "Some card",
                 "This is a card",
-                "White",
                 null,
                 null,
                 0
@@ -28,7 +27,6 @@ class CardTest {
         card = new Card(
                 "My card",
                 "Fancy description",
-                "White",
                 null,
                 null
         );
@@ -46,7 +44,6 @@ class CardTest {
         card = new Card(
                 "My card",
                 "Fancy despription",
-                "White",
                 null,
                 null,
                 priority
@@ -163,11 +160,6 @@ class CardTest {
     }
 
     @Test
-    void getBackgroundColour() {
-        assertEquals("White", card.getBackgroundColour());
-    }
-
-    @Test
     void getTags() {
         assertNull(card.getTags());
     }
@@ -188,7 +180,6 @@ class CardTest {
         card = new Card(
                 "My card",
                 "Fancy despription",
-                "White",
                 null,
                 null,
                 priority
@@ -205,12 +196,6 @@ class CardTest {
     void setDescription() {
         card.setDescription("A new description");
         assertEquals("A new description", card.getDescription());
-    }
-
-    @Test
-    void setBackgroundColour() {
-        card.setBackgroundColour("Black");
-        assertEquals("Black", card.getBackgroundColour());
     }
 
     @Test
@@ -247,7 +232,6 @@ class CardTest {
         Card c1 = new Card(
                 "Some card",
                 "This is a card",
-                "White",
                 null,
                 null,
                 0
@@ -260,7 +244,6 @@ class CardTest {
         Card c1 = new Card(
                 "Some other card",
                 "This is a card",
-                "White",
                 null,
                 null,
                 0
@@ -273,7 +256,6 @@ class CardTest {
         Card c1 = new Card(
                 "Some card",
                 "This is a card",
-                "White",
                 null,
                 null,
                 0
@@ -285,6 +267,6 @@ class CardTest {
     @Test
     void testToString() {
         assertEquals("Card(title=Some card, description=This is a card, " +
-                     "backgroundColour=White, subTasks=null, id=0, priority=0, tags=null)", card.toString());
+                     "subTasks=null, id=0, priority=0, tags=null)", card.toString());
     }
 }

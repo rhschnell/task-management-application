@@ -18,6 +18,9 @@ public class CardList {
 
     private String listTitle;
 
+    private String backgroundColor = "FFFFFF";
+    private String fontColor = "000000";
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
 

@@ -27,7 +27,6 @@ class CardListControllerTest {
         Card card = new Card(
                 "My Card",
                 "Text",
-                "White",
                 null,
                 null
         );
