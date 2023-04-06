@@ -2,11 +2,11 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.BoardUtils;
 import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.edit.EditTagCtrl;
 import com.google.inject.Inject;
-import commons.Board;
 import commons.Tag;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -38,14 +38,16 @@ public class CustomEditTagCellCtrl {
     private Circle tagColor;
 
     private Tag tag;
+    private BoardUtils boardUtils;
 
     /**
      * Constructor for the CustomEditTagCellCtrl
      */
     @Inject
-    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl){
+    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, BoardUtils boardUtils){
         this.server = server;
         this.tagOverviewCtrl = tagOverviewCtrl;
+        this.boardUtils=boardUtils;
     }
 
     /**
@@ -66,12 +68,11 @@ public class CustomEditTagCellCtrl {
      * Method to delete a tag from the board
      */
     public void deleteTag(){
-        server.deleteTag(tag.getId());
+       // server.deleteTag(tag.getId());
+        //tagOverviewCtrl.displayTagList();
 
-        Board shownBoard = tagOverviewCtrl.getBoard();
-        shownBoard.removeTag(tag);
+        boardUtils.removeBoardTag(tagOverviewCtrl.getBoardKey(),tag);
 
-        tagOverviewCtrl.updateDisplayedTags();
     }
 
     /**

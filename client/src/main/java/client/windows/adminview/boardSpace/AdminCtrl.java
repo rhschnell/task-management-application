@@ -261,7 +261,7 @@ public class AdminCtrl implements Initializable {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
 
-        loader.getKey().setBoard(shownBoard);
+        loader.getKey().setBoardKey(shownBoard.getKey());
 
         loader.getKey().displayTagList();
 

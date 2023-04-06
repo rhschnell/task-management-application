@@ -124,6 +124,10 @@ public class TagListCtrl {
         }
     }
 
+    /**
+     * Refreshes the lists while removing the tag
+     * @param tag the tag to remove
+     */
     public void refreshRemove(Tag tag) {
         appliedTags.remove(tag);
         availableTags.add(tag);
@@ -131,6 +135,10 @@ public class TagListCtrl {
         displayAvailableTags();
     }
 
+    /**
+     * Refreshes the lists while adding the list
+     * @param tag the list to add
+     */
     public void refreshAdd(Tag tag) {
         availableTags.remove(tag);
         appliedTags.add(tag);
@@ -138,10 +146,18 @@ public class TagListCtrl {
         displayAvailableTags();
     }
 
+    /**
+     * Sets the addCardCtrl
+     * @param addCardCtrl
+     */
     public void setAddCardCtrl(AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
     }
 
+    /**
+     * Sets the editCardCtrl
+     * @param editCardCtrl
+     */
     public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
         this.editCardCtrl = editCardCtrl;
     }

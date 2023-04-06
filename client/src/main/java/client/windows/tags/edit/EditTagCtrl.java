@@ -78,11 +78,15 @@ public class EditTagCtrl {
         fontColor.setId(color.toString());
     }
     /**
-     * Method to set the colorpicker in the edit tag popup
+     * Method to set the color picker in the edit tag popup
      */
     public void setColorPicker(){
         tagColor.setValue(Color.web(tag.getTagColor()));
     }
+
+    /**
+     * Sets the Font Color Picker in the edit tag popup
+     */
     public void setFontColorPicker(){
         fontColor.setValue(Color.web(tag.getFontColor()));
     }
@@ -99,11 +103,15 @@ public class EditTagCtrl {
         tag.setTagColor(newTagColor.toString());
         tag.setFontColor(newFontColor.toString());
         service.insertTag(tag);
-        customEditTagCellCtrl.getTagOverviewCtrl().updateDisplayedTags();
+        customEditTagCellCtrl.getTagOverviewCtrl().displayTagList();
 
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 
+    /**
+     * When pressing enter the edit is saved
+     * @param event
+     */
     @FXML
     public void saveOnEnter(KeyEvent event)
     {

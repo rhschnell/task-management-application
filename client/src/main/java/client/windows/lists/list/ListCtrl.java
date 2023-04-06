@@ -69,7 +69,10 @@ public class ListCtrl {
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
 
-
+    /**
+     * Sets the workspace control
+     * @param workspaceCtrl the workspace to set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         separator = new Separator();
         this.workspaceCtrl = workspaceCtrl;
@@ -84,6 +87,10 @@ public class ListCtrl {
         });
     }
 
+    /**
+     * Sets the keyEvent listeners
+     * @param keyEvent
+     */
     public void setKeyEventListeners(KeyEvent keyEvent) {
         handleArrowKeys(keyEvent);
 
@@ -151,6 +158,10 @@ public class ListCtrl {
         focusedCardIndex = -1;
     }
 
+    /**
+     * Sets the cardList
+     * @param cardList to set
+     */
     public void setCardList(CardList cardList) {
         service.setCardList(cardList);
     }
@@ -488,14 +499,18 @@ public class ListCtrl {
      */
     public void updateListColors() {
         String backgroundColor = getCardList().getBackgroundColor();
-        String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #" 
-            + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
-            "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+        String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
+                       + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+                       "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
         cardVBox.setStyle("-fx-background-color: #" + backgroundColor);
         completeList.setStyle(style);
         listTitle.setTextFill(Color.web(getCardList().getFontColor()));
     }
 
+    /**
+     * Sets the helperMethod
+     * @param hm
+     */
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;
         this.cardFormat = this.hm.getCardFormat();

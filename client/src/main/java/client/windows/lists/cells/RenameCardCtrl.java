@@ -24,7 +24,7 @@ public class RenameCardCtrl implements Initializable {
     /**
      * Injectable constructor for the RenameCardCtrl
      * MUST call setCard in order to work properly
-     * @see #setCard(Card)
+     * @see #setData(Card) (Card)
      * @param service Injected parameter of corresponding service
      */
     @Inject

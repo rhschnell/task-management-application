@@ -12,19 +12,36 @@ import java.util.Map;
 public class WorkspaceService {
     private final BoardUtils server;
 
+    /**
+     * Constructor for the WorkspaceService
+     * @param server the BoardUtils server
+     */
     @Inject
     public WorkspaceService(BoardUtils server) {
         this.server = server;
     }
 
+    /**
+     * Inserts the board to the server, or updates it
+     * @param board the board to be inserted or update
+     */
     public void insertBoard(Board board) {
         server.insertBoard(board);
     }
 
+    /**
+     * Gets the board with the specified key from the server
+     * @param key the key for the board to retrieve
+     * @return the board that has the specified key
+     */
     public Board getBoard(String key) {
         return server.getBoard(key);
     }
 
+    /**
+     *Deletes the board from the server
+     * @param board the board to be deleted
+     */
     public void deleteBoard(Board board) {
         server.deleteBoard(board.getKey());
     }
