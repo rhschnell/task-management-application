@@ -42,6 +42,9 @@ public class CustomEditTagCellCtrl {
 
     /**
      * Constructor for the CustomEditTagCellCtrl
+     * @param server The server that handles tags
+     * @param tagOverviewCtrl The controller that this cell links back to
+     * @param boardUtils The instance of the utility class that handles boards
      */
     @Inject
     public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, BoardUtils boardUtils){

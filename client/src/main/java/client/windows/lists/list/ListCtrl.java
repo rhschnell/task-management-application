@@ -89,7 +89,7 @@ public class ListCtrl {
 
     /**
      * Sets the keyEvent listeners
-     * @param keyEvent
+     * @param keyEvent The key event that needs to be handled
      */
     public void setKeyEventListeners(KeyEvent keyEvent) {
         handleArrowKeys(keyEvent);
@@ -282,9 +282,9 @@ public class ListCtrl {
 
     /**
      * Sets the drag entered listener so that a separator is displayed in order to
-     * display the index where the card will drop
+     * Display the index where the card will drop
      *
-     * @param destination
+     * @param destination The destination where the dragged card will land
      */
     private void setDragEntered(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragEntered(event -> {
@@ -327,16 +327,16 @@ public class ListCtrl {
     /**
      * Sets the list id in order to know the index of the list displayed in the workspace container
      *
-     * @param index
+     * @param id The new ID for this list
      */
-    public void setListId(int index) {
-        listId = index;
+    public void setListId(int id) {
+        listId = id;
     }
 
     /**
      * Sets the key of the board the list is in
      *
-     * @param key
+     * @param key The new corresponding board key
      */
     public void setBoardKey(String key) {
         service.setBoardKey(key);
@@ -509,7 +509,7 @@ public class ListCtrl {
 
     /**
      * Sets the helperMethod
-     * @param hm
+     * @param hm The new instance of helper methods
      */
     public void setHelperMethod(HelperMethods hm) {
         this.hm = hm;

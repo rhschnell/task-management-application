@@ -1,7 +1,6 @@
 package server.features.tags;
 
 import commons.Tag;
-import commons.Tag;
 import org.springframework.stereotype.Service;
 import server.features.RepositoryService;
 

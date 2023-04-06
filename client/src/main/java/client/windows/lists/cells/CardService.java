@@ -14,8 +14,8 @@ public class CardService {
     /**
      * Inject the servers
      *
-     * @param cardUtils
-     * @param cardListUtils
+     * @param cardUtils Utility class that provides functionality for cards
+     * @param cardListUtils Utility class that provides functionality for card lists
      */
     @Inject
     public CardService(CardUtils cardUtils, CardListUtils cardListUtils) {
@@ -66,7 +66,7 @@ public class CardService {
     /**
      * Gets the boardKey
      *
-     * @return
+     * @return The board key
      */
     public String getBoardKey() {
         return boardKey;
@@ -75,7 +75,7 @@ public class CardService {
     /**
      * Sets the boardKey
      *
-     * @param boardKey
+     * @param boardKey The new board key
      */
 
     public void setBoardKey(String boardKey) {

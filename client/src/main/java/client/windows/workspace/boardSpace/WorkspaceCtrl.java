@@ -521,11 +521,11 @@ public class WorkspaceCtrl implements Initializable {
      * @return If the condition is valid
      */
     public boolean focusedIndicesAreValid() {
-        if (focusedCardIndex > 0 && focusedListIndex > 0 && focusedListIndex <= shownBoard.getCardLists().size()
-            && focusedCardIndex <= shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() &&
-            shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() > 0)
-            return true;
-        return false;
+        return focusedCardIndex > 0
+               && focusedListIndex > 0
+               && focusedListIndex <= shownBoard.getCardLists().size()
+               && focusedCardIndex <= shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size()
+               && shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() > 0;
     }
 
     /**
@@ -819,7 +819,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Delay method
-     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * Source: <a href="https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code">...</a>
      *
      * @param millis       amount of milliseconds to delay
      * @param continuation empty

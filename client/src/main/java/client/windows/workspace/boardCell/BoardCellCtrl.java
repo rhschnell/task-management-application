@@ -25,27 +25,38 @@ public class BoardCellCtrl implements Initializable {
     private ImageView leaveIcon;
 
     /**
-     * Creates a new instance of ListCellCtrl
+     * Creates a new instance of BoardCellCtrl
      */
     @Inject
     public BoardCellCtrl() {
 
     }
 
+    /**
+     * Handles the user leaving the board by clicking the dedicated icon
+     */
     public void leaveBoard() {
         workspaceCtrl.leaveBoard(board);
     }
 
+    /**
+     * Handles the user pressing the title of the board to show it
+     */
     public void showMyBoard() {
         workspaceCtrl.showBoard(board.getKey());
     }
 
+    /**
+     * Sets the workspace controller that this controller links back to
+     * @param workspaceCtrl The workspace controller to set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
      * Setter for the board
+     * @param board The board to set
      */
     public void setBoard(Board board) {
         this.board = board;

@@ -31,9 +31,10 @@ public class Board {
 
     /**
      * Constructor for board class
-     * @param key key
-     * @param title title
-     * @param cardLists null
+     * @param key This board's key
+     * @param title This board's title
+     * @param cardLists This board's list of cards
+     * @param tagList This board's list of tags
      */
     public Board(String key, String title, List<CardList> cardLists, List<Tag> tagList) {
         this.key = key;
@@ -88,10 +89,18 @@ public class Board {
         return this.cardLists.size();
     }
 
+    /**
+     * Adds a tag to this board
+     * @param tag The tag to add to the board
+     */
     public void addTag(Tag tag) {
         tagList.add(tag);
     }
 
+    /**
+     * Removes a tag from this board
+     * @param tag The tag to remove
+     */
     public void removeTag(Tag tag) {
         tagList.remove(tag);
     }

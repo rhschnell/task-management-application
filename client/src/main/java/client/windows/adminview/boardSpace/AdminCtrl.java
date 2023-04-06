@@ -133,6 +133,9 @@ public class AdminCtrl implements Initializable {
         tl.play();
     }
 
+    /**
+     * Handles the admin press on the ass button by creating a new board on the server
+     */
     public void add() {
         showBoard(keyField.getText());
 
@@ -165,6 +168,10 @@ public class AdminCtrl implements Initializable {
         boardControls.setVisible(false);
     }
 
+    /**
+     * Refreshes the workspace
+     * @param forced If true forces the refresh
+     */
     public void refreshWorkspace(boolean forced) {
         // Refresh the board
         try {
@@ -298,7 +305,7 @@ public class AdminCtrl implements Initializable {
     /**
      * Method to copy the key of currently shown board to the
      * clipboard. This method is called by the copy key button.
-     *
+     * <p>
      * After copying the key to the clipboard a small notification is displayed.
      */
     public void copyKey() throws InterruptedException {
@@ -318,7 +325,7 @@ public class AdminCtrl implements Initializable {
 
     /**
      * Delay method
-     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * Source: <a href="https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code">...</a>
      * @param millis amount of milliseconds to delay
      * @param continuation empty
      */

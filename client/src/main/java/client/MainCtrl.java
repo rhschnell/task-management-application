@@ -28,21 +28,24 @@ public class MainCtrl {
     private WorkspaceCtrl workspaceCtrl;
 
 
-    private HelperMethods hm;
+    private HelperMethods helperMethods;
 
     private Map<String, List<String>> serverToKeyListMap;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
      *
-     * @param primary       represents the primary stage
-     * @param adminLogin    represents the pair of login scene, and its controller.
+     * @param primary       Represents the primary stage
+     * @param startUp       Represents the pair of startup scene and its controller
+     * @param userLogin     Represents the pair of login scene and its controller for the user
+     * @param adminLogin    Represents the pair of login scene and its controller for the admin
+     * @param helperMethods Instance of HelperMethods, providing easy access utilities
      */
     public void initialize(Stage primary,
                            Pair<StartUpCtrl, Parent> startUp,
                            Pair<UserLoginCtrl, Parent> userLogin,
                            Pair<AdminLoginCtrl, Parent> adminLogin,
-                           HelperMethods hm) {
+                           HelperMethods helperMethods) {
         this.primaryStage = primary;
 
         this.startUpCtrl = startUp.getKey();
@@ -61,12 +64,12 @@ public class MainCtrl {
         primary.setMinWidth(1024);
         //Temporarily disabled resizing because of full screen problems
         primary.setResizable(false);
-        this.hm = hm;
-        hm.setScenes(this.startUp, this.adminLogin, null, this.userLogin, null);
-        hm.setPrimaryStage(primaryStage);
-        hm.setScene(Scenes.STARTUP);
-        hm.setCardFormat(new DataFormat("card"));
-        hm.setMemMap(serverToKeyListMap);
+        this.helperMethods = helperMethods;
+        helperMethods.setScenes(this.startUp, this.adminLogin, null, this.userLogin, null);
+        helperMethods.setPrimaryStage(primaryStage);
+        helperMethods.setScene(Scenes.STARTUP);
+        helperMethods.setCardFormat(new DataFormat("card"));
+        helperMethods.setMemMap(serverToKeyListMap);
         primary.show();
     }
 }

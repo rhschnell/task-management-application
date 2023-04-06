@@ -23,8 +23,10 @@ public class AdminLoginService {
     }
 
     /**
-     * Tries to ping the current server
-     * @return true if it pings, false otherwise
+     * Sets the server's IP address and tries to ping it
+     *
+     * @param serverAddress The IP address to try and ping
+     * @return true if the ping is successful, false otherwise
      */
     public boolean serverPing(String serverAddress) {
         server.setServer(serverAddress);

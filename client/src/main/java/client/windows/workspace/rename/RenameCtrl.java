@@ -52,7 +52,7 @@ public class RenameCtrl {
     /**
      * Listener for the ENTER KeyEvent so when pressed the change of name can be
      * saved
-     * @param event
+     * @param event The event to handle
      */
     public void saveOnEnter(KeyEvent event)
     {

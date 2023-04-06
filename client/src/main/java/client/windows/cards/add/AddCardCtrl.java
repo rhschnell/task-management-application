@@ -89,6 +89,10 @@ public class AddCardCtrl extends SubtaskContainer {
         this.helperMethods = helperMethods;
     }
 
+    /**
+     * Sets the card list for this card
+     * @param cardList The card list to which this card belongs
+     */
     public void setCardList(CardList cardList) {
         service.setCardList(cardList);
     }
@@ -193,6 +197,9 @@ public class AddCardCtrl extends SubtaskContainer {
         }
     }
 
+    /**
+     * Displays all the tasks of the card to the screen
+     */
     @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
@@ -207,6 +214,10 @@ public class AddCardCtrl extends SubtaskContainer {
         }
     }
 
+    /**
+     * Deletes the subtask from the card and refreshes the display
+     * @param task The subtask to remove
+     */
     @Override
     public void deleteSubtask(Task task) {
         taskList.remove(task);
