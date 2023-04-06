@@ -1,5 +1,6 @@
 package client.windows.workspace.boardCell;
 
+import client.utils.HelperMethods;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
@@ -17,6 +18,8 @@ public class BoardCellCtrl implements Initializable {
     private WorkspaceCtrl workspaceCtrl;
     private Board board;
 
+    private final HelperMethods helperMethods;
+
     @FXML
     private ImageView protectionIcon;
     @FXML
@@ -28,8 +31,8 @@ public class BoardCellCtrl implements Initializable {
      * Creates a new instance of ListCellCtrl
      */
     @Inject
-    public BoardCellCtrl() {
-
+    public BoardCellCtrl(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
     }
 
     public void leaveBoard() {
@@ -50,6 +53,7 @@ public class BoardCellCtrl implements Initializable {
     public void setBoard(Board board) {
         this.board = board;
         this.boardTitle.setText(board.getTitle());
+        updateProtectionIcon();
     }
 
     /**
@@ -72,19 +76,55 @@ public class BoardCellCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         leaveIcon.setCursor(Cursor.HAND);
         protectionIcon.setCursor(Cursor.HAND);
-
-        // TODO: if(board.isProtected())
-        protectionIcon.setOnMouseEntered(l -> {
-            Image lockSymbol = new Image("/client/icons/lock.png");
-            protectionIcon.setImage(lockSymbol);
-        });
-
-        protectionIcon.setOnMouseExited(l -> {
-            Image lockSymbol = new Image("/client/icons/unlock.png");
-            protectionIcon.setImage(lockSymbol);
-        });
-        // TODO: else
     }
+
+    public void updateProtectionIcon() {
+        if (board.verifyPassword("")) {
+            protectionIcon.setOnMouseEntered(l -> {
+                Image lockSymbol = new Image("/client/icons/lock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+
+            protectionIcon.setOnMouseExited(l -> {
+                Image lockSymbol = new Image("/client/icons/unlock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+            protectionIcon.setImage(new Image("/client/icons/unlock.png"));
+        } else {
+            protectionIcon.setOnMouseEntered(l -> {
+                Image lockSymbol = new Image("/client/icons/unlock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+
+            protectionIcon.setOnMouseExited(l -> {
+                Image lockSymbol = new Image("/client/icons/lock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+            protectionIcon.setImage(new Image("/client/icons/lock.png"));
+        }
+    }
+
+    /**
+     * Method to change locked state of board
+     */
+    public void swapLock() {
+        if (board.isProtected()) {
+            unlock();
+        } else {
+            lock();
+        }
+    }
+
+    public void unlock() {
+        workspaceCtrl.lockUnlock(board, "unlock");
+        updateProtectionIcon();
+    }
+
+    public void lock() {
+        workspaceCtrl.lockUnlock(board, "lock");
+        updateProtectionIcon();
+    }
+
 //
 //    public void setLabelColour()
 //    {

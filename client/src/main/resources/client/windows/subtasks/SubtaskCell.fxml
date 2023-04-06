@@ -31,7 +31,6 @@
                </font>
               </TextField>
               <ImageView fx:id="dragAndDropIcon" fitHeight="21.0" fitWidth="21.0"
-                         onMouseClicked="#delete"
                          pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                   <image>
                       <Image url="/client/icons/drag-drop.png" />
