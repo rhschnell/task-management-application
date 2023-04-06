@@ -526,6 +526,9 @@ public class ListCtrl {
         createCardButton.setOnMouseClicked(e -> {
             accessDeniedPopUp();
         });
+        Node quickAddCard = cardVBox.getChildren().get(cardVBox.getChildren().size() - 1);
+        quickAddCard.setVisible(false);
+        quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
     public void unlock() {
@@ -548,6 +551,10 @@ public class ListCtrl {
         createCardButton.setOnMouseClicked(e -> {
             addCardScreen();
         });
+
+        Node quickAddCard = cardVBox.getChildren().get(cardVBox.getChildren().size() - 1);
+        quickAddCard.setVisible(true);
+        quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
     public void accessDeniedPopUp() {
