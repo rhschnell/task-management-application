@@ -31,12 +31,20 @@ public class AddCardPresetCtrl {
     @FXML
     private Button cancelButton;
 
+    /**
+     * Constructor for the AddCardPresetCtrl
+     * @param service The corresponding service
+     * @param customizeCtrl Instance of CustomizeCtrl
+     */
     @Inject
     public AddCardPresetCtrl(AddCardPresetService service, CustomizeCtrl customizeCtrl){
         this.service = service;
         this.customizeCtrl = customizeCtrl;
     }
 
+    /**
+     * This method saves the preset that the user made and closes the window
+     */
     public void save() {
         ((Stage)addPresetButton.getScene().getWindow()).close();
         CardColorPreset preset = new CardColorPreset(
@@ -53,14 +61,25 @@ public class AddCardPresetCtrl {
         customizeCtrl.updateDisplayedPresets();
     }
 
+    /**
+     * This method cancels adding the created preset to the board
+     */
     public void cancel() {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
+    /**
+     * Sets the customizeCtrl
+     * @param customizeCtrl The customizeCtrl to be set
+     */
     public void setCustomizeCtrl(CustomizeCtrl customizeCtrl){
         this.customizeCtrl = customizeCtrl;
     }
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The workspaceCtrl to be set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
         this.workspaceCtrl = workspaceCtrl;
     }

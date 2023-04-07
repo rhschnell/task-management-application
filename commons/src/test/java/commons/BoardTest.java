@@ -136,4 +136,21 @@ class BoardTest {
         board.removeTag(tag);
         assertEquals(0, board.getTagList().size());
     }
+
+    @Test
+    void addPreset(){
+        CardColorPreset c = new CardColorPreset("New Preset", "0x00000000", "0xFFFFFF00");
+        board.addPreset(c);
+        assertEquals(1, board.getPresetList().size());
+    }
+
+    @Test
+    void removePreset(){
+        CardColorPreset c = new CardColorPreset("New Preset", "0x00000000", "0xFFFFFF00");
+        board.addPreset(c);
+        board.removePreset(c);
+        assertEquals(0, board.getPresetList().size());
+    }
+
+    
 }

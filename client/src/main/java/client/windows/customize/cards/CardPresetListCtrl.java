@@ -39,6 +39,11 @@ public class CardPresetListCtrl {
     private String type;
     private Board shownBoard;
 
+    /**
+     * Constructor for the CardPresetListCtrl
+     * @param addCardCtrl Instance of addCardCtrl
+     * @param editCardCtrl Instance of editCardCtrl
+     */
     @Inject
     public CardPresetListCtrl(AddCardCtrl addCardCtrl, EditCardCtrl editCardCtrl){
         this.addCardCtrl = addCardCtrl;
@@ -48,12 +53,19 @@ public class CardPresetListCtrl {
         availablePresets = new ArrayList<>();
     }
 
+    /**
+     * This method sets the available presets
+     * @param presetList The presets that are currently available on the board
+     */
     public void setAvailablePresets(List<CardColorPreset> presetList){
         this.availablePresets = new ArrayList<>();
         this.availablePresets.addAll(presetList);
         displayAvailablePresets();
     }
 
+    /**
+     * This method displays the currently available presets
+     */
     public void displayAvailablePresets(){
         availablePresetBox.getChildren().clear();
         for(int i = 0; i < availablePresets.size(); i++){
@@ -68,11 +80,18 @@ public class CardPresetListCtrl {
         }
     }
 
+    /**
+     * This method sets the applied preset
+     * @param preset The preset which is the applied preset
+     */
     public void setAppliedPreset(CardColorPreset preset){
         appliedPreset = preset;
         displayAppliedPreset();
     }
 
+    /**
+     * This method displays the applied preset
+     */
     public void displayAppliedPreset(){
         appliedPresetBox.getChildren().clear();
         if(appliedPreset == null){
@@ -89,6 +108,10 @@ public class CardPresetListCtrl {
         appliedPresetBox.getChildren().add(loader.getValue());
     }
 
+    /**
+     * This method adds the applied preset to the available presets and sets the applied preset to null
+     * @param preset The currently applied preset which needs to be moved
+     */
     public void refreshRemove(CardColorPreset preset){
         appliedPreset = null;
         availablePresets.add(preset);
@@ -96,6 +119,10 @@ public class CardPresetListCtrl {
         displayAvailablePresets();
     }
 
+    /**
+     * This method sets the applied preset to be the given preset
+     * @param preset The new applied preset
+     */
     public void refreshAdd(CardColorPreset preset){
         availablePresets.remove(preset);
         if(appliedPreset != null){
@@ -106,6 +133,9 @@ public class CardPresetListCtrl {
         displayAvailablePresets();
     }
 
+    /**
+     * This method closes the popup window and sets the new applied preset
+     */
     public void save() {
         if(type.equals("add"))
             addCardCtrl.setAppliedPreset(appliedPreset);
@@ -115,22 +145,41 @@ public class CardPresetListCtrl {
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 
+    /**
+     * This method cancels viewing the presets and closes the window
+     */
     public void cancel() {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
+    /**
+     * Sets the addCardCtrl
+     * @param addCardCtrl The addCardCtrl to be set
+     */
     public void setAddCartCtrl(AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
     }
 
+    /**
+     * Sets the editCardCtrl
+     * @param editCardCtrl The editCardCtrl to be set
+     */
     public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
         this.editCardCtrl = editCardCtrl;
     }
 
+    /**
+     * Sets the type
+     * @param type The type to be set
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Gets the type
+     * @return The type
+     */
     public String getType(){
         return type;
     }

@@ -29,12 +29,22 @@ public class CustomCardPresetViewCellCtrl {
     private String type;
     private CardColorPreset preset;
 
+    /**
+     * Constructor for the CustomCardPresetViewCellCtrl
+     * @param addCardCtrl Instance of addCardCtrl
+     * @param cardPresetListCtrl Instance of cardPresetListCtrl
+     */
     @Inject
     public CustomCardPresetViewCellCtrl(AddCardCtrl addCardCtrl, CardPresetListCtrl cardPresetListCtrl){
         this.cardPresetListCtrl = cardPresetListCtrl;
         this.addCardCtrl = addCardCtrl;
     }
 
+    /**
+     * This method sets the color preset
+     * @param preset The preset to be set
+     * @param type The type of the preset
+     */
     public void setPresetObject(CardColorPreset preset, String type){;
         this.preset = preset;
         this.type = type;
@@ -52,6 +62,9 @@ public class CustomCardPresetViewCellCtrl {
         }
     }
 
+    /**
+     * This method moves the preset from applied to available or vice versa
+     */
     public void action() {
         if(type.equals("removeFromList")){
             cardPresetListCtrl.refreshRemove(preset);
@@ -61,10 +74,18 @@ public class CustomCardPresetViewCellCtrl {
         }
     }
 
+    /**
+     * Sets the cardPresetListCtrl
+     * @param cardPresetListCtrl The cardPresetListCtrl to be set
+     */
     public void setCardPresetListCtrl(CardPresetListCtrl cardPresetListCtrl) {
         this.cardPresetListCtrl = cardPresetListCtrl;
     }
 
+    /**
+     * Sets the addCardCtrl
+     * @param addCardCtrl The addCardCtrl to be set
+     */
     public void setAddCardCtrl(AddCardCtrl addCardCtrl){
         this.addCardCtrl = addCardCtrl;
     }

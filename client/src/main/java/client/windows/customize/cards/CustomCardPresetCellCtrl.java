@@ -49,6 +49,11 @@ public class CustomCardPresetCellCtrl {
     private CardColorPreset preset;
     private Board shownBoard;
 
+    /**
+     * Constructor for the CustomCardPresetCellCtrl
+     * @param server The CardColorPresetUtils server
+     * @param cardUtils The CardUtils server
+     */
     @Inject
     public CustomCardPresetCellCtrl(CardColorPresetUtils server, CardUtils cardUtils){
         this.server = server;
@@ -108,6 +113,9 @@ public class CustomCardPresetCellCtrl {
         });
     }
 
+    /**
+     * This method deletes the preset from the database
+     */
     public void delete() {
         server.deletePreset(preset.getId());
 
@@ -117,6 +125,9 @@ public class CustomCardPresetCellCtrl {
         customizeCtrl.updateDisplayedPresets();
     }
 
+    /**
+     * This method allows the user to edit the custom-made preset
+     */
     public void edit() {
         var loader =  new MyFXML(createInjector(new MainModules()))
                 .load(EditCardPresetCtrl.class,
@@ -135,12 +146,19 @@ public class CustomCardPresetCellCtrl {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Sets the customizeCtrl
+     * @param customizeCtrl the CustomizeCtrl to be set
+     */
     public void setCustomizeCtrl(CustomizeCtrl customizeCtrl) {
         this.customizeCtrl = customizeCtrl;
     }
 
+    /**
+     * Gets the customizeCtrl
+     * @return The customizeCtrl
+     */
     public CustomizeCtrl getCustomizeCtrl() {
         return this.customizeCtrl;
     }
-
 }

@@ -123,8 +123,4 @@ public class EditCardPresetCtrl {
     public void setCustomCardPresetCellCtrl(CustomCardPresetCellCtrl customCardPresetCellCtrl){
         this.customCardPresetCellCtrl = customCardPresetCellCtrl;
     }
-
-
-
-
 }

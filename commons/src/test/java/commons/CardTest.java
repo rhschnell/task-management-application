@@ -240,6 +240,16 @@ class CardTest {
     }
 
     @Test
+    void deleteTag(){
+        Tag tag = new Tag("New Tag", "0x00000000");
+        Tag anotherTag = new Tag("Second Tag", "0x000000FF");
+        card.addTag(tag);
+        card.addTag(anotherTag);
+        card.deleteTag(tag);
+        assertEquals(1, card.getTags().size());
+    }
+
+    @Test
     void testEquals() {
         Card c1 = new Card(
                 "Some card",
