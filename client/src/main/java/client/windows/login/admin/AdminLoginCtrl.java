@@ -19,7 +19,6 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
-import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import jakarta.ws.rs.ForbiddenException;
@@ -33,7 +32,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 

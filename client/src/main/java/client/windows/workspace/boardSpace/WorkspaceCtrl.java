@@ -114,8 +114,8 @@ public class WorkspaceCtrl implements Initializable {
     private String initialListFontColor;
 
     private boolean admin;
-    @FXML Label screenTitle;
-    @FXML Button leaveButton;
+    @FXML private Label screenTitle;
+    @FXML private Button leaveButton;
 
 
     /**
@@ -414,24 +414,24 @@ public class WorkspaceCtrl implements Initializable {
         }
 
         // If shown board is locked client side, and we remember the password
-        if (shownBoard.verifyPassword("") || (                      // If board doesn't have password OR
-                pwdMap.containsKey(shownBoard.getKey())                     // (We have a saved password for it AND
-                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey())) // the saved password is correct
-                        && shownBoard.isProtected())                        // AND the board is locked on screen)
-                        || isAdmin()) {                                     // OR admin {
-            unlockButtons();                                                // unlock the board
+        if (shownBoard.verifyPassword("") || (                   // If board doesn't have password OR
+                pwdMap.containsKey(shownBoard.getKey())                  // (We have a saved password for it AND
+                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))// saved password is correct
+                        && shownBoard.isProtected())                     // AND the board is locked on screen)
+                        || isAdmin()) {                                  // OR admin {
+            unlockButtons();                                             // unlock the board
             unlockLists();
             shownBoard.setProtected(false);
 
-        } else if (!pwdMap.containsKey(shownBoard.getKey())                 // else if we do not know a password for it
-                || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {   // OR we have an incorrect password
-            lockLists();                                                            // saved for it {
-            lockButtons();                                                          // lock the board on screen
+        } else if (!pwdMap.containsKey(shownBoard.getKey())            // else if we do not know a password for it
+                || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {// OR stored incorrect password
+            lockLists();                                                          // saved for it {
+            lockButtons();                                                        // lock the board on screen
             shownBoard.setProtected(true);
         }
-        if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))     // if saved password for board is incorrect
-                && !"".equals(pwdMap.get(shownBoard.getKey()))) {           // and the board does have a password
-            pwdMap.remove(shownBoard.getKey());                             // remove the saved password
+        if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))    // if saved password board is incorrect
+                && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
+            pwdMap.remove(shownBoard.getKey());                            // remove the saved password
         }
         if (!shownBoard.equals(serverBoard)) {              // if the shown board is not the same as server board
             showBoard(key);                                 // reshow the boarda
@@ -450,15 +450,13 @@ public class WorkspaceCtrl implements Initializable {
         }
 
         boolean removed = false;
-        if (joinedKeys == null) { // If there are no board to show, stop
-            return;
-        }
         // temporary list to prevent concurrent modification exception
         List<String> tempList = new ArrayList<>(joinedKeys);
         for (String k : tempList) { // for each saved key
             try {
                 Board b = service.getBoard(k); // try to get the board from the server
-                // if the password we saved is no longer correct AND the password is not empty AND we stored a password
+                // if the password we saved is no longer correct
+                // AND the password is not empty AND we stored a password
                 if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))
                         && !isAdmin()) {// AND not admin
                     forced = true; // then force a total refresh of the displayed list
@@ -467,7 +465,8 @@ public class WorkspaceCtrl implements Initializable {
             } catch (NotFoundException e) {
                 removed = true; // if we get here, this means that the board was removed
                 joinedKeys.remove(k); // remove the board from our joined keys, as it no longer exists
-                helperMethods.getMemMap().get(helperMethods.getServerIP()).remove(k); // remove from server->board memory
+                // remove from server->board memory
+                helperMethods.getMemMap().get(helperMethods.getServerIP()).remove(k);
                 if (key.equals(k)) { // if the board that was removed was the board we are currently displaying
                     clearWorkspace(); // stop displaying !
                 }

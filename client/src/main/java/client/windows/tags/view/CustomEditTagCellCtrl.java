@@ -49,7 +49,8 @@ public class CustomEditTagCellCtrl {
      * @param boardUtils The instance of the utility class that handles boards
      */
     @Inject
-    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, HelperMethods helperMethods, BoardUtils boardUtils){
+    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl,
+                                 HelperMethods helperMethods, BoardUtils boardUtils){
         this.server = server;
         this.tagOverviewCtrl = tagOverviewCtrl;
         this.helperMethods = helperMethods;
