@@ -209,13 +209,6 @@ public class WorkspaceCtrl implements Initializable {
         // Add this board to the list of joined boards (keys) and show it in the UI
         if (!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
-//            var boardCell = new MyFXML(createInjector(new MainModules()))
-////                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
-////            BoardCellCtrl controller = boardCell.getKey();
-////            controller.setBoard(shownBoard);
-////            controller.setWorkspaceCtrl(this);
-////            boardList.getChildren().add(boardCell.getValue());
-////            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
             nameBoard();
         }
         keyField.clear();
