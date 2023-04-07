@@ -188,7 +188,7 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="17.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="21.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="/client/icons/users.png" />
                      </image>
@@ -206,7 +206,7 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="/client/icons/lock-alt.png" />
                      </image>
@@ -229,14 +229,14 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="/client/icons/shift-left.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Label>
-            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
+            <Button fx:id="leaveButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>

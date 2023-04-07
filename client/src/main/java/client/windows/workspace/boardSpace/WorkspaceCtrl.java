@@ -115,6 +115,7 @@ public class WorkspaceCtrl implements Initializable {
 
     private boolean admin;
     @FXML Label screenTitle;
+    @FXML Button leaveButton;
 
 
     /**
@@ -443,6 +444,10 @@ public class WorkspaceCtrl implements Initializable {
      * @param forced Forces a refresh even though there have been no changes
      */
     public void refreshBoardList(String key, boolean forced) {
+        if (isAdmin()) { // if admin
+            // add all server boards to joined keys
+        }
+
         boolean removed = false;
         if (joinedKeys == null) { // If there are no board to show, stop
             return;
@@ -1170,6 +1175,7 @@ public class WorkspaceCtrl implements Initializable {
         this.admin = admin;
         if (admin) {
             screenTitle.setText("All Server Boards");
+            leaveButton.setVisible(false);
         }
     }
 
