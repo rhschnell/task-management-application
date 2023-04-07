@@ -211,12 +211,14 @@ public class WorkspaceCtrl implements Initializable {
             return;
         }
 
+        List<String> tempList = new ArrayList<>(joinedKeys);
+
         showBoard(keyField.getText());
 
         pwdMap.putIfAbsent(keyField.getText(), "");
 
         // Add this board to the list of joined boards (keys) and show it in the UI
-        if (!joinedKeys.contains(keyField.getText()) || isAdmin()) {
+        if (!tempList.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             nameBoard();
         }
