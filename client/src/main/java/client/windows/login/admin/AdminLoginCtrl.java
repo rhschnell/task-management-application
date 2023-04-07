@@ -20,6 +20,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.adminview.boardSpace.AdminCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import jakarta.ws.rs.ForbiddenException;
 import javafx.fxml.FXML;
@@ -94,9 +95,10 @@ public class AdminLoginCtrl implements Initializable {
             service.sendPassword(passwordField.getText());
 
             var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(AdminCtrl.class, "client", "windows", "adminview", "AdminView.fxml");
+                    .load(WorkspaceCtrl.class, "client", "windows", "workspace", "Workspace.fxml");
 
 
+            loader.getKey().setAdmin(true);
             helperMethods.setServerIP(serverAddress.getText());
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
             loader.getKey().setHelperMethods(helperMethods);

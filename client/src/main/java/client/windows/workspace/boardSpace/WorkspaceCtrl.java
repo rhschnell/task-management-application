@@ -113,6 +113,9 @@ public class WorkspaceCtrl implements Initializable {
     private String initialListColor;
     private String initialListFontColor;
 
+    private boolean admin;
+    @FXML Label screenTitle;
+
 
     /**
      * Constructor for WorkspaceCtrl
@@ -134,6 +137,7 @@ public class WorkspaceCtrl implements Initializable {
         oldMouseYPosition = -1;
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
+        this.admin = false;
     }
 
 
@@ -225,8 +229,7 @@ public class WorkspaceCtrl implements Initializable {
      * Makes sure the user can join a board by pressing ENTER after typing the key
      * @param event The event that gets handled and checked for the ENTER key
      */
-    public void connectOnEnter(KeyEvent event)
-    {
+    public void connectOnEnter(KeyEvent event) {
         if(event.getCode().equals(KeyCode.ENTER))
         {
             connect();
@@ -942,7 +945,6 @@ public class WorkspaceCtrl implements Initializable {
      * Leaves the current board
      * @see #leaveBoard(Board)
      */
-
     public void leaveBoard() {
         leaveBoard(shownBoard);
     }
@@ -1095,7 +1097,6 @@ public class WorkspaceCtrl implements Initializable {
      * Sets the list of the keys for the joined board for this workspace
      * @param joinedKeys The keys of the joined boards
      */
-
     public void setJoinedKeys(List<String> joinedKeys) {
         this.joinedKeys = joinedKeys;
     }
@@ -1147,5 +1148,24 @@ public class WorkspaceCtrl implements Initializable {
      */
     public String getInitialListFontColor() {
         return initialListFontColor;
+    }
+
+    /**
+     * Setter for admin mode in workspace
+     * @param admin true/false
+     */
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+        if (admin) {
+            screenTitle.setText("All Server Boards");
+        }
+    }
+
+    /**
+     * Getter for admin mode of workspace
+     * @return true if admin, else false
+     */
+    public boolean isAdmin() {
+        return this.admin;
     }
 }

@@ -71,7 +71,7 @@
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="13.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#addList" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../icons/white-plus.png" />
+                              <Image url="/client/icons/white-plus.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -93,7 +93,7 @@
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
-         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="231.0" text="Workspace" textAlignment="CENTER">
+         <Label fx:id="screenTitle" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="231.0" text="Workspace" textAlignment="CENTER">
             <font>
                <Font name="Arial Bold" size="18.0" />
             </font>
@@ -162,7 +162,7 @@
                <graphic>
                   <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#customizeBoard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/brush.png" />
+                        <Image url="/client/icons/brush.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -190,7 +190,7 @@
                <graphic>
                   <ImageView fitHeight="21.0" fitWidth="17.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/users.png" />
+                        <Image url="/client/icons/users.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -208,7 +208,7 @@
                <graphic>
                   <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/lock-alt.png" />
+                        <Image url="/client/icons/lock-alt.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -231,7 +231,7 @@
                <graphic>
                   <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/shift-left.png" />
+                        <Image url="/client/icons/shift-left.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -248,7 +248,7 @@
                <graphic>
                   <ImageView fitHeight="12.0" fitWidth="12.0" onMouseClicked="#deleteScreen" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/white-trash-can.png" />
+                        <Image url="/client/icons/white-trash-can.png" />
                      </image>
                   </ImageView>
                </graphic>
