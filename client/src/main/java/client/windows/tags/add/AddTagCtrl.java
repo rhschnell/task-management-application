@@ -31,6 +31,8 @@ public class AddTagCtrl {
 
     /**
      * Constructor for AddTagCtrl
+     * @param service The service for handling adding tags
+     * @param tagOverviewCtrl The controller of the corresponding TagOverview view
      */
     @Inject
     public AddTagCtrl(AddTagService service, TagOverviewCtrl tagOverviewCtrl) {
@@ -53,6 +55,10 @@ public class AddTagCtrl {
     }
 
 
+    /**
+     * Methods that handles a keyEvent to include saving on enter
+     * @param event The event that needs to be handled
+     */
     public void saveOnEnter(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             save();

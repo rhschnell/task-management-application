@@ -43,7 +43,7 @@ public class RenameCardCtrl implements Initializable {
     /**
      * Sets the card to rename using this rename component. It sets the title in the textfield
      * and selects all the text in the textfield
-     *
+     * <p>
      * MUST be intitalized!
      * @param card The card to rename
      */

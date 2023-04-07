@@ -19,7 +19,8 @@ public class LockPopUpCtrl {
     private String mode;
 
     /**
-     * Constructor
+     * Creates a new instance of a LockPopUpCtrl
+     * @param service The service that handles the locking of boards
      */
     @Inject
     public LockPopUpCtrl(LockPopUpService service) {

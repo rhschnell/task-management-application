@@ -42,9 +42,10 @@ public class Board {
 
     /**
      * Constructor for board class
-     * @param key key
-     * @param title title
-     * @param cardLists null
+     * @param key This board's key
+     * @param title This board's title
+     * @param cardLists This board's list of cards
+     * @param tagList This board's list of tags
      */
     public Board(String key, String title, List<CardList> cardLists,
                  List<Tag> tagList, List<CardColorPreset> presetList) {
@@ -105,10 +106,18 @@ public class Board {
         return this.cardLists.size();
     }
 
+    /**
+     * Adds a tag to this board
+     * @param tag The tag to add to the board
+     */
     public void addTag(Tag tag) {
         tagList.add(tag);
     }
 
+    /**
+     * Removes a tag from this board
+     * @param tag The tag to remove
+     */
     public void removeTag(Tag tag) {
         tagList.remove(tag);
     }
@@ -137,6 +146,12 @@ public class Board {
         this.password = password;
     }
 
+    /**
+     * Verifies the correctness of the given password against the known password
+     * @param password The password to verify
+     * @return Boolean indicating the correctness. True if correct or there is no password set,
+     * false if incorrect
+     */
     public boolean verifyPassword(String password) {
         return this.password.equals(password) || "".equals(this.password);
     }
@@ -149,6 +164,11 @@ public class Board {
         presetList.remove(preset);
     }
 
+    /**
+     * Checks for equality of objects against another object
+     * @param o The other object
+     * @return Whether this board should be considered equal to the other object
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

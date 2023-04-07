@@ -14,6 +14,11 @@ import javax.transaction.Transactional;
 public class PasswordController {
     private final PasswordService service;
 
+    /**
+     * Creates a new PasswordController instance
+     *
+     * @param service The corresponding service
+     */
     public PasswordController(PasswordService service) {
         this.service = service;
     }
@@ -21,12 +26,13 @@ public class PasswordController {
     /**
      * Checks the password input against the server password
      *
+     * @param password The password to check against the known password
      * @return ResponseEntity with code 200 if successful or occurring error code
      */
     @Transactional
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Void> checkPassword(@RequestBody String password) {
-        if(service.isPasswordCorrect(password)) {
+        if (service.isPasswordCorrect(password)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(403).build();

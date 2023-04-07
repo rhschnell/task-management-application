@@ -151,6 +151,13 @@ public class Card implements Serializable {
         }
     }
 
+    /**
+     * Removes the tag from the card
+     * @param tag
+     */
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+    }
 
     /**
      * Delete tag by index

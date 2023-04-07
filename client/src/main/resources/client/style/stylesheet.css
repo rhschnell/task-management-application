@@ -1,3 +1,8 @@
+/* Inspiration for the styling of the lists taken from
+  https://dlsc.com/2017/09/07/javafx-tip-28-pretty-list-view
+*/
+
+
 .root{
     -fx-font-family: "Arial";
     -fx-text-background-color: #1A1A1A;

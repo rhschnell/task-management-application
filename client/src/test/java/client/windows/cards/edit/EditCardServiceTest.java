@@ -4,7 +4,6 @@ import client.serverUtils.CardUtils;
 import client.serverUtils.TagUtils;
 import commons.Card;
 import commons.Tag;
-import org.hibernate.boot.model.source.internal.hbm.ManyToOnePropertySource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

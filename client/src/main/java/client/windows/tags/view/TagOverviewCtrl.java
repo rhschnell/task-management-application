@@ -36,6 +36,7 @@ public class TagOverviewCtrl {
 
     /**
      * Constructor for the TagOverviewCtrl
+     * @param tagUtils Instance of the utility class for tags
      */
     @Inject
     public TagOverviewCtrl(TagUtils tagUtils) {
