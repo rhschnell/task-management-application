@@ -112,18 +112,35 @@
             </VBox.margin>
          </ScrollPane>
          <Separator prefWidth="200.0" />
-         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Join/create a board" textAlignment="CENTER">
+         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Join a board" textAlignment="CENTER">
             <font>
                <Font name="Arial Bold" size="14.0" />
             </font>
          </Label>
          <HBox prefHeight="11.0" prefWidth="231.0" spacing="10.0">
-            <TextField fx:id="keyField" maxHeight="-Infinity" minHeight="-Infinity" onKeyPressed="#connectOnEnter" prefHeight="30.0" prefWidth="180.0" promptText="Board Key" style="-fx-background-radius: 10;">
+            <TextField fx:id="keyField" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" onKeyPressed="#connectOnEnter" prefHeight="30.0" prefWidth="180.0" promptText="Invite key" style="-fx-background-radius: 10;">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
             </TextField>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="30.0" prefWidth="41.0" styleClass="green-button" text="Add">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="30.0" prefWidth="55.0" styleClass="green-button" text="Join">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+         </HBox>
+         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Create a board" textAlignment="CENTER">
+            <font>
+               <Font name="Arial Bold" size="14.0" />
+            </font>
+         </Label>
+         <HBox prefHeight="11.0" prefWidth="231.0" spacing="10.0">
+            <TextField fx:id="titleField" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" onKeyPressed="#createOnEnter" prefHeight="30.0" prefWidth="180.0" promptText="Board title" style="-fx-background-radius: 10;">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </TextField>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#create" prefHeight="30.0" prefWidth="55.0" styleClass="green-button" text="Create">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>

@@ -26,8 +26,8 @@ public class WorkspaceService {
      * Inserts the board to the server, or updates it
      * @param board the board to be inserted or update
      */
-    public void insertBoard(Board board) {
-        server.insertBoard(board);
+    public Board insertBoard(Board board) {
+        return server.insertBoard(board);
     }
 
     /**

@@ -81,6 +81,8 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private TextField keyField;
     @FXML
+    private TextField titleField;
+    @FXML
     private Button copyButton;
 
     // Locking needs
@@ -202,9 +204,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Handles the action of connecting to a board.
-     * Connects to the board with the specified key. If it does not exist, creates a new board
-     * with this key.
+     * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
         if (keyField.getText().equals("")) {
@@ -220,19 +220,34 @@ public class WorkspaceCtrl implements Initializable {
         // Add this board to the list of joined boards (keys) and show it in the UI
         if (!tempList.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
-            nameBoard();
         }
         keyField.clear();
         refreshWorkspace(true);
     }
 
-    public void nameBoard() {
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+    /**
+     * Handles the action of creating a new board with the typed title
+     */
+    public void create() {
+        if (titleField.getText().equals("")) {
+            return;
+        }
 
-        Scene scene = new Scene(loader.getValue());
-        loader.getKey().setRemoteCtrl(this);
-        helperMethods.popUp(scene, "Name board: ");
+        shownBoard = new Board(titleField.getText(), null, null);
+        shownBoard = service.insertBoard(shownBoard);
+        String key = shownBoard.getKey();
+
+        List<String> tempList = new ArrayList<>(joinedKeys);
+
+        showBoard(key);
+
+        pwdMap.putIfAbsent(key, "");
+
+        // Add this board to the list of joined boards (keys) and show it in the UI
+        if (!tempList.contains(key)) {
+            joinedKeys.add(key);
+        }
+        titleField.clear();
         refreshWorkspace(true);
     }
 
@@ -244,6 +259,17 @@ public class WorkspaceCtrl implements Initializable {
         if(event.getCode().equals(KeyCode.ENTER))
         {
             connect();
+        }
+    }
+
+    /**
+     * Makes sure the user can create a board by pressing ENTER after typing the title
+     * @param event The event that gets handled and checked for the ENTER key
+     */
+    public void createOnEnter(KeyEvent event) {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            create();
         }
     }
 
@@ -557,27 +583,26 @@ public class WorkspaceCtrl implements Initializable {
     public void showBoard(String targetKey) {
         try {
             shownBoard = service.getBoard(targetKey);
-        } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null, null);
-            service.insertBoard(shownBoard);
-        }
-        // Theoretically unnecessary, but to be sure
-        helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
+            // Theoretically unnecessary, but to be sure
+            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
 
-        if (!isAdmin()) {
-            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
+            if (!isAdmin()) {
+                helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
+            }
+            if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+                lockButtons();
+                lockLists();
+                shownBoard.setProtected(true);
+            } else {
+                unlockButtons();
+                unlockLists();
+                shownBoard.setProtected(false);
+            }
+            unhideWorkspace();
+            displayLists();
+        } catch (NotFoundException | BadRequestException e) {
+            System.out.println("The board you tried to join does not exist");
         }
-        if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
-            lockButtons();
-            lockLists();
-            shownBoard.setProtected(true);
-        } else {
-            unlockButtons();
-            unlockLists();
-            shownBoard.setProtected(false);
-        }
-        unhideWorkspace();
-        displayLists();
     }
 
     /**

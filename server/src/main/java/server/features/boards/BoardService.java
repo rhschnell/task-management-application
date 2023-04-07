@@ -17,11 +17,11 @@ public class BoardService implements RepositoryService<Board, String> {
     }
 
     @Override
-    public void insert(Board board) {
+    public Board insert(Board board) {
         if (board == null) {
             throw new IllegalArgumentException();
         }
-        repo.save(board);
+        return repo.save(board);
     }
 
     @Override

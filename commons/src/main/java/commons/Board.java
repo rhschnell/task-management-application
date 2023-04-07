@@ -16,6 +16,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Board {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String key;
 
     private String title;
@@ -35,13 +36,11 @@ public class Board {
 
     /**
      * Constructor for board class
-     * @param key This board's key
      * @param title This board's title
      * @param cardLists This board's list of cards
      * @param tagList This board's list of tags
      */
-    public Board(String key, String title, List<CardList> cardLists, List<Tag> tagList) {
-        this.key = key;
+    public Board(String title, List<CardList> cardLists, List<Tag> tagList) {
         this.title = title;
         this.cardLists = cardLists;
         if (cardLists == null) {
