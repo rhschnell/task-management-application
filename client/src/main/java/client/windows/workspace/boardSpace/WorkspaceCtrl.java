@@ -209,15 +209,27 @@ public class WorkspaceCtrl implements Initializable {
         // Add this board to the list of joined boards (keys) and show it in the UI
         if (!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
-            var boardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
-            BoardCellCtrl controller = boardCell.getKey();
-            controller.setBoard(shownBoard);
-            controller.setWorkspaceCtrl(this);
-            boardList.getChildren().add(boardCell.getValue());
-            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
+//            var boardCell = new MyFXML(createInjector(new MainModules()))
+////                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
+////            BoardCellCtrl controller = boardCell.getKey();
+////            controller.setBoard(shownBoard);
+////            controller.setWorkspaceCtrl(this);
+////            boardList.getChildren().add(boardCell.getValue());
+////            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
+            nameBoard();
         }
         keyField.clear();
+        refreshWorkspace(true);
+    }
+
+    public void nameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(false);
+        HelperMethods.popUp(scene, "Name board: ");
         refreshWorkspace(true);
     }
 
@@ -531,9 +543,6 @@ public class WorkspaceCtrl implements Initializable {
             service.insertBoard(shownBoard);
         }
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
-        if (!helperMethods.getMemMap().get(helperMethods.getServerIP()).contains(shownBoard.getKey())) {
-            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
-        }
         if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
             lockButtons();
             lockLists();
