@@ -126,9 +126,6 @@ public class BoardController {
     @PostMapping("/removeBoardTag/{key}")
     public synchronized ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key,@RequestBody Tag tag) {
         try {
-            Board updateBoard = service.getByID(key);
-            updateBoard.removeTag(tag);
-            service.insert(updateBoard);
             Pair<String, Tag> removePair = Pair.of("Remove", tag);
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
             for(int i = 0;i<listeners.get(key).size();i++)
