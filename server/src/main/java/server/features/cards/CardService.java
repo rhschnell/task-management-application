@@ -20,11 +20,11 @@ public class CardService implements RepositoryService<Card, Long> {
      * @param card the card to be inserted
      */
     @Override
-    public void insert(Card card) {
+    public Card insert(Card card) {
         if (card == null) {
             throw new IllegalArgumentException();
         }
-        repo.save(card);
+        return repo.save(card);
     }
 
     /**

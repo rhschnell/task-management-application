@@ -21,11 +21,11 @@ public class TagService implements RepositoryService<Tag, Long> {
      * @param tag entity to be inserted
      */
     @Override
-    public void insert(Tag tag) {
+    public Tag insert(Tag tag) {
         if (tag == null) {
             throw new IllegalArgumentException();
         }
-        repo.save(tag);
+        return repo.save(tag);
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Board {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String key;
 
     private String title;
@@ -32,6 +33,25 @@ public class Board {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "key")
     private List<Tag> tagList; // Use a list here to make the annotation work
+
+    /**
+     * Constructor for board class
+     * @param title This board's title
+     * @param cardLists This board's list of cards
+     * @param tagList This board's list of tags
+     */
+    public Board(String title, List<CardList> cardLists, List<Tag> tagList) {
+        this.title = title;
+        this.cardLists = cardLists;
+        if (cardLists == null) {
+            this.cardLists = new ArrayList<>();
+        }
+        this.tagList = tagList;
+        if(tagList == null){
+            this.tagList = new ArrayList<>();
+        }
+        this.password = "";
+    }
 
     /**
      * Constructor for board class

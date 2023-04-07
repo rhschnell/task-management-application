@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-import java.util.List;
+import java.util.Set;
 
 public class LeaveCtrl {
 
@@ -17,7 +17,7 @@ public class LeaveCtrl {
 
     private WorkspaceCtrl workspaceCtrl;
     private HelperMethods hm;
-    private List<String> joinedKeys;
+    private Set<String> joinedKeys;
     private Board leaveBoard;
 
     /**
@@ -71,7 +71,7 @@ public class LeaveCtrl {
      * Sets the joinedKeys
      * @param joinedKeys The new joined keys list
      */
-    public void setJoinedKeys(List<String> joinedKeys) {
+    public void setJoinedKeys(Set<String> joinedKeys) {
         this.joinedKeys = joinedKeys;
     }
 

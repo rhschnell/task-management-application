@@ -25,7 +25,7 @@ public class BoardCellCtrl implements Initializable {
     @FXML
     private Label boardTitle;
     @FXML
-    private ImageView leaveIcon;
+    private ImageView leaveDeleteIcon;
 
     /**
      * Creates a new instance of BoardCellCtrl
@@ -56,6 +56,9 @@ public class BoardCellCtrl implements Initializable {
      */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
+        if (workspaceCtrl.isAdmin()) {
+            leaveDeleteIcon.setImage(new Image("/client/icons/trash-can.png"));
+        }
     }
 
     /**
@@ -86,7 +89,7 @@ public class BoardCellCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        leaveIcon.setCursor(Cursor.HAND);
+        leaveDeleteIcon.setCursor(Cursor.HAND);
         protectionIcon.setCursor(Cursor.HAND);
     }
 
@@ -147,10 +150,12 @@ public class BoardCellCtrl implements Initializable {
         updateProtectionIcon();
     }
 
-//
-//    public void setLabelColour()
-//    {
-//        this.boardTitle.setTextFill(Color.web(board.getFontColour()));
-//    }
+    public void leaveDelete() {
+        if (workspaceCtrl.isAdmin()) {
+            workspaceCtrl.deleteScreen(board);
+        } else {
+            leaveBoard();
+        }
+    }
 }
 

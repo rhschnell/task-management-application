@@ -160,7 +160,7 @@ public class CustomizeCtrl {
             cardListUtils.insertCardList(list);
         }
         boardUtils.insertBoard(board);
-        workspaceCtrl.refreshWorkspace();
+        workspaceCtrl.refreshWorkspace(false);
         ((Stage) closeButton.getScene().getWindow()).close();
     }
 

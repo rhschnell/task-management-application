@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class MainCtrl {
@@ -30,7 +30,7 @@ public class MainCtrl {
 
     private HelperMethods helperMethods;
 
-    private Map<String, List<String>> serverToKeyListMap;
+    private Map<String, Set<String>> serverToKeyListMap;
 
     /**
      * Initializes the Stages that needs to be switched within the app.
@@ -57,7 +57,7 @@ public class MainCtrl {
         this.userLoginCtrl = userLogin.getKey();
         this.userLogin = new Scene(userLogin.getValue());
 
-        this.serverToKeyListMap = new HashMap<String, List<String>>();
+        this.serverToKeyListMap = new HashMap<String, Set<String>>();
 
         primary.setTitle("Talio");
         primary.setMinHeight(576);
