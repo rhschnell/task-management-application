@@ -181,6 +181,12 @@ public class WorkspaceCtrl implements Initializable {
             addListButton
         };
 
+        //Use websockets
+        service.registerForMessages("/topic/boards/titles", title -> {
+            shownBoard.setTitle(title);
+            boardName.setText(title);
+        });
+
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);
         KeyFrame kf = new KeyFrame(Duration.millis(300),
@@ -525,9 +531,6 @@ public class WorkspaceCtrl implements Initializable {
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
-            if (shownBoard != null) {
-                boardName.setText(shownBoard.getTitle());
-            }
         }
     }
 
@@ -615,7 +618,6 @@ public class WorkspaceCtrl implements Initializable {
     public void displayLists() {
         listContainer.getChildren().clear();
         listControllers.clear();
-        boardName.setText(shownBoard.getTitle());
 
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))

@@ -9,6 +9,7 @@ import javafx.scene.input.DataFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class WorkspaceService {
     private final BoardUtils server;
@@ -64,5 +65,9 @@ public class WorkspaceService {
         Map<DataFormat, Object> clipMap = new HashMap<DataFormat, Object>();
         clipMap.put(DataFormat.PLAIN_TEXT, key);
         clipboard.setContent(clipMap);
+    }
+
+    public void registerForMessages(String dest, Consumer<String> consumer) {
+        server.registerForMessages(dest, consumer);
     }
 }

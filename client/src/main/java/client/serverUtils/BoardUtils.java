@@ -9,14 +9,26 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import javax.inject.Inject;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class BoardUtils {
-    private final ServerUtils serverUtils;
+    private ServerUtils serverUtils = new ServerUtils();
     private Client client;
 
     /**
@@ -60,7 +72,7 @@ public class BoardUtils {
         return client.target(serverUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Board>>() {});
+                .get(new GenericType<>() {});
     }
 
     /**
@@ -90,6 +102,50 @@ public class BoardUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
+    }
+
+    /**
+     * Adds a message using websocket technologies
+     * @param board the board to add
+     */
+    @MessageMapping("/boards")
+    @SendTo("/topic/boards/titles")
+    public String addMessage(Board board) {
+        return insertBoard(board).getTitle();
+    }
+
+    private final String url = "ws://" + serverUtils.getServer().substring(7) + "/websocket";
+    private final StompSession session = connect(url);
+    private StompSession connect(String url) {
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try {
+            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    public void registerForMessages(String dest, Consumer<String> consumer) {
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return String.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((String) payload);
+            }
+        });
+    }
+
+    public void send(String dest, Object o) {
+        session.send(dest, o);
     }
 
     public void setServer(String server) {
