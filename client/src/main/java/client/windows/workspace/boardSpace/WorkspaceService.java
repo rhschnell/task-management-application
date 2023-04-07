@@ -7,6 +7,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WorkspaceService {
@@ -36,6 +37,14 @@ public class WorkspaceService {
      */
     public Board getBoard(String key) {
         return server.getBoard(key);
+    }
+
+    /**
+     * Gets all boards from the database
+     * @return List of boards that are in the database
+     */
+    public List<Board> getBoards() {
+        return server.getBoards();
     }
 
     /**

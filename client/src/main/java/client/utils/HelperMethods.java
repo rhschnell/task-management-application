@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -19,7 +20,7 @@ public class HelperMethods {
     private Stage primaryStage;
     private Scene[] scenes;
     private DataFormat cardFormat;
-    private Map<String, List<String>> memMap;
+    private Map<String, Set<String>> memMap;
     private String serverIP;
 
     /**
@@ -149,7 +150,7 @@ public class HelperMethods {
      * @param serverToKeyListMap New map containing servers as keys and lists or board-keys as
      *                           values
      */
-    public void setMemMap(Map<String, List<String>> serverToKeyListMap) {
+    public void setMemMap(Map<String, Set<String>> serverToKeyListMap) {
         this.memMap = serverToKeyListMap;
     }
 
@@ -159,7 +160,7 @@ public class HelperMethods {
      *
      * @return The memory map
      */
-    public Map<String, List<String>> getMemMap() {
+    public Map<String, Set<String>> getMemMap() {
         return memMap;
     }
 

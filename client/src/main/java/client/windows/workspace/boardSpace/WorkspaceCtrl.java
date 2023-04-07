@@ -97,7 +97,7 @@ public class WorkspaceCtrl implements Initializable {
 
     private Map<String, String> pwdMap;
 
-    private List<String> joinedKeys;
+    private Set<String> joinedKeys;
     private int focusedCardIndex;
     private int focusedListIndex;
     private Board shownBoard;
@@ -160,7 +160,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        joinedKeys = new ArrayList<>();
+        joinedKeys = new HashSet<>();
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
@@ -446,6 +446,7 @@ public class WorkspaceCtrl implements Initializable {
     public void refreshBoardList(String key, boolean forced) {
         if (isAdmin()) { // if admin
             // add all server boards to joined keys
+            service.getBoards().forEach(b -> {joinedKeys.add(b.getKey());});
         }
 
         boolean removed = false;
@@ -1114,7 +1115,7 @@ public class WorkspaceCtrl implements Initializable {
      * Sets the list of the keys for the joined board for this workspace
      * @param joinedKeys The keys of the joined boards
      */
-    public void setJoinedKeys(List<String> joinedKeys) {
+    public void setJoinedKeys(Set<String> joinedKeys) {
         this.joinedKeys = joinedKeys;
     }
 
