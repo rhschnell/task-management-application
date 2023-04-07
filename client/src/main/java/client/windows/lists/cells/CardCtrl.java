@@ -7,6 +7,7 @@ import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
 import commons.Tag;
 import commons.Task;
@@ -19,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -51,6 +53,7 @@ public class CardCtrl implements Initializable {
 
 
     private Card card;
+    private Board shownBoard;
     private long lastClickTime;
 
     private final CardService service;
@@ -107,7 +110,7 @@ public class CardCtrl implements Initializable {
 
     public void delete() {
         var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
+                .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setDeleteCard(card);
@@ -129,6 +132,9 @@ public class CardCtrl implements Initializable {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setCard(card);
+        loader.getKey().setShownBoard(shownBoard);
+        loader.getKey().setAppliedPreset();
+
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();
@@ -169,6 +175,9 @@ public class CardCtrl implements Initializable {
         controller.setCard(cell);
         controller.setBoardKey(getBoardKey());
         controller.displayTasks();
+        controller.setShownBoard(shownBoard);
+        controller.setAppliedPreset();
+
         String title = "View Card";
         HelperMethods.popUp(scene, title);
 
@@ -192,12 +201,6 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * Updates the list of Cards with a new object.
-     *
-     * @param item The new item for the cell.
-     */
-
-    /**
      * Sets the subtasks indicator in the UI to reflect the number of completed subtasks for this
      * card as ratio completed/total
      *
@@ -207,12 +210,12 @@ public class CardCtrl implements Initializable {
     public void setSubtasksCompleted(long completed, long total) {
         if (completed > total) {
             throw new IllegalArgumentException("Cannot have more completed " +
-                                               "subtasks than the total amount of" +
-                                               " subtasks");
+                    "subtasks than the total amount of" +
+                    " subtasks");
         }
         if (completed < 0) {
             throw new IllegalArgumentException("Cannot have negative amounts of completed or " +
-                                               "total subtasks");
+                    "total subtasks");
         }
         subtaskIndicator.setText(String.format("%d/%d", completed, total));
     }
@@ -224,6 +227,13 @@ public class CardCtrl implements Initializable {
             this.setDisplayTags(item.getTags());
         setDescriptionIconVisible(item.hasDescription());
 
+        String backgroundColor = card.getBackgroundColor();
+        String fontColor = card.getFontColor();
+        String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
+                "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
+        setFontColor(fontColor);
+        setBackgroundColor(backgroundStyle);
+
         if(card.getSubTasks() !=null) {
             long subtasks = card.getSubTasks().size();
             if (subtasks > 0) {
@@ -233,6 +243,14 @@ public class CardCtrl implements Initializable {
                 subtaskIndicator.setVisible(true);
             }
         }
+    }
+
+    private void setFontColor(String fontColor) {
+        cardTitle.setTextFill(Color.web(fontColor));
+    }
+
+    private void setBackgroundColor(String style){
+        pane.setStyle(style);
     }
 
     private String getBoardKey()
@@ -252,6 +270,10 @@ public class CardCtrl implements Initializable {
         return deleteButton;
     }
 
+    public void setBoard(Board shownBoard){
+        this.shownBoard = shownBoard;
+    }
+
     /**
      * Called to initialize a controller after its root element has been
      * completely processed.
@@ -267,4 +289,3 @@ public class CardCtrl implements Initializable {
         editButton.setCursor(Cursor.HAND);
     }
 }
-

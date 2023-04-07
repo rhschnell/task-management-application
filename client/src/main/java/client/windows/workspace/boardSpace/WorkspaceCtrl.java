@@ -45,6 +45,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -53,6 +54,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -441,7 +443,39 @@ public class WorkspaceCtrl implements Initializable {
         }
         updateBoardColours();
         updateListColors();
+        updateCardColors();
     }
+
+    public void updateCardColors() {
+        if(shownBoard == null) {
+            return;
+        }
+
+        for(int i = 0; i < shownBoard.getCardLists().size(); i++){
+            Node scrollPane = ((VBox) listContainer.getChildren().get(i)).getChildren().get(1);
+
+            for(int j = 0; j < shownBoard.getCardLists().get(i).getCards().size(); j++){
+                Card card = shownBoard.getCardLists().get(i).getCards().get(j);
+                String backgroundColor = card.getBackgroundColor();
+                String fontColor = card.getFontColor();
+
+                String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
+                        "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
+
+                if (scrollPane instanceof ScrollPane){
+                    Node cardBox = ((VBox) ((ScrollPane) scrollPane).getContent()).getChildren().get(j);
+                    cardBox.setStyle(backgroundStyle);
+                    Node cardTitle = ((HBox) ((VBox) ((HBox) ((AnchorPane) cardBox)
+                            .getChildren().get(0)).getChildren().get(0))
+                            .getChildren().get(0)).getChildren().get(0);
+                    if (cardTitle instanceof  Label){
+                        ((Label) cardTitle).setTextFill(Color.web(fontColor));
+                    }
+                }
+            }
+        }
+    }
+
 
     public void updateListColors(){
         if(shownBoard == null){
@@ -489,7 +523,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             shownBoard = service.getBoard(targetKey);
         } catch (NotFoundException | BadRequestException e) {
-            shownBoard = new Board(targetKey, targetKey, null, null);
+            shownBoard = new Board(targetKey, targetKey, null, null, null);
             service.insertBoard(shownBoard);
         }
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
@@ -1030,6 +1064,7 @@ public class WorkspaceCtrl implements Initializable {
         loader.getKey().setBoard(shownBoard);
         loader.getKey().setLists(shownBoard.getCardLists());
         loader.getKey().setWorkspaceCtrl(this);
+        loader.getKey().displayPresetList();
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);

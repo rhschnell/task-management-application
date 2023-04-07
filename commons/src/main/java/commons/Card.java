@@ -15,6 +15,9 @@ public class Card implements Serializable {
     private String title;
     private String description;
 
+    private String backgroundColor;
+    private String fontColor;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
     @OrderBy("priority ASC")
@@ -50,6 +53,8 @@ public class Card implements Serializable {
                 List<Task> subTasks, long id) {
         this.title = title;
         this.description = description;
+        this.backgroundColor = "0xDEEDE7FF";
+        this.fontColor = "0x000000FF";
         this.tags = tags;
         this.subTasks = subTasks;
         this.id = id;
@@ -68,6 +73,8 @@ public class Card implements Serializable {
                 List<Task> subTasks) {
         this.title = title;
         this.description = description;
+        this.backgroundColor = "0xDEEDE7FF";
+        this.fontColor = "0x000000FF";
         this.tags = tags;
         this.subTasks = subTasks;
     }
@@ -84,6 +91,8 @@ public class Card implements Serializable {
                 List<Task> subTasks, Long priority) {
         this.title = title;
         this.description = description;
+        this.backgroundColor = "0xDEEDE7FF";
+        this.fontColor = "0x000000FF";
         this.tags = tags;
         this.subTasks = subTasks;
         this.priority = priority;

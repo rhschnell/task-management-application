@@ -138,6 +138,18 @@ class CardTest {
         assertEquals(List.of(task2), card.getSubTasks());
     }
 
+
+    @Test
+    void setBackgroundColour() {
+        card.setBackgroundColor("0x000000FF");
+        assertEquals("0x000000FF", card.getBackgroundColor());
+    }
+
+    @Test
+    void getBackgroundColour() {
+        assertEquals("0xDEEDE7FF", card.getBackgroundColor());
+    }
+
     @Test
     void hasDescription(){
         assertTrue(card.hasDescription());
@@ -267,6 +279,7 @@ class CardTest {
     @Test
     void testToString() {
         assertEquals("Card(title=Some card, description=This is a card, " +
-                     "subTasks=null, id=0, priority=0, tags=null)", card.toString());
+                "backgroundColor=0xDEEDE7FF, fontColor=0x000000FF, subTasks=null, " +
+                "id=0, priority=0, tags=null)", card.toString());
     }
 }

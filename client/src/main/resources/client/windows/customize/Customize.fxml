@@ -90,7 +90,7 @@
                 <VBox fx:id="cardPresets" prefHeight="131.0" prefWidth="297.0" />
             </content>
         </ScrollPane>
-      <Button mnemonicParsing="false" text="Add Card Color">
+      <Button mnemonicParsing="false" onAction="#addCardPreset" text="Add Card Color">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

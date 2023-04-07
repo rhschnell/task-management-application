@@ -1,5 +1,6 @@
 package client.windows.cards.add;
 
+import client.serverUtils.CardColorPresetUtils;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.TagUtils;
 import commons.Card;
@@ -28,11 +29,13 @@ class AddCardServiceTest {
     private AddCardService addCardService;
     private CardListUtils server;
     private TagUtils tagUtils;
+    private CardColorPresetUtils cardColorPresetUtils;
 
     @BeforeEach
     void setUp() {
         server = Mockito.mock(CardListUtils.class);
         tagUtils = Mockito.mock(TagUtils.class);
+        cardColorPresetUtils = Mockito.mock(CardColorPresetUtils.class);
 
         when(tagUtils.getBoardTags(anyString())).thenReturn(List.of(
                 new Tag("Testing", "FFFFFF"),
@@ -40,7 +43,7 @@ class AddCardServiceTest {
                 new Tag("Refactoring", "00FF00")
         ));
 
-        addCardService = new AddCardService(server, tagUtils);
+        addCardService = new AddCardService(server, tagUtils, cardColorPresetUtils);
     }
 
     @Test

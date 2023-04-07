@@ -1,6 +1,7 @@
 package client.windows.lists.cells;
 
 import client.windows.lists.list.ListCtrl;
+import commons.Board;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +18,8 @@ public class QuickAddCardCtrl {
     @FXML
     private Button addButton;
 
+    private Board shownBoard;
+
     @Inject
     public QuickAddCardCtrl(CardService service, ListCtrl listCtrl) {
         this.service = service;
@@ -32,10 +35,13 @@ public class QuickAddCardCtrl {
      * Adds a new card with a title
      */
     public void addCard() {
-        service.insertCard(new Card(cardTitle.getText()),listCtrl.getCardList());
+        Card card = new Card(cardTitle.getText());
+        card.setBackgroundColor(shownBoard.getDefaultCardBackgroundColor());
+        card.setFontColor(shownBoard.getDefaultCardFontColor());
+
+        service.insertCard(card, listCtrl.getCardList());
         listCtrl.displayCards();
     }
-
 
     /**
      * Set the ListCtrl the QuickAdd is on
@@ -44,13 +50,18 @@ public class QuickAddCardCtrl {
     public void setListCtrl(ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
     }
+
     public String getBoardKey()
     {
         return service.getBoardKey();
     }
+
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
     }
 
+    public void setShownBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
 }

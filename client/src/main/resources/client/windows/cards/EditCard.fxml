@@ -78,7 +78,42 @@
                   </HBox>
                   <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="231.0" prefWidth="288.0">
                      <content>
-                        <VBox fx:id="subtasks" maxHeight="1.7976931348623157E308" prefWidth="305.0" spacing="10.0" />
+                        <VBox maxHeight="1.7976931348623157E308" prefHeight="232.0" prefWidth="307.0" spacing="10.0">
+                           <children>
+                              <VBox fx:id="subtasks" prefHeight="200.0" prefWidth="100.0" />
+                              <Separator prefWidth="200.0">
+                                 <opaqueInsets>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </opaqueInsets>
+                              </Separator>
+                              <HBox prefHeight="34.0" prefWidth="301.0">
+                                 <children>
+                                    <Label prefHeight="16.0" prefWidth="90.0" text="Color Preset:">
+                                       <font>
+                                          <Font name="Arial Bold" size="13.0" />
+                                       </font>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#openPresetList" prefHeight="25.0" prefWidth="65.0" styleClass="green-button" text="Manage">
+                                       <font>
+                                          <Font name="Arial Bold" size="11.0" />
+                                       </font>
+                                       <opaqueInsets>
+                                          <Insets left="150.0" right="10.0" />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets left="140.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="appliedPreset" maxHeight="1.7976931348623157E308" prefHeight="91.0" prefWidth="307.0" spacing="10.0" />
+                           </children></VBox>
                      </content>
                      <VBox.margin>
                         <Insets right="-8.0" />

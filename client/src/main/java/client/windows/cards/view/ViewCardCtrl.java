@@ -20,9 +20,11 @@ import client.MyFXML;
 import client.MainCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
+import client.windows.customize.cards.view.CustomCardPresetViewCellCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
 import commons.Task;
 import javafx.fxml.FXML;
@@ -30,7 +32,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -42,6 +47,7 @@ public class ViewCardCtrl {
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
     private Card card;
+    private Board shownBoard;
 
     @FXML
     private Label cardTitle;
@@ -57,6 +63,9 @@ public class ViewCardCtrl {
 
     @FXML
     private VBox taskBox;
+
+    @FXML
+    private VBox appliedPreset;
 
     private ViewCardService service;
 
@@ -137,6 +146,9 @@ public class ViewCardCtrl {
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
         loader.getKey().displayTasks();
+        loader.getKey().setShownBoard(shownBoard);
+        loader.getKey().setAppliedPreset();
+
         Scene scene = new Scene(loader.getValue());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -145,6 +157,25 @@ public class ViewCardCtrl {
         });
         HelperMethods.popUp(scene,"Edit Card");
         displayTasks();
+    }
+
+    public void setAppliedPreset(){
+        if(appliedPreset.getChildren() != null){
+            appliedPreset.getChildren().clear();
+        }
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CustomCardPresetViewCellCtrl.class,
+                        "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
+
+        HBox cell = (HBox) loader.getValue();
+        Rectangle backgroundRectangle = (Rectangle) cell.lookup("#backgroundColor");
+        backgroundRectangle.setFill(Color.web(card.getBackgroundColor()));
+        Rectangle fontRectangle = (Rectangle) cell.lookup("#fontColor");
+        fontRectangle.setFill(Color.web(card.getFontColor()));
+        Button actionButton = (Button) cell.lookup("#actionButton");
+        actionButton.setVisible(false);
+
+        appliedPreset.getChildren().add(loader.getValue());
     }
 
     /**
@@ -176,5 +207,9 @@ public class ViewCardCtrl {
             loader.getKey().disableEdit();
             taskBox.getChildren().add(loader.getValue());
         }
+    }
+
+    public void setShownBoard(Board shownBoard){
+        this.shownBoard = shownBoard;
     }
 }

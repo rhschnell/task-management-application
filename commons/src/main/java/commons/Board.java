@@ -25,6 +25,9 @@ public class Board {
     private String backgroundColour = "FFFFFF";
     private String fontColour = "000000";
 
+    private String defaultCardBackgroundColor = "0xDEEDE7FF";
+    private String defaultCardFontColor = "0x000000FF";
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "key")
     private List<CardList> cardLists; // Use a list here to make the annotation work
@@ -33,13 +36,18 @@ public class Board {
     @JoinColumn(referencedColumnName = "key")
     private List<Tag> tagList; // Use a list here to make the annotation work
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "key")
+    private List<CardColorPreset> presetList;
+
     /**
      * Constructor for board class
      * @param key key
      * @param title title
      * @param cardLists null
      */
-    public Board(String key, String title, List<CardList> cardLists, List<Tag> tagList) {
+    public Board(String key, String title, List<CardList> cardLists,
+                 List<Tag> tagList, List<CardColorPreset> presetList) {
         this.key = key;
         this.title = title;
         this.cardLists = cardLists;
@@ -49,6 +57,10 @@ public class Board {
         this.tagList = tagList;
         if(tagList == null){
             this.tagList = new ArrayList<>();
+        }
+        this.presetList = presetList;
+        if(presetList == null) {
+            this.presetList = new ArrayList<>();
         }
         this.password = "";
     }
@@ -127,6 +139,14 @@ public class Board {
 
     public boolean verifyPassword(String password) {
         return this.password.equals(password) || "".equals(this.password);
+    }
+
+    public void addPreset(CardColorPreset preset){
+        presetList.add(preset);
+    }
+
+    public void removePreset(CardColorPreset preset){
+        presetList.remove(preset);
     }
 
     @Override

@@ -19,15 +19,14 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
+import client.windows.customize.cards.CardPresetListCtrl;
+import client.windows.customize.cards.view.CustomCardPresetViewCellCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
 import com.google.inject.Inject;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
-import commons.Task;
+import commons.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,7 +37,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -62,6 +64,9 @@ public class AddCardCtrl extends SubtaskContainer {
     private VBox appliedTagsVbox;
 
     @FXML
+    private VBox appliedPreset;
+
+    @FXML
     private TextField addSubtaskTitle;
 
     @FXML
@@ -71,7 +76,7 @@ public class AddCardCtrl extends SubtaskContainer {
     private VBox subtasks;
 
     private List<Task> taskList;
-
+    private Board shownBoard;
 
     private HelperMethods helperMethods;
 
@@ -126,6 +131,21 @@ public class AddCardCtrl extends SubtaskContainer {
                 cardDescription.getText(),
                 service.getAppliedTags(),
                 taskList);
+        if(appliedPreset.getChildren().size() == 0){
+            card.setFontColor(shownBoard.getDefaultCardFontColor());
+            card.setBackgroundColor(shownBoard.getDefaultCardBackgroundColor());
+        } else {
+            Rectangle fontColorRectangle = (Rectangle) ((HBox) appliedPreset
+                    .getChildren().get(0)).getChildren().get(2);
+            Color fontColor = (Color) fontColorRectangle.getFill();
+            Rectangle backgroundColorRectangle = (Rectangle) ((HBox) appliedPreset
+                    .getChildren().get(0)).getChildren().get(1);
+            Color backgroundColor = (Color) backgroundColorRectangle.getFill();
+
+            card.setFontColor(fontColor.toString());
+            card.setBackgroundColor(backgroundColor.toString());
+        }
+
         card.setPriority(service.getCardList().getCards().size() + 1);
         service.setAppliedTags(new ArrayList<>());
         service.addCard(card);
@@ -165,6 +185,45 @@ public class AddCardCtrl extends SubtaskContainer {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
+        helperMethods.popUp(scene, title);
+    }
+
+    public void setAppliedPreset(CardColorPreset preset){
+        if(appliedPreset.getChildren() != null){
+            appliedPreset.getChildren().clear();
+        }
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CustomCardPresetViewCellCtrl.class,
+                        "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
+
+        CustomCardPresetViewCellCtrl ctrl = loader.getKey();
+        ctrl.setAddCardCtrl(this);
+        ctrl.setPresetObject(preset, "addFromList");
+
+        HBox cell = (HBox) loader.getValue();
+        Button actionButton = (Button) cell.lookup("#actionButton");
+        actionButton.setVisible(false);
+
+        appliedPreset.getChildren().add(loader.getValue());
+    }
+
+    public void openPresetList() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CardPresetListCtrl.class,
+                        "client", "windows", "customize", "cards", "view", "CardPresetList.fxml");
+
+        CardPresetListCtrl ctrl = loader.getKey();
+        ctrl.setAvailablePresets(shownBoard.getPresetList());
+        CardColorPreset c = new CardColorPreset(
+                "Default", shownBoard.getDefaultCardBackgroundColor(), shownBoard.getDefaultCardFontColor());
+        ctrl.setAppliedPreset(c);
+        ctrl.setAddCartCtrl(this);
+        ctrl.setType("add");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Add Preset";
         helperMethods.popUp(scene, title);
     }
 
@@ -245,6 +304,10 @@ public class AddCardCtrl extends SubtaskContainer {
             event.consume();
         });
 
+    }
+
+    public void setBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
     }
 
 }
