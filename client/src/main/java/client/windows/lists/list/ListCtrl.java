@@ -472,6 +472,8 @@ public class ListCtrl {
         loader.getKey().setBoard(workspaceCtrl.getShownBoard());
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
+        System.out.println(workspaceCtrl.getShownBoard().getDefaultPreset());
+        loader.getKey().setAppliedPreset(workspaceCtrl.getShownBoard().getDefaultPreset());
 
         String title = "Create a card";
         hm.popUp(scene, title);

@@ -2,7 +2,10 @@ package client.windows.customize.cards.edit;
 
 import client.windows.customize.cards.CustomCardPresetCellCtrl;
 import com.google.inject.Inject;
+import commons.Board;
+import commons.Card;
 import commons.CardColorPreset;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -94,17 +97,30 @@ public class EditCardPresetCtrl {
      * Method to save the just edited preset
      */
     public void save() {
-        String title = presetTitle.getText();
-        Color newPresetBackgroundColor = backgroundColor.getValue();
-        Color newPresetFontColor = fontColor.getValue();
+        String newBackgroundColor = backgroundColor.getValue().toString();
+        String newFontColor = fontColor.getValue().toString();
+        String newTitle = presetTitle.getText();
 
-        presetTitle.setText(preset.getName());
+        Board shownBoard = customCardPresetCellCtrl.getCustomizeCtrl().getBoard();
+        for(CardList list : shownBoard.getCardLists()){
+            for(Card c : list.getCards()){
+                if(c.getPreset().getName().equals(preset.getName())
+                        && c.getPreset().getFontColor().equals(preset.getFontColor())
+                        && c.getPreset().getBackgroundColor().equals(preset.getBackgroundColor())){
+                    c.setBackgroundColor(newBackgroundColor);
+                    c.setFontColor(newFontColor);
+                    c.setPreset(new CardColorPreset(newTitle, newBackgroundColor, newFontColor));
+                }
+            }
+        }
+        shownBoard.setDefaultPreset(new CardColorPreset(newTitle, newBackgroundColor, newFontColor));
+        shownBoard.setDefaultCardFontColor(newFontColor);
+        shownBoard.setDefaultCardBackgroundColor(newBackgroundColor);
 
-        preset.setName(title);
-        preset.setBackgroundColor(newPresetBackgroundColor.toString());
-        preset.setFontColor(newPresetFontColor.toString());
+        preset.setName(newTitle);
+        preset.setBackgroundColor(newBackgroundColor);
+        preset.setFontColor(newFontColor);
         service.insertPreset(preset);
-
         customCardPresetCellCtrl.getCustomizeCtrl().updateDisplayedPresets();
         ((Stage)saveButton.getScene().getWindow()).close();
     }

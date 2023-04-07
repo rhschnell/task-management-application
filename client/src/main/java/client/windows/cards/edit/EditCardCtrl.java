@@ -20,12 +20,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -66,7 +68,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private VBox appliedTagsVbox;
 
     @FXML
-    private VBox appliedPreset;
+    private Pane appliedPreset;
 
     private Card newCard;
     private Card oldCard;
@@ -154,20 +156,19 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(cardDescription.getText());
 
-        if(appliedPreset.getChildren().size() == 0){
-            editedCard.setFontColor(shownBoard.getDefaultCardFontColor());
-            editedCard.setBackgroundColor(shownBoard.getDefaultCardBackgroundColor());
-        } else {
-            Rectangle fontColorRectangle = (Rectangle) ((HBox) appliedPreset
-                    .getChildren().get(0)).getChildren().get(2);
-            Color fontColor = (Color) fontColorRectangle.getFill();
-            Rectangle backgroundColorRectangle = (Rectangle) ((HBox) appliedPreset
-                    .getChildren().get(0)).getChildren().get(1);
-            Color backgroundColor = (Color) backgroundColorRectangle.getFill();
+        Label presetName = (Label) ((HBox) appliedPreset
+                .getChildren().get(0)).getChildren().get(0);
+        String name = presetName.getText();
+        Rectangle backgroundColorRectangle = (Rectangle) ((HBox) appliedPreset
+                .getChildren().get(0)).getChildren().get(1);
+        Color backgroundColor = (Color) backgroundColorRectangle.getFill();
+        Rectangle fontColorRectangle = (Rectangle) ((HBox) appliedPreset
+                .getChildren().get(0)).getChildren().get(2);
+        Color fontColor = (Color) fontColorRectangle.getFill();
 
-            editedCard.setFontColor(fontColor.toString());
-            editedCard.setBackgroundColor(backgroundColor.toString());
-        }
+        editedCard.setFontColor(fontColor.toString());
+        editedCard.setBackgroundColor(backgroundColor.toString());
+        editedCard.setPreset(new CardColorPreset(name, backgroundColor.toString(), fontColor.toString()));
 
         // Delete the tasks from the database
         for (long taskID : deletedSubtaskIDs) {
@@ -197,6 +198,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                         "client", "windows", "customize", "cards", "view", "CardPresetList.fxml");
 
         CardPresetListCtrl ctrl = loader.getKey();
+        ctrl.setAppliedPreset(oldCard.getPreset());
         ctrl.setAvailablePresets(shownBoard.getPresetList());
         ctrl.setEditCardCtrl(this);
         ctrl.setType("edit");
@@ -263,7 +265,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
         appliedPreset.getChildren().add(loader.getValue());
     }
-
 
     public void setAppliedTags(List<Tag> appliedTags) {
         newCard.setTags(appliedTags);

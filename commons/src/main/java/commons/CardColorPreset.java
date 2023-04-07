@@ -28,6 +28,6 @@ public class CardColorPreset {
         this.name = name;
         this.backgroundColor = backgroundColor;
         this.fontColor = fontColor;
+        this.isDefault = false;
     }
-
 }

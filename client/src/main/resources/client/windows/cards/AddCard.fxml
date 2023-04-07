@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -117,11 +118,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <VBox fx:id="appliedPreset" maxHeight="1.7976931348623157E308" prefHeight="71.0" prefWidth="301.0" spacing="10.0">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </VBox>
+                              <Pane fx:id="appliedPreset" prefHeight="46.0" prefWidth="302.0" />
                            </children>
                         </VBox>
                      </content>

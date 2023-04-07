@@ -26,6 +26,7 @@ import client.windows.tags.view.CustomTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
+import commons.CardColorPreset;
 import commons.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -33,9 +34,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -65,7 +65,7 @@ public class ViewCardCtrl {
     private VBox taskBox;
 
     @FXML
-    private VBox appliedPreset;
+    private Pane appliedPreset;
 
     private ViewCardService service;
 
@@ -147,7 +147,7 @@ public class ViewCardCtrl {
         loader.getKey().setCard(card);
         loader.getKey().displayTasks();
         loader.getKey().setShownBoard(shownBoard);
-        loader.getKey().setAppliedPreset();
+        loader.getKey().setAppliedPreset(card.getPreset());
 
         Scene scene = new Scene(loader.getValue());
         scene.getRoot().setOnKeyPressed(event -> {
@@ -159,7 +159,7 @@ public class ViewCardCtrl {
         displayTasks();
     }
 
-    public void setAppliedPreset(){
+    public void setAppliedPreset(CardColorPreset preset){
         if(appliedPreset.getChildren() != null){
             appliedPreset.getChildren().clear();
         }
@@ -167,11 +167,11 @@ public class ViewCardCtrl {
                 .load(CustomCardPresetViewCellCtrl.class,
                         "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
 
+        CustomCardPresetViewCellCtrl ctrl = loader.getKey();
+        ctrl.setViewCardCtrl(this);
+        ctrl.setPresetObject(preset, "view");
+
         HBox cell = (HBox) loader.getValue();
-        Rectangle backgroundRectangle = (Rectangle) cell.lookup("#backgroundColor");
-        backgroundRectangle.setFill(Color.web(card.getBackgroundColor()));
-        Rectangle fontRectangle = (Rectangle) cell.lookup("#fontColor");
-        fontRectangle.setFill(Color.web(card.getFontColor()));
         Button actionButton = (Button) cell.lookup("#actionButton");
         actionButton.setVisible(false);
 

@@ -28,6 +28,13 @@ public class Board {
     private String defaultCardBackgroundColor = "0xDEEDE7FF";
     private String defaultCardFontColor = "0x000000FF";
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "preset_id", referencedColumnName = "id")
+    private CardColorPreset defaultPreset = new CardColorPreset(
+            "Default",
+            defaultCardBackgroundColor,
+            defaultCardFontColor);
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "key")
     private List<CardList> cardLists; // Use a list here to make the annotation work

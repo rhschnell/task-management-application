@@ -289,7 +289,9 @@ class CardTest {
     @Test
     void testToString() {
         assertEquals("Card(title=Some card, description=This is a card, " +
-                "backgroundColor=0xDEEDE7FF, fontColor=0x000000FF, subTasks=null, " +
+                "backgroundColor=0xDEEDE7FF, fontColor=0x000000FF, " +
+                "preset=CardColorPreset(name=Default, backgroundColor=0xDEEDE7FF, " +
+                "fontColor=0x000000FF, isDefault=false, id=0), subTasks=null, " +
                 "id=0, priority=0, tags=null)", card.toString());
     }
 }

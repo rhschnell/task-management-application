@@ -2,8 +2,6 @@ package client.windows.customize;
 
 import client.MyFXML;
 import client.modules.MainModules;
-import client.serverUtils.BoardUtils;
-import client.serverUtils.CardListUtils;
 import client.utils.HelperMethods;
 import client.windows.customize.cards.CustomCardPresetCellCtrl;
 import client.windows.customize.cards.add.AddCardPresetCtrl;
@@ -28,12 +26,10 @@ import static com.google.inject.Guice.createInjector;
 public class CustomizeCtrl {
     private WorkspaceCtrl workspaceCtrl;
 
+    private final CustomizeService service;
+
     private Board board;
-    private BoardUtils boardUtils;
-
     private List<CardList> lists;
-    private CardListUtils cardListUtils;
-
 
     @FXML
     private Button resetBoardColorButton;
@@ -57,14 +53,12 @@ public class CustomizeCtrl {
     /**
      * Constructor for CustomizeCtrl
      * @param workspaceCtrl Instance of WorkspaceCtrl
-     * @param boardUtils Instance of BoardUtils
-     * @param cardListUtils Instance of CardListUtils
+     * @param service Corresponding service
      */
     @Inject
-    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, BoardUtils boardUtils, CardListUtils cardListUtils){
+    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, CustomizeService service){
         this.workspaceCtrl = workspaceCtrl;
-        this.boardUtils = boardUtils;
-        this.cardListUtils = cardListUtils;
+        this.service = service;
     }
 
     /**
@@ -148,7 +142,7 @@ public class CustomizeCtrl {
     public void resetBoard() {
         board.setFontColour("000000");
         board.setBackgroundColour("FFFFFF");
-        boardUtils.insertBoard(board);
+        service.insertBoard(board);
         boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
         boardFontColor.setValue(Color.web(board.getFontColour()));
     }
@@ -182,9 +176,12 @@ public class CustomizeCtrl {
      */
     public void save() {
         for(CardList list : lists){
-            cardListUtils.insertCardList(list);
+            service.insertCardList(list);
         }
-        boardUtils.insertBoard(board);
+        for(CardColorPreset preset : workspaceCtrl.getShownBoard().getPresetList()){
+            service.insertPreset(preset);
+        }
+        service.insertBoard(board);
         workspaceCtrl.refreshWorkspace();
         ((Stage)closeButton.getScene().getWindow()).close();
     }
@@ -199,6 +196,7 @@ public class CustomizeCtrl {
                     .load(CustomCardPresetCellCtrl.class,
                             "client", "windows", "customize", "cards", "CustomCardPresetCell.fxml");
             CustomCardPresetCellCtrl ctrl = loader.getKey();
+            ctrl.setBoard(workspaceCtrl.getShownBoard());
             ctrl.setPresetObject(preset);
             ctrl.setCustomizeCtrl(this);
 

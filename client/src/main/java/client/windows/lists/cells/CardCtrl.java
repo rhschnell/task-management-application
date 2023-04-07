@@ -133,7 +133,7 @@ public class CardCtrl implements Initializable {
         Scene scene = new Scene(root);
         loader.getKey().setCard(card);
         loader.getKey().setShownBoard(shownBoard);
-        loader.getKey().setAppliedPreset();
+        loader.getKey().setAppliedPreset(card.getPreset());
 
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -176,7 +176,7 @@ public class CardCtrl implements Initializable {
         controller.setBoardKey(getBoardKey());
         controller.displayTasks();
         controller.setShownBoard(shownBoard);
-        controller.setAppliedPreset();
+        controller.setAppliedPreset(cell.getPreset());
 
         String title = "View Card";
         HelperMethods.popUp(scene, title);

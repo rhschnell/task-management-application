@@ -1,6 +1,7 @@
 package client.windows.customize.cards.view;
 
 import client.windows.cards.add.AddCardCtrl;
+import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.cards.CardPresetListCtrl;
 import com.google.inject.Inject;
 import commons.CardColorPreset;
@@ -13,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 public class CustomCardPresetViewCellCtrl {
     private CardPresetListCtrl cardPresetListCtrl;
     private AddCardCtrl addCardCtrl;
+    private ViewCardCtrl viewCardCtrl;
 
     @FXML
     private Label presetTitle;
@@ -60,6 +62,9 @@ public class CustomCardPresetViewCellCtrl {
             actionButton.setText("Remove");
             actionButton.getStyleClass().add("red-button");
         }
+        if(type.equals("view")){
+            actionButton.setVisible(false);
+        }
     }
 
     /**
@@ -88,5 +93,9 @@ public class CustomCardPresetViewCellCtrl {
      */
     public void setAddCardCtrl(AddCardCtrl addCardCtrl){
         this.addCardCtrl = addCardCtrl;
+    }
+
+    public void setViewCardCtrl(ViewCardCtrl viewCardCtrl) {
+        this.viewCardCtrl = viewCardCtrl;
     }
 }

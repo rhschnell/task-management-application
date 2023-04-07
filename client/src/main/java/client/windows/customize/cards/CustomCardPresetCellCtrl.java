@@ -3,7 +3,6 @@ package client.windows.customize.cards;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.serverUtils.CardColorPresetUtils;
-import client.serverUtils.CardUtils;
 import client.utils.HelperMethods;
 import client.windows.customize.CustomizeCtrl;
 import client.windows.customize.cards.edit.EditCardPresetCtrl;
@@ -25,7 +24,6 @@ import static com.google.inject.Guice.createInjector;
 
 public class CustomCardPresetCellCtrl {
     private CardColorPresetUtils server;
-    private CardUtils cardUtils;
     private CustomizeCtrl customizeCtrl;
 
     @FXML
@@ -52,12 +50,10 @@ public class CustomCardPresetCellCtrl {
     /**
      * Constructor for the CustomCardPresetCellCtrl
      * @param server The CardColorPresetUtils server
-     * @param cardUtils The CardUtils server
      */
     @Inject
-    public CustomCardPresetCellCtrl(CardColorPresetUtils server, CardUtils cardUtils){
+    public CustomCardPresetCellCtrl(CardColorPresetUtils server){
         this.server = server;
-        this.cardUtils = cardUtils;
     }
 
     /***
@@ -71,18 +67,6 @@ public class CustomCardPresetCellCtrl {
         cardBackgroundColor.setValue(Color.web(preset.getBackgroundColor()));
         cardFontColor.setValue(Color.web(preset.getFontColor()));
 
-        cardBackgroundColor.setOnAction(event -> {
-            preset.setBackgroundColor(cardBackgroundColor.getValue().toString());
-            server.insertPreset(preset);
-            customizeCtrl.updateDisplayedPresets();
-        });
-
-        cardFontColor.setOnAction(event -> {
-            preset.setFontColor(cardFontColor.getValue().toString());
-            server.insertPreset(preset);
-            customizeCtrl.updateDisplayedPresets();
-        });
-
         defaultBox.setSelected(preset.isDefault());
         defaultBox.setOnAction(event -> {
             preset.setDefault(defaultBox.isSelected());
@@ -90,26 +74,26 @@ public class CustomCardPresetCellCtrl {
                 for(CardColorPreset p : customizeCtrl.getBoard().getPresetList()){
                     if(p != preset){
                         p.setDefault(false);
-                        server.insertPreset(p);
                     }
                 }
 
                 for(CardList cardList : customizeCtrl.getBoard().getCardLists()){
                     for(Card card : cardList.getCards()){
+                        card.setPreset(new CardColorPreset(preset.getName(),
+                                preset.getBackgroundColor(), preset.getFontColor()));
                         card.setBackgroundColor(preset.getBackgroundColor());
                         card.setFontColor(preset.getFontColor());
                     }
                 }
-
                 customizeCtrl.getBoard().setDefaultCardBackgroundColor(preset.getBackgroundColor());
                 customizeCtrl.getBoard().setDefaultCardFontColor(preset.getFontColor());
             } else {
                 customizeCtrl.getBoard().setDefaultCardFontColor("0x000000FF");
                 customizeCtrl.getBoard().setDefaultCardBackgroundColor("0xDEEDE7FF");
             }
-            server.insertPreset(preset);
+            shownBoard.setDefaultPreset(new CardColorPreset(preset.getName(),
+                    preset.getBackgroundColor(), preset.getFontColor()));
             customizeCtrl.updateDisplayedPresets();
-
         });
     }
 
@@ -120,9 +104,28 @@ public class CustomCardPresetCellCtrl {
         server.deletePreset(preset.getId());
 
         Board shownBoard = customizeCtrl.getBoard();
+        if(preset.isDefault()) {
+            shownBoard.setDefaultPreset(new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF"));
+            shownBoard.setDefaultCardFontColor("0x000000FF");
+            shownBoard.setDefaultCardBackgroundColor("0xDEEDE7FF");
+        }
         shownBoard.removePreset(preset);
-
         customizeCtrl.updateDisplayedPresets();
+        for(CardList cardList : customizeCtrl.getBoard().getCardLists()){
+            for(Card c : cardList.getCards()){
+                if(equalsPreset(c.getPreset(), preset)){
+                    c.setBackgroundColor(shownBoard.getDefaultCardBackgroundColor());
+                    c.setFontColor(shownBoard.getDefaultCardFontColor());
+                    c.setPreset(shownBoard.getDefaultPreset());
+                }
+            }
+        }
+    }
+
+    public boolean equalsPreset(CardColorPreset p1, CardColorPreset p2){
+        return p1.getName().equals(p2.getName())
+                && p1.getFontColor().equals(p2.getFontColor())
+                && p1.getBackgroundColor().equals(p2.getBackgroundColor());
     }
 
     /**
@@ -160,5 +163,9 @@ public class CustomCardPresetCellCtrl {
      */
     public CustomizeCtrl getCustomizeCtrl() {
         return this.customizeCtrl;
+    }
+
+    public void setBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
     }
 }

@@ -19,6 +19,10 @@ public class Card implements Serializable {
     private String fontColor;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "preset_id", referencedColumnName = "id")
+    private CardColorPreset preset;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
     @OrderBy("priority ASC")
     private List<Task> subTasks;
@@ -55,6 +59,7 @@ public class Card implements Serializable {
         this.description = description;
         this.backgroundColor = "0xDEEDE7FF";
         this.fontColor = "0x000000FF";
+        this.preset = new CardColorPreset("Default", this.backgroundColor, this.fontColor);
         this.tags = tags;
         this.subTasks = subTasks;
         this.id = id;
@@ -75,6 +80,7 @@ public class Card implements Serializable {
         this.description = description;
         this.backgroundColor = "0xDEEDE7FF";
         this.fontColor = "0x000000FF";
+        this.preset = new CardColorPreset("Default", this.backgroundColor, this.fontColor);
         this.tags = tags;
         this.subTasks = subTasks;
     }
@@ -93,6 +99,7 @@ public class Card implements Serializable {
         this.description = description;
         this.backgroundColor = "0xDEEDE7FF";
         this.fontColor = "0x000000FF";
+        this.preset = new CardColorPreset("Default", this.backgroundColor, this.fontColor);
         this.tags = tags;
         this.subTasks = subTasks;
         this.priority = priority;

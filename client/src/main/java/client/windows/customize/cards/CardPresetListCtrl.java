@@ -85,7 +85,7 @@ public class CardPresetListCtrl {
      * @param preset The preset which is the applied preset
      */
     public void setAppliedPreset(CardColorPreset preset){
-        appliedPreset = preset;
+        this.appliedPreset = preset;
         displayAppliedPreset();
     }
 
@@ -125,9 +125,6 @@ public class CardPresetListCtrl {
      */
     public void refreshAdd(CardColorPreset preset){
         availablePresets.remove(preset);
-        if(appliedPreset != null){
-            availablePresets.add(appliedPreset);
-        }
         appliedPreset = preset;
         displayAppliedPreset();
         displayAvailablePresets();

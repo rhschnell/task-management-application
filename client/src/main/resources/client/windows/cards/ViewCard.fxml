@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -83,7 +84,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <VBox fx:id="appliedPreset" maxHeight="1.7976931348623157E308" prefHeight="43.0" prefWidth="305.0" spacing="10.0" />
+                                    <Pane fx:id="appliedPreset" prefHeight="49.0" prefWidth="306.0" />
                                  </children></VBox>
                            </content>
                            <VBox.margin>

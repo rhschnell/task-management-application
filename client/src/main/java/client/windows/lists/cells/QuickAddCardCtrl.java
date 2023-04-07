@@ -3,6 +3,7 @@ package client.windows.lists.cells;
 import client.windows.lists.list.ListCtrl;
 import commons.Board;
 import commons.Card;
+import commons.CardColorPreset;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -38,6 +39,9 @@ public class QuickAddCardCtrl {
         Card card = new Card(cardTitle.getText());
         card.setBackgroundColor(shownBoard.getDefaultCardBackgroundColor());
         card.setFontColor(shownBoard.getDefaultCardFontColor());
+        card.setPreset(new CardColorPreset(shownBoard.getDefaultPreset().getName(),
+                shownBoard.getDefaultCardBackgroundColor(),
+                shownBoard.getDefaultCardFontColor()));
 
         service.insertCard(card, listCtrl.getCardList());
         listCtrl.displayCards();
