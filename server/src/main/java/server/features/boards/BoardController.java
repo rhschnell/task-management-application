@@ -100,7 +100,6 @@ public class BoardController {
         }
     }
     private final Map<String, List<Pair<Object, Consumer<Pair<String, Tag>>>>> listeners  = new HashMap<>();
-   //private final Map<String, List<Consumer<Pair<String,Tag>>>> listeners = new HashMap<>();
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
