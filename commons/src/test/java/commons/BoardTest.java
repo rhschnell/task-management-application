@@ -17,7 +17,7 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board("000000", "My Board", null, new ArrayList<>());
+        board = new Board("My Board", null, new ArrayList<>());
         cardList = new CardList();
         Card card = new Card(
                 "My Card",
@@ -26,7 +26,7 @@ class BoardTest {
                 null
         );
         cardList.addCard(card);
-        board2 = new Board("000001", "My Board", null, null);
+        board2 = new Board("My Board", null, null);
         board2.addList(cardList);
     }
 
@@ -38,6 +38,11 @@ class BoardTest {
     @Test
     void EmptyConstructorTest() {
         assertNotNull(new Board());
+    }
+
+    @Test
+    void KeyConstructorTest() {
+        assertNotNull(new Board("00000", "Title", null, null));
     }
 
     @Test
@@ -80,7 +85,7 @@ class BoardTest {
 
     @Test
     void getKey() {
-        assertEquals("000000", board.getKey());
+        assertEquals(null, board.getKey());
     }
 
     @Test

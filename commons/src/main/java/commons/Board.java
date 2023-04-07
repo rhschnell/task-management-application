@@ -54,6 +54,27 @@ public class Board {
     }
 
     /**
+     * Constructor for board class
+     * @param key This board's key
+     * @param title This board's title
+     * @param cardLists This board's list of cards
+     * @param tagList This board's list of tags
+     */
+    public Board(String key, String title, List<CardList> cardLists, List<Tag> tagList) {
+        this.key = key;
+        this.title = title;
+        this.cardLists = cardLists;
+        if (cardLists == null) {
+            this.cardLists = new ArrayList<>();
+        }
+        this.tagList = tagList;
+        if(tagList == null){
+            this.tagList = new ArrayList<>();
+        }
+        this.password = "";
+    }
+
+    /**
      * Adds a new clean card-list to the board
      */
     public void addList(){
