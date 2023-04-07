@@ -128,6 +128,7 @@ public class CardCtrl implements Initializable {
                 .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setBoardKey(service.getBoardKey());
         loader.getKey().setCard(card);
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
