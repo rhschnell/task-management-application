@@ -153,9 +153,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         deletedSubtaskIDs.clear();
 
         service.insertCard(editedCard);
-        viewCardCtrl.applyTag();
-        viewCardCtrl.displayTasks();
-
     }
 
     /**

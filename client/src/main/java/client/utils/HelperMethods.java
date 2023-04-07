@@ -43,6 +43,7 @@ public class HelperMethods {
      * @param scene represents the scene that needs to be shown in the popup.
      * @param title represents the popup's title.
      */
+    // TODO: Make this methods non-static
     public static void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
