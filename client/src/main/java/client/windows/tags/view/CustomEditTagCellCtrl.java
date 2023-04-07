@@ -71,9 +71,7 @@ public class CustomEditTagCellCtrl {
      * Method to delete a tag from the board
      */
     public void deleteTag(){
-       // server.deleteTag(tag.getId());
-        //tagOverviewCtrl.displayTagList();
-
+        server.deleteTag(tag.getId());
         boardUtils.removeBoardTag(tagOverviewCtrl.getBoardKey(),tag);
 
     }
