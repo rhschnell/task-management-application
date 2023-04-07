@@ -393,6 +393,7 @@ public class WorkspaceCtrl implements Initializable {
         // Refresh the board list (joined boards)
         refreshBoardList(key, forceBoardListRefresh);
         updateBoardColours();
+        updateListColors();
     }
 
     /**
@@ -443,28 +444,32 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void refreshBoardList(String key, boolean forced) {
         boolean removed = false;
-        if (joinedKeys == null) {
+        if (joinedKeys == null) { // If there are no board to show, stop
             return;
         }
+        // temporary list to prevent concurrent modification exception
         List<String> tempList = new ArrayList<>(joinedKeys);
-        for (String k : tempList) {
+        for (String k : tempList) { // for each saved key
             try {
-                Board b = service.getBoard(k);
+                Board b = service.getBoard(k); // try to get the board from the server
+                // if the password we saved is no longer correct AND the password is not empty AND we stored a password
                 if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))) {
-                    forced = true;
-                    pwdMap.put(k, "");
+                    forced = true; // then force a total refresh of the displayed list
+                    pwdMap.remove(k); // and delete the incorrect, stored password
                 }
             } catch (NotFoundException e) {
-                removed = true;
-                joinedKeys.remove(k);
-                helperMethods.getMemMap().get(helperMethods.getServerIP()).remove(k);
-                if (key.equals(k)) {
-                    clearWorkspace();
+                removed = true; // if we get here, this means that the board was removed
+                joinedKeys.remove(k); // remove the board from our joined keys, as it no longer exists
+                helperMethods.getMemMap().get(helperMethods.getServerIP()).remove(k); // remove from server->board memory
+                if (key.equals(k)) { // if the board that was removed was the board we are currently displaying
+                    clearWorkspace(); // stop displaying !
                 }
             }
         }
         if (removed || forced) {
+            // Empty the board list
             boardList.getChildren().clear();
+            // Loop to spawn boardCell fxml s in the board list
             for (String k : joinedKeys) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
                         .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell",
@@ -478,8 +483,6 @@ public class WorkspaceCtrl implements Initializable {
                 boardName.setText(shownBoard.getTitle());
             }
         }
-        updateBoardColours();
-        updateListColors();
     }
 
     /**
