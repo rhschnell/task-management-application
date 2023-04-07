@@ -89,7 +89,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     }
 
     /**
-     * @param card
+     * @param card The card to get the data from
      */
     public void setCard(Card card) {
         service.setCard(card);
@@ -153,9 +153,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         deletedSubtaskIDs.clear();
 
         service.insertCard(editedCard);
-        viewCardCtrl.applyTag();
-        viewCardCtrl.displayTasks();
-
     }
 
     /**

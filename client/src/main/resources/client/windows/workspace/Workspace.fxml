@@ -38,6 +38,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -57,10 +59,22 @@
                         <Font name="Arial Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Button fx:id="addListButton" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addList" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Add list">
+                  <Button fx:id="unlockBoardButton" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#unlock" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Unlock">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>
+                  </Button>
+                  <Button fx:id="addListButton" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#addList" prefHeight="30.0" prefWidth="87.0" styleClass="green-button" text="Add list">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="13.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#addList" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/white-plus.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Button>
                </children>
             </HBox>
@@ -145,8 +159,15 @@
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#customizeBoard" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/brush.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Label>
-            <Button maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#renameBoard" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Rename">
+            <Button fx:id="renameButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#renameBoard" prefHeight="30.0" prefWidth="70.0" styleClass="green-button" text="Rename">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -156,7 +177,7 @@
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Button>
-            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="30.0" styleClass="green-button" text="Tags">
+            <Button fx:id="tagsButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#tagOverview" prefHeight="30.0" styleClass="green-button" text="Tags">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -166,8 +187,38 @@
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="21.0" fitWidth="17.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/users.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Label>
             <Button fx:id="copyButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#copyKey" prefHeight="30.0" prefWidth="85.0" styleClass="green-button" text="Copy Key">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+            <Separator prefWidth="200.0" />
+            <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Password" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/lock-alt.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Button fx:id="setPasswordButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#setPassword" prefHeight="30.0" prefWidth="85.0" styleClass="red-button" text="Set/Change Password">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="removePasswordButton" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#remPassword" prefHeight="30.0" prefWidth="85.0" styleClass="red-button" text="Remove Password">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -177,16 +228,30 @@
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/shift-left.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Label>
             <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
             </Button>
-            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#deleteScreen" prefHeight="30.0" prefWidth="133.0" styleClass="red-button" text="Delete">
+            <Button fx:id="deleteButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#deleteScreen" prefHeight="30.0" prefWidth="133.0" styleClass="red-button" text="Delete">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="12.0" fitWidth="12.0" onMouseClicked="#deleteScreen" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/white-trash-can.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
          </children>
          <padding>

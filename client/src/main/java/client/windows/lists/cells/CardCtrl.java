@@ -3,6 +3,7 @@ package client.windows.lists.cells;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
+import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
 import com.google.inject.Inject;
@@ -32,6 +33,8 @@ public class CardCtrl implements Initializable {
     private AnchorPane pane;
     @FXML
     private Label cardTitle;
+    @FXML
+    private ImageView editButton;
     @FXML
     private ImageView deleteButton;
     @FXML
@@ -120,6 +123,21 @@ public class CardCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    public void edit() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setCard(card);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+        });
+        String title = "Edit card";
+        HelperMethods.popUp(scene, title);
+    }
+
 
     /**
      * This function is called when clicking, and when double-clicking within 300ms, the viewCard is opened
@@ -174,12 +192,6 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * Updates the list of Cards with a new object.
-     *
-     * @param item The new item for the cell.
-     */
-
-    /**
      * Sets the subtasks indicator in the UI to reflect the number of completed subtasks for this
      * card as ratio completed/total
      *
@@ -226,6 +238,14 @@ public class CardCtrl implements Initializable {
         service.setBoardKey(boardKey);
     }
 
+    public ImageView getEditButton() {
+        return editButton;
+    }
+
+    public ImageView getDeleteButton() {
+        return deleteButton;
+    }
+
     /**
      * Called to initialize a controller after its root element has been
      * completely processed.
@@ -238,6 +258,7 @@ public class CardCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         deleteButton.setCursor(Cursor.HAND);
+        editButton.setCursor(Cursor.HAND);
     }
 }
 

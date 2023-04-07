@@ -1,5 +1,6 @@
 package client.windows.workspace.boardCell;
 
+import client.utils.HelperMethods;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
@@ -17,6 +18,8 @@ public class BoardCellCtrl implements Initializable {
     private WorkspaceCtrl workspaceCtrl;
     private Board board;
 
+    private final HelperMethods helperMethods;
+
     @FXML
     private ImageView protectionIcon;
     @FXML
@@ -25,31 +28,44 @@ public class BoardCellCtrl implements Initializable {
     private ImageView leaveIcon;
 
     /**
-     * Creates a new instance of ListCellCtrl
+     * Creates a new instance of BoardCellCtrl
+     * @param helperMethods The instance of HelperMethods used for utilities
      */
     @Inject
-    public BoardCellCtrl() {
-
+    public BoardCellCtrl(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
     }
 
+    /**
+     * Handles the user leaving the board by clicking the dedicated icon
+     */
     public void leaveBoard() {
         workspaceCtrl.leaveBoard(board);
     }
 
+    /**
+     * Handles the user pressing the title of the board to show it
+     */
     public void showMyBoard() {
         workspaceCtrl.showBoard(board.getKey());
     }
 
+    /**
+     * Sets the workspace controller that this controller links back to
+     * @param workspaceCtrl The workspace controller to set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
      * Setter for the board
+     * @param board The board to set
      */
     public void setBoard(Board board) {
         this.board = board;
         this.boardTitle.setText(board.getTitle());
+        updateProtectionIcon();
     }
 
     /**
@@ -72,19 +88,65 @@ public class BoardCellCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         leaveIcon.setCursor(Cursor.HAND);
         protectionIcon.setCursor(Cursor.HAND);
-
-        // TODO: if(board.isProtected())
-        protectionIcon.setOnMouseEntered(l -> {
-            Image lockSymbol = new Image("/client/icons/lock.png");
-            protectionIcon.setImage(lockSymbol);
-        });
-
-        protectionIcon.setOnMouseExited(l -> {
-            Image lockSymbol = new Image("/client/icons/unlock.png");
-            protectionIcon.setImage(lockSymbol);
-        });
-        // TODO: else
     }
+
+    /**
+     * Updates the protection icon to mirror the state of protection that the board is in (locked
+     * or unlocked) and sets the hover animations indication that the user can lock/unlock the board
+     */
+    public void updateProtectionIcon() {
+        if (board.verifyPassword("")) {
+            protectionIcon.setOnMouseEntered(l -> {
+                Image lockSymbol = new Image("/client/icons/lock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+
+            protectionIcon.setOnMouseExited(l -> {
+                Image lockSymbol = new Image("/client/icons/unlock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+            protectionIcon.setImage(new Image("/client/icons/unlock.png"));
+        } else {
+            protectionIcon.setOnMouseEntered(l -> {
+                Image lockSymbol = new Image("/client/icons/unlock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+
+            protectionIcon.setOnMouseExited(l -> {
+                Image lockSymbol = new Image("/client/icons/lock.png");
+                protectionIcon.setImage(lockSymbol);
+            });
+            protectionIcon.setImage(new Image("/client/icons/lock.png"));
+        }
+    }
+
+    /**
+     * Method to change locked state of board
+     */
+    public void swapLock() {
+        if (board.isProtected()) {
+            unlock();
+        } else {
+            lock();
+        }
+    }
+
+    /**
+     * Sets the board to be unlocked and updates the icons
+     */
+    public void unlock() {
+        workspaceCtrl.lockUnlock(board, "unlock");
+        updateProtectionIcon();
+    }
+
+    /**
+     * Sets the board to be locked and updates the icons
+     */
+    public void lock() {
+        workspaceCtrl.lockUnlock(board, "lock");
+        updateProtectionIcon();
+    }
+
 //
 //    public void setLabelColour()
 //    {

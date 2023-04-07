@@ -53,7 +53,7 @@ public class LeaveCtrl {
 
     /**
      * Sets the workspaceCtrl
-     * @param workspaceCtrl
+     * @param workspaceCtrl The new workspace controller
      */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
@@ -61,7 +61,7 @@ public class LeaveCtrl {
 
     /**
      * Sets the HelperMethods
-     * @param hm
+     * @param hm the new helper methods instance
      */
     public void setHelperMethods(HelperMethods hm) {
         this.hm = hm;
@@ -69,7 +69,7 @@ public class LeaveCtrl {
 
     /**
      * Sets the joinedKeys
-     * @param joinedKeys
+     * @param joinedKeys The new joined keys list
      */
     public void setJoinedKeys(List<String> joinedKeys) {
         this.joinedKeys = joinedKeys;
@@ -77,7 +77,7 @@ public class LeaveCtrl {
 
     /**
      * Sets the leaveBoard
-     * @param leaveBoard
+     * @param leaveBoard The board to set as leaveBoard
      */
     public void setLeaveBoard(Board leaveBoard) {
         this.leaveBoard = leaveBoard;

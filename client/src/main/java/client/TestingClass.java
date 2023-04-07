@@ -16,7 +16,7 @@
 //    public Board createBoardObject(String boardName)
 //    {
 //        ArrayList<CardList> systemCardList= new ArrayList<>();
-//        systemCardList.add(createCardListObject("TODO"));
+//        systemCardList.add(createCardListObject("TO-DO"));
 //        systemCardList.add(createCardListObject("DONE"));
 //        systemCardList.add(createCardListObject("TRASH"));
 //        return new Board("-1", boardName, systemCardList);

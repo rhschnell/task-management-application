@@ -3,10 +3,12 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -17,6 +19,8 @@ public class Board {
     private String key;
 
     private String title;
+    private String password;
+    private boolean secured; //could not use protected as it is a keyword in java
 
     private String backgroundColour = "FFFFFF";
     private String fontColour = "000000";
@@ -31,9 +35,10 @@ public class Board {
 
     /**
      * Constructor for board class
-     * @param key key
-     * @param title title
-     * @param cardLists null
+     * @param key This board's key
+     * @param title This board's title
+     * @param cardLists This board's list of cards
+     * @param tagList This board's list of tags
      */
     public Board(String key, String title, List<CardList> cardLists, List<Tag> tagList) {
         this.key = key;
@@ -46,6 +51,7 @@ public class Board {
         if(tagList == null){
             this.tagList = new ArrayList<>();
         }
+        this.password = "";
     }
 
     /**
@@ -89,26 +95,71 @@ public class Board {
     }
 
     /**
-     * Ads a tag to the board
-     * @param tag
+     * Adds a tag to this board
+     * @param tag The tag to add to the board
      */
     public void addTag(Tag tag) {
         tagList.add(tag);
     }
 
     /**
-     * Removes the tag from the cards existing in the board
-     * @param tag
+     * Removes a tag from this board
+     * @param tag The tag to remove
      */
-    public void removeTag(Tag tag){
-        for(int i=0;i<cardLists.size();i++)
-        {
-            for(int j=0;j<cardLists.get(i).getCards().size();j++)
-            {
-                if(cardLists.get(i).getCards().get(j).getTags().contains(tag))
-                    cardLists.get(i).getCards().get(j).removeTag(tag);
-            }
-        }
+    public void removeTag(Tag tag) {
         tagList.remove(tag);
+    }
+
+    /**
+     * Returns whether the board is protected or not
+     * @return true/false
+     */
+    public boolean isProtected() {
+        return secured;
+    }
+
+    /**
+     * Setter for protected true/false
+     * @param secured state of protection
+     */
+    public void setProtected(boolean secured) {
+        this.secured = secured;
+    }
+
+    /**
+     * Setter for password
+     * @param password the new password
+     */
+    public void setPassword(@NotNull String password) {
+        this.password = password;
+    }
+
+    /**
+     * Verifies the correctness of the given password against the known password
+     * @param password The password to verify
+     * @return Boolean indicating the correctness. True if correct or there is no password set,
+     * false if incorrect
+     */
+    public boolean verifyPassword(String password) {
+        return this.password.equals(password) || "".equals(this.password);
+    }
+
+    /**
+     * Checks for equality of objects against another object
+     * @param o The other object
+     * @return Whether this board should be considered equal to the other object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return Objects.equals(key, board.key) &&
+                Objects.equals(title, board.title) &&
+                Objects.equals(password, board.password) &&
+                Objects.equals(backgroundColour, board.backgroundColour) &&
+                Objects.equals(fontColour, board.fontColour) &&
+                Objects.equals(cardLists, board.cardLists) &&
+                Objects.equals(tagList, board.tagList);
     }
 }

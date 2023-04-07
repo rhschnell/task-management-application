@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.persistence.EntityNotFoundException;
-import javax.swing.*;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.function.Consumer;
@@ -87,6 +86,11 @@ public class BoardController {
     }
 
 
+    /**
+     * Gets a list of all the tags associated to a board in the database
+     * @param key The key of the board
+     * @return List of associated board tags
+     */
     @GetMapping("/getBoardTags/{key}")
     public ResponseEntity<List<Tag>> getBoardTags(@PathVariable("key") String key) {
         try {
@@ -100,6 +104,14 @@ public class BoardController {
         }
     }
     private final Map<String, List<Pair<Object, Consumer<Pair<String, Tag>>>>> listeners  = new HashMap<>();
+
+
+    /**
+     * Adds a tag to a board in the database
+     * @param key The key of the board to add the tag to
+     * @param tag The tag to add to the board
+     * @return The freshly added tag
+     */
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
@@ -122,6 +134,13 @@ public class BoardController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    /**
+     * Removes a tag from a board
+     * @param key The board the remove the tag from
+     * @param tag The tag to remove from the board
+     * @return The removed tag
+     */
     @PostMapping("/removeBoardTag/{key}")
     public synchronized ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key,@RequestBody Tag tag) {
         try {
@@ -141,6 +160,12 @@ public class BoardController {
     }
 
 
+    /**
+     * Methods for clients to register for tag updates for boards
+     * @param key The key of the board to register for
+     * @return Updated tag if there are any updates within 5 seconds, otherwise response with
+     * NO_CONTENT code
+     */
     @GetMapping("/{key}/tagUpdates")
     public synchronized DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key")
                                                                                            String key) {

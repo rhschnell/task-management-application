@@ -110,6 +110,11 @@ public class AdminLoginCtrl implements Initializable {
         }
     }
 
+
+    /**
+     * Makes sure the user can join a board by pressing ENTER after typing the key
+     * @param event The event that gets handled and checked for the ENTER key
+     */
     public void connectOnEnter(KeyEvent event)
     {
         if(event.getCode().equals(KeyCode.ENTER))

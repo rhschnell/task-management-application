@@ -73,7 +73,7 @@ public class TagListCtrl {
     /**
      * Sets the tagList VBOX contain all the tags that are available in the board
      *
-     * @param tagList
+     * @param tagList The list of tags representing all the created tags of the board
      */
     public void setAvailableTags(List<Tag> tagList) {
         this.availableTags = new ArrayList<>();
@@ -81,6 +81,10 @@ public class TagListCtrl {
         displayAvailableTags();
     }
 
+
+    /**
+     * Displays the set of available tags on screen
+     */
     public void displayAvailableTags() {
         availableTagsBox.getChildren().clear();
         for (int i = 0; i < availableTags.size(); i++) {
@@ -94,9 +98,9 @@ public class TagListCtrl {
     }
 
     /**
-     * sets the AppliedTags VBOX contian all the tags that are applied on the card
+     * Sets the AppliedTags VBOX to contain all the tags that are applied on the card
      *
-     * @param tagList
+     * @param tagList The list of tags representing all the applied tags on the card
      */
     public void setAppliedTags(List<Tag> tagList) {
         this.appliedTags = new ArrayList<>();
@@ -112,6 +116,9 @@ public class TagListCtrl {
         return appliedTags;
     }
 
+    /**
+     * Displays the currently applied tags of the card on screen
+     */
     public void displayAppliedTags() {
         appliedTagsBox.getChildren().clear();
         for (int i = 0; i < appliedTags.size(); i++) {
@@ -148,7 +155,7 @@ public class TagListCtrl {
 
     /**
      * Sets the addCardCtrl
-     * @param addCardCtrl
+     * @param addCardCtrl The new add card controller
      */
     public void setAddCardCtrl(AddCardCtrl addCardCtrl) {
         this.addCardCtrl = addCardCtrl;
@@ -156,7 +163,7 @@ public class TagListCtrl {
 
     /**
      * Sets the editCardCtrl
-     * @param editCardCtrl
+     * @param editCardCtrl The new edit card controller
      */
     public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
         this.editCardCtrl = editCardCtrl;

@@ -3,7 +3,6 @@ package client.windows.tags.add;
 import static org.mockito.Mockito.*;
 
 import client.serverUtils.BoardUtils;
-import commons.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
