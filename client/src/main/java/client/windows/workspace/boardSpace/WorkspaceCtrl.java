@@ -226,7 +226,6 @@ public class WorkspaceCtrl implements Initializable {
 
         Scene scene = new Scene(loader.getValue());
         loader.getKey().setRemoteCtrl(this);
-        loader.getKey().setAdmin(false);
         helperMethods.popUp(scene, "Name board: ");
         refreshWorkspace(true);
     }
@@ -1095,7 +1094,6 @@ public class WorkspaceCtrl implements Initializable {
 
         Scene scene = new Scene(loader.getValue());
         loader.getKey().setRemoteCtrl(this);
-        loader.getKey().setAdmin(false);
         helperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
         refreshWorkspace(true);
     }
