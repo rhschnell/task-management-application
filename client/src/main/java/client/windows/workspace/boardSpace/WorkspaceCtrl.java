@@ -446,7 +446,7 @@ public class WorkspaceCtrl implements Initializable {
     public void refreshBoardList(String key, boolean forced) {
         if (isAdmin()) { // if admin
             // add all server boards to joined keys
-            service.getBoards().forEach(b -> {joinedKeys.add(b.getKey());});
+            service.getBoards().forEach(b -> joinedKeys.add(b.getKey()));
         }
 
         boolean removed = false;
@@ -459,7 +459,8 @@ public class WorkspaceCtrl implements Initializable {
             try {
                 Board b = service.getBoard(k); // try to get the board from the server
                 // if the password we saved is no longer correct AND the password is not empty AND we stored a password
-                if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))) {
+                if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))
+                        && !isAdmin()) {// AND not admin
                     forced = true; // then force a total refresh of the displayed list
                     pwdMap.remove(k); // and delete the incorrect, stored password
                 }
