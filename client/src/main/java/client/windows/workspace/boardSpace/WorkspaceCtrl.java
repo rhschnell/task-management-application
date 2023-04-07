@@ -29,6 +29,7 @@ import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
 import client.windows.workspace.delete.DeleteBoardCtrl;
 import client.windows.workspace.leave.LeaveCtrl;
+import client.windows.workspace.lock.AccessDeniedCtrl;
 import client.windows.workspace.lock.LockPopUpCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
@@ -207,7 +208,8 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
-        if (keyField.getText().equals("")) {
+        if (keyField.getText().strip().equals("")) {
+            emptyKeyPopUp();
             return;
         }
 
@@ -231,6 +233,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void create() {
         if (titleField.getText().equals("")) {
+            emptyTitlePopUp();
             return;
         }
 
@@ -1231,5 +1234,31 @@ public class WorkspaceCtrl implements Initializable {
      */
     public boolean isAdmin() {
         return this.admin;
+    }
+
+    /**
+     * Shows the pop-up for when the entered title is empty
+     */
+    public void emptyTitlePopUp() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "joinAlerts", "EmptyTitle.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Error!";
+        helperMethods.popUp(scene, title);
+    }
+
+    /**
+     * Shows the pop-up for when the entered key is empty
+     */
+    private void emptyKeyPopUp() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "joinAlerts", "EmptyKey.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Error!";
+        helperMethods.popUp(scene, title);
     }
 }
