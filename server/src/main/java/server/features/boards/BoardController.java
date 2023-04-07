@@ -39,8 +39,7 @@ public class BoardController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Board> insert(@RequestBody Board board) {
         try {
-            service.insert(board);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(service.insert(board));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
