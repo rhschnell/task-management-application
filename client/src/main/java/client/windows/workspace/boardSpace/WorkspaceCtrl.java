@@ -211,7 +211,8 @@ public class WorkspaceCtrl implements Initializable {
             return;
         }
 
-        List<String> tempList = new ArrayList<>(joinedKeys);
+        List<String> tempList = new ArrayList<>();
+        service.getBoards().forEach(b -> tempList.add(b.getKey()));
 
         showBoard(keyField.getText());
 
@@ -941,24 +942,32 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Method to delete the shown board from the database
      */
-    public void deleteBoard() {
-        service.deleteBoard(shownBoard);
-        joinedKeys.remove(shownBoard.getKey());
+    public void deleteBoard(Board board) {
+        service.deleteBoard(board);
+        joinedKeys.remove(board.getKey());
         refreshWorkspace(true);
         clearWorkspace();
+    }
+
+    /**
+     * Helper method
+     */
+    public void deleteScreen() {
+        deleteScreen(shownBoard);
     }
 
     /**
      * Handles the action of deleting the currently shown from within the workspace by opening a
      * confirmation popup.
      */
-    public void deleteScreen() {
+    public void deleteScreen(Board board) {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(DeleteBoardCtrl.class, "client", "windows", "workspace", "delete", "deleteBoard.fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setWorkspaceCtrl(this);
+        loader.getKey().setBoard(board);
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();
