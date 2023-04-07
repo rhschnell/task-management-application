@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.persistence.EntityNotFoundException;
-import javax.swing.*;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.function.Consumer;
@@ -87,6 +86,11 @@ public class BoardController {
     }
 
 
+    /**
+     * Gets a list of all the tags associated to a board in the database
+     * @param key The key of the board
+     * @return List of associated board tags
+     */
     @GetMapping("/getBoardTags/{key}")
     public ResponseEntity<List<Tag>> getBoardTags(@PathVariable("key") String key) {
         try {
@@ -99,8 +103,15 @@ public class BoardController {
             return ResponseEntity.notFound().build();
         }
     }
+    private final Map<String, List<Pair<Object, Consumer<Pair<String, Tag>>>>> listeners  = new HashMap<>();
 
-    private final Map<String, List<Consumer<Pair<String,Tag>>>> listeners = new HashMap<>();
+
+    /**
+     * Adds a tag to a board in the database
+     * @param key The key of the board to add the tag to
+     * @param tag The tag to add to the board
+     * @return The freshly added tag
+     */
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
@@ -110,7 +121,11 @@ public class BoardController {
             Pair<String, Tag> updatePair = Pair.of("Add",
                     updateBoard.getTagList().get(updateBoard.getTagList().size()-1));
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-            listeners.get(key).forEach(l -> l.accept(updatePair));
+            for(int i = 0;i<listeners.get(key).size();i++)
+            {
+                if( listeners.get(key).get(i)!=null)
+                            listeners.get(key).get(i).getSecond().accept(updatePair);
+            }
 
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
@@ -119,17 +134,23 @@ public class BoardController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    /**
+     * Removes a tag from a board
+     * @param key The board the remove the tag from
+     * @param tag The tag to remove from the board
+     * @return The removed tag
+     */
     @PostMapping("/removeBoardTag/{key}")
-    public ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
+    public synchronized ResponseEntity<Tag> removeBoardTag(@PathVariable("key") String key,@RequestBody Tag tag) {
         try {
-            Board updateBoard = service.getByID(key);
-            updateBoard.removeTag(tag);
-            service.insert(updateBoard);
             Pair<String, Tag> removePair = Pair.of("Remove", tag);
             if (listeners.get(key) == null) {return null;} // never happens in practice, but only in test
-
-            listeners.get(key).forEach(l -> l.accept(removePair));
-
+            for(int i = 0;i<listeners.get(key).size();i++)
+            {
+                if( listeners.get(key).get(i)!=null)
+                      listeners.get(key).get(i).getSecond().accept(removePair);
+            }
             return ResponseEntity.ok(tag);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -139,18 +160,25 @@ public class BoardController {
     }
 
 
+    /**
+     * Methods for clients to register for tag updates for boards
+     * @param key The key of the board to register for
+     * @return Updated tag if there are any updates within 5 seconds, otherwise response with
+     * NO_CONTENT code
+     */
     @GetMapping("/{key}/tagUpdates")
-    public DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key") String key) {
+    public synchronized DeferredResult<ResponseEntity<Pair<String,Tag>>> getTagUpdates(@PathVariable("key")
+                                                                                           String key) {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         var res = new DeferredResult<ResponseEntity<Pair<String,Tag>>>(5000L, noContent);
 
         listeners.computeIfAbsent(key, k -> new ArrayList<>());
 
-        int remIdx = listeners.get(key).size();
-        listeners.get(key).add(t -> res.setResult(ResponseEntity.ok(t)));
+        Object o = new Object();
+        listeners.get(key).add(Pair.of(o, t -> res.setResult(ResponseEntity.ok(t))));
 
         res.onCompletion(() -> {
-            listeners.get(key).remove(remIdx);
+            listeners.get(key).removeIf(pair -> pair.getFirst().equals(o));
         });
 
         return res;

@@ -133,6 +133,9 @@ public class AdminCtrl implements Initializable {
         tl.play();
     }
 
+    /**
+     * Handles the admin press on the ass button by creating a new board on the server
+     */
     public void add() {
         showBoard(keyField.getText());
 
@@ -165,6 +168,10 @@ public class AdminCtrl implements Initializable {
         boardControls.setVisible(false);
     }
 
+    /**
+     * Refreshes the workspace
+     * @param forced If true forces the refresh even though no board has been deleted
+     */
     public void refreshWorkspace(boolean forced) {
         // Refresh the board
         try {
@@ -198,6 +205,9 @@ public class AdminCtrl implements Initializable {
         updateBoardColours();
     }
 
+    /**
+     * Updates the board on screen to display the correct background and font color
+     */
     public void updateBoardColours()
     {
         if(shownBoard!=null){
@@ -206,6 +216,12 @@ public class AdminCtrl implements Initializable {
         }
     }
 
+
+    /**
+     * Shows the board with the specified key. Retrieves it from the server or creates it if it
+     * does not exist yet
+     * @param targetKey The key of the board to show
+     */
     public void showBoard(String targetKey) {
         try {
             shownBoard = service.getBoard(targetKey);
@@ -251,12 +267,21 @@ public class AdminCtrl implements Initializable {
         HelperMethods.popUp(scene, "Delete the board");
     }
 
+
+    /**
+     * Adds a new list to the currently shown board
+     */
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
         refreshWorkspace(false);
     }
 
+
+
+    /**
+     * Method to load the tag-overview window in a new popup screen
+     */
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
@@ -298,7 +323,7 @@ public class AdminCtrl implements Initializable {
     /**
      * Method to copy the key of currently shown board to the
      * clipboard. This method is called by the copy key button.
-     *
+     * <p>
      * After copying the key to the clipboard a small notification is displayed.
      */
     public void copyKey() throws InterruptedException {
@@ -318,7 +343,7 @@ public class AdminCtrl implements Initializable {
 
     /**
      * Delay method
-     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * Source: <a href="https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code">...</a>
      * @param millis amount of milliseconds to delay
      * @param continuation empty
      */
@@ -335,11 +360,19 @@ public class AdminCtrl implements Initializable {
         new Thread(sleeper).start();
     }
 
+    /**
+     * Sets the instance of HelperMethods
+     * @param helperMethods The instance of HelperMethods to set
+     */
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
         this.service.setServer(helperMethods.getServerIP());
     }
 
+
+    /**
+     * Method to open the customize-window in a new popup
+     */
     @FXML
     public void customizeBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))

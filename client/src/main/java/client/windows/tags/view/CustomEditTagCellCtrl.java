@@ -42,6 +42,9 @@ public class CustomEditTagCellCtrl {
 
     /**
      * Constructor for the CustomEditTagCellCtrl
+     * @param server The server that handles tags
+     * @param tagOverviewCtrl The controller that this cell links back to
+     * @param boardUtils The instance of the utility class that handles boards
      */
     @Inject
     public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, BoardUtils boardUtils){
@@ -68,9 +71,7 @@ public class CustomEditTagCellCtrl {
      * Method to delete a tag from the board
      */
     public void deleteTag(){
-       // server.deleteTag(tag.getId());
-        //tagOverviewCtrl.displayTagList();
-
+        server.deleteTag(tag.getId());
         boardUtils.removeBoardTag(tagOverviewCtrl.getBoardKey(),tag);
 
     }

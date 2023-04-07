@@ -100,7 +100,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     }
 
     /**
-     * @param card
+     * @param card The card to get the data from
      */
     public void setCard(Card card) {
         this.oldCard = card;

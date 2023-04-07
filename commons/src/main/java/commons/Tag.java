@@ -77,6 +77,7 @@ public class Tag implements Serializable {
         }
     }
 
+
     /**
      * Checks the equality against another tag
      *

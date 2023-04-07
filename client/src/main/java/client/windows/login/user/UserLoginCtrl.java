@@ -48,7 +48,9 @@ public class UserLoginCtrl implements Initializable {
 
     /**
      * Constructor for UserLoginCtrl
-     * @param service corresponding service
+     *
+     * @param service       The corresponding service
+     * @param helperMethods Instance of utility class HelperMethods
      */
     @Inject
     public UserLoginCtrl(UserLoginService service, HelperMethods helperMethods) {
@@ -57,14 +59,10 @@ public class UserLoginCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,8 +76,8 @@ public class UserLoginCtrl implements Initializable {
      * Middleware that tries to connect to the user specified server. If successful, redirects
      * the user to the workspace. Otherwise, shows an error message.
      */
-    public void connect(){
-        if (service.serverPing(serverAddress.getText())){
+    public void connect() {
+        if (service.serverPing(serverAddress.getText())) {
 
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(WorkspaceCtrl.class, "client", "windows", "workspace", "Workspace.fxml");
@@ -99,10 +97,8 @@ public class UserLoginCtrl implements Initializable {
         }
     }
 
-    public void connectOnEnter(KeyEvent event)
-    {
-        if(event.getCode().equals(KeyCode.ENTER))
-        {
+    public void connectOnEnter(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             connect();
         }
     }
