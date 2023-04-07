@@ -34,6 +34,7 @@ import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -100,7 +101,7 @@ public class AdminLoginCtrl implements Initializable {
 
             loader.getKey().setAdmin(true);
             helperMethods.setServerIP(serverAddress.getText());
-            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
             loader.getKey().setHelperMethods(helperMethods);
             loader.getKey().refreshWorkspace(true);
             helperMethods.setScene(new Scene(loader.getValue()));
