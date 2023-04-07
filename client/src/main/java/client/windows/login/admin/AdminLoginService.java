@@ -34,6 +34,11 @@ public class AdminLoginService {
         return server.pingServer();
     }
 
+    /**
+     * Sends a post request to the server for the admin password
+     *
+     * @param password The password to send
+     */
     public void sendPassword(String password) {
         adminUtils.sendPassword(password);
     }

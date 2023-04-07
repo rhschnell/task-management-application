@@ -191,6 +191,10 @@ public class AddCardCtrl extends SubtaskContainer {
         displayTasks();
     }
 
+    /**
+     * Handles key events to make sure the user can add tasks by pressing ENTER
+     * @param event The key event to be handled
+     */
     public void handleKeyPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             addTask();

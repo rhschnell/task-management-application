@@ -170,7 +170,7 @@ public class AdminCtrl implements Initializable {
 
     /**
      * Refreshes the workspace
-     * @param forced If true forces the refresh
+     * @param forced If true forces the refresh even though no board has been deleted
      */
     public void refreshWorkspace(boolean forced) {
         // Refresh the board
@@ -205,6 +205,9 @@ public class AdminCtrl implements Initializable {
         updateBoardColours();
     }
 
+    /**
+     * Updates the board on screen to display the correct background and font color
+     */
     public void updateBoardColours()
     {
         if(shownBoard!=null){
@@ -213,6 +216,12 @@ public class AdminCtrl implements Initializable {
         }
     }
 
+
+    /**
+     * Shows the board with the specified key. Retrieves it from the server or creates it if it
+     * does not exist yet
+     * @param targetKey The key of the board to show
+     */
     public void showBoard(String targetKey) {
         try {
             shownBoard = service.getBoard(targetKey);
@@ -258,12 +267,21 @@ public class AdminCtrl implements Initializable {
         HelperMethods.popUp(scene, "Delete the board");
     }
 
+
+    /**
+     * Adds a new list to the currently shown board
+     */
     public void addList() {
         shownBoard.addList(new CardList("New List", new ArrayList<>()));
         service.insertBoard(shownBoard);
         refreshWorkspace(false);
     }
 
+
+
+    /**
+     * Method to load the tag-overview window in a new popup screen
+     */
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
@@ -342,11 +360,19 @@ public class AdminCtrl implements Initializable {
         new Thread(sleeper).start();
     }
 
+    /**
+     * Sets the instance of HelperMethods
+     * @param helperMethods The instance of HelperMethods to set
+     */
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
         this.service.setServer(helperMethods.getServerIP());
     }
 
+
+    /**
+     * Method to open the customize-window in a new popup
+     */
     @FXML
     public void customizeBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))

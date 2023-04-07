@@ -134,10 +134,21 @@ public class Board {
         this.password = password;
     }
 
+    /**
+     * Verifies the correctness of the given password against the known password
+     * @param password The password to verify
+     * @return Boolean indicating the correctness. True if correct or there is no password set,
+     * false if incorrect
+     */
     public boolean verifyPassword(String password) {
         return this.password.equals(password) || "".equals(this.password);
     }
 
+    /**
+     * Checks for equality of objects against another object
+     * @param o The other object
+     * @return Whether this board should be considered equal to the other object
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
