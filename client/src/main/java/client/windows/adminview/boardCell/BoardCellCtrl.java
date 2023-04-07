@@ -21,6 +21,8 @@ import java.util.ResourceBundle;
 import static com.google.inject.Guice.createInjector;
 
 public class BoardCellCtrl  implements Initializable {
+    private final HelperMethods helperMethods;
+
     private AdminCtrl adminCtrl;
     private Board board;
 
@@ -33,8 +35,10 @@ public class BoardCellCtrl  implements Initializable {
 
     /**
      * Creates a new instance of BoardCellCtrl
+     * @param helperMethods hm
      */
-    public BoardCellCtrl() {
+    public BoardCellCtrl(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -81,7 +85,7 @@ public class BoardCellCtrl  implements Initializable {
         Scene scene = new Scene(root);
         loader.getKey().setAdminCtrl(adminCtrl);
         loader.getKey().setBoardKey(board.getKey());
-        HelperMethods.popUp(scene, "Delete the board");
+        helperMethods.popUp(scene, "Delete the board");
     }
 
 

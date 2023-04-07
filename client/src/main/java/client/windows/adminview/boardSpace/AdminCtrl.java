@@ -264,7 +264,7 @@ public class AdminCtrl implements Initializable {
         Scene scene = new Scene(root);
         loader.getKey().setAdminCtrl(this);
         loader.getKey().setBoardKey(shownBoard.getKey());
-        HelperMethods.popUp(scene, "Delete the board");
+        helperMethods.popUp(scene, "Delete the board");
     }
 
 
@@ -294,7 +294,7 @@ public class AdminCtrl implements Initializable {
         Scene scene = new Scene(root);
 
         String title = "Tag Overview";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
@@ -308,7 +308,7 @@ public class AdminCtrl implements Initializable {
         Scene scene = new Scene(loader.getValue());
         loader.getKey().setRemoteCtrl(this);
         loader.getKey().setAdmin(true);
-        HelperMethods.popUp(scene, "Rename board: " + shownBoard.getTitle());
+        helperMethods.popUp(scene, "Rename board: " + shownBoard.getTitle());
         refreshWorkspace(true);
     }
 
@@ -387,6 +387,6 @@ public class AdminCtrl implements Initializable {
         Scene scene = new Scene(root);
 
         String title = "Customize";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 }

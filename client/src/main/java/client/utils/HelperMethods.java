@@ -43,8 +43,7 @@ public class HelperMethods {
      * @param scene represents the scene that needs to be shown in the popup.
      * @param title represents the popup's title.
      */
-    // TODO: Make this methods non-static
-    public static void popUp(Scene scene, String title) {
+    public void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
         if (!title.equals("Help Window")) {
@@ -56,7 +55,7 @@ public class HelperMethods {
                     Parent root = loader.getValue();
                     Scene helpScene = new Scene(root);
                     String helpTitle = "Help Window";
-                    HelperMethods.popUp(helpScene, helpTitle);
+                    this.popUp(helpScene, helpTitle);
                 }
 
             });
@@ -138,7 +137,7 @@ public class HelperMethods {
                 Parent root = loader.getValue();
                 Scene helpScene = new Scene(root);
                 String helpTitle = "Help Window";
-                HelperMethods.popUp(helpScene, helpTitle);
+                this.popUp(helpScene, helpTitle);
             }
 
         });

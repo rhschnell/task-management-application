@@ -21,6 +21,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class CustomEditTagCellCtrl {
     private TagOverviewCtrl tagOverviewCtrl;
+    private final HelperMethods helperMethods;
 
     @FXML
     private TagUtils server;
@@ -44,12 +45,14 @@ public class CustomEditTagCellCtrl {
      * Constructor for the CustomEditTagCellCtrl
      * @param server The server that handles tags
      * @param tagOverviewCtrl The controller that this cell links back to
+     * @param helperMethods hm
      * @param boardUtils The instance of the utility class that handles boards
      */
     @Inject
-    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, BoardUtils boardUtils){
+    public CustomEditTagCellCtrl(TagUtils server, TagOverviewCtrl tagOverviewCtrl, HelperMethods helperMethods, BoardUtils boardUtils){
         this.server = server;
         this.tagOverviewCtrl = tagOverviewCtrl;
+        this.helperMethods = helperMethods;
         this.boardUtils=boardUtils;
     }
 
@@ -93,7 +96,7 @@ public class CustomEditTagCellCtrl {
         controller.setCustomTagCellCtrl(this);
 
         String title = "Edit Tag";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**

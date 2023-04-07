@@ -178,7 +178,7 @@ public class WorkspaceCtrl implements Initializable {
         KeyFrame kf = new KeyFrame(Duration.millis(300),
                 event -> {
                     try {
-                        refreshWorkspace();
+                        refreshWorkspace(false);
                     } catch (Exception ignored) {
                     }
                 });
@@ -380,20 +380,18 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Refreshes the workspace
-     * @param forced If true forces the refresh even though no board has been deleted
+     * @param forceBoardListRefresh If true forces the refresh even though no board has been deleted
      */
-    public void refreshWorkspace(boolean... forced) {
-        if (forced.length == 0) {
-            forced = new boolean[]{false};
-        }
+    public void refreshWorkspace(boolean forceBoardListRefresh) {
         // Refresh the board
         String key = "";
         try {
             key = shownBoard.getKey();
             refreshBoard(key);
         } catch (Exception ignored) {}
+
         // Refresh the board list (joined boards)
-        refreshBoardList(key, forced);
+        refreshBoardList(key, forceBoardListRefresh);
         updateBoardColours();
     }
 
@@ -402,8 +400,14 @@ public class WorkspaceCtrl implements Initializable {
      * @param key The board key
      */
     public void refreshBoard(String key) {
+        // Get board from server to compare to and decide if updating the display is necessary
         Board serverBoard = service.getBoard(key);
-        if (!serverBoard.getPassword().equals(shownBoard.getPassword())) {shownBoard.setProtected(true);}
+
+        // If the password was changed, the shown board should be locked
+        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !serverBoard.verifyPassword("")) {
+            shownBoard.setProtected(true);
+        }
+
         // If shown board is locked client side, and we remember the password
         if (shownBoard.verifyPassword("") || (
                 pwdMap.containsKey(shownBoard.getKey())
@@ -432,7 +436,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param key The key of the board
      * @param forced Forces a refresh even though there have been no changes
      */
-    public void refreshBoardList(String key, boolean... forced) {
+    public void refreshBoardList(String key, boolean forced) {
         boolean removed = false;
         if (joinedKeys == null) {
             return;
@@ -442,7 +446,7 @@ public class WorkspaceCtrl implements Initializable {
             try {
                 Board b = service.getBoard(k);
                 if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))) {
-                    forced[0] = true;
+                    forced = true;
                     pwdMap.put(k, "");
                 }
             } catch (NotFoundException e) {
@@ -454,7 +458,7 @@ public class WorkspaceCtrl implements Initializable {
                 }
             }
         }
-        if (removed || forced[0]) {
+        if (removed || forced) {
             boardList.getChildren().clear();
             for (String k : joinedKeys) {
                 var boardCell = new MyFXML(createInjector(new MainModules()))
@@ -904,7 +908,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setBoardKey(getBoardKey());
             controller.displayTasks();
             String title = "View Card";
-            HelperMethods.popUp(scene, title);
+            helperMethods.popUp(scene, title);
         }
     }
 
@@ -938,7 +942,7 @@ public class WorkspaceCtrl implements Initializable {
             }
         });
         String title = "Delete a board";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
@@ -1011,7 +1015,7 @@ public class WorkspaceCtrl implements Initializable {
         Scene scene = new Scene(root);
 
         String title = "Tag Overview";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
@@ -1020,7 +1024,7 @@ public class WorkspaceCtrl implements Initializable {
      * <p>
      * After copying the key to the clipboard a small notification is displayed.
      */
-    public void copyKey() throws InterruptedException {
+    public void copyKey() {
         // Functionality
         String key = shownBoard.getKey();
         service.copyKey(key);
@@ -1071,7 +1075,7 @@ public class WorkspaceCtrl implements Initializable {
         Scene scene = new Scene(loader.getValue());
         loader.getKey().setRemoteCtrl(this);
         loader.getKey().setAdmin(false);
-        HelperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
+        helperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
         refreshWorkspace(true);
     }
 
@@ -1090,7 +1094,7 @@ public class WorkspaceCtrl implements Initializable {
         Scene scene = new Scene(root);
 
         String title = "Customize";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
