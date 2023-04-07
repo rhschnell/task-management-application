@@ -34,6 +34,9 @@ public class CustomTagCellCtrl {
 
     /**
      * Constructor for the CustomTagCellCtrl
+     * @param server The instance of the utility class handling servers
+     * @param tagListCtrl The controller for the tag list that this cell links back to
+     * @param addCardCtrl The controller for the
      */
     @Inject
     public CustomTagCellCtrl(ServerUtils server, TagListCtrl tagListCtrl,

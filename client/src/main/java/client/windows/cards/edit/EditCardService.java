@@ -50,8 +50,7 @@ public class EditCardService {
      */
     public List<Tag> getAvailableTags()
     {
-        List<Tag> availableTags = new ArrayList<>();
-        availableTags.addAll(tagUtils.getBoardTags(boardKey));
+        List<Tag> availableTags = new ArrayList<>(tagUtils.getBoardTags(boardKey));
         availableTags.removeAll(appliedTags);
         return availableTags;
     }

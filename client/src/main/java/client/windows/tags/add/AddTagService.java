@@ -9,7 +9,7 @@ public class AddTagService {
 
     /**
      * Constructor for AddTagService
-     * @param server
+     * @param server Server that handles boards
      */
     @Inject AddTagService(BoardUtils server){
         this.server = server;

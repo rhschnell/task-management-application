@@ -28,27 +28,39 @@ public class BoardCellCtrl implements Initializable {
     private ImageView leaveIcon;
 
     /**
-     * Creates a new instance of ListCellCtrl
+     * Creates a new instance of BoardCellCtrl
+     * @param helperMethods The instance of HelperMethods used for utilities
      */
     @Inject
     public BoardCellCtrl(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
     }
 
+    /**
+     * Handles the user leaving the board by clicking the dedicated icon
+     */
     public void leaveBoard() {
         workspaceCtrl.leaveBoard(board);
     }
 
+    /**
+     * Handles the user pressing the title of the board to show it
+     */
     public void showMyBoard() {
         workspaceCtrl.showBoard(board.getKey());
     }
 
+    /**
+     * Sets the workspace controller that this controller links back to
+     * @param workspaceCtrl The workspace controller to set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
      * Setter for the board
+     * @param board The board to set
      */
     public void setBoard(Board board) {
         this.board = board;
@@ -78,6 +90,10 @@ public class BoardCellCtrl implements Initializable {
         protectionIcon.setCursor(Cursor.HAND);
     }
 
+    /**
+     * Updates the protection icon to mirror the state of protection that the board is in (locked
+     * or unlocked) and sets the hover animations indication that the user can lock/unlock the board
+     */
     public void updateProtectionIcon() {
         if (board.verifyPassword("")) {
             protectionIcon.setOnMouseEntered(l -> {
@@ -115,11 +131,17 @@ public class BoardCellCtrl implements Initializable {
         }
     }
 
+    /**
+     * Sets the board to be unlocked and updates the icons
+     */
     public void unlock() {
         workspaceCtrl.lockUnlock(board, "unlock");
         updateProtectionIcon();
     }
 
+    /**
+     * Sets the board to be locked and updates the icons
+     */
     public void lock() {
         workspaceCtrl.lockUnlock(board, "lock");
         updateProtectionIcon();

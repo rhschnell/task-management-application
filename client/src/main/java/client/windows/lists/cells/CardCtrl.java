@@ -192,12 +192,6 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * Updates the list of Cards with a new object.
-     *
-     * @param item The new item for the cell.
-     */
-
-    /**
      * Sets the subtasks indicator in the UI to reflect the number of completed subtasks for this
      * card as ratio completed/total
      *

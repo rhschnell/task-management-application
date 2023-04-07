@@ -73,7 +73,7 @@ public class TagListFromShortcutCtrl extends TagListCtrl {
 
     /**
      * Sets the card on which the tags can be applied
-     * @param card
+     * @param card The card of which the tags are managed
      */
     public void setCard(Card card) {
         this.card = card;

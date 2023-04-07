@@ -192,6 +192,11 @@ public class WorkspaceCtrl implements Initializable {
         this.initialListFontColor = "000000"; // Black
     }
 
+    /**
+     * Handles the action of connecting to a board.
+     * Connects to the board with the specified key. If it does not exist, creates a new board
+     * with this key.
+     */
     public void connect() {
         if (keyField.getText().equals("")) {
             return;
@@ -199,8 +204,9 @@ public class WorkspaceCtrl implements Initializable {
 
         showBoard(keyField.getText());
 
-        pwdMap.computeIfAbsent(keyField.getText(), k -> "");
+        pwdMap.putIfAbsent(keyField.getText(), "");
 
+        // Add this board to the list of joined boards (keys) and show it in the UI
         if (!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
             var boardCell = new MyFXML(createInjector(new MainModules()))
@@ -215,6 +221,10 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
 
+    /**
+     * Makes sure the user can join a board by pressing ENTER after typing the key
+     * @param event The event that gets handled and checked for the ENTER key
+     */
     public void connectOnEnter(KeyEvent event)
     {
         if(event.getCode().equals(KeyCode.ENTER))
@@ -353,6 +363,10 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
 
+    /**
+     * Gets the password map containing all the board keys and the corresponding passwords
+     * @return The password map
+     */
     public Map<String, String> getPwdMap() {
         return pwdMap;
     }
@@ -361,6 +375,10 @@ public class WorkspaceCtrl implements Initializable {
     END OF LOCK / UNLOCK METHODS
      */
 
+    /**
+     * Refreshes the workspace
+     * @param forced If true forces the refresh even though no board has been deleted
+     */
     public void refreshWorkspace(boolean... forced) {
         if (forced.length == 0) {
             forced = new boolean[]{false};
@@ -376,6 +394,10 @@ public class WorkspaceCtrl implements Initializable {
         updateBoardColours();
     }
 
+    /**
+     * Refreshes the board by getting it from the server again and displaying it again
+     * @param key The board key
+     */
     public void refreshBoard(String key) {
         Board serverBoard = service.getBoard(key);
         if (!serverBoard.getPassword().equals(shownBoard.getPassword())) {shownBoard.setProtected(true);}
@@ -402,6 +424,11 @@ public class WorkspaceCtrl implements Initializable {
         }
     }
 
+    /**
+     * Refreshes the list of boards that the user has joined
+     * @param key The key of the board
+     * @param forced Forces a refresh even though there have been no changes
+     */
     public void refreshBoardList(String key, boolean... forced) {
         boolean removed = false;
         if (joinedKeys == null) {
@@ -443,6 +470,9 @@ public class WorkspaceCtrl implements Initializable {
         updateListColors();
     }
 
+    /**
+     * Updates the lists on screen to display the correct background and font color
+     */
     public void updateListColors(){
         if(shownBoard == null){
             return;
@@ -478,6 +508,9 @@ public class WorkspaceCtrl implements Initializable {
         // }
     }
 
+    /**
+     * Updates the board on screen to display the correct background and font color
+     */
     public void updateBoardColours() {
         if (shownBoard != null) {
             listContainer.setStyle("-fx-background-color: #" + shownBoard.getBackgroundColour());
@@ -485,6 +518,11 @@ public class WorkspaceCtrl implements Initializable {
         }
     }
 
+    /**
+     * Shows the board with the specified key. Retrieves it from the server or creates it if it
+     * does not exist yet
+     * @param targetKey The key of the board to show
+     */
     public void showBoard(String targetKey) {
         try {
             shownBoard = service.getBoard(targetKey);
@@ -692,11 +730,11 @@ public class WorkspaceCtrl implements Initializable {
      * @return If the condition is valid
      */
     public boolean focusedIndicesAreValid() {
-        if (focusedCardIndex > 0 && focusedListIndex > 0 && focusedListIndex <= shownBoard.getCardLists().size()
-            && focusedCardIndex <= shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() &&
-            shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() > 0)
-            return true;
-        return false;
+        return focusedCardIndex > 0
+               && focusedListIndex > 0
+               && focusedListIndex <= shownBoard.getCardLists().size()
+               && focusedCardIndex <= shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size()
+               && shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() > 0;
     }
 
     /**
@@ -876,6 +914,11 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
         clearWorkspace();
     }
+
+    /**
+     * Handles the action of deleting the currently shown from within the workspace by opening a
+     * confirmation popup.
+     */
     public void deleteScreen() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(DeleteBoardCtrl.class, "client", "windows", "workspace", "delete", "deleteBoard.fxml");
@@ -895,10 +938,20 @@ public class WorkspaceCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Leaves the current board
+     * @see #leaveBoard(Board)
+     */
+
     public void leaveBoard() {
         leaveBoard(shownBoard);
     }
 
+    /**
+     * Sets the action of leaving a board by opening a new popup that asks the user to confirm
+     * their choice
+     * @param board The board that the user wants to leave
+     */
     public void leaveBoard(@NotNull Board board) {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(LeaveCtrl.class, "client", "windows", "workspace", "leave", "LeaveBoard.fxml");
@@ -985,7 +1038,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Delay method
-     * Source: https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code
+     * Source: <a href="https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code">...</a>
      *
      * @param millis       amount of milliseconds to delay
      * @param continuation empty
@@ -1021,7 +1074,7 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Method to open the customize window in a new popup
+     * Method to open the customize-window in a new popup
      */
     public void customizeBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))
@@ -1038,10 +1091,19 @@ public class WorkspaceCtrl implements Initializable {
         HelperMethods.popUp(scene, title);
     }
 
+    /**
+     * Sets the list of the keys for the joined board for this workspace
+     * @param joinedKeys The keys of the joined boards
+     */
+
     public void setJoinedKeys(List<String> joinedKeys) {
         this.joinedKeys = joinedKeys;
     }
 
+    /**
+     * Sets the instance of HelperMethods
+     * @param helperMethods The instance of HelperMethods to set
+     */
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
     }

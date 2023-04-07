@@ -30,8 +30,8 @@ public class ListService {
 
     /**
      * Constructor for the ListService
-     * @param listServer
-     * @param cardServer
+     * @param listServer The server handling lists
+     * @param cardServer The server handling cards
      */
     @Inject
     public ListService(CardListUtils listServer, CardUtils cardServer) {
@@ -75,8 +75,9 @@ public class ListService {
     }
 
     /**
-     * Deletes from the databse the card by using the position fix function from the cardList object
-     * @param card
+     * Deletes from the database the card by using the position fix function from the cardList
+     * object
+     * @param card The card to delete from the list
      */
     public void deleteFromCardList(Card card)
     {

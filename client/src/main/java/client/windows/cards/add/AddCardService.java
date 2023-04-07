@@ -20,6 +20,12 @@ public class AddCardService {
     private CardList cardList;
     private String boardKey;
 
+    /**
+     * Creates a new AddCardService instance
+     *
+     * @param server   Instance of the utility class that handles card lists
+     * @param tagUtils Instance of the utility class that handles tags
+     */
     @Inject
     public AddCardService(CardListUtils server, TagUtils tagUtils) {
 
@@ -28,10 +34,20 @@ public class AddCardService {
         appliedTags = new ArrayList<>();
     }
 
+    /**
+     * Gets the board key
+     *
+     * @return The board key
+     */
     public String getBoardKey() {
         return boardKey;
     }
 
+    /**
+     * Sets the board key
+     *
+     * @param boardKey The new board key
+     */
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
     }
@@ -39,7 +55,7 @@ public class AddCardService {
     /**
      * Sets the cardList that will need to be updated with the new card
      *
-     * @param cardList
+     * @param cardList The new card list
      */
     public void setCardList(CardList cardList) {
         this.cardList = cardList;
@@ -106,8 +122,7 @@ public class AddCardService {
      * @return the list of tags the that have not been applied to the card yet
      */
     public List<Tag> getAvailableTags() {
-        List<Tag> availableTags = new ArrayList<>();
-        availableTags.addAll(tagUtils.getBoardTags(boardKey));
+        List<Tag> availableTags = new ArrayList<>(tagUtils.getBoardTags(boardKey));
         availableTags.removeAll(appliedTags);
         return availableTags;
     }
