@@ -5,6 +5,7 @@ import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.adminview.boardSpace.AdminCtrl;
 import client.windows.adminview.deleteBoard.DeleteBoardCtrl;
+import com.google.inject.Inject;
 import commons.Board;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,6 +38,7 @@ public class BoardCellCtrl  implements Initializable {
      * Creates a new instance of BoardCellCtrl
      * @param helperMethods hm
      */
+    @Inject
     public BoardCellCtrl(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
     }

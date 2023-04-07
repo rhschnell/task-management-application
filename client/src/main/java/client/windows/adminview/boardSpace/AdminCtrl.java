@@ -88,7 +88,6 @@ public class AdminCtrl implements Initializable {
     /**
      * Return's to the main screen
      */
-    @FXML
     public void disconnect() {
         helperMethods.setScene(Scenes.ADMIN);
     }
@@ -373,7 +372,6 @@ public class AdminCtrl implements Initializable {
     /**
      * Method to open the customize-window in a new popup
      */
-    @FXML
     public void customizeBoard() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");

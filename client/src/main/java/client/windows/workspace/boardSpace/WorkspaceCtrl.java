@@ -403,31 +403,36 @@ public class WorkspaceCtrl implements Initializable {
         // Get board from server to compare to and decide if updating the display is necessary
         Board serverBoard = service.getBoard(key);
 
-        // If the password was changed, the shown board should be locked
-        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !serverBoard.verifyPassword("")) {
+        // If the password was changed, the shown board should be locked, EXCEPT if admin
+        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !serverBoard.verifyPassword("")
+            && !isAdmin()) {
             shownBoard.setProtected(true);
+        } else if (isAdmin()) {
+            shownBoard.setProtected(false); // Should not be needed but for stability purposes
         }
 
         // If shown board is locked client side, and we remember the password
-        if (shownBoard.verifyPassword("") || (
-                pwdMap.containsKey(shownBoard.getKey())
-                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
-                        && shownBoard.isProtected())) {
-            unlockButtons();
+        if (shownBoard.verifyPassword("") || (                      // If board doesn't have password OR
+                pwdMap.containsKey(shownBoard.getKey())                     // (We have a saved password for it AND
+                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey())) // the saved password is correct
+                        && shownBoard.isProtected())                        // AND the board is locked on screen)
+                        || isAdmin()) {                                     // OR admin {
+            unlockButtons();                                                // unlock the board
             unlockLists();
             shownBoard.setProtected(false);
-        } else if (!pwdMap.containsKey(shownBoard.getKey())
-                || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
-            lockLists();
-            lockButtons();
+
+        } else if (!pwdMap.containsKey(shownBoard.getKey())                 // else if we do not know a password for it
+                || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {   // OR we have an incorrect password
+            lockLists();                                                            // saved for it {
+            lockButtons();                                                          // lock the board on screen
             shownBoard.setProtected(true);
         }
-        if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
-                && !"".equals(pwdMap.get(shownBoard.getKey()))) {
-            pwdMap.remove(shownBoard.getKey());
+        if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))     // if saved password for board is incorrect
+                && !"".equals(pwdMap.get(shownBoard.getKey()))) {           // and the board does have a password
+            pwdMap.remove(shownBoard.getKey());                             // remove the saved password
         }
-        if (!shownBoard.equals(serverBoard)) {
-            showBoard(key);
+        if (!shownBoard.equals(serverBoard)) {              // if the shown board is not the same as server board
+            showBoard(key);                                 // reshow the boarda
         }
     }
 

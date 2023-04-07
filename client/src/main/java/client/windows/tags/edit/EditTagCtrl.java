@@ -112,7 +112,6 @@ public class EditTagCtrl {
      * When pressing enter the edit is saved
      * @param event The key event that needs to be handled
      */
-    @FXML
     public void saveOnEnter(KeyEvent event)
     {
         if(event.getCode().equals(KeyCode.ENTER))
