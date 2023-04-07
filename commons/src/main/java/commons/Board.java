@@ -88,11 +88,27 @@ public class Board {
         return this.cardLists.size();
     }
 
+    /**
+     * Ads a tag to the board
+     * @param tag
+     */
     public void addTag(Tag tag) {
         tagList.add(tag);
     }
 
-    public void removeTag(Tag tag) {
+    /**
+     * Removes the tag from the cards existing in the board
+     * @param tag
+     */
+    public void removeTag(Tag tag){
+        for(int i=0;i<cardLists.size();i++)
+        {
+            for(int j=0;j<cardLists.get(i).getCards().size();j++)
+            {
+                if(cardLists.get(i).getCards().get(j).getTags().contains(tag))
+                    cardLists.get(i).getCards().get(j).removeTag(tag);
+            }
+        }
         tagList.remove(tag);
     }
 }
