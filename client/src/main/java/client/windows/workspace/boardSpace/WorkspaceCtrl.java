@@ -431,10 +431,10 @@ public class WorkspaceCtrl implements Initializable {
         }
         if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))    // if saved password board is incorrect
                 && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
-            pwdMap.remove(shownBoard.getKey());                            // remove the saved password
+            pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
         if (!shownBoard.equals(serverBoard)) {              // if the shown board is not the same as server board
-            showBoard(key);                                 // reshow the boarda
+            showBoard(key);                                 // reshow the board
         }
     }
 
