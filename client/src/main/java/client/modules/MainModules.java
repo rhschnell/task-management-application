@@ -26,6 +26,7 @@ import client.windows.lists.cells.CardService;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.lists.list.NewListNameCtrl;
+import client.windows.lists.list.RenameListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.tags.add.AddTagCtrl;
@@ -58,5 +59,6 @@ public class MainModules implements Module {
         binder.bind(CustomizeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(DataFormatManager.class).in(Scopes.SINGLETON);
         binder.bind(NewListNameCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(RenameListCtrl.class).in(Scopes.SINGLETON);
     }
 }
