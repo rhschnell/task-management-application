@@ -6,6 +6,7 @@ import commons.Tag;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -18,14 +19,17 @@ import java.util.function.Consumer;
 @RequestMapping(Route.BOARD)
 public class BoardController {
     private final BoardService service;
+    private final SimpMessagingTemplate sender;
 
     /**
      * Creates a new BoardController
      *
      * @param service Instance of board repository
+     * @param sender
      */
-    public BoardController(BoardService service) {
+    public BoardController(BoardService service, SimpMessagingTemplate sender) {
         this.service = service;
+        this.sender = sender;
     }
 
 
@@ -39,6 +43,7 @@ public class BoardController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Board> insert(@RequestBody Board board) {
         try {
+            sender.convertAndSend("/topic/boards/titles",board);
             return ResponseEntity.ok(service.insert(board));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -75,6 +80,7 @@ public class BoardController {
     @GetMapping("/{key}")
     public ResponseEntity<Board> getById(@PathVariable("key") String key) {
         try {
+
             Board returnBoard = service.getByID(key);
             return ResponseEntity.ok(returnBoard);
         } catch (IllegalArgumentException e) {
@@ -114,6 +120,7 @@ public class BoardController {
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
+            sender.convertAndSend("/topic/boards/titles",tag);
             Board updateBoard = service.getByID(key);
             updateBoard.addTag(tag);
             service.insert(updateBoard);

@@ -42,6 +42,7 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -142,6 +143,7 @@ public class WorkspaceCtrl implements Initializable {
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
         this.admin = false;
+        service.registerForMessages();
     }
 
 
@@ -180,12 +182,8 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-
+        System.out.println("Deded");
         //Use websockets
-        service.registerForMessages("/topic/boards/titles", title -> {
-            shownBoard.setTitle(title);
-            boardName.setText(title);
-        });
 
         Timeline tl = new Timeline();
         tl.setCycleCount(-1);

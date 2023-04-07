@@ -3,6 +3,7 @@ package client.windows.workspace.boardSpace;
 import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import javafx.application.Platform;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 
@@ -67,7 +68,15 @@ public class WorkspaceService {
         clipboard.setContent(clipMap);
     }
 
-    public void registerForMessages(String dest, Consumer<String> consumer) {
-        server.registerForMessages(dest, consumer);
+    public void registerForMessages() {
+        server.registerForMessages("/topic/boards/titles", commons.Board.class, board -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Dedede");
+                }
+            });
+        });
+
     }
 }

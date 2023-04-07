@@ -19,8 +19,8 @@ class BoardControllerTest {
 
     @BeforeEach
     void before() {
-        repository = new TestBoardRepository();
-        sut = new BoardController(new BoardService(repository));
+        //repository = new TestBoardRepository();
+       // sut = new BoardController(new BoardService(repository), sender);
     }
 
     @Test

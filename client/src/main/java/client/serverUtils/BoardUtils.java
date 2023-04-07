@@ -108,20 +108,14 @@ public class BoardUtils {
      * Adds a message using websocket technologies
      * @param board the board to add
      */
-    @MessageMapping("/boards")
-    @SendTo("/topic/boards/titles")
-    public String addMessage(Board board) {
-        return insertBoard(board).getTitle();
-    }
-
     private final String url = "ws://" + serverUtils.getServer().substring(7) + "/websocket";
     private final StompSession session = connect(url);
     private StompSession connect(String url) {
-        var client = new StandardWebSocketClient();
-        var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        var client = new WebSocketStompClient(new StandardWebSocketClient());
+        //var stomp = new WebSocketStompClient(client);
+        client.setMessageConverter(new MappingJackson2MessageConverter());
         try {
-            return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+            return client.connect(url, new StompSessionHandlerAdapter() {}).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
@@ -130,16 +124,16 @@ public class BoardUtils {
         throw new IllegalStateException();
     }
 
-    public void registerForMessages(String dest, Consumer<String> consumer) {
+    public <T> void  registerForMessages(String dest, Class<T> type,Consumer<T> consumer) {
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return String.class;
+                return type;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                consumer.accept((String) payload);
+                consumer.accept((T) payload);
             }
         });
     }
