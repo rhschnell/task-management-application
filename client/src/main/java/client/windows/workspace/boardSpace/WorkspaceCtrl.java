@@ -146,7 +146,11 @@ public class WorkspaceCtrl implements Initializable {
      * Return's to the main screen
      */
     public void disconnect() {
-        helperMethods.setScene(Scenes.USER);
+        if (isAdmin()) {
+            helperMethods.setScene(Scenes.ADMIN);
+        } else {
+            helperMethods.setScene(Scenes.USER);
+        }
     }
 
     /**
@@ -212,7 +216,7 @@ public class WorkspaceCtrl implements Initializable {
         pwdMap.putIfAbsent(keyField.getText(), "");
 
         // Add this board to the list of joined boards (keys) and show it in the UI
-        if (!joinedKeys.contains(keyField.getText())) {
+        if (!joinedKeys.contains(keyField.getText()) || isAdmin()) {
             joinedKeys.add(keyField.getText());
             nameBoard();
         }
