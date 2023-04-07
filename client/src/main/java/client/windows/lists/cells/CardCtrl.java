@@ -138,6 +138,7 @@ public class CardCtrl implements Initializable {
                 loader.getKey().escape();
             }
         });
+        loader.getKey().displayTasks();
         String title = "Edit card";
         helperMethods.popUp(scene, title);
     }
