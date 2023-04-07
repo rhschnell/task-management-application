@@ -214,15 +214,20 @@ public class WorkspaceCtrl implements Initializable {
         // Add this board to the list of joined boards (keys) and show it in the UI
         if (!joinedKeys.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
-            var boardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell", "BoardCell.fxml");
-            BoardCellCtrl controller = boardCell.getKey();
-            controller.setBoard(shownBoard);
-            controller.setWorkspaceCtrl(this);
-            boardList.getChildren().add(boardCell.getValue());
-            helperMethods.getMemMap().get(helperMethods.getServerIP()).add(keyField.getText());
+            nameBoard();
         }
         keyField.clear();
+        refreshWorkspace(true);
+    }
+
+    public void nameBoard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
+
+        Scene scene = new Scene(loader.getValue());
+        loader.getKey().setRemoteCtrl(this);
+        loader.getKey().setAdmin(false);
+        helperMethods.popUp(scene, "Name board: ");
         refreshWorkspace(true);
     }
 
@@ -551,7 +556,9 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard = new Board(targetKey, targetKey, null, null);
             service.insertBoard(shownBoard);
         }
+        // Theoretically unnecessary, but to be sure
         helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
+
         if (!isAdmin()) {
             helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
         }
