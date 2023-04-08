@@ -63,10 +63,6 @@ public class BoardUtils {
                 .get(new GenericType<>() {});
     }
 
-    public void setServerUtils(ServerUtils serverUtils) {
-        this.serverUtils = serverUtils;
-    }
-
     /**
      * Sends a post request to the server to add a board to the database
      *

@@ -10,12 +10,21 @@ public class DeleteListService {
     private final BoardUtils boardUtils;
     private String boardKey;
 
+    /**
+     * Constructor for the List
+     * @param server the server
+     * @param boardUtils the boardUtils
+     */
     @Inject
     public DeleteListService(CardListUtils server, BoardUtils boardUtils) {
         this.server = server;
         this.boardUtils=boardUtils;
     }
 
+    /**
+     * Sets the boardKey
+     * @param boardKey the boardKey
+     */
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
     }

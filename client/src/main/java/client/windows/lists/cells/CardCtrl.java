@@ -68,6 +68,7 @@ public class CardCtrl implements Initializable {
      *
      * @param service The CardService for this CardCtrl
      * @param helperMethods hm
+     * @param websocketUtils the websocket utils to communicate with the websockets
      */
     @Inject
     public CardCtrl(CardService service, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
@@ -76,6 +77,10 @@ public class CardCtrl implements Initializable {
         this.websocketUtils=websocketUtils;
     }
 
+    /**
+     * Setter for the listCtrl to tell the list it needs to updates when an update is received
+     * @param listCtrl
+     */
     public void setListCtrl(ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
     }

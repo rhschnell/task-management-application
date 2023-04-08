@@ -67,7 +67,5 @@ public class WorkspaceService {
         clipboard.setContent(clipMap);
     }
 
-    public BoardUtils getServer() {
-        return server;
-    }
+
 }

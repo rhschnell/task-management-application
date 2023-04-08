@@ -16,6 +16,10 @@ import java.util.function.Consumer;
 public class WebsocketUtils {
     private ServerUtils serverUtils = new ServerUtils();
 
+    /**
+     * The serverUtils in order to communicate
+     * @param serverUtils the serverUtils
+     */
     @Inject
     public WebsocketUtils(ServerUtils serverUtils){
         this.serverUtils = serverUtils;
@@ -41,6 +45,14 @@ public class WebsocketUtils {
         throw new IllegalStateException();
     }
 
+    /**
+     * Register for the updates
+     * @param dest
+     * @param type
+     * @param consumer
+     * @return the return object
+     * @param <T>
+     */
     public <T>StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
         return session.subscribe(dest, new StompFrameHandler() {
             @Override
@@ -53,8 +65,5 @@ public class WebsocketUtils {
                 consumer.accept((T) payload);
             }
         });
-    }
-    public void send(String dest, Object o) {
-        session.send(dest, o);
     }
 }

@@ -83,6 +83,7 @@ public class ListCtrl {
      * Constructor for ListCtrl
      *
      * @param service The ListService for this controller
+     * @param websocketUtils The websocketUtils in order to send request for updates
      */
     @Inject
     public ListCtrl(ListService service, WebsocketUtils websocketUtils) {
@@ -210,7 +211,6 @@ public class ListCtrl {
             CardCtrl controller = cardCell.getKey();
 
             cardControllers.add(controller);
-
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
             makeCardDraggable(cardCell);
@@ -666,6 +666,8 @@ public class ListCtrl {
                 public void run() {
                     //Updates the cardList because a new version was received
                         service.setCardList(newCardList);
+                    //Updates the list title if updated
+                        listTitle.setText(newCardList.getListTitle());
                     //Updates the displayed cards because a newer version was received
                         displayCards();
                     //Updates the board in the workspace because a newer version is available
@@ -674,6 +676,10 @@ public class ListCtrl {
                 });
             }));
     }
+
+    /**
+     * Updates the cardList to the new version and refreshes the board in the workspace
+     */
     public void updateCardList()
     {
         //Updates the cardList because a newer version is available

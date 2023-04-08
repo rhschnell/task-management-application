@@ -25,6 +25,7 @@ public class CardController {
     /**
      * Creates a new CardController
      * @param service Instance of card repository
+     * @param sender the sender
      */
     public CardController(CardService service, SimpMessagingTemplate sender) {
         this.service = service;

@@ -115,6 +115,10 @@ public class TagOverviewCtrl {
         });
     }
 
+    /**
+     * Setter for the workspace in order to send a message the board has updates
+     * @param workspaceCtrl the workspaceCtrl
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
     }

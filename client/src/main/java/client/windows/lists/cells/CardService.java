@@ -1,6 +1,5 @@
 package client.windows.lists.cells;
 
-import client.serverUtils.BoardUtils;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import com.google.inject.Inject;
@@ -12,7 +11,6 @@ public class CardService {
     private final CardListUtils cardListUtils;
     private String boardKey;
     private CardUtils cardUtils;
-    private BoardUtils boardUtils;
 
     /**
      * Inject the servers
@@ -21,14 +19,9 @@ public class CardService {
      * @param cardListUtils Utility class that provides functionality for card lists
      */
     @Inject
-    public CardService(CardUtils cardUtils, CardListUtils cardListUtils, BoardUtils boardUtils) {
+    public CardService(CardUtils cardUtils, CardListUtils cardListUtils) {
         this.cardUtils = cardUtils;
         this.cardListUtils = cardListUtils;
-        this.boardUtils=boardUtils;
-    }
-
-    public BoardUtils getBoardUtils() {
-        return boardUtils;
     }
 
     /**

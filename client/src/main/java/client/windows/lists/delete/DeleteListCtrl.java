@@ -40,6 +40,10 @@ public class DeleteListCtrl{
         this.service = service;
     }
 
+    /**
+     * Sets the boardKey the list is part of
+     * @param boardKey the boardKey
+     */
     public void setBoardKey(String boardKey) {
         service.setBoardKey(boardKey);
     }

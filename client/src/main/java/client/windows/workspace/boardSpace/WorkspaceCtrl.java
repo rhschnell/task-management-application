@@ -138,6 +138,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param service       corresponding service
      * @param cardService   injected cardService instance
      * @param helperMethods corresponding helper methods
+     * @param websocketUtils injected websocket instance
      */
     @Inject
     public WorkspaceCtrl(WorkspaceService service,
@@ -1330,6 +1331,7 @@ public class WorkspaceCtrl implements Initializable {
                 public void run() {
                     //Update the board since the new one has changed
                     shownBoard=(Board) board;
+                    boardName.setText(shownBoard.getTitle());
                     //Display the updates since something was changed
                     displayLists();
                 }

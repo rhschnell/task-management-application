@@ -61,6 +61,11 @@ public class CardListService implements RepositoryService<CardList, Long> {
         }
         return repo.getById(id);
     }
+
+    /**
+     * Gets the cardList Repository
+     * @return the repo
+     */
     public CardListRepository getRepo() {
         return repo;
     }

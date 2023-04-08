@@ -44,10 +44,6 @@ public class ListService {
         this.cardList = new CardList();
     }
 
-    public BoardUtils getBoardUtils() {
-        return boardUtils;
-    }
-
     /**
      * Refreshes the cardList so that we know we perform operations on the last version of the CardList
      */

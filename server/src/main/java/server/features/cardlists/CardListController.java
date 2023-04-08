@@ -28,6 +28,7 @@ public class CardListController {
      * Creates a new CardListController
      *
      * @param service Instance of card list repository
+     * @param sender The sender
      */
     public CardListController(CardListService service, SimpMessagingTemplate sender) {
         this.service = service;
@@ -98,7 +99,7 @@ public class CardListController {
      * Deletes the card with the specified id from the cardList that contains that
      * card
      * @param id the card's id
-     * @return
+     * @return the response
      */
     @DeleteMapping("/deleteCard/{id}")
     @ResponseBody
