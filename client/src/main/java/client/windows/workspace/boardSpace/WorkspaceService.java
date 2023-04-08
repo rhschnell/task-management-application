@@ -68,15 +68,7 @@ public class WorkspaceService {
         clipboard.setContent(clipMap);
     }
 
-    public void registerForMessages() {
-        server.registerForMessages("/topic/boards/titles", commons.Board.class, board -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Dedede");
-                }
-            });
-        });
-
+    public BoardUtils getServer() {
+        return server;
     }
 }

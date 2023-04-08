@@ -59,6 +59,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.*;
@@ -116,7 +117,8 @@ public class WorkspaceCtrl implements Initializable {
 
     private String initialListColor;
     private String initialListFontColor;
-
+    private List <StompSession.Subscription> subscriptionsList;
+    public List <StompSession.Subscription> listListener;
     private boolean admin;
     @FXML private Label screenTitle;
     @FXML private Button leaveButton;
@@ -143,7 +145,7 @@ public class WorkspaceCtrl implements Initializable {
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
         this.admin = false;
-        service.registerForMessages();
+        //service.registerForMessages();
     }
 
 
@@ -151,6 +153,10 @@ public class WorkspaceCtrl implements Initializable {
      * Return's to the main screen
      */
     public void disconnect() {
+        for(int i=0;i<subscriptionsList.size();i++)
+        {
+            subscriptionsList.get(i).unsubscribe();
+        }
         if (isAdmin()) {
             helperMethods.setScene(Scenes.ADMIN);
         } else {
@@ -170,6 +176,8 @@ public class WorkspaceCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new HashSet<>();
+        subscriptionsList=new ArrayList<>();
+        listListener=new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
@@ -185,7 +193,7 @@ public class WorkspaceCtrl implements Initializable {
         System.out.println("Deded");
         //Use websockets
 
-        Timeline tl = new Timeline();
+      /*  Timeline tl = new Timeline();
         tl.setCycleCount(-1);
         KeyFrame kf = new KeyFrame(Duration.millis(300),
                 event -> {
@@ -196,10 +204,21 @@ public class WorkspaceCtrl implements Initializable {
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
-
+*/
         setDefaultListColors();
     }
-
+    public void registerForMessages(String key) {
+       subscriptionsList.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("There is an update");
+                    shownBoard=(Board) board;
+                    displayLists();
+                }
+            });
+        }));
+    }
     /**
      * Sets the list colors to the default
      */
@@ -212,6 +231,10 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
+        for(int i=0;i<subscriptionsList.size();i++)
+        {
+            subscriptionsList.get(i).unsubscribe();
+        }
         if (keyField.getText().strip().equals("")) {
             emptyKeyPopUp();
             return;
@@ -228,6 +251,8 @@ public class WorkspaceCtrl implements Initializable {
         if (!tempList.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
         }
+        registerForMessages(keyField.getText());
+        System.out.println(keyField.getText());
         keyField.clear();
         refreshWorkspace(true);
     }
@@ -236,6 +261,10 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
+        for(int i=0;i<subscriptionsList.size();i++)
+        {
+            subscriptionsList.get(i).unsubscribe();
+        }
         if (titleField.getText().equals("")) {
             emptyTitlePopUp();
             return;
@@ -257,6 +286,8 @@ public class WorkspaceCtrl implements Initializable {
         }
         titleField.clear();
         refreshWorkspace(true);
+        registerForMessages(key);
+        System.out.println(key);
     }
 
     /**
@@ -285,6 +316,10 @@ public class WorkspaceCtrl implements Initializable {
      * Method to clear the workspace
      */
     public void clearWorkspace() {
+        for(int i=0;i<subscriptionsList.size();i++)
+        {
+            subscriptionsList.get(i).unsubscribe();
+        }
         //Hide title bar
         boardName.setText("");
         titleBar.getChildren().forEach(c -> c.setVisible(false));
@@ -616,6 +651,10 @@ public class WorkspaceCtrl implements Initializable {
     public void displayLists() {
         listContainer.getChildren().clear();
         listControllers.clear();
+        for(int i=0;i<listListener.size();i++)
+        {
+            listListener.get(i).unsubscribe();
+        }
 
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
@@ -635,6 +674,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setHelperMethod(helperMethods);
             controller.setCardList(cardList);
             controller.displayCards();
+            controller.registerForMessages();
             setMoveShortcutListeners(loader.getKey().getCardVBox());
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);

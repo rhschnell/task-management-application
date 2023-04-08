@@ -55,6 +55,7 @@ public class DeleteCardCtrl{
      */
     public void delete(){
         ((Stage) deleteButton.getScene().getWindow()).close();
+        System.out.println("todelete"+this.deleteCard);
         service.deleteCard(this.deleteCard);
     }
     public void escape(){

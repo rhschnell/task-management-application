@@ -27,6 +27,7 @@ import client.windows.workspace.lock.AccessDeniedCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -39,6 +40,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class ListCtrl {
 
     @FXML
     private VBox completeList;
+    private List <StompSession.Subscription> subscriptionsList;
 
     @FXML
     private ScrollPane scrollPane;
@@ -108,6 +111,7 @@ public class ListCtrl {
             || keyEvent.getCode() == KeyCode.BACK_SPACE) workspaceCtrl.handleDeleteShortCut();
         if (keyEvent.getCode() == KeyCode.T) workspaceCtrl.handleTagShortcut();
     }
+
 
     /**
      * Method that checks a keyEvent and handles cases of the arrow keys
@@ -187,6 +191,19 @@ public class ListCtrl {
     /**
      * Displays the cards onto the list's inner VBox
      */
+    public void registerForMessages() {
+        workspaceCtrl.listListener.add(service.getBoardUtils().registerForMessages("/topic/lists/"+service.getCardList().getId(),CardList.class, newCardList -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("There is a list update");
+                    System.out.println(newCardList);
+                    service.setCardList(newCardList);
+                    displayCards();
+                }
+            });
+        }));
+    }
     public void displayCards() {
         updateListColors();
 
@@ -483,6 +500,7 @@ public class ListCtrl {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setDeleteId(service.getCardList().getId());
+        loader.getKey().setBoardKey(getBoardKey());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();

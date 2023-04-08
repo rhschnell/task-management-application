@@ -43,8 +43,9 @@ public class BoardController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Board> insert(@RequestBody Board board) {
         try {
-            sender.convertAndSend("/topic/boards/titles",board);
-            return ResponseEntity.ok(service.insert(board));
+            Board inserted = service.insert(board);
+            sender.convertAndSend("/topic/boards/"+board.getKey(),inserted);
+            return ResponseEntity.ok(inserted);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }

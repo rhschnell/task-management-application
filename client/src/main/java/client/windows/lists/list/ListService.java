@@ -1,5 +1,6 @@
 package client.windows.lists.list;
 
+import client.serverUtils.BoardUtils;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import com.google.inject.Inject;
@@ -9,6 +10,7 @@ import commons.CardList;
 public class ListService {
     private final CardListUtils listServer;
     private final CardUtils cardServer;
+    private final BoardUtils boardUtils;
     private String boardKey;
     private CardList cardList;
 
@@ -34,10 +36,15 @@ public class ListService {
      * @param cardServer The server handling cards
      */
     @Inject
-    public ListService(CardListUtils listServer, CardUtils cardServer) {
+    public ListService(CardListUtils listServer, CardUtils cardServer, BoardUtils boardUtils) {
         this.listServer = listServer;
         this.cardServer = cardServer;
+        this.boardUtils=boardUtils;
         this.cardList = new CardList();
+    }
+
+    public BoardUtils getBoardUtils() {
+        return boardUtils;
     }
 
     /**
@@ -83,6 +90,7 @@ public class ListService {
     {
         cardServer.deleteFromCardList(card);
     }
+
 
     /**
      * Returns the CardList with the id

@@ -2,6 +2,7 @@ package server.features.cardlists;
 
 import commons.Card;
 import commons.CardList;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import server.features.RepositoryService;
 import javax.persistence.EntityNotFoundException;
@@ -66,29 +67,21 @@ public class CardListService implements RepositoryService<CardList, Long> {
      * @param card The card to be removed
      * @return the card that was removed
      */
-    public Card removeFromCardList(Card card) {
-        if(card == null)
+    public CardList removeFromCardList(Card card) {
+       if(card == null)
         {
             throw new IllegalArgumentException();
         }
-        int ok = 0;
         for(int i=0;i<repo.findAll().size();i++)
         {
             if(repo.findAll().get(i).getCards().contains(card)) {
                 CardList repoList = repo.findAll().get(i);
                 repoList.removeCard(card);
-                repo.save(repoList);
-                ok = 1;
-                break;
+                //repo.save(repoList);
+               return repoList;
             }
         }
-
-        if(ok == 0)
-        {
-            throw new EntityNotFoundException();
-        }
-
-        return card;
+        return new CardList();
     }
 
 

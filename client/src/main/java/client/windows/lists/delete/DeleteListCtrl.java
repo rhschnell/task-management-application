@@ -31,6 +31,7 @@ public class DeleteListCtrl{
     @FXML
     private Button deleteButton;
 
+
     /**
      * Constructor for DeleteListCtrl
      * @param service corresponding service
@@ -40,7 +41,9 @@ public class DeleteListCtrl{
         this.service = service;
     }
 
-
+    public void setBoardKey(String boardKey) {
+      service.setBoardKey(boardKey);
+    }
 
     /**
      * This method cancels deleting the list from the board

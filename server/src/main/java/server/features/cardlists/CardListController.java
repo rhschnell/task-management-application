@@ -3,7 +3,9 @@ package server.features.cardlists;
 import commons.Card;
 import commons.CardList;
 import commons.Route;
+import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -13,14 +15,16 @@ import java.util.List;
 @RequestMapping(Route.CARD_LIST)
 public class CardListController {
     private final CardListService service;
+    private final SimpMessagingTemplate sender;
 
     /**
      * Creates a new CardListController
      *
      * @param service Instance of card list repository
      */
-    public CardListController(CardListService service) {
+    public CardListController(CardListService service, SimpMessagingTemplate sender) {
         this.service = service;
+        this.sender=sender;
     }
 
 
@@ -34,7 +38,8 @@ public class CardListController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Void> insert(@RequestBody CardList cardList) {
         try {
-            service.insert(cardList);
+            CardList inserted = service.insert(cardList);
+            sender.convertAndSend("/topic/lists/"+cardList.getId(),inserted);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -90,7 +95,17 @@ public class CardListController {
     @PostMapping("/removeFromCardList/")
     public ResponseEntity<Card> removeFromCardList(@RequestBody Card card) {
         try {
-            return ResponseEntity.ok(service.removeFromCardList(card));
+           // Ret
+          //  System.out.println("test");
+            //CardList returned = service.removeFromCardList(card);
+            System.out.println("entered");
+            CardList returned = service.removeFromCardList(card);
+            returned.removeCard(card);
+            System.out.println(returned);
+            System.out.println("exited");
+            insert(returned);
+            //sender.convertAndSend("/topic/lists/"+returned.getId(),returned);
+            return ResponseEntity.ok(new Card());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException e) {
