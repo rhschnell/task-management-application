@@ -1,5 +1,6 @@
 package client.windows.workspace.rename;
 
+import client.utils.HelperMethods;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
@@ -13,6 +14,7 @@ public class RenameCtrl {
     private final RenameService service;
 
     private WorkspaceCtrl workspaceCtrl;
+    private HelperMethods helperMethods;
 
     @FXML
     private TextField inputField;
@@ -21,10 +23,14 @@ public class RenameCtrl {
      * Injectable constructor for the RenameCtrl
      * After using this constructor setWorkspaceCtrl MUST be called.
      * @param service Injected parameter of corresponding service
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public RenameCtrl(RenameService service) {
+    public RenameCtrl(RenameService service,HelperMethods helperMethods) {
+
         this.service = service;
+        this.helperMethods = helperMethods;
+
     }
 
     /**
@@ -36,7 +42,11 @@ public class RenameCtrl {
      */
     public void save() {
         Board board = workspaceCtrl.getShownBoard();
-        board.setTitle(inputField.getText());
+
+        String newTitle = inputField.getText();
+        if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
+
+        board.setTitle(newTitle);
         service.insertBoard(board);
         close();
     }

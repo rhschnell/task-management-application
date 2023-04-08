@@ -1,5 +1,6 @@
 package client.windows.lists.cells;
 
+import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
@@ -19,6 +20,7 @@ public class RenameCardCtrl implements Initializable {
     private Card card;
     private RenameCardService service;
     private ListCtrl listCtrl;
+    private HelperMethods helperMethods;
 
 
     /**
@@ -26,10 +28,12 @@ public class RenameCardCtrl implements Initializable {
      * MUST call setCard in order to work properly
      * @see #setData(Card) (Card)
      * @param service Injected parameter of corresponding service
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public RenameCardCtrl(RenameCardService service){
+    public RenameCardCtrl(RenameCardService service, HelperMethods helperMethods){
         this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -60,7 +64,9 @@ public class RenameCardCtrl implements Initializable {
      */
     public void save(){
         String newTitle = inputField.getText();
-        if (newTitle == null || newTitle.isEmpty()) return; //TODO notify user
+
+        if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
+
         this.card.setTitle(newTitle);
         service.insertCard(this.card);
         this.close();
