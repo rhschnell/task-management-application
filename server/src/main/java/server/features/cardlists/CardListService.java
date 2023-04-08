@@ -11,6 +11,10 @@ import java.util.List;
 public class CardListService implements RepositoryService<CardList, Long> {
     private final CardListRepository repo;
 
+    /**
+     * Constructor for the CardListService
+     * @param repo a CardListRepository instance
+     */
     public CardListService(CardListRepository repo) {
         this.repo = repo;
     }

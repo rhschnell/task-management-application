@@ -9,18 +9,24 @@ public class LockPopUpService {
 
     private Board board;
 
+    /**
+     * Constructor for the LockPopUpService
+     * @param server a BoardUtils instance
+     */
     @Inject
     public LockPopUpService(BoardUtils server) {
         this.server = server;
     }
 
+    /**
+     * A utility method to verify the password of the board against passed text
+     * @param board the board used for the verification
+     * @param text the text to be checked
+     * @return a boolean that is true if the password is correct and false otherwise
+     */
     public boolean verifyPassword(Board board, String text) {
         return board.verifyPassword(text);
     }
-
-
-
-    // SETTERS AND GETTERS
 
     /**
      * Setter for this controller's board

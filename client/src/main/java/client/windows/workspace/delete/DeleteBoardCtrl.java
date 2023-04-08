@@ -64,6 +64,10 @@ public class DeleteBoardCtrl{
         ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
+    /**
+     * A setter for the board
+     * @param board the board to be set
+     */
     public void setBoard(Board board) {
         this.board = board;
     }

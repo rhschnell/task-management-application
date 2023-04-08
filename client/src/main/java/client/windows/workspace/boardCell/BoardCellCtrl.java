@@ -150,6 +150,9 @@ public class BoardCellCtrl implements Initializable {
         updateProtectionIcon();
     }
 
+    /**
+     * Leaves or deletes a board depending on whether we are in the admin workspace or the user one
+     */
     public void leaveDelete() {
         if (workspaceCtrl.isAdmin()) {
             workspaceCtrl.deleteScreen(board);

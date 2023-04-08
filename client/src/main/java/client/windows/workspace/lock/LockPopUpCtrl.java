@@ -75,10 +75,18 @@ public class LockPopUpCtrl {
         service.setBoard(board);
     }
 
+    /**
+     * Setter for the mode of the lock (i.e., "lock" or "unlock")
+     * @param mode the mode
+     */
     public void setMode(String mode) {
         this.mode = mode;
     }
 
+    /**
+     * Setter for the WorkspaceCtrl
+     * @param workspace a WorkspaceCtrl instance
+     */
     public void setWorkspace(WorkspaceCtrl workspace) {
         this.workspace = workspace;
     }

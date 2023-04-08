@@ -97,6 +97,10 @@ public class UserLoginCtrl implements Initializable {
         }
     }
 
+    /**
+     * Allows connection to the server by pressing enter
+     * @param event the event to be considered (only ENTER is taken into account)
+     */
     public void connectOnEnter(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             connect();
