@@ -117,28 +117,29 @@ public class CardCtrl implements Initializable {
      * it gets updates cause the path contains the cardId, which is unique
      */
     public void registerForCardUpdates() {
-        StompSession.Subscription subscriber = service.getBoardUtils().registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
-            Platform.runLater(new Runnable() {
-                @Override
+        StompSession.Subscription subscriber = service.getBoardUtils().
+                registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
                 public void run() {
                     //Sets the card to the updated one
-                    card=newCard;
+                            card=newCard;
                     //Updates the description indicator
-                    if(newCard.getDescription()!=null)
-                         setDescriptionIconVisible(true);
-                    if(newCard.getDescription()==null || newCard.getDescription().equals(""))
-                        setDescriptionIconVisible(false);
+                            if(newCard.getDescription()!=null)
+                                setDescriptionIconVisible(true);
+                            if(newCard.getDescription()==null || newCard.getDescription().equals(""))
+                                setDescriptionIconVisible(false);
                     //Updates the tag indicator
-                    setDisplayTags(newCard.getTags());
+                            setDisplayTags(newCard.getTags());
                     //Updates the subtasks indicator
-                    if(newCard.getSubTasks()!=null) {
-                        long completedTasks =
-                                newCard.getSubTasks().stream().filter(Task::isCompleted).count();
-                        setSubtasksCompleted(completedTasks, newCard.getSubTasks().size());
-                    }
-                }
-            });
-        });
+                            if(newCard.getSubTasks()!=null) {
+                                    long completedTasks =
+                                        newCard.getSubTasks().stream().filter(Task::isCompleted).count();
+                                    setSubtasksCompleted(completedTasks, newCard.getSubTasks().size());
+                            }
+                        }
+                    });
+                });
         //Adds the subscibert to the list of subscribers so when something changed we can unsubscribe
         listCtrl.addSubscriber(subscriber);
     }

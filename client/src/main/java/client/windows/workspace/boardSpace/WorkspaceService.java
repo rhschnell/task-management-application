@@ -3,14 +3,12 @@ package client.windows.workspace.boardSpace;
 import client.serverUtils.BoardUtils;
 import com.google.inject.Inject;
 import commons.Board;
-import javafx.application.Platform;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class WorkspaceService {
     private final BoardUtils server;

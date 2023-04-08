@@ -203,19 +203,20 @@ public class ListCtrl {
      * Register for this list updated, the parameter cardList id being set into the destination
      */
     public void registerForListUpdates() {
-        workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+service.getCardList().getId(),CardList.class, newCardList -> {
-            Platform.runLater(new Runnable() {
-                @Override
+        workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+
+                        service.getCardList().getId(), CardList.class, newCardList -> {
+                Platform.runLater(new Runnable() {
+                    @Override
                 public void run() {
                     //Sets the newCardList to the controller
-                    service.setCardList(newCardList);
+                        service.setCardList(newCardList);
                     //Display the new cards since something was updated
-                    displayCards();
+                        displayCards();
                     //In order the board to be the latest
-                    workspaceCtrl.needToUpdateBoard();
-                }
-            });
-        }));
+                        workspaceCtrl.needToUpdateBoard();
+                    }
+                });
+            }));
     }
     /**
      * Displays the cards onto the list's inner VBox
