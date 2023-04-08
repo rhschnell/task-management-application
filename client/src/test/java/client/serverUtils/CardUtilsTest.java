@@ -1,6 +1,7 @@
 package client.serverUtils;
 
 import commons.Card;
+import commons.CardList;
 import commons.Route;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -47,7 +48,7 @@ class CardUtilsTest {
         long id = 1;
         cardUtils.deleteCard(id);
         verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.CARD + "/" + id);
+        verify(mocker.targetMock).path(Route.CARD_LIST + "/deleteCard/" + id);
         verify(mocker.targetMock).request(APPLICATION_JSON);
         verify(mocker.builderMock).accept(APPLICATION_JSON);
         verify(mocker.builderMock).delete(Card.class);
@@ -57,9 +58,11 @@ class CardUtilsTest {
     @Test
     void deleteFromCardList() {
         Card card = new Card();
-        cardUtils.deleteFromCardList(card);
+        CardList cardList = new CardList();
+        cardList.addCard(card);
+        cardUtils.deleteFromCardList(cardList.getId(),card);
         verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.CARD_LIST + "/removeFromCardList/");
+        verify(mocker.targetMock).path(Route.CARD_LIST + "/removeFromCardList/0");
         verify(mocker.targetMock).request(APPLICATION_JSON);
         verify(mocker.builderMock).accept(APPLICATION_JSON);
         verify(mocker.builderMock).post(Entity.entity(card, APPLICATION_JSON), Card.class);

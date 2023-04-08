@@ -2,6 +2,7 @@ package client.windows.lists.cells;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
@@ -59,6 +60,7 @@ public class CardCtrl implements Initializable {
     private final CardService service;
     private final HelperMethods helperMethods;
     private  ListCtrl listCtrl;
+    private WebsocketUtils websocketUtils;
 
 
     /**
@@ -68,9 +70,10 @@ public class CardCtrl implements Initializable {
      * @param helperMethods hm
      */
     @Inject
-    public CardCtrl(CardService service, HelperMethods helperMethods) {
+    public CardCtrl(CardService service, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
         this.service = service;
         this.helperMethods = helperMethods;
+        this.websocketUtils=websocketUtils;
     }
 
     public void setListCtrl(ListCtrl listCtrl) {
@@ -286,7 +289,7 @@ public class CardCtrl implements Initializable {
      * it gets updates cause the path contains the cardId, which is unique
      */
     public void registerForCardUpdates() {
-        StompSession.Subscription subscriber = service.getBoardUtils().
+        StompSession.Subscription subscriber =websocketUtils.
                 registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
                     Platform.runLater(new Runnable() {
                         @Override

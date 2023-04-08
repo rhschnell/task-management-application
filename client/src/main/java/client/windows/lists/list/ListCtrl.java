@@ -17,6 +17,7 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
@@ -79,6 +80,20 @@ public class ListCtrl {
 
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
+    private WebsocketUtils websocketUtils;
+    /**
+     * Constructor for ListCtrl
+     *
+     * @param service The ListService for this controller
+     */
+    @Inject
+    public ListCtrl(ListService service, WebsocketUtils websocketUtils) {
+        this.service = service;
+        cardControllers = new ArrayList<>();
+        focusedCardIndex = -1;
+        cardSubscribers = new ArrayList<>();
+        this.websocketUtils = websocketUtils;
+    }
 
     /**
      * Sets the workspace control
@@ -159,18 +174,6 @@ public class ListCtrl {
         return cardVBox;
     }
 
-    /**
-     * Constructor for ListCtrl
-     *
-     * @param service The ListService for this controller
-     */
-    @Inject
-    public ListCtrl(ListService service) {
-        this.service = service;
-        cardControllers = new ArrayList<>();
-        focusedCardIndex = -1;
-        cardSubscribers = new ArrayList<>();
-    }
 
     /**
      * Sets the cardList
@@ -613,19 +616,19 @@ public class ListCtrl {
      * Register for this list updated, the parameter cardList id being set into the destination
      */
     public void registerForListUpdates() {
-        workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+
+        workspaceCtrl.addListSubscriber(websocketUtils.registerForMessages("/topic/lists/"+
                 service.getCardList().getId(), CardList.class, newCardList -> {
-            Platform.runLater(new Runnable() {
-                @Override
+                Platform.runLater(new Runnable() {
+                    @Override
                 public void run() {
                     //Updates the cardList because a new version was received
-                    service.setCardList(newCardList);
+                        service.setCardList(newCardList);
                     //Updates the displayed cards because a newer version was received
-                    displayCards();
+                        displayCards();
                     //Updates the board in the workspace because a newer version is available
-                    workspaceCtrl.updateBoard();
-                }
-            });
+                        workspaceCtrl.updateBoard();
+                    }
+                });
             }));
     }
     public void updateCardList()

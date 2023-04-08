@@ -17,6 +17,7 @@ package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
@@ -119,6 +120,7 @@ public class WorkspaceCtrl implements Initializable {
     private boolean admin;
     @FXML private Label screenTitle;
     @FXML private Button leaveButton;
+    private WebsocketUtils websocketUtils;
 
 
     /**
@@ -130,7 +132,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @Inject
     public WorkspaceCtrl(WorkspaceService service,
-                         CardService cardService, HelperMethods helperMethods) {
+                         CardService cardService, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
         this.service = service;
         this.cardService = cardService;
         this.helperMethods = helperMethods;
@@ -143,6 +145,7 @@ public class WorkspaceCtrl implements Initializable {
         this.pwdMap = new HashMap<>();
         this.admin = false;
         //service.registerForMessages();
+        this.websocketUtils=websocketUtils;
     }
     /**
      * Return's to the main screen
@@ -1272,7 +1275,7 @@ public class WorkspaceCtrl implements Initializable {
      * @param key the board we need to get the updated information
      */
     public void registerForBoardUpdates(String key) {
-        boardSubscriber.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
+        boardSubscriber.add(websocketUtils.registerForMessages("/topic/boards/"+key,Board.class, board -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
