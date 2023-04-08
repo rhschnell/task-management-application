@@ -7,6 +7,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WorkspaceService {
@@ -25,8 +26,8 @@ public class WorkspaceService {
      * Inserts the board to the server, or updates it
      * @param board the board to be inserted or update
      */
-    public void insertBoard(Board board) {
-        server.insertBoard(board);
+    public Board insertBoard(Board board) {
+        return server.insertBoard(board);
     }
 
     /**
@@ -36,6 +37,14 @@ public class WorkspaceService {
      */
     public Board getBoard(String key) {
         return server.getBoard(key);
+    }
+
+    /**
+     * Gets all boards from the database
+     * @return List of boards that are in the database
+     */
+    public List<Board> getBoards() {
+        return server.getBoards();
     }
 
     /**

@@ -46,7 +46,7 @@ import java.util.List;
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
-    private HelperMethods hm;
+    private HelperMethods helperMethods;
     private final ListService service;
 
     private DataFormat cardFormat;
@@ -471,7 +471,7 @@ public class ListCtrl {
         loader.getKey().setBoardKey(getBoardKey());
 
         String title = "Create a card";
-        hm.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
@@ -493,7 +493,7 @@ public class ListCtrl {
             }
         });
         String title = "Delete a list";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
@@ -554,8 +554,8 @@ public class ListCtrl {
      * @param hm The new instance of helper methods
      */
     public void setHelperMethod(HelperMethods hm) {
-        this.hm = hm;
-        this.cardFormat = this.hm.getCardFormat();
+        this.helperMethods = hm;
+        this.cardFormat = this.helperMethods.getCardFormat();
     }
 
     /**
@@ -627,7 +627,7 @@ public class ListCtrl {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Access denied!";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
 

@@ -21,11 +21,11 @@ public class TaskService implements RepositoryService<Task, Long> {
      * @param task the task to be inserted
      */
     @Override
-    public void insert(Task task) {
+    public Task insert(Task task) {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        repo.save(task);
+        return repo.save(task);
     }
 
     /**

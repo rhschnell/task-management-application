@@ -30,7 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -84,7 +84,7 @@ public class UserLoginCtrl implements Initializable {
 
 
             helperMethods.setServerIP(serverAddress.getText());
-            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
             loader.getKey().setHelperMethods(helperMethods);
             loader.getKey().setJoinedKeys(helperMethods.getMemMap().get(serverAddress.getText()));
             loader.getKey().refreshWorkspace(true);

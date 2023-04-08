@@ -21,7 +21,8 @@ import java.util.List;
 import static com.google.inject.Guice.createInjector;
 
 public class TagOverviewCtrl {
-    private TagUtils tagUtils;
+    private final HelperMethods helperMethods;
+    private final TagUtils tagUtils;
     private String boardKey;
     private List<Tag> tagList;
 
@@ -36,10 +37,12 @@ public class TagOverviewCtrl {
 
     /**
      * Constructor for the TagOverviewCtrl
+     * @param helperMethods hm
      * @param tagUtils Instance of the utility class for tags
      */
     @Inject
-    public TagOverviewCtrl(TagUtils tagUtils) {
+    public TagOverviewCtrl(HelperMethods helperMethods, TagUtils tagUtils) {
+        this.helperMethods = helperMethods;
         this.tagUtils = tagUtils;
         this.tagList = new ArrayList<>();
     }
@@ -54,7 +57,7 @@ public class TagOverviewCtrl {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add Tag";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**
