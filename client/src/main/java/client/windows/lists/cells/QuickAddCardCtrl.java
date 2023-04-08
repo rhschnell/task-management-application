@@ -17,12 +17,20 @@ public class QuickAddCardCtrl {
     @FXML
     private Button addButton;
 
+    /**
+     * Constructor for QuickAddCardCtrl
+     * @param service a CardService instance
+     * @param listCtrl a ListCtrl instance
+     */
     @Inject
     public QuickAddCardCtrl(CardService service, ListCtrl listCtrl) {
         this.service = service;
         this.listCtrl = listCtrl;
     }
 
+    /**
+     * Displays the add button
+     */
     public void setAddButtonVisible() {
         this.addButton.setVisible(true);
         this.addButton.setDisable(false);
@@ -36,7 +44,6 @@ public class QuickAddCardCtrl {
         listCtrl.displayCards();
     }
 
-
     /**
      * Set the ListCtrl the QuickAdd is on
      * @param listCtrl the listCtrl that needs to be setted
@@ -44,10 +51,20 @@ public class QuickAddCardCtrl {
     public void setListCtrl(ListCtrl listCtrl) {
         this.listCtrl = listCtrl;
     }
+
+    /**
+     * Getter for the key of the board
+     * @return the key of the board
+     */
     public String getBoardKey()
     {
         return service.getBoardKey();
     }
+
+    /**
+     * Setter for the key of the board
+     * @param boardKey the key of the board
+     */
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);

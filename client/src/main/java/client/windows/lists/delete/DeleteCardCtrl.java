@@ -58,6 +58,10 @@ public class DeleteCardCtrl{
         ((Stage) deleteButton.getScene().getWindow()).close();
         service.deleteCard(this.deleteCard);
     }
+
+    /**
+     * This method closes the window/stage
+     */
     public void escape(){
         ((Stage) cancelButton.getScene().getWindow()).close();
     }

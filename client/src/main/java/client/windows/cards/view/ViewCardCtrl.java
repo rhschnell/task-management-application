@@ -134,6 +134,9 @@ public class ViewCardCtrl {
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
 
+    /**
+     * Pops up the edit card window
+     */
     public void edit() {
         var loader = myFXML.load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
         loader.getKey().setBoardKey(getBoardKey());

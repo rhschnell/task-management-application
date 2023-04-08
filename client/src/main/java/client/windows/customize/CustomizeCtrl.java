@@ -44,6 +44,12 @@ public class CustomizeCtrl {
     @FXML
     private VBox cardPresets;
 
+    /**
+     * Constructor for CustomizeCtrl
+     * @param workspaceCtrl a WorkspaceCtrl instance
+     * @param boardUtils a BoardUtils instance
+     * @param cardListUtils a CardListUtils instance
+     */
     @Inject
     public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, BoardUtils boardUtils, CardListUtils cardListUtils) {
         this.workspaceCtrl = workspaceCtrl;
@@ -63,11 +69,17 @@ public class CustomizeCtrl {
         listFontColor.setValue(Color.web(workspaceCtrl.getInitialListFontColor()));
     }
 
+    /**
+     * Setter for the board background color
+     */
     @FXML
     public void setBoardBackgroundColor() {
         board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2, 8));
     }
 
+    /**
+     * Setter for the board font color
+     */
     @FXML
     public void setBoardFontColor() {
         board.setFontColour(boardFontColor.getValue().toString().substring(2, 8));
@@ -122,6 +134,9 @@ public class CustomizeCtrl {
         return listFontColor.getValue().toString();
     }
 
+    /**
+     * Resets the colors of the board to default
+     */
     @FXML
     public void resetBoard() {
         board.setFontColour("000000");
@@ -148,6 +163,9 @@ public class CustomizeCtrl {
         workspaceCtrl.setInitialListColor(defaultBackground);
     }
 
+    /**
+     * Closes the window/stage
+     */
     public void close() {
         ((Stage) closeButton.getScene().getWindow()).close();
     }
@@ -164,10 +182,18 @@ public class CustomizeCtrl {
         ((Stage) closeButton.getScene().getWindow()).close();
     }
 
+    /**
+     * Getter for the board
+     * @return the board
+     */
     public Board getBoard() {
         return this.board;
     }
 
+    /**
+     * Setter for the board
+     * @param shownBoard the board to be set
+     */
     public void setBoard(Board shownBoard) {
         board = shownBoard;
         boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));

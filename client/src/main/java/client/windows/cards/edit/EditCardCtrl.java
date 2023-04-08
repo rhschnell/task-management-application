@@ -100,10 +100,18 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         newCard.setSubTasks(card.getSubTasks());
     }
 
+    /**
+     * Getter for the key of the board
+     * @return the key of the board
+     */
     public String getBoardKey() {
         return service.getBoardKey();
     }
 
+    /**
+     * Setter for the key of the board
+     * @param boardKey the key of the board to be set
+     */
     public void setBoardKey(String boardKey) {
         service.setBoardKey(boardKey);
     }
@@ -186,11 +194,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         helperMethods.popUp(scene, title);
     }
 
-
     /**
-     * Sets the applied tags to this card and displays them on screen
-     *
-     * @param appliedTags The applied tags to set to the card
+     * Setter for the applied tag list
+     * @param appliedTags a list of tag objects
      */
     public void setAppliedTags(List<Tag> appliedTags) {
         if (appliedTags == null) appliedTags = new ArrayList<>();
@@ -209,6 +215,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     }
 
+    /**
+     * Adds a task to the card and displays it based on user input
+     */
     public void addTask() {
         if (!(addTaskField.getText() != null && !addTaskField.getText().isEmpty())) {
             return; //TODO: notify user in some way that you cannot add empty tasks
@@ -221,12 +230,19 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         displayTasks();
     }
 
+    /**
+     * Allows adding a task by pressing ENTER
+     * @param event the event (only ENTER is considered)
+     */
     public void handleKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             addTask();
         }
     }
 
+    /**
+     * Displays the subtasks to the UI
+     */
     @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
@@ -244,6 +260,10 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     }
 
+    /**
+     * Deletes a subtask from the card
+     * @param task the subtask you want to delete
+     */
     @Override
     public void deleteSubtask(Task task) {
         deletedSubtaskIDs.add(task.getId());

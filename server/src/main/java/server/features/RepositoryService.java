@@ -7,6 +7,7 @@ public interface RepositoryService<T, ID> {
     /**
      * Inserts given entity into repository
      * @param t entity to be inserted
+     * @return the inserted entity
      */
     T insert(T t);
 

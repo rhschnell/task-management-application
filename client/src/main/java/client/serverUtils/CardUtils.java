@@ -74,11 +74,20 @@ public class CardUtils {
                 .get(new GenericType<>() {});
     }
 
+    /**
+     * Setter for the client
+     * @param client the client to be set
+     */
     public void setClient(Client client)
     {
         this.client = client;
     }
 
+    /**
+     * Getter for the card with a given ID
+     * @param id the ID of the card to retrieve
+     * @return the card with that ID
+     */
     public Card getCardById(long id) {
         return client.target(serverUtils.getServer()).path(Route.CARD + "/" + id)
                 .request(APPLICATION_JSON)

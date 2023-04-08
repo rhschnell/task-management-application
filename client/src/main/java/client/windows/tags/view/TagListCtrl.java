@@ -51,7 +51,11 @@ public class TagListCtrl {
     private List<Tag> availableTags;
     private List<Tag> appliedTags;
 
-
+    /**
+     * Constructor for the TagListCtrl
+     * @param addCardCtrl an AddCardCtrl instance
+     * @param editCardCtrl an EditCardCtrl instance
+     */
     @Inject
     public TagListCtrl(AddCardCtrl addCardCtrl, EditCardCtrl editCardCtrl) {
         this.addCardCtrl = addCardCtrl;
@@ -62,10 +66,18 @@ public class TagListCtrl {
         appliedTagsBox = new VBox();
     }
 
+    /**
+     * Setter for the type of the TagListCtrl (e.g., "edit" or "add")
+     * @param type the type of the TagListCtrl
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Getter for the type of the TagListCtrl (e.g., "edit" or "add")
+     * @return the type of the TagListCtrl
+     */
     public String getType() {
         return type;
     }

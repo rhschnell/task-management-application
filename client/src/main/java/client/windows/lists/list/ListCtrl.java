@@ -66,8 +66,6 @@ public class ListCtrl {
     @FXML
     private VBox cardVBox;
     @FXML
-    private TextField renameTitle;
-    @FXML
     private Button deleteButton;
     @FXML
     private Button createCardButton;
@@ -97,6 +95,7 @@ public class ListCtrl {
 
     /**
      * Sets the workspace control
+     *
      * @param workspaceCtrl the workspace to set
      */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
@@ -115,6 +114,7 @@ public class ListCtrl {
 
     /**
      * Sets the keyEvent listeners
+     *
      * @param keyEvent The key event that needs to be handled
      */
     public void setKeyEventListeners(KeyEvent keyEvent) {
@@ -170,6 +170,10 @@ public class ListCtrl {
         return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
 
+    /**
+     * Getter for the VBox containing the displayed cards of the list
+     * @return the card VBox
+     */
     public VBox getCardVBox() {
         return cardVBox;
     }
@@ -177,6 +181,7 @@ public class ListCtrl {
 
     /**
      * Sets the cardList
+     *
      * @param cardList to set
      */
     public void setCardList(CardList cardList) {
@@ -505,15 +510,43 @@ public class ListCtrl {
         helperMethods.popUp(scene, title);
     }
 
-    public void rename() {
-        renameTitle.setVisible(true);
-        renameTitle.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.ENTER)) {
-                listTitle.setText(renameTitle.getText());
-                service.renameCardList(renameTitle.getText());
-                renameTitle.setVisible(false);
-            }
+    /**
+     * Sets the title of this list and updates the database and ui
+     *
+     * @param newTitle The new title of the corresponding list
+     */
+    public void renameList(String newTitle) {
+        // Update local data
+        getCardList().setListTitle(newTitle);
+        // Update UI
+        listTitle.setText(newTitle);
+        // Update database
+        service.insertCardList(getCardList());
+
+    }
+
+    /**
+     * Handles the renaming of lists by instantiating a new popup
+     */
+    public void onRenameButtonClicked() {
+        // Initialize a new rename dialog
+        var loader = new MyFXML(createInjector(new client.modules.MainModules()))
+                .load(RenameListCtrl.class, "client", "windows",
+                        "lists", "list", "RenameList.fxml");
+
+        RenameListCtrl controller = loader.getKey();
+        controller.setListCtrl(this);
+        controller.setPreviousTitle(getCardList().getListTitle());
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) controller.cancel();
         });
+
+        helperMethods.popUp(scene, "Rename list: " + getCardList().getListTitle());
+
+
     }
 
     /**
@@ -531,6 +564,7 @@ public class ListCtrl {
 
     /**
      * Sets the helperMethod
+     *
      * @param hm The new instance of helper methods
      */
     public void setHelperMethod(HelperMethods hm) {
@@ -548,9 +582,11 @@ public class ListCtrl {
         service.dragAndDrop(card, newIndex);
     }
 
-
+    /**
+     * Locks the editing capabilities of the list
+     */
     public void lock() {
-        for(int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
+        for (int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
             CardCtrl ctrl = cardControllers.get(i);
 
             ctrl.getEditButton().setOnMouseClicked(e -> {
@@ -574,8 +610,11 @@ public class ListCtrl {
         quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
+    /**
+     * Unlocks editing capabilities of the list
+     */
     public void unlock() {
-        for(int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
+        for (int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
             CardCtrl ctrl = cardControllers.get(i);
 
             ctrl.getEditButton().setOnMouseClicked(e -> {
@@ -586,7 +625,7 @@ public class ListCtrl {
             });
         }
         renameButton.setOnMouseClicked(e -> {
-            rename();
+            onRenameButtonClicked();
         });
         deleteButton.setOnMouseClicked(e -> {
             deleteScreen();
@@ -600,6 +639,9 @@ public class ListCtrl {
         quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
+    /**
+     * Pop up showing that access to editing the list is denied
+     */
     public void accessDeniedPopUp() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "lock", "AccessDenied.fxml");
@@ -609,6 +651,8 @@ public class ListCtrl {
         String title = "Access denied!";
         helperMethods.popUp(scene, title);
     }
+
+
 
     ///WEBSOCKETS
     /**

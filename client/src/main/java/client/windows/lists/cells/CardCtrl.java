@@ -118,7 +118,6 @@ public class CardCtrl implements Initializable {
     /**
      * Displays the DeleteList FXML into a new window (Popup).
      */
-
     public void delete() {
         var loader = new MyFXML(createInjector(new MainModules()))
                     .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
@@ -137,6 +136,9 @@ public class CardCtrl implements Initializable {
         helperMethods.popUp(scene, title);
     }
 
+    /**
+     * Pops up the edit card window
+     */
     public void edit() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
@@ -227,6 +229,10 @@ public class CardCtrl implements Initializable {
         subtaskIndicator.setText(String.format("%d/%d", completed, total));
     }
 
+    /**
+     * Updates the underlying card with the one given
+     * @param item the card to update with
+     */
     public void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
@@ -245,10 +251,19 @@ public class CardCtrl implements Initializable {
         }
     }
 
+    /**
+     * Getter for the board key
+     * @return the key of the board
+     */
     private String getBoardKey()
     {
         return service.getBoardKey();
     }
+
+    /**
+     * Setter for the board key
+     * @param boardKey the value of the board key to be set
+     */
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
@@ -256,10 +271,18 @@ public class CardCtrl implements Initializable {
 
     }
 
+    /**
+     * Getter for the edit button of the CardCtrl
+     * @return the edit button
+     */
     public ImageView getEditButton() {
         return editButton;
     }
 
+    /**
+     * Getter for the delete button of the CardCtrl
+     * @return the delete button
+     */
     public ImageView getDeleteButton() {
         return deleteButton;
     }

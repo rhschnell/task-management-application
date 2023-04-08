@@ -20,8 +20,11 @@ public class DeleteListService {
         this.boardKey = boardKey;
     }
 
+    /**
+     * Deletes a card list a given id
+     * @param id the id of the card list to be deleted
+     */
     public void deleteCardList(long id) {
-        //server.deleteCardList(id);
         Board toInsert = boardUtils.getBoard(boardKey);
         toInsert.removeList(server.getCardList(id));
         boardUtils.insertBoard(toInsert);

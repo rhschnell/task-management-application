@@ -25,6 +25,7 @@ import client.windows.customize.CustomizeCtrl;
 import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.lists.list.NewListNameCtrl;
 import client.windows.tags.view.TagListFromShortcutCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
@@ -87,16 +88,24 @@ public class WorkspaceCtrl implements Initializable {
     private Button copyButton;
 
     // Locking needs
-    @FXML private Button renameButton;
-    @FXML private Button personalizeButton;
-    @FXML private Button tagsButton;
-    @FXML private Button deleteButton;
-    @FXML private Button removePasswordButton;
-    @FXML private Button setPasswordButton;
-    @FXML private Button addListButton;
+    @FXML
+    private Button renameButton;
+    @FXML
+    private Button personalizeButton;
+    @FXML
+    private Button tagsButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button removePasswordButton;
+    @FXML
+    private Button setPasswordButton;
+    @FXML
+    private Button addListButton;
     private Button[] lockButtonArray;
 
-    @FXML private Button unlockBoardButton;
+    @FXML
+    private Button unlockBoardButton;
 
     private Map<String, String> pwdMap;
 
@@ -179,7 +188,7 @@ public class WorkspaceCtrl implements Initializable {
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
-        this.lockButtonArray = new Button[] {
+        this.lockButtonArray = new Button[]{
             renameButton,
             personalizeButton,
             tagsButton,
@@ -264,11 +273,11 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Makes sure the user can join a board by pressing ENTER after typing the key
+     *
      * @param event The event that gets handled and checked for the ENTER key
      */
     public void connectOnEnter(KeyEvent event) {
-        if(event.getCode().equals(KeyCode.ENTER))
-        {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             connect();
         }
     }
@@ -355,7 +364,7 @@ public class WorkspaceCtrl implements Initializable {
      * Method used for unlocking the buttons when the board gets set to unlocked
      */
     public void unlockButtons() {
-        for (Button b: lockButtonArray) {
+        for (Button b : lockButtonArray) {
             b.setDisable(false);
         }
         unlockBoardButton.setDisable(true);
@@ -389,8 +398,9 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Method to either add a password onto current board or unlock it while shown
+     *
      * @param board board to be changed
-     * @param mode "lock" or "unlock"
+     * @param mode  "lock" or "unlock"
      */
     public void lockUnlock(Board board, String mode) {
         // Load new instance of popup
@@ -420,6 +430,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Gets the password map containing all the board keys and the corresponding passwords
+     *
      * @return The password map
      */
     public Map<String, String> getPwdMap() {
@@ -450,6 +461,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Refreshes the board by getting it from the server again and displaying it again
+     *
      * @param key The board key
      */
     public void refreshBoard(String key) {
@@ -491,7 +503,8 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Refreshes the list of boards that the user has joined
-     * @param key The key of the board
+     *
+     * @param key    The key of the board
      * @param forced Forces a refresh even though there have been no changes
      */
     public void refreshBoardList(String key, boolean forced) {
@@ -542,15 +555,15 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Updates the lists on screen to display the correct background and font color
      */
-    public void updateListColors(){
-        if(shownBoard == null){
+    public void updateListColors() {
+        if (shownBoard == null) {
             return;
         }
         for (int i = 0; i < listContainer.getChildren().size(); i++) {
             String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
             String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
-                + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
-                "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+                           + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+                           "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
 
             VBox listInUI = (VBox) listContainer.getChildren().get(i);
 
@@ -590,6 +603,7 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Shows the board with the specified key. Retrieves it from the server or creates it if it
      * does not exist yet
+     *
      * @param targetKey The key of the board to show
      */
     public void showBoard(String targetKey) {
@@ -974,7 +988,8 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Method to delete the shown board from the database
+     * Method to delete a board from the database
+     * @param board the board to be deleted
      */
     public void deleteBoard(Board board) {
         service.deleteBoard(board);
@@ -991,8 +1006,9 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Handles the action of deleting the currently shown from within the workspace by opening a
+     * Handles the action of deleting a board from the workspace by opening a
      * confirmation popup.
+     * @param board the board to be deleted
      */
     public void deleteScreen(Board board) {
         var loader = new MyFXML(createInjector(new MainModules()))
@@ -1016,6 +1032,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Leaves the current board
+     *
      * @see #leaveBoard(Board)
      */
     public void leaveBoard() {
@@ -1025,6 +1042,7 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Sets the action of leaving a board by opening a new popup that asks the user to confirm
      * their choice
+     *
      * @param board The board that the user wants to leave
      */
     public void leaveBoard(@NotNull Board board) {
@@ -1041,11 +1059,35 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Adds a new list to the currently shown board
+     * Shows a popup that prompts the user to enter a title for their new list
+     * Called when the user clicks on the button to add a new list
      */
-    public void addList() {
-        CardList newCardList = new CardList("New List", new ArrayList<>());
-        if(!getShownBoard().getCardLists().isEmpty()){
+    public void onAddListButton() {
+        // show popup for list title first
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(NewListNameCtrl.class, "client", "windows", "lists", "list", "NewListTitle" +
+                                                                                   ".fxml");
+
+        NewListNameCtrl controller = loader.getKey();
+        controller.setWorkspaceCtrl(this);
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.CANCEL) controller.cancel();
+        });
+
+        helperMethods.popUp(scene, "Set new list title");
+    }
+
+    /**
+     * Adds a new list with the given title to the shown board
+     *
+     * @param listTitle The title for the new list
+     */
+    public void addList(String listTitle) {
+        CardList newCardList = new CardList(listTitle, new ArrayList<>());
+        if (!getShownBoard().getCardLists().isEmpty()) {
             newCardList.setBackgroundColor(getShownBoard().getCardLists().get(0).getBackgroundColor());
             newCardList.setFontColor(getShownBoard().getCardLists().get(0).getFontColor());
         }
@@ -1064,9 +1106,10 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Method to get the currently shown board
+     *
      * @return The board that is shown
      */
-    public Board getShownBoard(){
+    public Board getShownBoard() {
         return shownBoard;
     }
 
@@ -1168,6 +1211,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Sets the list of the keys for the joined board for this workspace
+     *
      * @param joinedKeys The keys of the joined boards
      */
     public void setJoinedKeys(Set<String> joinedKeys) {
@@ -1176,6 +1220,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Sets the instance of HelperMethods
+     *
      * @param helperMethods The instance of HelperMethods to set
      */
     public void setHelperMethods(HelperMethods helperMethods) {
@@ -1193,6 +1238,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Sets the color for all newly created lists
+     *
      * @param initialListColor The color (string) for the lists
      */
     public void setInitialListColor(String initialListColor) {
@@ -1201,6 +1247,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Getter for the initial list color
+     *
      * @return The initial list color
      */
     public String getInitialListColor() {
@@ -1209,6 +1256,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Sets the color of the font for all the newly created lists.
+     *
      * @param initialListFontColor The color (string) for the list text
      */
     public void setInitialListFontColor(String initialListFontColor) {
@@ -1217,6 +1265,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Getter for the list font color
+     *
      * @return The set list font color
      */
     public String getInitialListFontColor() {

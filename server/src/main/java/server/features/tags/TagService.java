@@ -11,6 +11,10 @@ import java.util.List;
 public class TagService implements RepositoryService<Tag, Long> {
     private final TagRepository repo;
 
+    /**
+     * Constructor for TagService
+     * @param repo a TagRepository instance
+     */
     public TagService(TagRepository repo) {
         this.repo = repo;
     }
@@ -28,6 +32,10 @@ public class TagService implements RepositoryService<Tag, Long> {
         return repo.save(tag);
     }
 
+    /**
+     * Deletes a tag with the given id
+     * @param id id of entity to be deleted
+     */
     @Override
     public void delete(Long id) {
         if (id < 0) {
@@ -39,6 +47,11 @@ public class TagService implements RepositoryService<Tag, Long> {
         repo.deleteById(id);
     }
 
+    /**
+     * Retrieves a tag with the given ID
+     * @param id ID of entity to be found and returned
+     * @return the tag with the given ID
+     */
     @Override
     public Tag getByID(Long id) {
         if (id < 0) {
@@ -50,6 +63,10 @@ public class TagService implements RepositoryService<Tag, Long> {
         return repo.getById(id);
     }
 
+    /**
+     * Retrieves all the tags from the repository
+     * @return a list of all existing tags
+     */
     @Override
     public List<Tag> getAll() {
         return repo.findAll();
