@@ -145,7 +145,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(description);
-
+        List<Task> mytask = new ArrayList<>();
+        mytask.add(new Task());
         // Delete the tasks from the database that were deleted
         for (long taskID : deletedSubtaskIDs) {
             taskUtils.deleteTask(taskID);
@@ -173,7 +174,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         List<Tag> available = service.getTags();
-        available.removeAll(newCard.getTags());
+        if( newCard.getTags()!=null)
+            available.removeAll(newCard.getTags());
         ctrl.setAvailableTags(available);
         ctrl.setAppliedTags(newCard.getTags());
         ctrl.setEditCardCtrl(this);

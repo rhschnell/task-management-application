@@ -6,10 +6,9 @@ import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
-import client.windows.workspace.boardSpace.WorkspaceCtrl;
+import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
-import commons.CardList;
 import commons.Tag;
 import commons.Task;
 import javafx.application.Platform;
@@ -24,6 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.List;
@@ -58,6 +58,7 @@ public class CardCtrl implements Initializable {
 
     private final CardService service;
     private final HelperMethods helperMethods;
+    private  ListCtrl listCtrl;
 
 
     /**
@@ -70,6 +71,10 @@ public class CardCtrl implements Initializable {
     public CardCtrl(CardService service, HelperMethods helperMethods) {
         this.service = service;
         this.helperMethods = helperMethods;
+    }
+
+    public void setListCtrl(ListCtrl listCtrl) {
+        this.listCtrl = listCtrl;
     }
 
     /**
@@ -107,22 +112,31 @@ public class CardCtrl implements Initializable {
         }
     }
     public void registerForMessages() {
-        service.getBoardUtils().registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
+        StompSession.Subscription subscriber = service.getBoardUtils().registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     System.out.println("There is a card update");
                     System.out.println(newCard);
-                    //service.setCardList(newCardList);
-                    //displayCards();s
+                    //DisplayUpdatedCard
+                    card=newCard;
+                    //Description indicator update
                     if(newCard.getDescription()!=null)
                          setDescriptionIconVisible(true);
                     if(newCard.getDescription()==null || newCard.getDescription().equals(""))
                         setDescriptionIconVisible(false);
+                    //Tags indicator update
                     setDisplayTags(newCard.getTags());
+                    //Subtask Indicator update
+                    if(newCard.getSubTasks()!=null) {
+                        long completedTasks =
+                                newCard.getSubTasks().stream().filter(Task::isCompleted).count();
+                        setSubtasksCompleted(completedTasks, newCard.getSubTasks().size());
+                    }
                 }
             });
         });
+        listCtrl.addSubscriber(subscriber);
     }
     /**
      * Displays the DeleteList FXML into a new window (Popup).

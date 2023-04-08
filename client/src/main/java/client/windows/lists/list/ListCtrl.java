@@ -55,7 +55,7 @@ public class ListCtrl {
 
     @FXML
     private VBox completeList;
-    private List <StompSession.Subscription> subscriptionsList;
+    private List<StompSession.Subscription> cardSubscribers;
 
     @FXML
     private ScrollPane scrollPane;
@@ -79,7 +79,17 @@ public class ListCtrl {
 
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
-
+    public void resetSubscriber()
+    {
+        if(cardSubscribers!=null)
+            for (StompSession.Subscription cardSubscriber : cardSubscribers) {
+                cardSubscriber.unsubscribe();
+            }
+    }
+    public void addSubscriber(StompSession.Subscription subscriber)
+    {
+        cardSubscribers.add(subscriber);
+    }
     /**
      * Sets the workspace control
      * @param workspaceCtrl the workspace to set
@@ -169,6 +179,7 @@ public class ListCtrl {
         this.service = service;
         cardControllers = new ArrayList<>();
         focusedCardIndex = -1;
+        cardSubscribers = new ArrayList<>();
     }
 
     /**
@@ -192,7 +203,7 @@ public class ListCtrl {
      * Displays the cards onto the list's inner VBox
      */
     public void registerForMessages() {
-        workspaceCtrl.listListener.add(service.getBoardUtils().registerForMessages("/topic/lists/"+service.getCardList().getId(),CardList.class, newCardList -> {
+        workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+service.getCardList().getId(),CardList.class, newCardList -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -200,13 +211,15 @@ public class ListCtrl {
                     System.out.println(newCardList);
                     service.setCardList(newCardList);
                     displayCards();
+                    //To have the latest object
+                    workspaceCtrl.needToUpdateBoard();
                 }
             });
         }));
     }
     public void displayCards() {
         updateListColors();
-
+        resetSubscriber();
         cardVBox.getChildren().clear();
         for (Card card : service.getCardList().getCards()) {
             cardCell = new MyFXML(createInjector(new MainModules()))
@@ -218,6 +231,7 @@ public class ListCtrl {
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
             makeCardDraggable(cardCell);
+            controller.setListCtrl(this);
             controller.setBoardKey(getBoardKey());
             controller.setListId(service.getCardList().getId());
             cardVBox.getChildren().add(cardCell.getValue());

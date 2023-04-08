@@ -40,8 +40,6 @@ import commons.CardList;
 import commons.Tag;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -58,7 +56,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
@@ -117,8 +114,8 @@ public class WorkspaceCtrl implements Initializable {
 
     private String initialListColor;
     private String initialListFontColor;
-    private List <StompSession.Subscription> subscriptionsList;
-    public List <StompSession.Subscription> listListener;
+    private List <StompSession.Subscription> boardSubscriber;
+    private List <StompSession.Subscription> listSubscribers;
     private boolean admin;
     @FXML private Label screenTitle;
     @FXML private Button leaveButton;
@@ -148,14 +145,18 @@ public class WorkspaceCtrl implements Initializable {
         //service.registerForMessages();
     }
 
+    public void addListSubscriber(StompSession.Subscription subscriber)
+    {
+        listSubscribers.add(subscriber);
+    }
 
     /**
      * Return's to the main screen
      */
     public void disconnect() {
-        for(int i=0;i<subscriptionsList.size();i++)
+        for(int i = 0; i< boardSubscriber.size(); i++)
         {
-            subscriptionsList.get(i).unsubscribe();
+            boardSubscriber.get(i).unsubscribe();
         }
         if (isAdmin()) {
             helperMethods.setScene(Scenes.ADMIN);
@@ -176,8 +177,8 @@ public class WorkspaceCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new HashSet<>();
-        subscriptionsList=new ArrayList<>();
-        listListener=new ArrayList<>();
+        boardSubscriber =new ArrayList<>();
+        listSubscribers =new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
@@ -208,7 +209,7 @@ public class WorkspaceCtrl implements Initializable {
         setDefaultListColors();
     }
     public void registerForMessages(String key) {
-       subscriptionsList.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
+        boardSubscriber.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -231,9 +232,9 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
-        for(int i=0;i<subscriptionsList.size();i++)
+        for(int i = 0; i< boardSubscriber.size(); i++)
         {
-            subscriptionsList.get(i).unsubscribe();
+            boardSubscriber.get(i).unsubscribe();
         }
         if (keyField.getText().strip().equals("")) {
             emptyKeyPopUp();
@@ -261,9 +262,9 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
-        for(int i=0;i<subscriptionsList.size();i++)
+        for(int i = 0; i< boardSubscriber.size(); i++)
         {
-            subscriptionsList.get(i).unsubscribe();
+            boardSubscriber.get(i).unsubscribe();
         }
         if (titleField.getText().equals("")) {
             emptyTitlePopUp();
@@ -316,9 +317,9 @@ public class WorkspaceCtrl implements Initializable {
      * Method to clear the workspace
      */
     public void clearWorkspace() {
-        for(int i=0;i<subscriptionsList.size();i++)
+        for(int i = 0; i< boardSubscriber.size(); i++)
         {
-            subscriptionsList.get(i).unsubscribe();
+            boardSubscriber.get(i).unsubscribe();
         }
         //Hide title bar
         boardName.setText("");
@@ -644,6 +645,10 @@ public class WorkspaceCtrl implements Initializable {
             System.out.println("The board you tried to join does not exist");
         }
     }
+    public void needToUpdateBoard()
+    {
+        shownBoard = service.getBoard(shownBoard.getKey());
+    }
 
     /**
      * Displays the lists into the Hbox list container
@@ -651,9 +656,13 @@ public class WorkspaceCtrl implements Initializable {
     public void displayLists() {
         listContainer.getChildren().clear();
         listControllers.clear();
-        for(int i=0;i<listListener.size();i++)
+        for(int i = 0; i< listControllers.size(); i++)
         {
-            listListener.get(i).unsubscribe();
+            listControllers.get(i).resetSubscriber();
+        }
+        for(int i = 0; i< listSubscribers.size(); i++)
+        {
+            listSubscribers.get(i).unsubscribe();
         }
 
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
@@ -1113,6 +1122,7 @@ public class WorkspaceCtrl implements Initializable {
 
         loader.getKey().setBoardKey(shownBoard.getKey());
         loader.getKey().poll();
+        loader.getKey().setWorkspaceCtrl(this);
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);

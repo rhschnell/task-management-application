@@ -2,7 +2,6 @@ package client.serverUtils;
 
 import commons.Card;
 import commons.Route;
-import commons.Tag;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -53,18 +52,12 @@ public class CardUtils {
      * Deletes a card from the list of CardLists
      * @param card The card that needs to be deleted from the list of lists
      */
-    public void deleteFromCardList2(Card card) {
-        client.target(serverUtils.getServer()).path(Route.CARD_LIST + "/removeFromCardList/")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-    public void deleteFromCardList(Long id, Card Card) {
+    public void deleteFromCardList(Long id, Card card) {
         client
                 .target(serverUtils.getServer()).path(Route.CARD_LIST+"/removeFromCardList/"+id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(Card, APPLICATION_JSON), Card.class);
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
     /**
