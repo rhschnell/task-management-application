@@ -45,6 +45,11 @@ public class TagUtils {
         this.client = client;
     }
 
+    /**
+     * Adds a tag to a card
+     * @param tag the tag to be added
+     * @param cardId the id of the card to which the tag should be added
+     */
     public void addTagToCard(Tag tag, long cardId) {
         client.target(serverUtils.getServer()).path("api/tagToCard")
                 .queryParam("cardId", cardId)

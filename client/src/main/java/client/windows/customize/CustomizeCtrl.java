@@ -57,6 +57,7 @@ public class CustomizeCtrl {
      * Constructor for CustomizeCtrl
      * @param workspaceCtrl Instance of WorkspaceCtrl
      * @param service Corresponding service
+     * @param helperMethods Instance of HelperMethods
      */
     @Inject
     public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, CustomizeService service, HelperMethods helperMethods){
@@ -81,7 +82,11 @@ public class CustomizeCtrl {
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Method to se the board's background color
+=======
+     * Setter for the board background color
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void setBoardBackgroundColor(){
@@ -89,7 +94,11 @@ public class CustomizeCtrl {
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Method to se the board's font color
+=======
+     * Setter for the board font color
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void setBoardFontColor() {
@@ -137,7 +146,11 @@ public class CustomizeCtrl {
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Method to reset the board colors to default
+=======
+     * Resets the colors of the board to default
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void resetBoard() {
@@ -163,10 +176,17 @@ public class CustomizeCtrl {
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * This method closes the customize window
      */
     public void close(){
         ((Stage)closeButton.getScene().getWindow()).close();
+=======
+     * Closes the window/stage
+     */
+    public void close() {
+        ((Stage) closeButton.getScene().getWindow()).close();
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
     }
 
     /**
@@ -203,6 +223,7 @@ public class CustomizeCtrl {
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * This method updates the displayed presets
      */
     public void updateDisplayedPresets() {
@@ -213,14 +234,23 @@ public class CustomizeCtrl {
     /**
      * Gets the board
      * @return The board
+=======
+     * Getter for the board
+     * @return the board
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     public Board getBoard() {
         return this.board;
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Sets the shownBoard
      * @param shownBoard The shown board to be set
+=======
+     * Setter for the board
+     * @param shownBoard the board to be set
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     public void setBoard(Board shownBoard) {
         board = shownBoard;

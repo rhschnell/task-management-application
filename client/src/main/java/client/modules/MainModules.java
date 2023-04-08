@@ -28,6 +28,8 @@ import client.windows.customize.cards.edit.EditCardPresetService;
 import client.windows.lists.cells.CardService;
 import client.windows.lists.delete.DeleteListCtrl;
 import client.windows.lists.list.ListCtrl;
+import client.windows.lists.list.NewListNameCtrl;
+import client.windows.lists.list.RenameListCtrl;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import client.windows.tags.add.AddTagCtrl;
@@ -39,7 +41,10 @@ import com.google.inject.Module;
 import com.google.inject.Scopes;
 
 public class MainModules implements Module {
-
+    /**
+     * Contributes bindings and other configurations for this module to binder.
+     * @param binder the binder
+     */
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
@@ -62,5 +67,7 @@ public class MainModules implements Module {
         binder.bind(AddCardPresetService.class).in(Scopes.SINGLETON);
         binder.bind(EditCardPresetCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditCardPresetService.class).in(Scopes.SINGLETON);
+        binder.bind(NewListNameCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(RenameListCtrl.class).in(Scopes.SINGLETON);
     }
 }

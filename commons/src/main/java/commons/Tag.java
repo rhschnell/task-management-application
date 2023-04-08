@@ -17,7 +17,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Tag implements Serializable {
     private String name;
-
     private String tagColor;
     private String fontColor;
 
@@ -38,7 +37,6 @@ public class Tag implements Serializable {
      * @param name The name of the tag
      * @param tagColor The color of this tag
      */
-
     public Tag(String name, String tagColor) {
         this.name = name;
         this.tagColor = tagColor;
@@ -50,7 +48,7 @@ public class Tag implements Serializable {
      *
      * @param name The name of the tag
      * @param tagColor The color of this tag
-     * @param fontColor The fot color
+     * @param fontColor The font color
      */
     public Tag(String name, String tagColor,String fontColor) {
         this.name = name;
@@ -58,7 +56,15 @@ public class Tag implements Serializable {
         this.cards = new ArrayList<>();
         this.fontColor=fontColor;
     }
-    public Tag(String name, String tagColor,String fontColor,Long id) {
+
+    /**
+     * Constructor for a Tag
+     * @param name The name of the tag
+     * @param tagColor The color of this tag
+     * @param fontColor The font color
+     * @param id the ID of the tag
+     */
+    public Tag(String name, String tagColor, String fontColor, Long id) {
         this.name = name;
         this.tagColor = tagColor;
         this.cards = new ArrayList<>();

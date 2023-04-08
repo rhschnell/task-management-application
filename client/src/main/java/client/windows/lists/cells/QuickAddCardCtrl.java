@@ -22,12 +22,21 @@ public class QuickAddCardCtrl {
 
     private Board shownBoard;
 
+
+    /**
+     * Constructor for QuickAddCardCtrl
+     * @param service a CardService instance
+     * @param listCtrl a ListCtrl instance
+     */
     @Inject
     public QuickAddCardCtrl(CardService service, ListCtrl listCtrl) {
         this.service = service;
         this.listCtrl = listCtrl;
     }
 
+    /**
+     * Displays the add button
+     */
     public void setAddButtonVisible() {
         this.addButton.setVisible(true);
         this.addButton.setDisable(false);
@@ -46,6 +55,7 @@ public class QuickAddCardCtrl {
         listCtrl.displayCards();
     }
 
+<<<<<<< client/src/main/java/client/windows/lists/cells/QuickAddCardCtrl.java
     public CardColorPreset getDefaultPreset(){
         for(CardColorPreset preset : shownBoard.getPresetList()){
             if(preset.isDefault()){
@@ -55,6 +65,8 @@ public class QuickAddCardCtrl {
         return shownBoard.getPresetList().get(0);
     }
 
+=======
+>>>>>>> client/src/main/java/client/windows/lists/cells/QuickAddCardCtrl.java
     /**
      * Set the ListCtrl the QuickAdd is on
      * @param listCtrl the listCtrl that needs to be setted
@@ -63,11 +75,25 @@ public class QuickAddCardCtrl {
         this.listCtrl = listCtrl;
     }
 
+<<<<<<< client/src/main/java/client/windows/lists/cells/QuickAddCardCtrl.java
+=======
+    /**
+     * Getter for the key of the board
+     * @return the key of the board
+     */
+>>>>>>> client/src/main/java/client/windows/lists/cells/QuickAddCardCtrl.java
     public String getBoardKey()
     {
         return service.getBoardKey();
     }
 
+<<<<<<< client/src/main/java/client/windows/lists/cells/QuickAddCardCtrl.java
+=======
+    /**
+     * Setter for the key of the board
+     * @param boardKey the key of the board
+     */
+>>>>>>> client/src/main/java/client/windows/lists/cells/QuickAddCardCtrl.java
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);

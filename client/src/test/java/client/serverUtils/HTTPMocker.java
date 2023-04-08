@@ -15,6 +15,10 @@ public class HTTPMocker {
     protected final WebTarget targetMock;
     protected final Invocation.Builder builderMock;
 
+    /**
+     * Constructor for the HTTPMocker class
+     * @param classType the type of the class to be mocked
+     */
     public HTTPMocker(Class<?> classType){
         clientMock = Mockito.mock(Client.class);
         targetMock = Mockito.mock(WebTarget.class);
@@ -22,6 +26,10 @@ public class HTTPMocker {
         initialize(classType);
     }
 
+    /**
+     * Initializes the mocker
+     * @param something the classType
+     */
     public void initialize(Class<?> something){
         when(clientMock.target(anyString())).thenReturn(targetMock);
         when(targetMock.path(anyString())).thenReturn(targetMock);

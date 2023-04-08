@@ -77,11 +77,15 @@ public class CardService {
      *
      * @param boardKey The new board key
      */
-
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
     }
 
+    /**
+     * Getter for a card based on its ID
+     * @param id the id of the card to be retrieved
+     * @return the card with that ID
+     */
     public Card getCardByID(long id) {
         return cardUtils.getCardById(id);
     }

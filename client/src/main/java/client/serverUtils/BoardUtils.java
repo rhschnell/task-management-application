@@ -77,6 +77,11 @@ public class BoardUtils {
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
     }
 
+    /**
+     * This method inserts a new tag to a given board
+     * @param key the key of the board
+     * @param tag the tag to be inserted
+     */
     public void insertNewTag(String key, Tag tag) {
         client
                 .target(serverUtils.getServer()).path(Route.BOARD+"/addBoardTag/"+key)
@@ -84,6 +89,12 @@ public class BoardUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
     }
+
+    /**
+     * This method removes a tag from a board
+     * @param key the key of the board
+     * @param tag the tag to be removed
+     */
     public void removeBoardTag(String key, Tag tag) {
         client
                 .target(serverUtils.getServer()).path(Route.BOARD+"/removeBoardTag/"+key)
@@ -92,14 +103,27 @@ public class BoardUtils {
                 .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
     }
 
+    /**
+     * Setter for the server address
+     * @param server the server address
+     */
     public void setServer(String server) {
         serverUtils.setServer(server);
     }
+
+    /**
+     * Getter for the server address
+     * @return the server address
+     */
     public String getServer()
     {
         return serverUtils.getServer();
     }
 
+    /**
+     * Setter for the client
+     * @param client the client
+     */
     public void setClient(Client client)
     {
         this.client = client;

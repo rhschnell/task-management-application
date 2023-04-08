@@ -37,38 +37,64 @@ public class SubtaskCellCtrl implements Initializable {
     private Task task;
 
     private EditCardCtrl editCardCtrl;
+
+    /**
+     * Constructor for the SubtaskCellCtrl
+     * @param helperMethods a helperMethods instance
+     */
     @Inject
     public SubtaskCellCtrl(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
     }
 
+    /**
+     * Setter for the editCardCtrl
+     * @param editCardCtrl the editCardCtrl
+     */
     public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
         this.editCardCtrl = editCardCtrl;
     }
 
+    /**
+     * Setter for the SubtaskContainer
+     * @param subtaskContainer the SubtaskContainer
+     */
     public void setSubtaskContainer(SubtaskContainer subtaskContainer) {
         this.subtaskContainer = subtaskContainer;
     }
 
+    /**
+     * Updates the subtask with new information
+     * @param task the task to be used for updating the controller
+     */
     public void updateItem(Task task) {
         this.task = task;
         taskTitle.setText(task.getTitle());
         checkBox.setSelected(task.isCompleted());
     }
 
+    /**
+     * Updates the completion status of the task based on the state of the checkbox
+     */
     public void onCheck() {
         if (task.isCompleted() != checkBox.isSelected()) {
             task.setCompleted(!task.isCompleted());
         }
     }
 
-
+    /**
+     * Edits the task title on ENTER
+     * @param event the event passed (only ENTER is considered)
+     */
     public void onTaskTitleAction(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             editTaskTitle();
         }
     }
 
+    /**
+     * Method to edit the task title based on user input
+     */
     public void editTaskTitle() {
         if (taskTitle.getText() != null && !taskTitle.getText().isEmpty()) {
             task.setTitle(taskTitle.getText());
@@ -82,6 +108,9 @@ public class SubtaskCellCtrl implements Initializable {
         subtaskContainer.deleteSubtask(task);
     }
 
+    /**
+     * Disables UI components that allow editing the task
+     */
     public void disableEdit() {
         checkBox.setDisable(true);
         taskTitle.setDisable(true);
