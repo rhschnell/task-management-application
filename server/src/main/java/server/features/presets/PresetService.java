@@ -16,11 +16,11 @@ public class PresetService implements RepositoryService<CardColorPreset, Long> {
     }
 
     @Override
-    public void insert(CardColorPreset preset){
+    public CardColorPreset insert(CardColorPreset preset){
         if (preset == null) {
             throw new IllegalArgumentException();
         }
-        repo.save(preset);
+        return repo.save(preset);
     }
 
     @Override

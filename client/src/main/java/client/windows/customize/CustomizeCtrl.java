@@ -25,6 +25,7 @@ import static com.google.inject.Guice.createInjector;
 
 public class CustomizeCtrl {
     private WorkspaceCtrl workspaceCtrl;
+    private HelperMethods helperMethods;
 
     private final CustomizeService service;
 
@@ -56,9 +57,10 @@ public class CustomizeCtrl {
      * @param service Corresponding service
      */
     @Inject
-    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, CustomizeService service){
+    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, CustomizeService service, HelperMethods helperMethods){
         this.workspaceCtrl = workspaceCtrl;
         this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -182,7 +184,7 @@ public class CustomizeCtrl {
             service.insertPreset(preset);
         }
         service.insertBoard(board);
-        workspaceCtrl.refreshWorkspace();
+        workspaceCtrl.refreshWorkspace(true);
         ((Stage)closeButton.getScene().getWindow()).close();
     }
 
@@ -261,7 +263,7 @@ public class CustomizeCtrl {
         Scene scene = new Scene(root);
 
         String title = "Create Preset";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 }
 

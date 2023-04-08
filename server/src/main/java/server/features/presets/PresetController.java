@@ -29,10 +29,9 @@ public class PresetController {
      */
     @Transactional
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Void> insert(@RequestBody CardColorPreset preset){
+    public ResponseEntity<CardColorPreset> insert(@RequestBody CardColorPreset preset){
         try {
-            service.insert(preset);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(service.insert(preset));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
