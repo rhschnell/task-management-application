@@ -88,32 +88,12 @@ public class CardListController {
 
     /**
      *
-     * @param card The card that needs to be removed using the delete method from the object
-     *             so the priority is preserved.
-     * @return the card that has been deleted
+     * @param id the id of the cardList that contains the card
+     * @param card the card that need to be deleted
+     * @return
      */
-   /* @PostMapping("/removeFromCardList/{id}")
-    public ResponseEntity<Card> removeFromCardList(@RequestBody Card card,@PathVariable("id") long id) {
-        try {
-           // Ret
-          //  System.out.println("test");
-            //CardList returned = service.removeFromCardList(card);
-            System.out.println("entered");
-           // CardList returned = service.removeFromCardList(card);
-            //returned.removeCard(card);
-           // System.out.println(returned);
-            System.out.println("exited");
-            //insert(returned);
-           // sender.convertAndSend("/topic/lists/"+returned.getId(),returned);
-            return ResponseEntity.ok(new Card());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }*/
     @PostMapping("/removeFromCardList/{id}")
-    public synchronized ResponseEntity<Card> removeBoardTag(@PathVariable("id") Long id, @RequestBody Card card) {
+    public synchronized ResponseEntity<Card> removeFromCardList(@PathVariable("id") Long id, @RequestBody Card card) {
         try {
             CardList list =  service.getRepo().getById(id);
             list.removeCard(card);
@@ -124,7 +104,6 @@ public class CardListController {
             }
             service.getRepo().save(list);
             sender.convertAndSend("/topic/lists/"+list.getId(),list);
-            System.out.println("updade");
             return ResponseEntity.ok(card);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -136,9 +115,8 @@ public class CardListController {
     @DeleteMapping("/deleteCard/{id}")
     @ResponseBody
     @Transactional
-    public ResponseEntity<Void> de(@PathVariable("id") long id) {
+    public ResponseEntity<Void> deleteCardById(@PathVariable("id") long id) {
         try {
-            System.out.println("visited");
             CardList list =null;
             int place = -1;
             for(int j=0;j<service.getRepo().findAll().size();j++)
