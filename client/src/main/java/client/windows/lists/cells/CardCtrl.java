@@ -6,10 +6,13 @@ import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Card;
+import commons.CardList;
 import commons.Tag;
 import commons.Task;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -103,7 +106,24 @@ public class CardCtrl implements Initializable {
 
         }
     }
-
+    public void registerForMessages() {
+        service.getBoardUtils().registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("There is a card update");
+                    System.out.println(newCard);
+                    //service.setCardList(newCardList);
+                    //displayCards();s
+                    if(newCard.getDescription()!=null)
+                         setDescriptionIconVisible(true);
+                    if(newCard.getDescription()==null || newCard.getDescription().equals(""))
+                        setDescriptionIconVisible(false);
+                    setDisplayTags(newCard.getTags());
+                }
+            });
+        });
+    }
     /**
      * Displays the DeleteList FXML into a new window (Popup).
      */
@@ -242,6 +262,8 @@ public class CardCtrl implements Initializable {
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
+        registerForMessages();
+
     }
     public void setListId(Long listId)
     {
