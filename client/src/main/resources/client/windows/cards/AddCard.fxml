@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -83,7 +82,7 @@
                      <content>
                         <VBox prefHeight="231.0" prefWidth="301.0">
                            <children>
-                              <VBox fx:id="subtasks" maxHeight="1.7976931348623157E308" prefHeight="171.0" prefWidth="301.0" spacing="10.0" />
+                              <VBox fx:id="subtasks" maxHeight="1.7976931348623157E308" prefHeight="107.0" prefWidth="301.0" spacing="10.0" />
                               <Separator prefWidth="200.0">
                                  <opaqueInsets>
                                     <Insets bottom="10.0" top="10.0" />
@@ -105,20 +104,9 @@
                                           <Insets />
                                        </HBox.margin>
                                     </Label>
-                                    <Button fx:id="managePresetList" minWidth="-Infinity" mnemonicParsing="false" onAction="#openPresetList" prefHeight="25.0" prefWidth="65.0" styleClass="green-button" text="Manage">
-                                       <font>
-                                          <Font name="Arial Bold" size="11.0" />
-                                       </font>
-                                       <opaqueInsets>
-                                          <Insets left="150.0" right="10.0" />
-                                       </opaqueInsets>
-                                       <HBox.margin>
-                                          <Insets left="140.0" />
-                                       </HBox.margin>
-                                    </Button>
                                  </children>
                               </HBox>
-                              <Pane fx:id="appliedPreset" prefHeight="46.0" prefWidth="302.0" />
+                              <VBox fx:id="presets" maxHeight="1.7976931348623157E308" prefHeight="107.0" prefWidth="301.0" spacing="10.0" />
                            </children>
                         </VBox>
                      </content>

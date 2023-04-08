@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 
 public class QuickAddCardCtrl {
 
@@ -37,14 +38,21 @@ public class QuickAddCardCtrl {
      */
     public void addCard() {
         Card card = new Card(cardTitle.getText());
-        card.setBackgroundColor(shownBoard.getDefaultCardBackgroundColor());
-        card.setFontColor(shownBoard.getDefaultCardFontColor());
-        card.setPreset(new CardColorPreset(shownBoard.getDefaultPreset().getName(),
-                shownBoard.getDefaultCardBackgroundColor(),
-                shownBoard.getDefaultCardFontColor()));
+
+        card.setPresets(new ArrayList<>());
+        card.setPreset(getDefaultPreset());
 
         service.insertCard(card, listCtrl.getCardList());
         listCtrl.displayCards();
+    }
+
+    public CardColorPreset getDefaultPreset(){
+        for(CardColorPreset preset : shownBoard.getPresetList()){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
     }
 
     /**

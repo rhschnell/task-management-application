@@ -1,6 +1,7 @@
 package client.windows.customize.cards.edit;
 
 import client.windows.customize.cards.CustomCardPresetCellCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
@@ -19,6 +20,8 @@ public class EditCardPresetCtrl {
     private CustomCardPresetCellCtrl customCardPresetCellCtrl;
 
     private CardColorPreset preset;
+
+    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private TextField presetTitle;
@@ -101,27 +104,13 @@ public class EditCardPresetCtrl {
         String newFontColor = fontColor.getValue().toString();
         String newTitle = presetTitle.getText();
 
-        Board shownBoard = customCardPresetCellCtrl.getCustomizeCtrl().getBoard();
-        for(CardList list : shownBoard.getCardLists()){
-            for(Card c : list.getCards()){
-                if(c.getPreset().getName().equals(preset.getName())
-                        && c.getPreset().getFontColor().equals(preset.getFontColor())
-                        && c.getPreset().getBackgroundColor().equals(preset.getBackgroundColor())){
-                    c.setBackgroundColor(newBackgroundColor);
-                    c.setFontColor(newFontColor);
-                    c.setPreset(new CardColorPreset(newTitle, newBackgroundColor, newFontColor));
-                }
-            }
-        }
-        shownBoard.setDefaultPreset(new CardColorPreset(newTitle, newBackgroundColor, newFontColor));
-        shownBoard.setDefaultCardFontColor(newFontColor);
-        shownBoard.setDefaultCardBackgroundColor(newBackgroundColor);
-
+        // TODO Move saving to the server to customize ctrl
         preset.setName(newTitle);
         preset.setBackgroundColor(newBackgroundColor);
         preset.setFontColor(newFontColor);
-        service.insertPreset(preset);
+
         customCardPresetCellCtrl.getCustomizeCtrl().updateDisplayedPresets();
+        workspaceCtrl.refreshWorkspace(true);
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 
@@ -138,5 +127,9 @@ public class EditCardPresetCtrl {
      */
     public void setCustomCardPresetCellCtrl(CustomCardPresetCellCtrl customCardPresetCellCtrl){
         this.customCardPresetCellCtrl = customCardPresetCellCtrl;
+    }
+
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+        this.workspaceCtrl = workspaceCtrl;
     }
 }

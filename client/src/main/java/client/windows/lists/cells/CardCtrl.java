@@ -6,6 +6,7 @@ import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
@@ -55,6 +56,7 @@ public class CardCtrl implements Initializable {
     private Card card;
     private Board shownBoard;
     private long lastClickTime;
+    private WorkspaceCtrl workspaceCtrl;
 
     private final CardService service;
     private final HelperMethods helperMethods;
@@ -137,7 +139,9 @@ public class CardCtrl implements Initializable {
         loader.getKey().setBoardKey(service.getBoardKey());
         loader.getKey().setCard(card);
         loader.getKey().setShownBoard(shownBoard);
-        loader.getKey().setAppliedPreset(card.getPreset());
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().setPresetList(shownBoard.getPresetList());
+        loader.getKey().displayPresetList();
 
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -181,11 +185,10 @@ public class CardCtrl implements Initializable {
         controller.setBoardKey(getBoardKey());
         controller.displayTasks();
         controller.setShownBoard(shownBoard);
-        controller.setAppliedPreset(cell.getPreset());
+        controller.displayPreset(cell.getPresets().get(0));
 
         String title = "View Card";
         helperMethods.popUp(scene, title);
-
     }
 
     /**
@@ -232,8 +235,8 @@ public class CardCtrl implements Initializable {
             this.setDisplayTags(item.getTags());
         setDescriptionIconVisible(item.hasDescription());
 
-        String backgroundColor = card.getBackgroundColor();
-        String fontColor = card.getFontColor();
+        String backgroundColor = card.getPresets().get(0).getBackgroundColor();
+        String fontColor = card.getPresets().get(0).getFontColor();
         String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
                 "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
         setFontColor(fontColor);
@@ -292,5 +295,9 @@ public class CardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         deleteButton.setCursor(Cursor.HAND);
         editButton.setCursor(Cursor.HAND);
+    }
+
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+        this.workspaceCtrl = workspaceCtrl;
     }
 }

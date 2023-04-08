@@ -26,16 +26,6 @@ public class Board {
     private String backgroundColour = "FFFFFF";
     private String fontColour = "000000";
 
-    private String defaultCardBackgroundColor = "0xDEEDE7FF";
-    private String defaultCardFontColor = "0x000000FF";
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "preset_id", referencedColumnName = "id")
-    private CardColorPreset defaultPreset = new CardColorPreset(
-            "Default",
-            defaultCardBackgroundColor,
-            defaultCardFontColor);
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "key")
     private List<CardList> cardLists; // Use a list here to make the annotation work
@@ -54,7 +44,7 @@ public class Board {
      * @param cardLists This board's list of cards
      * @param tagList This board's list of tags
      */
-    public Board(String title, List<CardList> cardLists, List<Tag> tagList) {
+    public Board(String title, List<CardList> cardLists, List<Tag> tagList, List<CardColorPreset> presetList) {
         this.title = title;
         this.cardLists = cardLists;
         if (cardLists == null) {
@@ -63,6 +53,10 @@ public class Board {
         this.tagList = tagList;
         if(tagList == null){
             this.tagList = new ArrayList<>();
+        }
+        this.presetList = presetList;
+        if(presetList == null){
+            this.presetList = new ArrayList<>();
         }
         this.password = "";
     }
@@ -207,6 +201,7 @@ public class Board {
                 Objects.equals(backgroundColour, board.backgroundColour) &&
                 Objects.equals(fontColour, board.fontColour) &&
                 Objects.equals(cardLists, board.cardLists) &&
-                Objects.equals(tagList, board.tagList);
+                Objects.equals(tagList, board.tagList) &&
+                Objects.equals(presetList, board.presetList);
     }
 }

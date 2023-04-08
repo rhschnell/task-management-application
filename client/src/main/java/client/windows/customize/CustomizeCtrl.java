@@ -18,6 +18,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class CustomizeCtrl {
 
     private Board board;
     private List<CardList> lists;
+    private List<CardColorPreset> presetList;
 
     @FXML
     private Button resetBoardColorButton;
@@ -73,6 +75,9 @@ public class CustomizeCtrl {
         // Also initialize the default colors from this workspace
         listBackgroundColor.setValue(Color.web(workspaceCtrl.getInitialListColor()));
         listFontColor.setValue(Color.web(workspaceCtrl.getInitialListFontColor()));
+
+        // Initializes the preset list with the presets from the board
+        this.presetList = workspaceCtrl.getShownBoard().getPresetList();
     }
 
     /**
@@ -82,7 +87,6 @@ public class CustomizeCtrl {
     public void setBoardBackgroundColor(){
         board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2,8));
     }
-
 
     /**
      * Method to se the board's font color
@@ -177,22 +181,16 @@ public class CustomizeCtrl {
      * Method to save the current made changes to the board colors
      */
     public void save() {
-        for(CardList list : lists){
-            service.insertCardList(list);
-        }
-        for(CardColorPreset preset : workspaceCtrl.getShownBoard().getPresetList()){
-            service.insertPreset(preset);
-        }
+        ((Stage)closeButton.getScene().getWindow()).close();
+        board.setPresetList(presetList);
         service.insertBoard(board);
         workspaceCtrl.refreshWorkspace(true);
-        ((Stage)closeButton.getScene().getWindow()).close();
     }
 
     /**
      * This method displays the presets in the cardPresets box
      */
     public void displayPresetList() {
-        List<CardColorPreset> presetList = getBoard().getPresetList();
         for(CardColorPreset preset : presetList){
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomCardPresetCellCtrl.class,
@@ -201,6 +199,8 @@ public class CustomizeCtrl {
             ctrl.setBoard(workspaceCtrl.getShownBoard());
             ctrl.setPresetObject(preset);
             ctrl.setCustomizeCtrl(this);
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
+            ctrl.setPresetList(presetList);
 
             cardPresets.getChildren().add(loader.getValue());
         }
@@ -264,6 +264,10 @@ public class CustomizeCtrl {
 
         String title = "Create Preset";
         helperMethods.popUp(scene, title);
+    }
+
+    public void addPreset(CardColorPreset preset) {
+        this.presetList.add(preset);
     }
 }
 

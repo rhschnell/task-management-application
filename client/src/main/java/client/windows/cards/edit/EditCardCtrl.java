@@ -6,12 +6,12 @@ import client.serverUtils.TaskUtils;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
-import client.windows.customize.cards.CardPresetListCtrl;
-import client.windows.customize.cards.view.CustomCardPresetViewCellCtrl;
+import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.*;
 import javafx.fxml.FXML;
@@ -20,17 +20,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -54,6 +49,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private Button cancelButton;
     private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
+    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private VBox subtasks;
@@ -68,14 +64,18 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private VBox appliedTagsVbox;
 
     @FXML
-    private Pane appliedPreset;
+    private VBox presets;
 
     private Card newCard;
     private Card oldCard;
+    private List<CardColorPreset> presetList;
 
     private List<Long> deletedSubtaskIDs;
 
     private Board shownBoard;
+
+    private final CardColorPreset DEFAULT_PRESET = new CardColorPreset(
+            "Default", "0xDEEDE7FF", "0x000000FF");
 
     /**
      * Injects the service , the Helper Methods and the viewCardCtrl
@@ -156,19 +156,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(cardDescription.getText());
 
-        Label presetName = (Label) ((HBox) appliedPreset
-                .getChildren().get(0)).getChildren().get(0);
-        String name = presetName.getText();
-        Rectangle backgroundColorRectangle = (Rectangle) ((HBox) appliedPreset
-                .getChildren().get(0)).getChildren().get(1);
-        Color backgroundColor = (Color) backgroundColorRectangle.getFill();
-        Rectangle fontColorRectangle = (Rectangle) ((HBox) appliedPreset
-                .getChildren().get(0)).getChildren().get(2);
-        Color fontColor = (Color) fontColorRectangle.getFill();
-
-        editedCard.setFontColor(fontColor.toString());
-        editedCard.setBackgroundColor(backgroundColor.toString());
-        editedCard.setPreset(new CardColorPreset(name, backgroundColor.toString(), fontColor.toString()));
+        editedCard.setPresets(new ArrayList<>());
+        editedCard.setPreset(getAppliedPreset());
 
         // Delete the tasks from the database that were deleted
         for (long taskID : deletedSubtaskIDs) {
@@ -182,6 +171,36 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     }
 
+    public void displayPresetList(){
+        for(CardColorPreset preset : presetList){
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomCardPresetCellViewCtrl.class,
+                            "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
+            CustomCardPresetCellViewCtrl ctrl = loader.getKey();
+            ctrl.setEditCardCtrl(this);
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
+            ctrl.setPresetList(shownBoard.getPresetList());
+            ctrl.setPresetObject(preset, "EditCardCtrl");
+            ctrl.setAppliedPreset(oldCard.getPresets().get(0));
+
+            presets.getChildren().add(loader.getValue());
+        }
+    }
+
+    public void updateDisplayedPresets(){
+        presets.getChildren().clear();
+        displayPresetList();
+    }
+
+    public CardColorPreset getAppliedPreset(){
+        for(CardColorPreset preset : presetList){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return DEFAULT_PRESET;
+    }
+
     /**
      * @param location  The location used to resolve relative paths for the root object, or
      *                  {@code null} if the location is not known.
@@ -190,43 +209,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    }
-
-    public void openPresetList() {
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(CardPresetListCtrl.class,
-                        "client", "windows", "customize", "cards", "view", "CardPresetList.fxml");
-
-        CardPresetListCtrl ctrl = loader.getKey();
-        ctrl.setAppliedPreset(oldCard.getPreset());
-        ctrl.setAvailablePresets(shownBoard.getPresetList());
-        ctrl.setEditCardCtrl(this);
-        ctrl.setType("edit");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        String title = "Add Preset";
-        helperMethods.popUp(scene, title);
-    }
-
-    public void setAppliedPreset(){
-        if(appliedPreset.getChildren() != null){
-            appliedPreset.getChildren().clear();
-        }
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(CustomCardPresetViewCellCtrl.class,
-                        "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
-
-        HBox cell = (HBox) loader.getValue();
-        Rectangle backgroundRectangle = (Rectangle) cell.lookup("#backgroundColor");
-        backgroundRectangle.setFill(Color.web(oldCard.getBackgroundColor()));
-        Rectangle fontRectangle = (Rectangle) cell.lookup("#fontColor");
-        fontRectangle.setFill(Color.web(oldCard.getFontColor()));
-        Button actionButton = (Button) cell.lookup("#actionButton");
-        actionButton.setVisible(false);
-
-        appliedPreset.getChildren().add(loader.getValue());
     }
 
     /**
@@ -246,24 +228,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         Scene scene = new Scene(root);
         String title = "Add tag";
         helperMethods.popUp(scene, title);
-    }
-
-    public void setAppliedPreset(CardColorPreset preset){
-        if(appliedPreset.getChildren() != null){
-            appliedPreset.getChildren().clear();
-        }
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(CustomCardPresetViewCellCtrl.class,
-                        "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
-
-        CustomCardPresetViewCellCtrl ctrl = loader.getKey();
-        ctrl.setPresetObject(preset, "addFromList");
-
-        HBox cell = (HBox) loader.getValue();
-        Button actionButton = (Button) cell.lookup("#actionButton");
-        actionButton.setVisible(false);
-
-        appliedPreset.getChildren().add(loader.getValue());
     }
 
     public void setAppliedTags(List<Tag> appliedTags) {
@@ -354,4 +318,11 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         this.shownBoard = shownBoard;
     }
 
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    public void setPresetList(List<CardColorPreset> presetList){
+        this.presetList = presetList;
+    }
 }

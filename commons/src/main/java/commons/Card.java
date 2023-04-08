@@ -15,12 +15,15 @@ public class Card implements Serializable {
     private String title;
     private String description;
 
-    private String backgroundColor;
-    private String fontColor;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "preset_id", referencedColumnName = "id")
-    private CardColorPreset preset;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "Card_Preset",
+            joinColumns = {
+                    @JoinColumn(name = "card_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "preset_id", referencedColumnName = "id")
+            })
+    private List<CardColorPreset> presets;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
@@ -30,7 +33,6 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
 
     private long priority;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
@@ -57,9 +59,6 @@ public class Card implements Serializable {
                 List<Task> subTasks, long id) {
         this.title = title;
         this.description = description;
-        this.backgroundColor = "0xDEEDE7FF";
-        this.fontColor = "0x000000FF";
-        this.preset = new CardColorPreset("Default", this.backgroundColor, this.fontColor);
         this.tags = tags;
         this.subTasks = subTasks;
         this.id = id;
@@ -75,14 +74,15 @@ public class Card implements Serializable {
      * @param subTasks         Subtasks for this card
      */
     public Card(String title, String description, List<Tag> tags,
-                List<Task> subTasks) {
+                List<Task> subTasks, List<CardColorPreset> presets) {
         this.title = title;
         this.description = description;
-        this.backgroundColor = "0xDEEDE7FF";
-        this.fontColor = "0x000000FF";
-        this.preset = new CardColorPreset("Default", this.backgroundColor, this.fontColor);
         this.tags = tags;
         this.subTasks = subTasks;
+        this.presets = presets;
+        if(this.presets == null) {
+            this.presets = new ArrayList<>();
+        }
     }
 
     /**
@@ -97,9 +97,6 @@ public class Card implements Serializable {
                 List<Task> subTasks, Long priority) {
         this.title = title;
         this.description = description;
-        this.backgroundColor = "0xDEEDE7FF";
-        this.fontColor = "0x000000FF";
-        this.preset = new CardColorPreset("Default", this.backgroundColor, this.fontColor);
         this.tags = tags;
         this.subTasks = subTasks;
         this.priority = priority;
@@ -229,5 +226,9 @@ public class Card implements Serializable {
      */
     public void deleteTag(Tag tag) {
         this.tags.remove(tag);
+    }
+
+    public void setPreset(CardColorPreset preset){
+        this.presets.add(preset);
     }
 }

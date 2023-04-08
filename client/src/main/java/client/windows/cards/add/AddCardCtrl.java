@@ -19,12 +19,13 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
-import client.windows.customize.cards.CardPresetListCtrl;
-import client.windows.customize.cards.view.CustomCardPresetViewCellCtrl;
+import client.windows.customize.cards.CustomCardPresetCellCtrl;
+import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.*;
 import javafx.fxml.FXML;
@@ -32,17 +33,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -66,7 +62,7 @@ public class AddCardCtrl extends SubtaskContainer {
     private VBox appliedTagsVbox;
 
     @FXML
-    private Pane appliedPreset;
+    private VBox presets;
 
     @FXML
     private TextField addSubtaskTitle;
@@ -82,6 +78,8 @@ public class AddCardCtrl extends SubtaskContainer {
     private CardColorPreset preset;
 
     private HelperMethods helperMethods;
+    private WorkspaceCtrl workspaceCtrl;
+    private List<CardColorPreset> presetList;
 
     /**
      * Constructor for AddCardCtrl
@@ -137,26 +135,23 @@ public class AddCardCtrl extends SubtaskContainer {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 service.getAppliedTags(),
-                taskList);
+                taskList,
+                new ArrayList<>());
 
-        Label presetName = (Label) ((HBox) appliedPreset
-                .getChildren().get(0)).getChildren().get(0);
-        String name = presetName.getText();
-        Rectangle backgroundColorRectangle = (Rectangle) ((HBox) appliedPreset
-                .getChildren().get(0)).getChildren().get(1);
-        Color backgroundColor = (Color) backgroundColorRectangle.getFill();
-        Rectangle fontColorRectangle = (Rectangle) ((HBox) appliedPreset
-                .getChildren().get(0)).getChildren().get(2);
-        Color fontColor = (Color) fontColorRectangle.getFill();
-
-        card.setFontColor(fontColor.toString());
-        card.setBackgroundColor(backgroundColor.toString());
-        card.setPreset(new CardColorPreset(name, backgroundColor.toString(), fontColor.toString()));
-
+        card.setPreset(getAppliedPreset());
         card.setPriority(service.getCardList().getCards().size() + 1);
         service.setAppliedTags(new ArrayList<>());
         service.addCard(card);
         service.insertCardList();
+    }
+
+    public CardColorPreset getAppliedPreset(){
+        for(CardColorPreset preset : presetList){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
     }
 
     /**
@@ -195,42 +190,25 @@ public class AddCardCtrl extends SubtaskContainer {
         helperMethods.popUp(scene, title);
     }
 
-    public void setAppliedPreset(CardColorPreset preset){
-        this.preset = preset;
-        if(appliedPreset.getChildren() != null){
-            appliedPreset.getChildren().clear();
+    public void displayPresetList(){
+        this.presetList = workspaceCtrl.getShownBoard().getPresetList();
+        for(CardColorPreset preset : presetList){
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomCardPresetCellViewCtrl.class,
+                            "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
+            CustomCardPresetCellViewCtrl ctrl = loader.getKey();
+            ctrl.setAddCardCtrl(this);
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
+            ctrl.setPresetList(shownBoard.getPresetList());
+            ctrl.setPresetObject(preset, "AddCardCtrl");
+
+            presets.getChildren().add(loader.getValue());
         }
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(CustomCardPresetViewCellCtrl.class,
-                        "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
-
-        CustomCardPresetViewCellCtrl ctrl = loader.getKey();
-        ctrl.setAddCardCtrl(this);
-        ctrl.setPresetObject(preset, "addFromList");
-
-        HBox cell = (HBox) loader.getValue();
-        Button actionButton = (Button) cell.lookup("#actionButton");
-        actionButton.setVisible(false);
-
-        appliedPreset.getChildren().add(loader.getValue());
     }
 
-    public void openPresetList() {
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(CardPresetListCtrl.class,
-                        "client", "windows", "customize", "cards", "view", "CardPresetList.fxml");
-
-        CardPresetListCtrl ctrl = loader.getKey();
-        ctrl.setAppliedPreset(preset);
-        ctrl.setAvailablePresets(shownBoard.getPresetList());
-        ctrl.setAddCartCtrl(this);
-        ctrl.setType("add");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-
-        String title = "Add Preset";
-        helperMethods.popUp(scene, title);
+    public void updateDisplayedPresets(){
+        presets.getChildren().clear();
+        displayPresetList();
     }
 
     /**
@@ -327,4 +305,7 @@ public class AddCardCtrl extends SubtaskContainer {
         this.shownBoard = shownBoard;
     }
 
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
 }

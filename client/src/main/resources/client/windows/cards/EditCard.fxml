@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -77,49 +76,38 @@
                         <Insets bottom="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="231.0" prefWidth="288.0">
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="100.0" prefWidth="318.0">
                      <content>
-                        <VBox maxHeight="1.7976931348623157E308" prefHeight="232.0" prefWidth="307.0" spacing="10.0">
+                        <VBox maxHeight="1.7976931348623157E308" prefHeight="150.0" prefWidth="307.0" spacing="10.0">
                            <children>
-                              <VBox fx:id="subtasks" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="subtasks" prefHeight="138.0" prefWidth="307.0" />
                               <Separator prefWidth="200.0">
                                  <opaqueInsets>
                                     <Insets bottom="10.0" top="10.0" />
                                  </opaqueInsets>
                               </Separator>
-                              <HBox prefHeight="34.0" prefWidth="301.0">
-                                 <children>
-                                    <Label prefHeight="16.0" prefWidth="90.0" text="Color Preset:">
-                                       <font>
-                                          <Font name="Arial Bold" size="13.0" />
-                                       </font>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#openPresetList" prefHeight="25.0" prefWidth="65.0" styleClass="green-button" text="Manage">
-                                       <font>
-                                          <Font name="Arial Bold" size="11.0" />
-                                       </font>
-                                       <opaqueInsets>
-                                          <Insets left="150.0" right="10.0" />
-                                       </opaqueInsets>
-                                       <HBox.margin>
-                                          <Insets left="140.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <Pane fx:id="appliedPreset" prefHeight="90.0" prefWidth="307.0" />
                            </children></VBox>
                      </content>
                      <VBox.margin>
                         <Insets right="-8.0" />
                      </VBox.margin>
                   </ScrollPane>
+                  <HBox prefHeight="20.0" prefWidth="310.0">
+                     <children>
+                        <Label prefHeight="16.0" prefWidth="90.0" text="Color Preset:">
+                           <font>
+                              <Font name="Arial Bold" size="13.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <VBox fx:id="presets" prefHeight="83.0" prefWidth="310.0" />
                </children>
                <HBox.margin>
                   <Insets />

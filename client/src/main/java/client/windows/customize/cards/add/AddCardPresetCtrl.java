@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import commons.CardColorPreset;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddCardPresetCtrl {
     private final AddCardPresetService service;
     private WorkspaceCtrl workspaceCtrl;
@@ -51,13 +54,7 @@ public class AddCardPresetCtrl {
                 presetTitle.getText(),
                 backgroundColor.getValue().toString(),
                 fontColor.getValue().toString());
-
-        Board shownBoard = customizeCtrl.getBoard();
-        if (shownBoard == null){
-            return;
-        }
-        shownBoard.addPreset(preset);
-        service.insertBoard(shownBoard);
+        customizeCtrl.addPreset(preset);
         customizeCtrl.updateDisplayedPresets();
     }
 

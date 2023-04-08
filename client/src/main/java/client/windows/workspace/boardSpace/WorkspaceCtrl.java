@@ -34,10 +34,7 @@ import client.windows.workspace.delete.DeleteBoardCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.animation.KeyFrame;
@@ -60,6 +57,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.checkerframework.checker.units.qual.C;
 
 import java.net.URL;
 import java.util.*;
@@ -239,7 +237,10 @@ public class WorkspaceCtrl implements Initializable {
             return;
         }
 
-        shownBoard = new Board(titleField.getText(), null, null);
+        shownBoard = new Board(titleField.getText(), null, null, null);
+        CardColorPreset defaultPreset = new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF");
+        defaultPreset.setDefault(true);
+        shownBoard.addPreset(defaultPreset);
         shownBoard = service.insertBoard(shownBoard);
         String key = shownBoard.getKey();
 
@@ -546,8 +547,8 @@ public class WorkspaceCtrl implements Initializable {
 
             for(int j = 0; j < shownBoard.getCardLists().get(i).getCards().size(); j++){
                 Card card = shownBoard.getCardLists().get(i).getCards().get(j);
-                String backgroundColor = card.getBackgroundColor();
-                String fontColor = card.getFontColor();
+                String backgroundColor = card.getPresets().get(0).getBackgroundColor();
+                String fontColor = card.getPresets().get(0).getFontColor();
 
                 String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
                         "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";

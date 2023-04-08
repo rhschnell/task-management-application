@@ -20,9 +20,10 @@ import client.MyFXML;
 import client.MainCtrl;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
-import client.windows.customize.cards.view.CustomCardPresetViewCellCtrl;
+import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.tags.view.CustomTagCellCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
@@ -33,7 +34,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -68,6 +68,7 @@ public class ViewCardCtrl {
     private Pane appliedPreset;
 
     private ViewCardService service;
+    private WorkspaceCtrl workspaceCtrl;
 
     /**
      * Constructor for ViewCardCtrl
@@ -149,7 +150,9 @@ public class ViewCardCtrl {
         loader.getKey().setCard(card);
         loader.getKey().displayTasks();
         loader.getKey().setShownBoard(shownBoard);
-        loader.getKey().setAppliedPreset(card.getPreset());
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().setPresetList(shownBoard.getPresetList());
+        loader.getKey().displayPresetList();
 
         Scene scene = new Scene(loader.getValue());
         scene.getRoot().setOnKeyPressed(event -> {
@@ -159,25 +162,6 @@ public class ViewCardCtrl {
         });
         helperMethods.popUp(scene,"Edit Card");
         displayTasks();
-    }
-
-    public void setAppliedPreset(CardColorPreset preset){
-        if(appliedPreset.getChildren() != null){
-            appliedPreset.getChildren().clear();
-        }
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(CustomCardPresetViewCellCtrl.class,
-                        "client", "windows", "customize", "cards", "view", "CustomCardPresetViewCell.fxml");
-
-        CustomCardPresetViewCellCtrl ctrl = loader.getKey();
-        ctrl.setViewCardCtrl(this);
-        ctrl.setPresetObject(preset, "view");
-
-        HBox cell = (HBox) loader.getValue();
-        Button actionButton = (Button) cell.lookup("#actionButton");
-        actionButton.setVisible(false);
-
-        appliedPreset.getChildren().add(loader.getValue());
     }
 
     /**
@@ -213,5 +197,22 @@ public class ViewCardCtrl {
 
     public void setShownBoard(Board shownBoard){
         this.shownBoard = shownBoard;
+    }
+
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    public void displayPreset(CardColorPreset preset) {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CustomCardPresetCellViewCtrl.class,
+                        "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
+        CustomCardPresetCellViewCtrl ctrl = loader.getKey();
+        ctrl.setViewCardCtrl(this);
+        ctrl.setWorkspaceCtrl(workspaceCtrl);
+        ctrl.setPresetList(shownBoard.getPresetList());
+        ctrl.setPresetObject(preset, "ViewCardCtrl");
+
+        appliedPreset.getChildren().add(loader.getValue());
     }
 }

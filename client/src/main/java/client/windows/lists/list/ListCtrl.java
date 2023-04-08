@@ -26,6 +26,7 @@ import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import client.windows.workspace.lock.AccessDeniedCtrl;
 import com.google.inject.Inject;
 import commons.Card;
+import commons.CardColorPreset;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -201,6 +202,7 @@ public class ListCtrl {
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
             controller.setBoard(workspaceCtrl.getShownBoard());
+            controller.setWorkspaceCtrl(workspaceCtrl);
 
             makeCardDraggable(cardCell);
             controller.setBoardKey(getBoardKey());
@@ -472,11 +474,20 @@ public class ListCtrl {
         loader.getKey().setBoard(workspaceCtrl.getShownBoard());
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
-        System.out.println(workspaceCtrl.getShownBoard().getDefaultPreset());
-        loader.getKey().setAppliedPreset(workspaceCtrl.getShownBoard().getDefaultPreset());
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().displayPresetList();
 
         String title = "Create a card";
         helperMethods.popUp(scene, title);
+    }
+
+    public CardColorPreset getDefaultPreset(){
+        for(CardColorPreset preset : workspaceCtrl.getShownBoard().getPresetList()){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return null;
     }
 
     /**
