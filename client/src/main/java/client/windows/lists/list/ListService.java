@@ -88,7 +88,8 @@ public class ListService {
      */
     public void deleteFromCardList(Card card)
     {
-        cardServer.deleteFromCardList(card);
+        cardServer.deleteFromCardList(cardList.getId(),card);
+        cardServer.deleteCard(card.getId());
     }
 
 

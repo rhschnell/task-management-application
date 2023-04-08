@@ -2,8 +2,13 @@ package server.features.cardlists;
 
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import org.springframework.data.util.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import server.features.RepositoryService;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -59,32 +64,9 @@ public class CardListService implements RepositoryService<CardList, Long> {
         }
         return repo.getById(id);
     }
-
-    /**
-     * Finds, deletes and returns the provided card from the repository.
-     * If null is provided the method returns an IllegalArgumentException
-     * If the card is not found the method returns an EntityNotFoundException
-     * @param card The card to be removed
-     * @return the card that was removed
-     */
-    public CardList removeFromCardList(Card card) {
-       if(card == null)
-        {
-            throw new IllegalArgumentException();
-        }
-        for(int i=0;i<repo.findAll().size();i++)
-        {
-            if(repo.findAll().get(i).getCards().contains(card)) {
-                CardList repoList = repo.findAll().get(i);
-                repoList.removeCard(card);
-                //repo.save(repoList);
-               return repoList;
-            }
-        }
-        return new CardList();
+    public CardListRepository getRepo() {
+        return repo;
     }
-
-
 
     /**
      * Returns all card lists from repository

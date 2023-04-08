@@ -21,6 +21,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 
 public class DeleteCardCtrl{
     private final DeleteCardService service;
@@ -69,4 +71,8 @@ public class DeleteCardCtrl{
     public void setDeleteCard(Card deleteCard) {
         this.deleteCard = deleteCard;
     }
+    public void setListId(Long id) {
+        service.setListId(id);
+    }
+
 }

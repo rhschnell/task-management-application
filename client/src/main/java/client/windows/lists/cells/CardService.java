@@ -6,9 +6,12 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 
+import javax.persistence.PrePersist;
+
 public class CardService {
     private final CardListUtils cardListUtils;
     private String boardKey;
+    private long listId;
     private CardUtils cardUtils;
 
     /**
@@ -29,10 +32,17 @@ public class CardService {
      * @param card , the card that needs to be deleted
      */
     public void deleteCard(Card card) {
-        cardUtils.deleteFromCardList(card);
+        cardUtils.deleteFromCardList(listId,card);
         cardUtils.deleteCard(card.getId());
     }
+    public void setListId(Long id)
+    {
+        this.listId=id;
+    }
 
+    public long getListId() {
+        return listId;
+    }
 
     /**
      * Inserts a new card into the database

@@ -188,13 +188,15 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     public void setAppliedTags(List<Tag> appliedTags) {
         newCard.setTags(appliedTags);
         appliedTagsVbox.getChildren().clear();
-        for (int i = 0; i < appliedTags.size(); i++) {
-            service.applyTag(appliedTags.get(i));
-            var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
-            CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(appliedTags.get(i), "viewTag");
-            appliedTagsVbox.getChildren().add(loader.getValue());
+        if(appliedTags!=null) {
+            for (int i = 0; i < appliedTags.size(); i++) {
+                service.applyTag(appliedTags.get(i));
+                var loader = new MyFXML(createInjector(new MainModules()))
+                        .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
+                CustomTagCellCtrl ctrl = loader.getKey();
+                ctrl.setTagObject(appliedTags.get(i), "viewTag");
+                appliedTagsVbox.getChildren().add(loader.getValue());
+            }
         }
 
     }
@@ -220,14 +222,16 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
-        for (Task task : newCard.getSubTasks()) {
+        if(newCard.getSubTasks()!=null) {
+            for (Task task : newCard.getSubTasks()) {
 
-            var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
-                    "client", "windows", "subtasks", "SubtaskCell.fxml");
-            loader.getKey().updateItem(task);
-            loader.getKey().setSubtaskContainer(this);
-            makeTaskDraggable(loader, subtasks);
-            subtasks.getChildren().add(loader.getValue());
+                var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
+                        "client", "windows", "subtasks", "SubtaskCell.fxml");
+                loader.getKey().updateItem(task);
+                loader.getKey().setSubtaskContainer(this);
+                makeTaskDraggable(loader, subtasks);
+                subtasks.getChildren().add(loader.getValue());
+            }
         }
     }
 
