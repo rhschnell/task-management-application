@@ -94,7 +94,12 @@ public class CardListController {
         }
     }
 
-
+    /**
+     * Deletes the card with the specified id from the cardList that contains that
+     * card
+     * @param id the card's id
+     * @return
+     */
     @DeleteMapping("/deleteCard/{id}")
     @ResponseBody
     @Transactional

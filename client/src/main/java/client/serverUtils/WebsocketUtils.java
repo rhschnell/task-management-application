@@ -22,9 +22,14 @@ public class WebsocketUtils {
     }
     private final String url = "ws://" + serverUtils.getServer().substring(7) + "/websocket";
     private final StompSession session = connect(url);
+
+    /**
+     * Connects the subscriber to the url
+     * @param url the url to connect to
+     * @return
+     */
     private StompSession connect(String url) {
         var client = new WebSocketStompClient(new StandardWebSocketClient());
-        //var stomp = new WebSocketStompClient(client);
         client.setMessageConverter(new MappingJackson2MessageConverter());
         try {
             return client.connect(url, new StompSessionHandlerAdapter() {}).get();
