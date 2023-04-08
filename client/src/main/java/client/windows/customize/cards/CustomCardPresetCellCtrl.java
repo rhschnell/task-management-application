@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import static com.google.inject.Guice.createInjector;
 
 public class CustomCardPresetCellCtrl {
+    private HelperMethods helperMethods;
     private CardColorPresetUtils server;
     private CustomizeCtrl customizeCtrl;
 
@@ -52,8 +53,9 @@ public class CustomCardPresetCellCtrl {
      * @param server The CardColorPresetUtils server
      */
     @Inject
-    public CustomCardPresetCellCtrl(CardColorPresetUtils server){
+    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods){
         this.server = server;
+        this.helperMethods = helperMethods;
     }
 
     /***
@@ -146,7 +148,7 @@ public class CustomCardPresetCellCtrl {
         controller.setCustomCardPresetCellCtrl(this);
 
         String title = "Edit Preset";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     /**

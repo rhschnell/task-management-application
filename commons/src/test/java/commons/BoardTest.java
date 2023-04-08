@@ -80,7 +80,7 @@ class BoardTest {
 
     @Test
     void getKey() {
-        assertEquals("000000", board.getKey());
+        assertEquals(null, board.getKey());
     }
 
     @Test

@@ -31,6 +31,7 @@ import client.windows.workspace.leave.LeaveCtrl;
 import client.windows.workspace.lock.AccessDeniedCtrl;
 import client.windows.workspace.lock.LockPopUpCtrl;
 import client.windows.workspace.delete.DeleteBoardCtrl;
+import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
 import commons.Board;
