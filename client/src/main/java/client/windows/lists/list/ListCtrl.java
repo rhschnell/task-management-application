@@ -530,7 +530,7 @@ public class ListCtrl {
             if (event.getCode() == KeyCode.ESCAPE) controller.cancel();
         });
 
-        HelperMethods.popUp(scene, "Rename list: " + getCardList().getListTitle());
+        helperMethods.popUp(scene, "Rename list: " + getCardList().getListTitle());
 
 
     }
