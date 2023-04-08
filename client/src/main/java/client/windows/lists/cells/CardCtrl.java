@@ -111,23 +111,26 @@ public class CardCtrl implements Initializable {
 
         }
     }
-    public void registerForMessages() {
+
+    /**
+     * Registers for the messages for this card, so when c=something is changed on this card
+     * it gets updates cause the path contains the cardId, which is unique
+     */
+    public void registerForCardUpdates() {
         StompSession.Subscription subscriber = service.getBoardUtils().registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("There is a card update");
-                    System.out.println(newCard);
-                    //DisplayUpdatedCard
+                    //Sets the card to the updated one
                     card=newCard;
-                    //Description indicator update
+                    //Updates the description indicator
                     if(newCard.getDescription()!=null)
                          setDescriptionIconVisible(true);
                     if(newCard.getDescription()==null || newCard.getDescription().equals(""))
                         setDescriptionIconVisible(false);
-                    //Tags indicator update
+                    //Updates the tag indicator
                     setDisplayTags(newCard.getTags());
-                    //Subtask Indicator update
+                    //Updates the subtasks indicator
                     if(newCard.getSubTasks()!=null) {
                         long completedTasks =
                                 newCard.getSubTasks().stream().filter(Task::isCompleted).count();
@@ -136,6 +139,7 @@ public class CardCtrl implements Initializable {
                 }
             });
         });
+        //Adds the subscibert to the list of subscribers so when something changed we can unsubscribe
         listCtrl.addSubscriber(subscriber);
     }
     /**
@@ -276,7 +280,7 @@ public class CardCtrl implements Initializable {
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
-        registerForMessages();
+        registerForCardUpdates();
 
     }
     public void setListId(Long listId)

@@ -191,7 +191,6 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-        System.out.println("Deded");
         //Use websockets
 
       /*  Timeline tl = new Timeline();
@@ -208,13 +207,19 @@ public class WorkspaceCtrl implements Initializable {
 */
         setDefaultListColors();
     }
-    public void registerForMessages(String key) {
+
+    /**
+     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
+     * @param key the board we need to get the updated information
+     */
+    public void registerForBoardUpdates(String key) {
         boardSubscriber.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("There is an update");
+                    //Update the board since the new one has changed
                     shownBoard=(Board) board;
+                    //Display the updates since something was changed
                     displayLists();
                 }
             });
@@ -252,7 +257,7 @@ public class WorkspaceCtrl implements Initializable {
         if (!tempList.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
         }
-        registerForMessages(keyField.getText());
+        registerForBoardUpdates(keyField.getText());
         System.out.println(keyField.getText());
         keyField.clear();
         refreshWorkspace(true);
@@ -287,7 +292,7 @@ public class WorkspaceCtrl implements Initializable {
         }
         titleField.clear();
         refreshWorkspace(true);
-        registerForMessages(key);
+        registerForBoardUpdates(key);
         System.out.println(key);
     }
 
@@ -683,7 +688,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setHelperMethod(helperMethods);
             controller.setCardList(cardList);
             controller.displayCards();
-            controller.registerForMessages();
+            controller.registerForListUpdates();
             setMoveShortcutListeners(loader.getKey().getCardVBox());
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);

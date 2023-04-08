@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 
-import javax.persistence.PrePersist;
 
 public class CardService {
     private final CardListUtils cardListUtils;

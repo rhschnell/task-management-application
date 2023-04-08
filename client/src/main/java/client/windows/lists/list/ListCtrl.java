@@ -200,23 +200,26 @@ public class ListCtrl {
     }
 
     /**
-     * Displays the cards onto the list's inner VBox
+     * Register for this list updated, the parameter cardList id being set into the destination
      */
-    public void registerForMessages() {
+    public void registerForListUpdates() {
         workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+service.getCardList().getId(),CardList.class, newCardList -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("There is a list update");
-                    System.out.println(newCardList);
+                    //Sets the newCardList to the controller
                     service.setCardList(newCardList);
+                    //Display the new cards since something was updated
                     displayCards();
-                    //To have the latest object
+                    //In order the board to be the latest
                     workspaceCtrl.needToUpdateBoard();
                 }
             });
         }));
     }
+    /**
+     * Displays the cards onto the list's inner VBox
+     */
     public void displayCards() {
         updateListColors();
         resetSubscriber();

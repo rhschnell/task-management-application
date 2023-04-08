@@ -42,7 +42,7 @@ public class DeleteListCtrl{
     }
 
     public void setBoardKey(String boardKey) {
-      service.setBoardKey(boardKey);
+        service.setBoardKey(boardKey);
     }
 
     /**
