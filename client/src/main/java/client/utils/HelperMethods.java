@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -180,4 +181,19 @@ public class HelperMethods {
     public void setServerIP(String serverIP) {
         this.serverIP = serverIP;
     }
+
+
+    /**
+     * Method to validate the input of anything. The text cannot be null nor empty nor start
+     * with a whitespace.
+     *
+     * @param text The text to validate
+     * @return Boolean indicating the validness of the given text according to the conditions
+     * mentioned above
+     */
+    public boolean isValidNonEmptyInput(String text) {
+        Pattern pattern = Pattern.compile("^\\S.*"); // Has to start with a non-whitespace character
+        return text != null && pattern.matcher(text).find();
+    }
 }
+
