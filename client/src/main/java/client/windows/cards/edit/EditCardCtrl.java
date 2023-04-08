@@ -214,9 +214,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Adds a task to the card and displays it based on user input
      */
     public void addTask() {
-        if (!(addTaskField.getText() != null && !addTaskField.getText().isEmpty())) {
-            return; //TODO: notify user in some way that you cannot add empty tasks
-        }
+        if (!helperMethods.validateInputAndShowPopup(addTaskField.getText())) return;
+
         Task newTask = new Task();
         newTask.setCompleted(false);
         newTask.setTitle(addTaskField.getText());

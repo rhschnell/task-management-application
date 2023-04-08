@@ -125,6 +125,9 @@ public class AddCardCtrl extends SubtaskContainer {
      */
     public void save() {
         ((Stage) saveButton.getScene().getWindow()).close();
+
+        if (!helperMethods.validateInputAndShowPopup(cardTitle.getText())) return;
+
         Card card = new Card(
                 cardTitle.getText(),
                 cardDescription.getText(),
@@ -179,9 +182,8 @@ public class AddCardCtrl extends SubtaskContainer {
         if (taskList == null) {
             taskList = new ArrayList<>();
         }
-        if (!(addSubtaskTitle.getText() != null && !addSubtaskTitle.getText().isEmpty())) {
-            return; //TODO: notify user in some way that you cannot add empty tasks
-        }
+        if (!helperMethods.validateInputAndShowPopup(addSubtaskTitle.getText())) return;
+
         Task newTask = new Task();
         newTask.setCompleted(false);
         newTask.setTitle(addSubtaskTitle.getText());

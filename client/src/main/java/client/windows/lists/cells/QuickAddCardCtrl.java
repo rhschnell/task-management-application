@@ -1,5 +1,6 @@
 package client.windows.lists.cells;
 
+import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
 import commons.Card;
 import javafx.fxml.FXML;
@@ -16,16 +17,19 @@ public class QuickAddCardCtrl {
     private TextField cardTitle;
     @FXML
     private Button addButton;
+    private final HelperMethods helperMethods;
 
     /**
      * Constructor for QuickAddCardCtrl
      * @param service a CardService instance
      * @param listCtrl a ListCtrl instance
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public QuickAddCardCtrl(CardService service, ListCtrl listCtrl) {
+    public QuickAddCardCtrl(CardService service, ListCtrl listCtrl, HelperMethods helperMethods) {
         this.service = service;
         this.listCtrl = listCtrl;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -40,6 +44,7 @@ public class QuickAddCardCtrl {
      * Adds a new card with a title
      */
     public void addCard() {
+        if (!helperMethods.validateInputAndShowPopup(cardTitle.getText())) return;
         service.insertCard(new Card(cardTitle.getText()),listCtrl.getCardList());
         listCtrl.displayCards();
     }
