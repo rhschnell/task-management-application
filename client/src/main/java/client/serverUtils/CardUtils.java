@@ -50,11 +50,12 @@ public class CardUtils {
     }
     /**
      * Deletes a card from the list of CardLists
+     * @param listID    The ID of the card list to delete this card from
      * @param card The card that needs to be deleted from the list of lists
      */
-    public void deleteFromCardList(Long id, Card card) {
+    public void deleteFromCardList(Long listID, Card card) {
         client
-                .target(serverUtils.getServer()).path(Route.CARD_LIST+"/removeFromCardList/"+id)
+                .target(serverUtils.getServer()).path(Route.CARD_LIST+"/removeFromCardList/"+listID)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);

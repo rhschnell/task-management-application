@@ -34,6 +34,7 @@ public class ListService {
      * Constructor for the ListService
      * @param listServer The server handling lists
      * @param cardServer The server handling cards
+     * @param boardUtils The utility class for handling boards
      */
     @Inject
     public ListService(CardListUtils listServer, CardUtils cardServer, BoardUtils boardUtils) {

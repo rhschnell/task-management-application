@@ -139,6 +139,22 @@ class CardTest {
     }
 
     @Test
+    public void deleteSubtaskByID(){
+        Task task1 = new Task(false, "Task 1");
+        task1.setId(1);
+        Task task2 = new Task(false, "Task 2");
+        task2.setId(2);
+        card.addSubTask(task1);
+        card.addSubTask(task2);
+
+        assertEquals(2, card.getSubTasks().size());
+
+        card.deleteSubTask(2L);
+        assertEquals(1, card.getSubTasks().size());
+        assertEquals(List.of(task1), card.getSubTasks());
+    }
+
+    @Test
     void hasDescription(){
         assertTrue(card.hasDescription());
     }
