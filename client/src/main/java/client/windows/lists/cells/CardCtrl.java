@@ -292,7 +292,7 @@ public class CardCtrl implements Initializable {
                         @Override
                         public void run() {
                             //Updates the cardList so that when we insert it again we have the latest version
-                            listCtrl.UpdateCardList();
+                            listCtrl.updateCardList();
                             //Updates the card to the most recent version
                             card=newCard;
                             //Updates the cardTitle
@@ -309,7 +309,8 @@ public class CardCtrl implements Initializable {
                                 long completedTasks =
                                         newCard.getSubTasks().stream().filter(Task::isCompleted).count();
                                 subtaskIndicator.setVisible(true);
-                                subtaskIndicator.setText(String.format("%d/%d", completedTasks, newCard.getSubTasks().size()));
+                                subtaskIndicator.setText(String.format("%d/%d", completedTasks,
+                                        newCard.getSubTasks().size()));
                             }
                         }
                     });

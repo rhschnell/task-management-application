@@ -626,9 +626,9 @@ public class ListCtrl {
                     workspaceCtrl.updateBoard();
                 }
             });
-        }));
+            }));
     }
-    public void UpdateCardList()
+    public void updateCardList()
     {
         //Updates the cardList because a newer version is available
         service.setCardList(service.getCardList(service.getCardList().getId()));
