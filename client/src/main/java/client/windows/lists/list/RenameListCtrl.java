@@ -59,24 +59,11 @@ public class RenameListCtrl implements Initializable {
         this.previousTitle = previousTitle;
     }
 
-    /**
-     * Method to validate the title of the list. It cannot be null nor empty
-     *
-     * @param text The text to validate as being the title of the new list
-     * @return Boolean indicating the validness of the given text as a list title
-     */
-    private boolean isValidTitle(String text) {
-        return text != null && !text.equals("");
-    }
-
     @FXML
     private void save() {
         String newTitle = newListTitleField.getText();
 
-        if (!helperMethods.isValidNonEmptyInput(newTitle)) {
-            showInvalidTitlePopup();
-            return;
-        }
+        if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
 
         // Apply this new title to the database
         listCtrl.renameList(newTitle);

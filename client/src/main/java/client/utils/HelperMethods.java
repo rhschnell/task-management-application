@@ -1,6 +1,8 @@
 package client.utils;
 
 import client.MyFXML;
+import client.modules.MainModules;
+import client.windows.dialogs.DialogPopupCtrl;
 import client.windows.workspace.helpWindow.HelpWindowCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static client.utils.ErrorDialogs.*;
 import static com.google.inject.Guice.createInjector;
 
 public class HelperMethods {
@@ -22,6 +25,7 @@ public class HelperMethods {
     private DataFormat cardFormat;
     private Map<String, Set<String>> memMap;
     private String serverIP;
+    public final static int maxInputLength = 255;
 
     /**
      * Creates a new HelperMethods instance
@@ -184,16 +188,89 @@ public class HelperMethods {
 
 
     /**
-     * Method to validate the input of anything. The text cannot be null nor empty nor start
-     * with a whitespace.
+     * Method to validate the input of anything to be starting with whitespace.
      *
      * @param text The text to validate
      * @return Boolean indicating the validness of the given text according to the conditions
      * mentioned above
      */
-    public boolean isValidNonEmptyInput(String text) {
+    public boolean isValidInputNonStartingWhitespace(String text) {
         Pattern pattern = Pattern.compile("^\\S.*"); // Has to start with a non-whitespace character
-        return text != null && pattern.matcher(text).find();
+        return pattern.matcher(text).find();
+    }
+
+    /**
+     * Method to validate the text not being empty
+     * @param text The text to validate
+     * @return Boolean indicating the validness of the given text according to the conditions
+     * mentioned above
+     */
+    public boolean isValidInputNonEmpty(String text){
+        return !text.equals("");
+    }
+
+    /**
+     * Method to validate the length of any input to be within the set bounds
+     * @param text The text to validate
+     * @return Boolean indicating the validness of the given text according to the conditions
+     * mentioned above
+     */
+    public boolean isValidInputLength(String text){
+        return text.length() <= maxInputLength;
+    }
+
+    /**
+     * This method validates the given text and displays a popup to communicate invalid input
+     * back to the user.
+     *
+     * The methods to validate the text are used in order of importance.
+     * Example: if the user gives an empty input, then the input is both starting with whitespace
+     * and empty. Since input not allowed to be empty one is a more general rule than it not
+     * being allowed to start with whitespaces, this is also the message displayed to the user.
+     *
+     * @param textToValidate The text to validate
+     * @return Boolean indicating the correctness of this text
+     *
+     * @see #isValidInputNonEmpty(String)
+     * @see #isValidInputNonStartingWhitespace(String)
+     * @see #isValidInputLength(String)
+     * @see ErrorDialogs
+     */
+    public boolean validateInputAndShowPopup(String textToValidate){
+        if (textToValidate == null) return false;
+        if (!isValidInputLength(textToValidate)) {
+            showErrorDialog(INVALID_LENGTH);
+            return false;
+        }
+
+        if (!isValidInputNonEmpty(textToValidate)){
+            showErrorDialog(INVALID_EMPTY);
+            return false;
+        }
+
+        if (!isValidInputNonStartingWhitespace(textToValidate)) {
+            showErrorDialog(INVALID_START_WHITESPACE);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Shows a simple dialog popup with a title, message and close button. The title and message
+     * are specified in the entry
+     * @param errorDialogEntry ErrorDialogEntry containing the title and message of this error dialog
+     */
+    public void showErrorDialog(ErrorDialogEntry errorDialogEntry){
+        var loader = new MyFXML(createInjector(new MainModules())).load(
+                DialogPopupCtrl.class, "client", "windows", "dialogs", "DialogPopup.fxml");
+
+        DialogPopupCtrl ctrl = loader.getKey();
+        ctrl.setMessage(errorDialogEntry.getMessage());
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        popUp(scene, errorDialogEntry.getPopupTitle());
     }
 }
 

@@ -1,16 +1,11 @@
 package client.windows.lists.list;
 
-import client.MyFXML;
-import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
-import client.windows.workspace.joinAlerts.EmptyTitleCtrl;
 import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -18,8 +13,6 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static com.google.inject.Guice.createInjector;
 
 public class NewListNameCtrl implements Initializable {
 
@@ -57,25 +50,9 @@ public class NewListNameCtrl implements Initializable {
     @FXML
     private void create() {
         String title = listTitleField.getText();
-        if (!helperMethods.isValidNonEmptyInput(title)) {
-            showInvalidTitlePopup();
-            return;
-        }
+        if (!helperMethods.validateInputAndShowPopup(title)) return;
         workspaceCtrl.addList(title);
         close();
-    }
-
-    /**
-     * Shows a popup that communicates to the user that the title is not valid
-     */
-    private void showInvalidTitlePopup() {
-        var loader = new MyFXML(createInjector(new MainModules())).load(
-                EmptyTitleCtrl.class, "client", "windows", "workspace", "joinAlerts", "EmptyTitle" +
-                                                                                  ".fxml");
-
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-        helperMethods.popUp(scene, "Invalid title");
     }
 
     /**
