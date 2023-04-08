@@ -5,7 +5,7 @@ public class ErrorDialogs {
     public final static ErrorDialogEntry INVALID_LENGTH =
             new ErrorDialogEntry(
                     "Error!",
-                    "Your input exceeds the maximum length of " + HelperMethods.maxInputLength);
+                    "Your input exceeds the maximum length of " + HelperMethods.getMaxInputLength());
 
     public final static ErrorDialogEntry INVALID_EMPTY =
             new ErrorDialogEntry(

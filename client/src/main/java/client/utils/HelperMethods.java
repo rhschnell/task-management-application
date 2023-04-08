@@ -4,6 +4,7 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.windows.dialogs.DialogPopupCtrl;
 import client.windows.workspace.helpWindow.HelpWindowCtrl;
+import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
@@ -14,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import static client.utils.ErrorDialogs.*;
 import static com.google.inject.Guice.createInjector;
@@ -25,12 +25,24 @@ public class HelperMethods {
     private DataFormat cardFormat;
     private Map<String, Set<String>> memMap;
     private String serverIP;
-    public final static int maxInputLength = 255;
-
+    private InputValidator inputValidator;
+    private static final int MAX_INPUT_LENGTH = 255;
     /**
      * Creates a new HelperMethods instance
+     * @param inputValidator Validator for user input
      */
-    public HelperMethods() {
+    @Inject
+    public HelperMethods(InputValidator inputValidator) {
+        this.inputValidator = inputValidator;
+        inputValidator.setMaxInputLength(MAX_INPUT_LENGTH);
+    }
+
+    /**
+     * Returns the (static) max input length that is allowed for user input
+     * @return The maximum allowed input length
+     */
+    public static int getMaxInputLength() {
+        return MAX_INPUT_LENGTH;
     }
 
     /**
@@ -188,38 +200,6 @@ public class HelperMethods {
 
 
     /**
-     * Method to validate the input of anything to be starting with whitespace.
-     *
-     * @param text The text to validate
-     * @return Boolean indicating the validness of the given text according to the conditions
-     * mentioned above
-     */
-    public boolean isValidInputNonStartingWhitespace(String text) {
-        Pattern pattern = Pattern.compile("^\\S.*"); // Has to start with a non-whitespace character
-        return pattern.matcher(text).find();
-    }
-
-    /**
-     * Method to validate the text not being empty
-     * @param text The text to validate
-     * @return Boolean indicating the validness of the given text according to the conditions
-     * mentioned above
-     */
-    public boolean isValidInputNonEmpty(String text){
-        return !text.equals("");
-    }
-
-    /**
-     * Method to validate the length of any input to be within the set bounds
-     * @param text The text to validate
-     * @return Boolean indicating the validness of the given text according to the conditions
-     * mentioned above
-     */
-    public boolean isValidInputLength(String text){
-        return text.length() <= maxInputLength;
-    }
-
-    /**
      * This method validates the given text and displays a popup to communicate invalid input
      * back to the user.
      *
@@ -238,17 +218,17 @@ public class HelperMethods {
      */
     public boolean validateInputAndShowPopup(String textToValidate){
         if (textToValidate == null) return false;
-        if (!isValidInputLength(textToValidate)) {
+        if (!inputValidator.isValidInputLength(textToValidate)) {
             showErrorDialog(INVALID_LENGTH);
             return false;
         }
 
-        if (!isValidInputNonEmpty(textToValidate)){
+        if (!inputValidator.isValidInputNonEmpty(textToValidate)){
             showErrorDialog(INVALID_EMPTY);
             return false;
         }
 
-        if (!isValidInputNonStartingWhitespace(textToValidate)) {
+        if (!inputValidator.isValidInputNonStartingWhitespace(textToValidate)) {
             showErrorDialog(INVALID_START_WHITESPACE);
             return false;
         }
