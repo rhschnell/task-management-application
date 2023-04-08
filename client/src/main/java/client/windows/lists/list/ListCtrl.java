@@ -151,6 +151,10 @@ public class ListCtrl {
         return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
     }
 
+    /**
+     * Getter for the VBox containing the displayed cards of the list
+     * @return the card VBox
+     */
     public VBox getCardVBox() {
         return cardVBox;
     }
@@ -568,7 +572,9 @@ public class ListCtrl {
         service.dragAndDrop(card, newIndex);
     }
 
-
+    /**
+     * Locks the editing capabilities of the list
+     */
     public void lock() {
         for (int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
             CardCtrl ctrl = cardControllers.get(i);
@@ -594,6 +600,9 @@ public class ListCtrl {
         quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
+    /**
+     * Unlocks editing capabilities of the list
+     */
     public void unlock() {
         for (int i = 0; i < cardVBox.getChildren().size() - 1; ++i) {
             CardCtrl ctrl = cardControllers.get(i);
@@ -620,6 +629,9 @@ public class ListCtrl {
         quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
+    /**
+     * Pop up showing that access to editing the list is denied
+     */
     public void accessDeniedPopUp() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "lock", "AccessDenied.fxml");

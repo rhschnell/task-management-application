@@ -40,14 +40,16 @@ public class DeleteListCtrl{
         this.service = service;
     }
 
-
-
     /**
      * This method cancels deleting the list from the board
      */
     public void cancel(){
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
+
+    /**
+     * This method closes the window/stage
+     */
     public void escape(){
         ((Stage)cancelButton.getScene().getWindow()).close();
     }
@@ -60,6 +62,10 @@ public class DeleteListCtrl{
         service.deleteCardList(this.deleteId);
     }
 
+    /**
+     * Setter for the id of the list to be deleted
+     * @param deleteId the id of the list you want to delte
+     */
     public void setDeleteId(long deleteId) {
         this.deleteId = deleteId;
     }

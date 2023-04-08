@@ -982,7 +982,8 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Method to delete the shown board from the database
+     * Method to delete a board from the database
+     * @param board the board to be deleted
      */
     public void deleteBoard(Board board) {
         service.deleteBoard(board);
@@ -999,8 +1000,9 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Handles the action of deleting the currently shown from within the workspace by opening a
+     * Handles the action of deleting a board from the workspace by opening a
      * confirmation popup.
+     * @param board the board to be deleted
      */
     public void deleteScreen(Board board) {
         var loader = new MyFXML(createInjector(new MainModules()))

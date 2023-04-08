@@ -32,6 +32,10 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MainModules());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    /**
+     * Launches the app
+     * @param args program arguments
+     */
     public static void main(String[] args) {
         launch();
     }

@@ -11,6 +11,10 @@ import java.util.List;
 public class TaskService implements RepositoryService<Task, Long> {
     private final TaskRepository repo;
 
+    /**
+     * Constructor for the TaskService
+     * @param repo a TaskRepository instance
+     */
     public TaskService(TaskRepository repo) {
         this.repo = repo;
     }

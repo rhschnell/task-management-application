@@ -17,13 +17,24 @@ import javafx.util.Pair;
 public abstract class SubtaskContainer {
     private final DataFormatManager dataFormatManager;
 
+    /**
+     * Constructor for the SubtaskContainer
+     * @param dataFormatManager a DataFormatManager instance
+     */
     @Inject
     public SubtaskContainer(DataFormatManager dataFormatManager) {
         this.dataFormatManager = dataFormatManager;
     }
 
+    /**
+     * Deletes the subtask passed to the method
+     * @param task the subtask you want to delete
+     */
     public abstract void deleteSubtask(Task task);
 
+    /**
+     * Displays the tasks in the UI
+     */
     public abstract void displayTasks();
 
     /**
@@ -118,8 +129,6 @@ public abstract class SubtaskContainer {
                 event.consume();
             }
         });
-
-
     }
 
     /**

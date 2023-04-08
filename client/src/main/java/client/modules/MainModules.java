@@ -37,7 +37,10 @@ import com.google.inject.Module;
 import com.google.inject.Scopes;
 
 public class MainModules implements Module {
-
+    /**
+     * Contributes bindings and other configurations for this module to binder.
+     * @param binder the binder
+     */
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);

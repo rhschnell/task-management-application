@@ -20,6 +20,11 @@ public class EditCardService {
 
     private String boardKey;
 
+    /**
+     * Constructor for the CardService
+     * @param server a CardUtils instance
+     * @param tagUtils a TagUtils instance
+     */
     @Inject
     public EditCardService(CardUtils server, TagUtils tagUtils) {
         this.server = server;
@@ -54,6 +59,11 @@ public class EditCardService {
         availableTags.removeAll(appliedTags);
         return availableTags;
     }
+
+    /**
+     * Method to update the edited card by inserting it to the server
+     * @param card the card to be inserted
+     */
     public void insertCard(Card card) {
         server.insertCard(card);
     }
@@ -61,7 +71,6 @@ public class EditCardService {
 
     /**
      * Returns the tags from the service
-     * //TODO get the tags from the board
      * @return the list of tags of the board
      */
     public List<Tag> getTags()
@@ -87,12 +96,18 @@ public class EditCardService {
         return appliedTags;
     }
 
-
-
+    /**
+     * Getter for the key of the board
+     * @return the key of the board
+     */
     public String getBoardKey() {
         return boardKey;
     }
 
+    /**
+     * Setter for the key of the board
+     * @param boardKey the key of the board
+     */
     public void setBoardKey(String boardKey) {
         this.boardKey = boardKey;
     }

@@ -58,6 +58,10 @@ public class CardListUtils {
                 .get(CardList.class);
     }
 
+    /**
+     * Setter for the client
+     * @param client the client to be set
+     */
     public void setClient(Client client)
     {
         this.client = client;
