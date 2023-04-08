@@ -234,7 +234,6 @@ public class WorkspaceCtrl implements Initializable {
             joinedKeys.add(keyField.getText());
         }
         registerForBoardUpdates(keyField.getText());
-        System.out.println(keyField.getText());
         keyField.clear();
         refreshWorkspace(true);
     }
@@ -269,7 +268,6 @@ public class WorkspaceCtrl implements Initializable {
         titleField.clear();
         refreshWorkspace(true);
         registerForBoardUpdates(key);
-        System.out.println(key);
     }
 
     /**
