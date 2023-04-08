@@ -1,8 +1,15 @@
 package client.windows.lists.list;
 
+import client.MyFXML;
+import client.modules.MainModules;
+import client.utils.HelperMethods;
+import client.windows.workspace.joinAlerts.EmptyTitleCtrl;
+import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -11,6 +18,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.google.inject.Guice.createInjector;
+
 public class RenameListCtrl implements Initializable {
 
     private ListCtrl listCtrl;
@@ -18,11 +27,16 @@ public class RenameListCtrl implements Initializable {
 
     @FXML
     private TextField newListTitleField;
+    private HelperMethods helperMethods;
 
     /**
      * Creates a new RenameListCtrl
+     *
+     * @param helperMethods Instance of HelperMethods that helps display popups in this class
      */
-    public RenameListCtrl() {
+    @Inject
+    public RenameListCtrl(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -58,13 +72,30 @@ public class RenameListCtrl implements Initializable {
     @FXML
     private void save() {
         String newTitle = newListTitleField.getText();
-        if (!isValidTitle(newTitle)) return;
+
+        if (!helperMethods.isValidNonEmptyInput(newTitle)) {
+            showInvalidTitlePopup();
+            return;
+        }
 
         // Apply this new title to the database
         listCtrl.renameList(newTitle);
 
         // Close the window
         close();
+    }
+
+    /**
+     * Shows a popup that communicates to the user that the title is not valid
+     */
+    private void showInvalidTitlePopup() {
+        var loader = new MyFXML(createInjector(new MainModules())).load(
+                EmptyTitleCtrl.class, "client", "windows", "workspace", "joinAlerts", "EmptyTitle" +
+                                                                                      ".fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        helperMethods.popUp(scene, "Invalid title");
     }
 
 
