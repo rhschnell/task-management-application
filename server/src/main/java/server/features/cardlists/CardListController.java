@@ -1,9 +1,7 @@
 package server.features.cardlists;
 
-import commons.Card;
 import commons.CardList;
 import commons.Route;
-import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +14,15 @@ import java.util.List;
 public class CardListController {
     private final CardListService service;
     private final SimpMessagingTemplate sender;
+    private Boolean testing = false;
+
+    /**
+     * Disables websockets for testing
+     * @param testing
+     */
+    public void setTesting(Boolean testing) {
+        this.testing = testing;
+    }
 
     /**
      * Creates a new CardListController
@@ -39,7 +46,8 @@ public class CardListController {
     public ResponseEntity<Void> insert(@RequestBody CardList cardList) {
         try {
             CardList inserted = service.insert(cardList);
-            sender.convertAndSend("/topic/lists/"+cardList.getId(),inserted);
+            if(!testing)
+                sender.convertAndSend("/topic/lists/"+cardList.getId(),inserted);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -86,31 +94,6 @@ public class CardListController {
         }
     }
 
-    /**
-     *
-     * @param id the id of the cardList that contains the card
-     * @param card the card that need to be deleted
-     * @return
-     */
-    @PostMapping("/removeFromCardList/{id}")
-    public synchronized ResponseEntity<Card> removeFromCardList(@PathVariable("id") Long id, @RequestBody Card card) {
-        try {
-            CardList list =  service.getRepo().getById(id);
-            list.removeCard(card);
-            for(int i=0;i<list.getCards().size();i++)
-            {
-                if(list.getCards().get(i).getId()==card.getId())
-                    list.getCards().remove(i);
-            }
-            service.getRepo().save(list);
-            sender.convertAndSend("/topic/lists/"+list.getId(),list);
-            return ResponseEntity.ok(card);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     @DeleteMapping("/deleteCard/{id}")
     @ResponseBody
@@ -120,21 +103,22 @@ public class CardListController {
             CardList list =null;
             int place = -1;
             for(int j=0;j<service.getRepo().findAll().size();j++)
-            for(int i=0;i<service.getRepo().findAll().get(j).getCards().size();i++)
-            {
-                if(service.getRepo().findAll().get(j).getCards().get(i).getId()==id) {
-                    {
-                         list = service.getRepo().findAll().get(j);
-                         place = i;
-                         break;
-                    }
+                for(int i=0;i<service.getRepo().findAll().get(j).getCards().size();i++)
+                {
+                    if(service.getRepo().findAll().get(j).getCards().get(i).getId()==id) {
+                        {
+                            list = service.getRepo().findAll().get(j);
+                            place = i;
+                            break;
+                        }
 
+                    }
                 }
-            }
             if(list != null) {
                 list.removeCard(place);
                 service.getRepo().save(list);
-                sender.convertAndSend("/topic/lists/" + list.getId(), list);
+                if(!testing)
+                        sender.convertAndSend("/topic/lists/" + list.getId(), list);
             }
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {

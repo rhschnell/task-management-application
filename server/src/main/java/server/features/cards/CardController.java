@@ -14,6 +14,14 @@ import java.util.List;
 public class CardController {
     private final CardService service;
     private final SimpMessagingTemplate sender;
+    private Boolean testing = false;
+    /**
+     * Disables websockets for testing
+     * @param testing
+     */
+    public void setTesting(Boolean testing) {
+        this.testing = testing;
+    }
     /**
      * Creates a new CardController
      * @param service Instance of card repository
@@ -34,7 +42,8 @@ public class CardController {
     public ResponseEntity<Void> insert(@RequestBody Card card) {
         try {
             service.insert(card);
-            sender.convertAndSend("/topic/cards/" + card.getId(), card);
+            if(!testing)
+                sender.convertAndSend("/topic/cards/" + card.getId(), card);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

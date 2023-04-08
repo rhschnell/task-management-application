@@ -1,14 +1,7 @@
 package server.features.cardlists;
 
-import commons.Card;
 import commons.CardList;
-import commons.Tag;
-import org.springframework.data.util.Pair;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import server.features.RepositoryService;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;

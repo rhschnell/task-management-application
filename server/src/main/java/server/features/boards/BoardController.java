@@ -20,7 +20,15 @@ import java.util.function.Consumer;
 public class BoardController {
     private final BoardService service;
     private final SimpMessagingTemplate sender;
+    private Boolean testing = false;
 
+    /**
+     * Disables websockets for testing
+     * @param testing
+     */
+    public void setTesting(Boolean testing) {
+        this.testing = testing;
+    }
     /**
      * Creates a new BoardController
      *
@@ -44,7 +52,8 @@ public class BoardController {
     public ResponseEntity<Board> insert(@RequestBody Board board) {
         try {
             Board inserted = service.insert(board);
-            sender.convertAndSend("/topic/boards/"+board.getKey(),inserted);
+            if(!testing)
+                sender.convertAndSend("/topic/boards/"+board.getKey(),inserted);
             return ResponseEntity.ok(inserted);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -121,7 +130,6 @@ public class BoardController {
     @PostMapping("/addBoardTag/{key}")
     public ResponseEntity<Tag> addBoardTag(@PathVariable("key") String key, @RequestBody Tag tag) {
         try {
-            sender.convertAndSend("/topic/boards/titles",tag);
             Board updateBoard = service.getByID(key);
             updateBoard.addTag(tag);
             service.insert(updateBoard);

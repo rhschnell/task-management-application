@@ -27,7 +27,10 @@ public class DeleteCardService {
      */
 
     public void deleteCard(Card card) {
-        server.deleteFromCardList(listId,card);
+        System.out.println(listId);
+        //server.deleteFromCardList(listId,card);
         server.deleteCard(card.getId());
+        server.deleteCardFromDatabase(card.getId());
+
     }
 }

@@ -38,8 +38,8 @@ public class CardService {
      * @param card , the card that needs to be deleted
      */
     public void deleteCard(Card card) {
-        cardUtils.deleteFromCardList(listId,card);
         cardUtils.deleteCard(card.getId());
+        cardUtils.deleteCardFromDatabase(card.getId());
     }
     public void setListId(Long id)
     {
@@ -49,6 +49,7 @@ public class CardService {
     public long getListId() {
         return listId;
     }
+
 
     /**
      * Inserts a new card into the database

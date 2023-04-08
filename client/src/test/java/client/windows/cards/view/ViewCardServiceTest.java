@@ -31,7 +31,7 @@ class ViewCardServiceTest {
         cardList.addCard(card);
         viewCardService.deleteCard(card);
         //Need to see why this test fails
-        verify(server,times(0)).deleteFromCardList(cardList.getId(),card);
+        verify(server,times(0)).deleteCardFromDatabase(cardList.getId());
     }
 
     @Test
