@@ -158,11 +158,11 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         // Delete the deleted tasks from the database
         for(int i=0;i<deletedSubtaskIDs.size();i++)
         {
-           for(int j=0;j<editedCard.getSubTasks().size();j++)
-           {
-               if(editedCard.getSubTasks().get(j).getId()==deletedSubtaskIDs.get(i))
-                   taskUtils.deleteTask(deletedSubtaskIDs.get(i));
-           }
+            for(int j=0;j<editedCard.getSubTasks().size();j++)
+            {
+                if(editedCard.getSubTasks().get(j).getId()==deletedSubtaskIDs.get(i))
+                    taskUtils.deleteTask(deletedSubtaskIDs.get(i));
+            }
         }
         deletedSubtaskIDs.clear();
 
