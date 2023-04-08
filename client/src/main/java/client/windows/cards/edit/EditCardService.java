@@ -77,7 +77,7 @@ public class EditCardService {
      */
     public void applyTag(Tag tag)
     {
-        if(appliedTags==null || !appliedTags.contains(tag))
+        if(appliedTags!=null && !appliedTags.contains(tag))
             appliedTags.add(tag);
     }
 

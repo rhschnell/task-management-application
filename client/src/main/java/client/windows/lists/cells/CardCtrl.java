@@ -305,7 +305,9 @@ public class CardCtrl implements Initializable {
                             //Updates the tag indicator
                             setDisplayTags(newCard.getTags());
                             //Updates the subtasks indicator
-                            if(newCard.getSubTasks()!=null) {
+                            if(newCard.getSubTasks()==null || newCard.getSubTasks().size()==0)
+                                subtaskIndicator.setVisible(false);
+                            if(newCard.getSubTasks()!=null && newCard.getSubTasks().size()>0) {
                                 long completedTasks =
                                         newCard.getSubTasks().stream().filter(Task::isCompleted).count();
                                 subtaskIndicator.setVisible(true);

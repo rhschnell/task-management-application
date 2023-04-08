@@ -185,20 +185,6 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-        //Use websockets
-
-      /*  Timeline tl = new Timeline();
-        tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(300),
-                event -> {
-                    try {
-                        refreshWorkspace(false);
-                    } catch (Exception ignored) {
-                    }
-                });
-        tl.getKeyFrames().add(kf);
-        tl.play();
-*/
         setDefaultListColors();
     }
 

@@ -147,8 +147,14 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setDescription(description);
         editedCard.setSubTasks(newCard.getSubTasks());
         // Delete the tasks from the database that were deleted
-        for (long taskID : deletedSubtaskIDs) {
+       /* for (long taskID : deletedSubtaskIDs) {
             taskUtils.deleteTask(taskID);
+        }*/
+        for(int j=0;j<deletedSubtaskIDs.size();j++)
+            for(int i=0;i<editedCard.getSubTasks().size();i++)
+        {
+            if(editedCard.getSubTasks().get(i).getId()==deletedSubtaskIDs.get(j))
+                editedCard.getSubTasks().remove(deletedSubtaskIDs.get(i));
         }
         deletedSubtaskIDs.clear();
 
@@ -187,6 +193,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
 
     public void setAppliedTags(List<Tag> appliedTags) {
+        if(appliedTags==null)
+                appliedTags=new ArrayList<>();
         newCard.setTags(appliedTags);
         appliedTagsVbox.getChildren().clear();
         if(appliedTags!=null) {
