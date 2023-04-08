@@ -170,7 +170,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setBackgroundColor(backgroundColor.toString());
         editedCard.setPreset(new CardColorPreset(name, backgroundColor.toString(), fontColor.toString()));
 
-        // Delete the tasks from the database
+        // Delete the tasks from the database that were deleted
         for (long taskID : deletedSubtaskIDs) {
             taskUtils.deleteTask(taskID);
         }

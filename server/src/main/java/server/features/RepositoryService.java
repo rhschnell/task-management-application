@@ -8,7 +8,7 @@ public interface RepositoryService<T, ID> {
      * Inserts given entity into repository
      * @param t entity to be inserted
      */
-    void insert(T t);
+    T insert(T t);
 
     /**
      * Deletes entity with given ID from repository

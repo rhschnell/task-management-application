@@ -57,16 +57,19 @@ public class CardCtrl implements Initializable {
     private long lastClickTime;
 
     private final CardService service;
+    private final HelperMethods helperMethods;
 
 
     /**
      * Creates a new instance of CardCtrl
      *
      * @param service The CardService for this CardCtrl
+     * @param helperMethods hm
      */
     @Inject
-    public CardCtrl(CardService service) {
+    public CardCtrl(CardService service, HelperMethods helperMethods) {
         this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -123,7 +126,7 @@ public class CardCtrl implements Initializable {
             }
         });
         String title = "Delete a card";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
     public void edit() {
@@ -141,8 +144,9 @@ public class CardCtrl implements Initializable {
                 loader.getKey().escape();
             }
         });
+        loader.getKey().displayTasks();
         String title = "Edit card";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
     }
 
 
@@ -180,7 +184,7 @@ public class CardCtrl implements Initializable {
         controller.setAppliedPreset(cell.getPreset());
 
         String title = "View Card";
-        HelperMethods.popUp(scene, title);
+        helperMethods.popUp(scene, title);
 
     }
 

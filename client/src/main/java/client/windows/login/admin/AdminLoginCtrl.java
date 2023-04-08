@@ -19,7 +19,7 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
-import client.windows.adminview.boardSpace.AdminCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import jakarta.ws.rs.ForbiddenException;
 import javafx.fxml.FXML;
@@ -32,7 +32,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
@@ -94,11 +94,12 @@ public class AdminLoginCtrl implements Initializable {
             service.sendPassword(passwordField.getText());
 
             var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(AdminCtrl.class, "client", "windows", "adminview", "AdminView.fxml");
+                    .load(WorkspaceCtrl.class, "client", "windows", "workspace", "Workspace.fxml");
 
 
+            loader.getKey().setAdmin(true);
             helperMethods.setServerIP(serverAddress.getText());
-            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new ArrayList<>());
+            helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
             loader.getKey().setHelperMethods(helperMethods);
             loader.getKey().refreshWorkspace(true);
             helperMethods.setScene(new Scene(loader.getValue()));

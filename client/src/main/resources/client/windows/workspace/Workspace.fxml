@@ -71,7 +71,7 @@
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="13.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#addList" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../icons/white-plus.png" />
+                              <Image url="/client/icons/white-plus.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -93,7 +93,7 @@
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
-         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="231.0" text="Workspace" textAlignment="CENTER">
+         <Label fx:id="screenTitle" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="28.0" prefWidth="231.0" text="Workspace" textAlignment="CENTER">
             <font>
                <Font name="Arial Bold" size="18.0" />
             </font>
@@ -112,18 +112,35 @@
             </VBox.margin>
          </ScrollPane>
          <Separator prefWidth="200.0" />
-         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Join/create a board" textAlignment="CENTER">
+         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Join a board" textAlignment="CENTER">
             <font>
                <Font name="Arial Bold" size="14.0" />
             </font>
          </Label>
          <HBox prefHeight="11.0" prefWidth="231.0" spacing="10.0">
-            <TextField fx:id="keyField" maxHeight="-Infinity" minHeight="-Infinity" onKeyPressed="#connectOnEnter" prefHeight="30.0" prefWidth="180.0" promptText="Board Key" style="-fx-background-radius: 10;">
+            <TextField fx:id="keyField" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" onKeyPressed="#connectOnEnter" prefHeight="30.0" prefWidth="180.0" promptText="Invite key" style="-fx-background-radius: 10;">
                <font>
                   <Font name="Arial" size="12.0" />
                </font>
             </TextField>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="30.0" prefWidth="41.0" styleClass="green-button" text="Add">
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="30.0" prefWidth="55.0" styleClass="green-button" text="Join">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+         </HBox>
+         <Label maxHeight="-Infinity" minHeight="-Infinity" prefHeight="21.0" prefWidth="231.0" text="Create a board" textAlignment="CENTER">
+            <font>
+               <Font name="Arial Bold" size="14.0" />
+            </font>
+         </Label>
+         <HBox prefHeight="11.0" prefWidth="231.0" spacing="10.0">
+            <TextField fx:id="titleField" focusTraversable="false" maxHeight="-Infinity" minHeight="-Infinity" onKeyPressed="#createOnEnter" prefHeight="30.0" prefWidth="180.0" promptText="Board title" style="-fx-background-radius: 10;">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </TextField>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#create" prefHeight="30.0" prefWidth="55.0" styleClass="green-button" text="Create">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -162,7 +179,7 @@
                <graphic>
                   <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#customizeBoard" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/brush.png" />
+                        <Image url="/client/icons/brush.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -188,9 +205,9 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="17.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="21.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/users.png" />
+                        <Image url="/client/icons/users.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -206,9 +223,9 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/lock-alt.png" />
+                        <Image url="/client/icons/lock-alt.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -229,14 +246,14 @@
                   <Font name="Arial Bold" size="14.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="14.0" fitWidth="14.0" onMouseClicked="#leaveBoard" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/shift-left.png" />
+                        <Image url="/client/icons/shift-left.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Label>
-            <Button maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
+            <Button fx:id="leaveButton" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#leaveBoard" prefHeight="30.0" styleClass="red-button" text="Leave">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
@@ -248,7 +265,7 @@
                <graphic>
                   <ImageView fitHeight="12.0" fitWidth="12.0" onMouseClicked="#deleteScreen" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/white-trash-can.png" />
+                        <Image url="/client/icons/white-trash-can.png" />
                      </image>
                   </ImageView>
                </graphic>

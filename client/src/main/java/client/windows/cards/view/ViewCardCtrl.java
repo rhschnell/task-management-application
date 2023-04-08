@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 import static com.google.inject.Guice.createInjector;
 
 public class ViewCardCtrl {
-
+    private final HelperMethods helperMethods;
 
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
@@ -71,12 +71,14 @@ public class ViewCardCtrl {
 
     /**
      * Constructor for ViewCardCtrl
+     * @param helperMethods hm
      * @param service The service to use in this controller
      * @param mainCtrl The main controller to use in this controller
      * @param myFXML The MyFXML injector to use in this controller
      */
     @Inject
-    public ViewCardCtrl(ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
+    public ViewCardCtrl(HelperMethods helperMethods, ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
+        this.helperMethods = helperMethods;
         this.service=service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
@@ -155,7 +157,7 @@ public class ViewCardCtrl {
                 loader.getKey().escape();
             }
         });
-        HelperMethods.popUp(scene,"Edit Card");
+        helperMethods.popUp(scene,"Edit Card");
         displayTasks();
     }
 

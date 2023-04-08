@@ -30,7 +30,7 @@ class BoardControllerTest {
         cardLists.add(cardList);
         Board board = new Board("000000", "My Board", cardLists, null, null);
         board.addTag(new Tag("New Tag","White"));
-        ResponseEntity<Void> response = sut.insert(board);
+        ResponseEntity<Board> response = sut.insert(board);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(board, sut.getById("000000").getBody());
@@ -83,7 +83,7 @@ class BoardControllerTest {
     void getByIdSuccess() {
         Board myBoard = new Board("any key", "some title", new LinkedList<>(), null, null);
 
-        ResponseEntity<Void> response = sut.insert(myBoard);
+        ResponseEntity<Board> response = sut.insert(myBoard);
         Board saved = sut.getById(myBoard.getKey()).getBody();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());

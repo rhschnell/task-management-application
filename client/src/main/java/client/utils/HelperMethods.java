@@ -10,8 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -19,7 +19,7 @@ public class HelperMethods {
     private Stage primaryStage;
     private Scene[] scenes;
     private DataFormat cardFormat;
-    private Map<String, List<String>> memMap;
+    private Map<String, Set<String>> memMap;
     private String serverIP;
 
     /**
@@ -43,8 +43,7 @@ public class HelperMethods {
      * @param scene represents the scene that needs to be shown in the popup.
      * @param title represents the popup's title.
      */
-    // TODO: Make this methods non-static
-    public static void popUp(Scene scene, String title) {
+    public void popUp(Scene scene, String title) {
         Stage popUp = new Stage();
         popUp.setScene(scene);
         if (!title.equals("Help Window")) {
@@ -56,7 +55,7 @@ public class HelperMethods {
                     Parent root = loader.getValue();
                     Scene helpScene = new Scene(root);
                     String helpTitle = "Help Window";
-                    HelperMethods.popUp(helpScene, helpTitle);
+                    this.popUp(helpScene, helpTitle);
                 }
 
             });
@@ -138,7 +137,7 @@ public class HelperMethods {
                 Parent root = loader.getValue();
                 Scene helpScene = new Scene(root);
                 String helpTitle = "Help Window";
-                HelperMethods.popUp(helpScene, helpTitle);
+                this.popUp(helpScene, helpTitle);
             }
 
         });
@@ -150,7 +149,7 @@ public class HelperMethods {
      * @param serverToKeyListMap New map containing servers as keys and lists or board-keys as
      *                           values
      */
-    public void setMemMap(Map<String, List<String>> serverToKeyListMap) {
+    public void setMemMap(Map<String, Set<String>> serverToKeyListMap) {
         this.memMap = serverToKeyListMap;
     }
 
@@ -160,7 +159,7 @@ public class HelperMethods {
      *
      * @return The memory map
      */
-    public Map<String, List<String>> getMemMap() {
+    public Map<String, Set<String>> getMemMap() {
         return memMap;
     }
 

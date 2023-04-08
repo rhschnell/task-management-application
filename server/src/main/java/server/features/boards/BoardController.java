@@ -37,10 +37,9 @@ public class BoardController {
      */
     @Transactional
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Void> insert(@RequestBody Board board) {
+    public ResponseEntity<Board> insert(@RequestBody Board board) {
         try {
-            service.insert(board);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(service.insert(board));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }

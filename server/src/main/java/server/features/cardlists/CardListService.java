@@ -21,11 +21,11 @@ public class CardListService implements RepositoryService<CardList, Long> {
      * @param cardList the card list to be inserted
      */
     @Override
-    public void insert(CardList cardList) {
+    public CardList insert(CardList cardList) {
         if (cardList == null) {
             throw new IllegalArgumentException();
         }
-        repo.save(cardList);
+        return repo.save(cardList);
     }
 
     /**

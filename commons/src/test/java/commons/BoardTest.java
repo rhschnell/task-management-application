@@ -17,7 +17,7 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board("000000", "My Board", null, new ArrayList<>(), null);
+        board = new Board("My Board", null, new ArrayList<>());
         cardList = new CardList();
         Card card = new Card(
                 "My Card",
@@ -26,7 +26,7 @@ class BoardTest {
                 null
         );
         cardList.addCard(card);
-        board2 = new Board("000001", "My Board", null, null, null);
+        board2 = new Board("My Board", null, null);
         board2.addList(cardList);
     }
 
@@ -135,21 +135,4 @@ class BoardTest {
         board.removeTag(tag);
         assertEquals(0, board.getTagList().size());
     }
-
-    @Test
-    void addPreset(){
-        CardColorPreset c = new CardColorPreset("New Preset", "0x00000000", "0xFFFFFF00");
-        board.addPreset(c);
-        assertEquals(1, board.getPresetList().size());
-    }
-
-    @Test
-    void removePreset(){
-        CardColorPreset c = new CardColorPreset("New Preset", "0x00000000", "0xFFFFFF00");
-        board.addPreset(c);
-        board.removePreset(c);
-        assertEquals(0, board.getPresetList().size());
-    }
-
-    
 }
