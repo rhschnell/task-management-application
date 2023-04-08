@@ -154,7 +154,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
             for(int i=0;i<editedCard.getSubTasks().size();i++)
         {
             if(editedCard.getSubTasks().get(i).getId()==deletedSubtaskIDs.get(j))
-                editedCard.getSubTasks().remove(deletedSubtaskIDs.get(i));
+                editedCard.getSubTasks().remove(deletedSubtaskIDs.get(j));
         }
         deletedSubtaskIDs.clear();
 
