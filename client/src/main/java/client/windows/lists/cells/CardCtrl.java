@@ -113,37 +113,6 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * Registers for the messages for this card, so when c=something is changed on this card
-     * it gets updates cause the path contains the cardId, which is unique
-     */
-    public void registerForCardUpdates() {
-        StompSession.Subscription subscriber = service.getBoardUtils().
-                registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                public void run() {
-                    //Sets the card to the updated one
-                            card=newCard;
-                    //Updates the description indicator
-                            if(newCard.getDescription()!=null)
-                                setDescriptionIconVisible(true);
-                            if(newCard.getDescription()==null || newCard.getDescription().equals(""))
-                                setDescriptionIconVisible(false);
-                    //Updates the tag indicator
-                            setDisplayTags(newCard.getTags());
-                    //Updates the subtasks indicator
-                            if(newCard.getSubTasks()!=null) {
-                                    long completedTasks =
-                                        newCard.getSubTasks().stream().filter(Task::isCompleted).count();
-                                    setSubtasksCompleted(completedTasks, newCard.getSubTasks().size());
-                            }
-                        }
-                    });
-                });
-        //Adds the subscibert to the list of subscribers so when something changed we can unsubscribe
-        listCtrl.addSubscriber(subscriber);
-    }
-    /**
      * Displays the DeleteList FXML into a new window (Popup).
      */
 
@@ -310,6 +279,44 @@ public class CardCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         deleteButton.setCursor(Cursor.HAND);
         editButton.setCursor(Cursor.HAND);
+    }
+    ///WEBSOCKETS
+    /**
+     * Registers for the messages for this card, so when c=something is changed on this card
+     * it gets updates cause the path contains the cardId, which is unique
+     */
+    public void registerForCardUpdates() {
+        StompSession.Subscription subscriber = service.getBoardUtils().
+                registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Updates the cardList so that when we insert it again we have the latest version
+                            listCtrl.UpdateCardList();
+                            //Updates the card to the most recent version
+                            card=newCard;
+                            //Updates the cardTitle
+                            cardTitle.setText(newCard.getTitle());
+                            //Updates the description indicator
+                            if(newCard.getDescription()!=null)
+                                setDescriptionIconVisible(true);
+                            if(newCard.getDescription()==null || newCard.getDescription().equals(""))
+                                setDescriptionIconVisible(false);
+                            //Updates the tag indicator
+                            setDisplayTags(newCard.getTags());
+                            //Updates the subtasks indicator
+                            if(newCard.getSubTasks()!=null) {
+                                cardTitle.setText(newCard.getSubTasks().get(0).getTitle());
+                                long completedTasks =
+                                        newCard.getSubTasks().stream().filter(Task::isCompleted).count();
+                                subtaskIndicator.setVisible(true);
+                                subtaskIndicator.setText(String.format("%d/%d", completedTasks, newCard.getSubTasks().size()));
+                            }
+                        }
+                    });
+                });
+        //Adds the subscriber to the list of subscribers so when something changed we can unsubscribe
+        listCtrl.addSubscriber(subscriber);
     }
 }
 

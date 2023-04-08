@@ -145,8 +145,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(description);
-        List<Task> mytask = new ArrayList<>();
-        mytask.add(new Task());
+        editedCard.setSubTasks(newCard.getSubTasks());
         // Delete the tasks from the database that were deleted
         for (long taskID : deletedSubtaskIDs) {
             taskUtils.deleteTask(taskID);

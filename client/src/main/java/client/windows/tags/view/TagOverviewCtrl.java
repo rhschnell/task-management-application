@@ -111,7 +111,7 @@ public class TagOverviewCtrl {
         displayTagList();
         tagUtils.registerForUpdates(boardKey, tagList, t -> {
             Platform.runLater(this::displayTagList);
-            workspaceCtrl.needToUpdateBoard();
+            workspaceCtrl.updateBoard();
         });
     }
 

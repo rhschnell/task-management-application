@@ -79,17 +79,7 @@ public class ListCtrl {
 
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
-    public void resetSubscriber()
-    {
-        if(cardSubscribers!=null)
-            for (StompSession.Subscription cardSubscriber : cardSubscribers) {
-                cardSubscriber.unsubscribe();
-            }
-    }
-    public void addSubscriber(StompSession.Subscription subscriber)
-    {
-        cardSubscribers.add(subscriber);
-    }
+
     /**
      * Sets the workspace control
      * @param workspaceCtrl the workspace to set
@@ -198,32 +188,13 @@ public class ListCtrl {
     public void setListTitle(String title) {
         listTitle.setText(title);
     }
-
-    /**
-     * Register for this list updated, the parameter cardList id being set into the destination
-     */
-    public void registerForListUpdates() {
-        workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+
-                        service.getCardList().getId(), CardList.class, newCardList -> {
-                Platform.runLater(new Runnable() {
-                    @Override
-                public void run() {
-                    //Sets the newCardList to the controller
-                        service.setCardList(newCardList);
-                    //Display the new cards since something was updated
-                        displayCards();
-                    //In order the board to be the latest
-                        workspaceCtrl.needToUpdateBoard();
-                    }
-                });
-            }));
-    }
     /**
      * Displays the cards onto the list's inner VBox
      */
     public void displayCards() {
         updateListColors();
-        resetSubscriber();
+        //New subscriber are going to be created so we need to remove the existing ones
+        unsubscribeCards();
         cardVBox.getChildren().clear();
         for (Card card : service.getCardList().getCards()) {
             cardCell = new MyFXML(createInjector(new MainModules()))
@@ -636,4 +607,53 @@ public class ListCtrl {
         String title = "Access denied!";
         helperMethods.popUp(scene, title);
     }
+
+    ///WEBSOCKETS
+    /**
+     * Register for this list updated, the parameter cardList id being set into the destination
+     */
+    public void registerForListUpdates() {
+        workspaceCtrl.addListSubscriber(service.getBoardUtils().registerForMessages("/topic/lists/"+
+                service.getCardList().getId(), CardList.class, newCardList -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    //Updates the cardList because a new version was received
+                    service.setCardList(newCardList);
+                    //Updates the displayed cards because a newer version was received
+                    displayCards();
+                    //Updates the board in the workspace because a newer version is available
+                    workspaceCtrl.updateBoard();
+                }
+            });
+        }));
+    }
+    public void UpdateCardList()
+    {
+        //Updates the cardList because a newer version is available
+        service.setCardList(service.getCardList(service.getCardList().getId()));
+        //Updates the board in the workspace because a newer is available
+        workspaceCtrl.updateBoard();
+    }
+
+    /**
+     * Unsubscribe the cards because the lists needs to be updated with new cells
+     */
+    public void unsubscribeCards()
+    {
+        if(cardSubscribers!=null)
+            for (StompSession.Subscription cardSubscriber : cardSubscribers) {
+                cardSubscriber.unsubscribe();
+            }
+    }
+
+    /**
+     * A new Card Subscriber has been created which needs to be added
+     * @param subscriber
+     */
+    public void addSubscriber(StompSession.Subscription subscriber)
+    {
+        cardSubscribers.add(subscriber);
+    }
+
 }

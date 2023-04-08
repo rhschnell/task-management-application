@@ -144,12 +144,6 @@ public class WorkspaceCtrl implements Initializable {
         this.admin = false;
         //service.registerForMessages();
     }
-
-    public void addListSubscriber(StompSession.Subscription subscriber)
-    {
-        listSubscribers.add(subscriber);
-    }
-
     /**
      * Return's to the main screen
      */
@@ -208,23 +202,6 @@ public class WorkspaceCtrl implements Initializable {
         setDefaultListColors();
     }
 
-    /**
-     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
-     * @param key the board we need to get the updated information
-     */
-    public void registerForBoardUpdates(String key) {
-        boardSubscriber.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    //Update the board since the new one has changed
-                    shownBoard=(Board) board;
-                    //Display the updates since something was changed
-                    displayLists();
-                }
-            });
-        }));
-    }
     /**
      * Sets the list colors to the default
      */
@@ -650,26 +627,12 @@ public class WorkspaceCtrl implements Initializable {
             System.out.println("The board you tried to join does not exist");
         }
     }
-    public void needToUpdateBoard()
-    {
-        shownBoard = service.getBoard(shownBoard.getKey());
-    }
-
     /**
      * Displays the lists into the Hbox list container
      */
     public void displayLists() {
-        listContainer.getChildren().clear();
-        listControllers.clear();
-        for(int i = 0; i< listControllers.size(); i++)
-        {
-            listControllers.get(i).resetSubscriber();
-        }
-        for(int i = 0; i< listSubscribers.size(); i++)
-        {
-            listSubscribers.get(i).unsubscribe();
-        }
-
+        //New subscriber are going to be created, so we need to remove the existing ones
+        unsubscribeLists();
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
@@ -1316,4 +1279,58 @@ public class WorkspaceCtrl implements Initializable {
         String title = "Error!";
         helperMethods.popUp(scene, title);
     }
+
+    ///WEBSOCKETS
+    /**
+     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
+     * @param key the board we need to get the updated information
+     */
+    public void registerForBoardUpdates(String key) {
+        boardSubscriber.add(service.getServer().registerForMessages("/topic/boards/"+key,Board.class, board -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    //Update the board since the new one has changed
+                    shownBoard=(Board) board;
+                    //Display the updates since something was changed
+                    displayLists();
+                }
+            });
+        }));
+    }
+
+    /**
+     * Ads a list subscriber to the list, so we can unsubscribe it later
+     * @param subscriber
+     */
+    public void addListSubscriber(StompSession.Subscription subscriber)
+    {
+        listSubscribers.add(subscriber);
+    }
+
+    /**
+     * Updates the board because a new version of it is available
+     */
+    public void updateBoard()
+    {
+        shownBoard = service.getBoard(shownBoard.getKey());
+    }
+
+    /**
+     * Unsubscribe all the lists because the board needs to be updated
+     */
+    public void unsubscribeLists()
+    {
+        listContainer.getChildren().clear();
+        listControllers.clear();
+        for(int i = 0; i< listControllers.size(); i++)
+        {
+            listControllers.get(i).unsubscribeCards();
+        }
+        for(int i = 0; i< listSubscribers.size(); i++)
+        {
+            listSubscribers.get(i).unsubscribe();
+        }
+    }
+
 }
