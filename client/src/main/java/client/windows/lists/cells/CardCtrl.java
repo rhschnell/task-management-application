@@ -125,7 +125,6 @@ public class CardCtrl implements Initializable {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setDeleteCard(card);
-        loader.getKey().setListId(service.getListId());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();
@@ -255,10 +254,6 @@ public class CardCtrl implements Initializable {
         service.setBoardKey(boardKey);
         registerForCardUpdates();
 
-    }
-    public void setListId(Long listId)
-    {
-        service.setListId(listId);
     }
 
     public ImageView getEditButton() {

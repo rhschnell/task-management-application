@@ -11,7 +11,6 @@ import commons.CardList;
 public class CardService {
     private final CardListUtils cardListUtils;
     private String boardKey;
-    private long listId;
     private CardUtils cardUtils;
     private BoardUtils boardUtils;
 
@@ -41,15 +40,6 @@ public class CardService {
         cardUtils.deleteCard(card.getId());
         cardUtils.deleteCardFromDatabase(card.getId());
     }
-    public void setListId(Long id)
-    {
-        this.listId=id;
-    }
-
-    public long getListId() {
-        return listId;
-    }
-
 
     /**
      * Inserts a new card into the database

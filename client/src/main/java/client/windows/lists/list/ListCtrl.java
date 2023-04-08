@@ -211,7 +211,6 @@ public class ListCtrl {
             makeCardDraggable(cardCell);
             controller.setListCtrl(this);
             controller.setBoardKey(getBoardKey());
-            controller.setListId(service.getCardList().getId());
             cardVBox.getChildren().add(cardCell.getValue());
         }
 

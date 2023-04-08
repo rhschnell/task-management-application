@@ -69,8 +69,5 @@ public class DeleteCardCtrl{
     public void setDeleteCard(Card deleteCard) {
         this.deleteCard = deleteCard;
     }
-    public void setListId(Long id) {
-        service.setListId(id);
-    }
 
 }

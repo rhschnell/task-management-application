@@ -6,7 +6,6 @@ import commons.Card;
 
 public class DeleteCardService {
     private final CardUtils server;
-    private  Long listId;
 
     /**
      * Injects the server
@@ -17,9 +16,6 @@ public class DeleteCardService {
         this.server = server;
     }
 
-    public void setListId(Long listId) {
-        this.listId = listId;
-    }
 
     /**
      * Deletes the card
@@ -27,8 +23,6 @@ public class DeleteCardService {
      */
 
     public void deleteCard(Card card) {
-        System.out.println(listId);
-        //server.deleteFromCardList(listId,card);
         server.deleteCard(card.getId());
         server.deleteCardFromDatabase(card.getId());
 
