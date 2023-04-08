@@ -25,6 +25,7 @@ import client.windows.login.user.UserLoginCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
@@ -49,6 +50,7 @@ public class Main extends Application {
         var adminLogin = FXML
                         .load(AdminLoginCtrl.class, "client", "windows", "login", "admin", "AdminLogin.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        primaryStage.getIcons().add(new Image("/client/icons/talio-icon.png"));
         HelperMethods hm = INJECTOR.getInstance(HelperMethods.class);
         mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, hm);
     }

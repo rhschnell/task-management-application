@@ -52,7 +52,6 @@ public class CustomCardPresetCellCtrl {
     @FXML
     private CheckBox defaultBox;
 
-    private final CardColorPreset DEFAULT_PRESET = new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF");
     private CardColorPreset preset;
     private Board shownBoard;
     private List<CardColorPreset> presetList;
@@ -112,7 +111,7 @@ public class CustomCardPresetCellCtrl {
             for(Card c : cardList.getCards()){
                 if(c.getPresets().get(0).equals(preset)){
                     c.setPresets(new ArrayList<>());
-                    c.setPreset(DEFAULT_PRESET);
+                    c.setPreset(shownBoard.getPresetList().get(0));
                 }
             }
         }

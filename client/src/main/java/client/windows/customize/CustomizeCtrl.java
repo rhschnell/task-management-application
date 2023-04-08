@@ -102,10 +102,9 @@ public class CustomizeCtrl {
     @FXML
     public void setListBackgroundColor(){
         String newColor = listBackgroundColor.getValue().toString().substring(2, 8);
-        for(CardList list : lists){
+        for(CardList list : lists) {
             list.setBackgroundColor(newColor);
         }
-        workspaceCtrl.setInitialListColor(newColor);
     }
 
     /**
@@ -126,10 +125,6 @@ public class CustomizeCtrl {
         for (CardList list : lists) {
             list.setFontColor(newColor);
         }
-
-        // Also make sure that any text in lists that are going to be created after this is
-        // going to get this color out of the box
-        workspaceCtrl.setInitialListFontColor(newColor);
     }
 
     /**
@@ -165,9 +160,6 @@ public class CustomizeCtrl {
         }
         listBackgroundColor.setValue(Color.web(defaultBackground));
         listFontColor.setValue(Color.web(defaultFont));
-
-        workspaceCtrl.setInitialListFontColor(defaultFont);
-        workspaceCtrl.setInitialListColor(defaultBackground);
     }
 
     /**
@@ -182,6 +174,10 @@ public class CustomizeCtrl {
      */
     public void save() {
         ((Stage)closeButton.getScene().getWindow()).close();
+
+        workspaceCtrl.setInitialListFontColor(listFontColor.getValue().toString().substring(2, 8));
+        workspaceCtrl.setInitialListColor(listBackgroundColor.getValue().toString().substring(2, 8));
+
         board.setPresetList(presetList);
         service.insertBoard(board);
         workspaceCtrl.refreshWorkspace(true);
