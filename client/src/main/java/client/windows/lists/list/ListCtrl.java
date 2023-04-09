@@ -254,13 +254,15 @@ public class ListCtrl {
      * @param cardCell the cardCell that needs to be draggable
      */
     private void makeCardDraggable(Pair<CardCtrl, Parent> cardCell) {
-        setDragOver(cardCell);
-        setDragDetected(cardCell);
-        setDragOver(cardCell);
-        setDragExited(cardCell);
-        setMouseEvents(cardCell);
-        setDragEntered(cardCell);
-        setOnDragDropped(cardCell);
+        if (workspaceCtrl.isAdmin() || !workspaceCtrl.getShownBoard().isProtected()) {
+            setDragOver(cardCell);
+            setDragDetected(cardCell);
+            setDragOver(cardCell);
+            setDragExited(cardCell);
+            setMouseEvents(cardCell);
+            setDragEntered(cardCell);
+            setOnDragDropped(cardCell);
+        }
     }
 
     /**

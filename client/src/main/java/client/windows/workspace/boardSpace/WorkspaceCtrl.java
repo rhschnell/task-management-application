@@ -669,7 +669,7 @@ public class WorkspaceCtrl implements Initializable {
         refreshWorkspace(true);
     }
     /**
-     * Displays the lists into the Hbox list container
+     * Displays the lists into the HBox list container
      */
     public void displayLists() {
         //New subscriber are going to be created, so we need to remove the existing ones
@@ -1364,7 +1364,6 @@ public class WorkspaceCtrl implements Initializable {
                 @Override
                 public void run() {
                     showBoard(board.getKey());
-                    refreshWorkspace(true);
                 }
             });
         }));
