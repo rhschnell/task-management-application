@@ -140,28 +140,28 @@ public class ListCtrl {
      * @param keyEvent The keyEvent fired
      */
     private void handleArrowKeys(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.UP) {
-            // If shift is down, reorder cards, otherwise move focus
-            if (keyEvent.isShiftDown()) {
-                workspaceCtrl.handleReorderingShortcut(true);
-            } else {
-                workspaceCtrl.moveFocusUp();
-            }
-
-        }
-        if (keyEvent.getCode() == KeyCode.DOWN) {
-            // If shift is down, reorder cards, otherwise move focus
-            if (keyEvent.isShiftDown()) {
-                workspaceCtrl.handleReorderingShortcut(false);
-            } else {
-                workspaceCtrl.moveFocusDown();
-            }
-        }
-        if (keyEvent.getCode() == KeyCode.LEFT) {
-            workspaceCtrl.moveFocusLeft();
-        }
-        if (keyEvent.getCode() == KeyCode.RIGHT) {
-            workspaceCtrl.moveFocusRight();
+        switch (keyEvent.getCode()) {
+            case UP:
+                // If shift is down, reorder cards, otherwise move focus
+                if (keyEvent.isShiftDown()) {
+                    workspaceCtrl.handleReorderingShortcut(true);
+                } else {
+                    workspaceCtrl.moveFocusUp();
+                }
+                break;
+            case DOWN:
+                // If shift is down, reorder cards, otherwise move focus
+                if (keyEvent.isShiftDown()) {
+                    workspaceCtrl.handleReorderingShortcut(false);
+                } else {
+                    workspaceCtrl.moveFocusDown();
+                }
+                break;
+            case LEFT:
+                workspaceCtrl.moveFocusLeft();
+                break;
+            case RIGHT:
+                workspaceCtrl.moveFocusRight();
         }
     }
 
