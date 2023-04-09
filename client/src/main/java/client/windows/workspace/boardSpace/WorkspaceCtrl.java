@@ -410,7 +410,7 @@ public class WorkspaceCtrl implements Initializable {
 
         // Setter Injection
         LockPopUpCtrl ctrl = loader.getKey();
-        ctrl.setBoard(shownBoard);
+        ctrl.setBoard(board);
         ctrl.setMode(mode);
         ctrl.setWorkspace(this);
 
@@ -661,6 +661,7 @@ public class WorkspaceCtrl implements Initializable {
                 unlockLists();
                 shownBoard.setProtected(false);
             }
+            titleField.setText(shownBoard.getTitle());
             unhideWorkspace();
             displayLists();
         } catch (NotFoundException | BadRequestException e) {
