@@ -1,10 +1,15 @@
 package client.windows.subtasks;
 
 import client.utils.DataFormatManager;
+import client.utils.ErrorDialogEntry;
+import client.utils.HelperMethods;
 import com.google.inject.Inject;
 import commons.Task;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,16 +19,21 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-public abstract class SubtaskContainer {
+public abstract class SubtaskContainer implements Initializable{
     private final DataFormatManager dataFormatManager;
+    @FXML
+    private Label errorMessage;
+    protected HelperMethods helperMethods;
 
     /**
      * Constructor for the SubtaskContainer
      * @param dataFormatManager a DataFormatManager instance
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public SubtaskContainer(DataFormatManager dataFormatManager) {
+    public SubtaskContainer(DataFormatManager dataFormatManager, HelperMethods helperMethods) {
         this.dataFormatManager = dataFormatManager;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -139,6 +149,46 @@ public abstract class SubtaskContainer {
      */
     public abstract void setOnDragDropped(Parent fxComponent, VBox taskVBox);
 
+
+    /**
+     * Shows the user an error in the dedicated place on the window.
+     *
+     * This method is moved in this class because the implementing classes AddCardCtrl and
+     * EditCardCtrl share the same UI, and therefore share the same functionality of showing errors
+     *
+     * @param errorDialogEntry The error dialog containing the error title and message
+     */
+    public void showErrorMessage(ErrorDialogEntry errorDialogEntry){
+        this.errorMessage.requestFocus();
+        this.errorMessage.setVisible(true);
+        this.errorMessage.setText(errorDialogEntry.getMessage());
+    }
+
+    /**
+     * Hides the error message label
+     */
+    public void hideErrorMessageLabel(){
+        this.errorMessage.setVisible(false);
+    }
+
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    protected boolean checkAndHandleUserInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)){
+            showErrorMessage(new ErrorDialogEntry("Error!", "The card title cannot be empty"));
+            return true;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)){
+            showErrorMessage(new ErrorDialogEntry("Error!", "The card title cannot be longer " +
+                                                            "than " + HelperMethods.getMaxInputLength()));
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Returns the data format manager used by this container
      *
@@ -147,4 +197,6 @@ public abstract class SubtaskContainer {
     public DataFormatManager getDataFormatManager() {
         return dataFormatManager;
     }
+
+
 }
