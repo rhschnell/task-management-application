@@ -83,6 +83,8 @@ public class ViewCardCtrl {
         this.service=service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
+        appliedTagsVbox = new VBox();
+        cardTitle = new Label();
     }
 
     /**
