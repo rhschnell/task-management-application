@@ -122,14 +122,23 @@ public class ListCtrl {
      * @param keyEvent The key event that needs to be handled
      */
     public void setKeyEventListeners(KeyEvent keyEvent) {
-        handleArrowKeys(keyEvent);
+        if (workspaceCtrl.isAdmin() || !workspaceCtrl.getShownBoard().isProtected()) {
+            handleArrowKeys(keyEvent);
 
-        switch (keyEvent.getCode()) {
-            case ENTER:         workspaceCtrl.openFocusedCard();       break;
-            case E:             workspaceCtrl.handleRenameShortcut();  break;
-            case DELETE:
-            case BACK_SPACE:    workspaceCtrl.handleDeleteShortCut();  break;
-            case T:             workspaceCtrl.handleTagShortcut();
+            switch (keyEvent.getCode()) {
+                case ENTER:
+                    workspaceCtrl.openFocusedCard();
+                    break;
+                case E:
+                    workspaceCtrl.handleRenameShortcut();
+                    break;
+                case DELETE:
+                case BACK_SPACE:
+                    workspaceCtrl.handleDeleteShortCut();
+                    break;
+                case T:
+                    workspaceCtrl.handleTagShortcut();
+            }
         }
     }
 
@@ -255,7 +264,7 @@ public class ListCtrl {
     }
 
     /**
-     * Sets mouse events to the card so that focused can be reseted
+     * Sets mouse events to the card so that focused can be reset
      *
      * @param destination to set the listener
      */
