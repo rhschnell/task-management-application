@@ -18,10 +18,10 @@ public class Card implements Serializable {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "Card_Preset",
             joinColumns = {
-                    @JoinColumn(name = "card_id", referencedColumnName = "id")
+                @JoinColumn(name = "card_id", referencedColumnName = "id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "preset_id", referencedColumnName = "id")
+                @JoinColumn(name = "preset_id", referencedColumnName = "id")
             })
     private List<CardColorPreset> presets;
 
@@ -72,6 +72,7 @@ public class Card implements Serializable {
      * @param description      Description of the card
      * @param tags             Tags associated with this card
      * @param subTasks         Subtasks for this card
+     * @param presets          Presets associated with this card
      */
     public Card(String title, String description, List<Tag> tags,
                 List<Task> subTasks, List<CardColorPreset> presets) {
@@ -228,6 +229,10 @@ public class Card implements Serializable {
         this.tags.remove(tag);
     }
 
+    /**
+     * Adds a new preset to the card's preset list
+     * @param preset The preset to be added
+     */
     public void setPreset(CardColorPreset preset){
         this.presets.add(preset);
     }

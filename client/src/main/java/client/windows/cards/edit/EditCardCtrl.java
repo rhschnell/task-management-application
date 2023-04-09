@@ -74,9 +74,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     private Board shownBoard;
 
-    private final CardColorPreset DEFAULT_PRESET = new CardColorPreset(
-            "Default", "0xDEEDE7FF", "0x000000FF");
-
     /**
      * Injects the service , the Helper Methods and the viewCardCtrl
      *
@@ -179,6 +176,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     }
 
+    /**
+     * Method to display the presets in a VBox
+     */
     public void displayPresetList(){
         for(CardColorPreset preset : presetList){
             var loader = new MyFXML(createInjector(new MainModules()))
@@ -195,18 +195,25 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         }
     }
 
+    /**
+     * This method updates the displayed presets
+     */
     public void updateDisplayedPresets(){
         presets.getChildren().clear();
         displayPresetList();
     }
 
+    /**
+     * Gets the preset that is applied
+     * @return The applied preset
+     */
     public CardColorPreset getAppliedPreset(){
         for(CardColorPreset preset : presetList){
             if(preset.isDefault()){
                 return preset;
             }
         }
-        return DEFAULT_PRESET;
+        return shownBoard.getPresetList().get(0);
     }
 
     /**
@@ -340,14 +347,26 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         });
     }
 
+    /**
+     * Sets the shown board
+     * @param shownBoard The shown board to be set
+     */
     public void setShownBoard(Board shownBoard){
         this.shownBoard = shownBoard;
     }
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
         this.workspaceCtrl = workspaceCtrl;
     }
 
+    /**
+     * Sets the preset list of color presets
+     * @param presetList The list of presets to be set
+     */
     public void setPresetList(List<CardColorPreset> presetList){
         this.presetList = presetList;
     }

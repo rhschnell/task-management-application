@@ -43,6 +43,7 @@ public class Board {
      * @param title This board's title
      * @param cardLists This board's list of cards
      * @param tagList This board's list of tags
+     * @param presetList This board's list of presets
      */
     public Board(String title, List<CardList> cardLists, List<Tag> tagList, List<CardColorPreset> presetList) {
         this.title = title;
@@ -67,6 +68,7 @@ public class Board {
      * @param title This board's title
      * @param cardLists This board's list of cards
      * @param tagList This board's list of tags
+     * @param presetList This board's list of presets
      */
     public Board(String key, String title, List<CardList> cardLists,
                  List<Tag> tagList, List<CardColorPreset> presetList) {
@@ -177,10 +179,18 @@ public class Board {
         return this.password.equals(password) || "".equals(this.password);
     }
 
+    /**
+     * Adds a preset to the list of presets
+     * @param preset The preset to be added
+     */
     public void addPreset(CardColorPreset preset){
         presetList.add(preset);
     }
 
+    /**
+     * Removes a preset from the list
+     * @param preset The preset to be removed
+     */
     public void removePreset(CardColorPreset preset){
         presetList.remove(preset);
     }

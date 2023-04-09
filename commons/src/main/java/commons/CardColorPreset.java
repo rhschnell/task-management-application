@@ -27,6 +27,12 @@ public class CardColorPreset {
     private String fontColor;
     private boolean isDefault;
 
+    /**
+     * Constructor for the CardColorPreset
+     * @param name The name of the preset
+     * @param backgroundColor The background-color of the preset
+     * @param fontColor The font-color of the preset
+     */
     public CardColorPreset(String name, String backgroundColor, String fontColor) {
         this.name = name;
         this.backgroundColor = backgroundColor;

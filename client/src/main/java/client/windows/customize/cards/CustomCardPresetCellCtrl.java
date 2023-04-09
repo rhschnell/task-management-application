@@ -59,6 +59,7 @@ public class CustomCardPresetCellCtrl {
     /**
      * Constructor for the CustomCardPresetCellCtrl
      * @param server The CardColorPresetUtils server
+     * @param helperMethods Instance of HelperMethods
      */
     @Inject
     public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods){
@@ -155,6 +156,10 @@ public class CustomCardPresetCellCtrl {
         return this.customizeCtrl;
     }
 
+    /**
+     * Sets the preset list of color presets
+     * @param presetList The list of presets to be set
+     */
     public void setPresetList(List<CardColorPreset> presetList){
         this.presetList = presetList;
     }

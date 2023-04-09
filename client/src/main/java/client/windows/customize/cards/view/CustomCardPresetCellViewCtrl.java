@@ -32,18 +32,23 @@ public class CustomCardPresetCellViewCtrl {
     @FXML
     private CheckBox defaultBox;
 
-    private final CardColorPreset DEFAULT_PRESET = new CardColorPreset(
-            "Default", "0xDEEDE7FF", "0x000000FF");
-
     private CardColorPreset preset;
     private CardColorPreset appliedPreset;
     private List<CardColorPreset> presetList;
 
+    /**
+     * Empty constructor for the CustomCardPresetCellViewCtrl
+     */
     @Inject
     public CustomCardPresetCellViewCtrl(){
 
     }
 
+    /**
+     * This method sets the preset object and handles button clicks
+     * @param preset The preset that will be shown
+     * @param caller The method from where it was called
+     */
     public void setPresetObject(CardColorPreset preset, String caller){
         this.preset = preset;
         presetTitle.setText(preset.getName());
@@ -73,6 +78,10 @@ public class CustomCardPresetCellViewCtrl {
         });
     }
 
+    /**
+     * Sets the applied preset
+     * @param appliedPreset The color preset that is the applied one
+     */
     public void setAppliedPreset(CardColorPreset appliedPreset){
         this.appliedPreset = appliedPreset;
     }
@@ -101,10 +110,18 @@ public class CustomCardPresetCellViewCtrl {
         this.editCardCtrl = editCardCtrl;
     }
 
+    /**
+     * Sets the preset list of color presets
+     * @param presetList The list of presets
+     */
     public void setPresetList(List<CardColorPreset> presetList){
         this.presetList = presetList;
     }
 
+    /**
+     * Sets the viewCardCtrl
+     * @param viewCardCtrl The ViewCardCtrl to be set
+     */
     public void setViewCardCtrl(ViewCardCtrl viewCardCtrl) {
         this.viewCardCtrl = viewCardCtrl;
     }

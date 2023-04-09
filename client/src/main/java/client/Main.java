@@ -15,18 +15,17 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
-
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import com.google.inject.Injector;
-
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import static com.google.inject.Guice.createInjector;
 
 
 public class Main extends Application {

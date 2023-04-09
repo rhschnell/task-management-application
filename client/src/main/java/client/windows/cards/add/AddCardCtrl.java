@@ -19,7 +19,6 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
-import client.windows.customize.cards.CustomCardPresetCellCtrl;
 import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
@@ -145,6 +144,10 @@ public class AddCardCtrl extends SubtaskContainer {
         service.insertCardList();
     }
 
+    /**
+     * Gets the applied preset
+     * @return The applied preset, or default if no preset is applied
+     */
     public CardColorPreset getAppliedPreset(){
         for(CardColorPreset preset : presetList){
             if(preset.isDefault()){
@@ -190,6 +193,9 @@ public class AddCardCtrl extends SubtaskContainer {
         helperMethods.popUp(scene, title);
     }
 
+    /**
+     * This method displays the preset list of color presets
+     */
     public void displayPresetList(){
         this.presetList = workspaceCtrl.getShownBoard().getPresetList();
         for(CardColorPreset preset : presetList){
@@ -206,6 +212,9 @@ public class AddCardCtrl extends SubtaskContainer {
         }
     }
 
+    /**
+     * Method that updates the displayed presets
+     */
     public void updateDisplayedPresets(){
         presets.getChildren().clear();
         displayPresetList();
@@ -301,10 +310,18 @@ public class AddCardCtrl extends SubtaskContainer {
 
     }
 
+    /**
+     * Sets the shown board
+     * @param shownBoard The shown board to be set
+     */
     public void setBoard(Board shownBoard) {
         this.shownBoard = shownBoard;
     }
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
     }

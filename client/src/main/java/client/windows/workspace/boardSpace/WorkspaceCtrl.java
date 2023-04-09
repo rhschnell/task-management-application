@@ -28,10 +28,10 @@ import client.windows.lists.list.NewListNameCtrl;
 import client.windows.tags.view.TagListFromShortcutCtrl;
 import client.windows.tags.view.TagOverviewCtrl;
 import client.windows.workspace.boardCell.BoardCellCtrl;
+import client.windows.workspace.delete.DeleteBoardCtrl;
 import client.windows.workspace.leave.LeaveCtrl;
 import client.windows.workspace.lock.AccessDeniedCtrl;
 import client.windows.workspace.lock.LockPopUpCtrl;
-import client.windows.workspace.delete.DeleteBoardCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
@@ -58,7 +58,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import org.checkerframework.checker.units.qual.C;
 
 import java.net.URL;
 import java.util.*;
@@ -550,6 +549,9 @@ public class WorkspaceCtrl implements Initializable {
         updateCardColors();
     }
 
+    /**
+     * Updates the card colors
+     */
     public void updateCardColors() {
         if(shownBoard == null) {
             return;

@@ -75,8 +75,8 @@ public class CardColorPresetTest {
 
     @Test
     void toStringTest() {
-        assertEquals( "CardColorPreset(name=New Preset, " +
+        assertEquals( "CardColorPreset(id=0, cards=null, name=New Preset, " +
                 "backgroundColor=0xDEEDE7FF, fontColor=0x000000FF, " +
-                "isDefault=false, id=0)", preset.toString());
+                "isDefault=false)", preset.toString());
     }
 }

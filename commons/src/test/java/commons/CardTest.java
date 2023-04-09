@@ -28,7 +28,8 @@ class CardTest {
                 "My card",
                 "Fancy description",
                 null,
-                null
+                null,
+                100
         );
         assertNotNull(card);
     }
@@ -136,18 +137,6 @@ class CardTest {
         card.deleteSubTask(0);
         assertEquals(1, card.getSubTasks().size());
         assertEquals(List.of(task2), card.getSubTasks());
-    }
-
-
-    @Test
-    void setBackgroundColour() {
-        card.setBackgroundColor("0x000000FF");
-        assertEquals("0x000000FF", card.getBackgroundColor());
-    }
-
-    @Test
-    void getBackgroundColour() {
-        assertEquals("0xDEEDE7FF", card.getBackgroundColor());
     }
 
     @Test
@@ -288,10 +277,7 @@ class CardTest {
 
     @Test
     void testToString() {
-        assertEquals("Card(title=Some card, description=This is a card, " +
-                "backgroundColor=0xDEEDE7FF, fontColor=0x000000FF, " +
-                "preset=CardColorPreset(name=Default, backgroundColor=0xDEEDE7FF, " +
-                "fontColor=0x000000FF, isDefault=false, id=0), subTasks=null, " +
-                "id=0, priority=0, tags=null)", card.toString());
+        assertEquals("Card(title=Some card, description=This is a card," +
+                " presets=null, subTasks=null, id=0, priority=0, tags=null)", card.toString());
     }
 }

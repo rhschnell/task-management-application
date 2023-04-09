@@ -26,14 +26,16 @@ import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import client.windows.workspace.lock.AccessDeniedCtrl;
 import com.google.inject.Inject;
 import commons.Card;
-import commons.CardColorPreset;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -484,15 +486,6 @@ public class ListCtrl {
 
         String title = "Create a card";
         helperMethods.popUp(scene, title);
-    }
-
-    public CardColorPreset getDefaultPreset(){
-        for(CardColorPreset preset : workspaceCtrl.getShownBoard().getPresetList()){
-            if(preset.isDefault()){
-                return preset;
-            }
-        }
-        return null;
     }
 
     /**

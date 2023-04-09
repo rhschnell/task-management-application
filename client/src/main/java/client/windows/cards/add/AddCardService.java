@@ -27,6 +27,7 @@ public class AddCardService {
      *
      * @param server   Instance of the utility class that handles card lists
      * @param tagUtils Instance of the utility class that handles tags
+     * @param cardColorPresetUtils Instance of the utility class that handles color presets
      */
     @Inject
     public AddCardService(CardListUtils server, TagUtils tagUtils,

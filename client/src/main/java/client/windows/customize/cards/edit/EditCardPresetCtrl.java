@@ -3,10 +3,7 @@ package client.windows.customize.cards.edit;
 import client.windows.customize.cards.CustomCardPresetCellCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
-import commons.Board;
-import commons.Card;
 import commons.CardColorPreset;
-import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -129,6 +126,10 @@ public class EditCardPresetCtrl {
         this.customCardPresetCellCtrl = customCardPresetCellCtrl;
     }
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
         this.workspaceCtrl = workspaceCtrl;
     }

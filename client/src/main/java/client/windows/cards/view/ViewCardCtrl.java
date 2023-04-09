@@ -15,9 +15,9 @@
  */
 package client.windows.cards.view;
 
-import client.modules.MainModules;
-import client.MyFXML;
 import client.MainCtrl;
+import client.MyFXML;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
@@ -198,14 +198,26 @@ public class ViewCardCtrl {
         }
     }
 
+    /**
+     * Sets the shown board
+     * @param shownBoard The shown board to be set
+     */
     public void setShownBoard(Board shownBoard){
         this.shownBoard = shownBoard;
     }
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
         this.workspaceCtrl = workspaceCtrl;
     }
 
+    /**
+     * This method displays the applied preset
+     * @param preset The applied preset that needs to be displayed
+     */
     public void displayPreset(CardColorPreset preset) {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(CustomCardPresetCellViewCtrl.class,

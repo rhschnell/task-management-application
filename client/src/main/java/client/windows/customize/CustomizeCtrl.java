@@ -18,7 +18,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 
@@ -176,17 +175,10 @@ public class CustomizeCtrl {
     }
 
     /**
-<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * This method closes the customize window
      */
     public void close(){
         ((Stage)closeButton.getScene().getWindow()).close();
-=======
-     * Closes the window/stage
-     */
-    public void close() {
-        ((Stage) closeButton.getScene().getWindow()).close();
->>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
     }
 
     /**
@@ -234,23 +226,14 @@ public class CustomizeCtrl {
     /**
      * Gets the board
      * @return The board
-=======
-     * Getter for the board
-     * @return the board
->>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     public Board getBoard() {
         return this.board;
     }
 
     /**
-<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Sets the shownBoard
      * @param shownBoard The shown board to be set
-=======
-     * Setter for the board
-     * @param shownBoard the board to be set
->>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     public void setBoard(Board shownBoard) {
         board = shownBoard;
@@ -292,6 +275,10 @@ public class CustomizeCtrl {
         helperMethods.popUp(scene, title);
     }
 
+    /**
+     * Adds a preset to the presetList
+     * @param preset The preset to be added
+     */
     public void addPreset(CardColorPreset preset) {
         this.presetList.add(preset);
     }

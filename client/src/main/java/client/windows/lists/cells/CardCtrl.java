@@ -301,6 +301,10 @@ public class CardCtrl implements Initializable {
         return deleteButton;
     }
 
+    /**
+     * Sets the shownBoard
+     * @param shownBoard The shownBoard to be set
+     */
     public void setBoard(Board shownBoard){
         this.shownBoard = shownBoard;
     }
@@ -320,6 +324,10 @@ public class CardCtrl implements Initializable {
         editButton.setCursor(Cursor.HAND);
     }
 
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
         this.workspaceCtrl = workspaceCtrl;
     }

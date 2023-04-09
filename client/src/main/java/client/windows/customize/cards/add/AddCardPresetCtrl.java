@@ -3,16 +3,12 @@ package client.windows.customize.cards.add;
 import client.windows.customize.CustomizeCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
-import commons.Board;
+import commons.CardColorPreset;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import commons.CardColorPreset;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddCardPresetCtrl {
     private final AddCardPresetService service;
