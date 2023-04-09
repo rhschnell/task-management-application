@@ -18,9 +18,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,10 @@ public class CustomCardPresetCellCtrl {
     private Label presetTitle;
 
     @FXML
-    private ColorPicker cardBackgroundColor;
+    private Rectangle cardBackgroundColor;
 
     @FXML
-    private ColorPicker cardFontColor;
+    private Rectangle cardFontColor;
 
     @FXML
     private Button deleteButton;
@@ -50,7 +51,7 @@ public class CustomCardPresetCellCtrl {
     private Button editButton;
 
     @FXML
-    private CheckBox defaultBox;
+    private RadioButton defaultBox;
 
     private CardColorPreset preset;
     private Board shownBoard;
@@ -75,8 +76,8 @@ public class CustomCardPresetCellCtrl {
         this.preset = preset;
         presetTitle.setText(preset.getName());
 
-        cardBackgroundColor.setValue(Color.web(preset.getBackgroundColor()));
-        cardFontColor.setValue(Color.web(preset.getFontColor()));
+        cardBackgroundColor.setFill(Color.web(preset.getBackgroundColor()));
+        cardFontColor.setFill(Color.web(preset.getFontColor()));
 
         defaultBox.setSelected(preset.isDefault());
         defaultBox.setOnAction(event -> {
