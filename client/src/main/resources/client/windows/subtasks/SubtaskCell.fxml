@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="15.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.subtasks.SubtaskCellCtrl">
    <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="15.0" prefWidth="600.0" spacing="10.0" stylesheets="@/client/style/stylesheet.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="15.0" prefWidth="600.0" spacing="10.0" stylesheets="/client/style/stylesheet.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
           <children>
               <CheckBox fx:id="checkBox" mnemonicParsing="false" onAction="#onCheck" styleClass="opaque-on-disable" HBox.hgrow="NEVER">
                   <HBox.margin>
@@ -30,8 +30,7 @@
                   <Font size="11.0" />
                </font>
               </TextField>
-              <ImageView fx:id="dragAndDropIcon" fitHeight="21.0" fitWidth="21.0"
-                         pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+              <ImageView fx:id="dragAndDropIcon" fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                   <image>
                       <Image url="/client/icons/drag-drop.png" />
                   </image>
