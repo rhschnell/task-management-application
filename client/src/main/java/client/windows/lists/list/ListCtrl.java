@@ -110,6 +110,7 @@ public class ListCtrl {
         if (keyEvent.getCode() == KeyCode.DELETE
             || keyEvent.getCode() == KeyCode.BACK_SPACE) workspaceCtrl.handleDeleteShortCut();
         if (keyEvent.getCode() == KeyCode.T) workspaceCtrl.handleTagShortcut();
+        if (keyEvent.getCode() == KeyCode.C) workspaceCtrl.handleCustomizationShortcut();
     }
 
     /**
