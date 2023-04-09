@@ -76,6 +76,9 @@ public class BoardController {
     public ResponseEntity<Void> delete(@PathVariable("key") String key) {
         try {
             service.delete(key);
+            if (!testing) {
+                sender.convertAndSend("/topic/boards/"+key, new Board(null, null, null, null, null));
+            }
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

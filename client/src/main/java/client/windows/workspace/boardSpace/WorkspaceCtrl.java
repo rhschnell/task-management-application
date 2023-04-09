@@ -661,7 +661,7 @@ public class WorkspaceCtrl implements Initializable {
                 unlockLists();
                 shownBoard.setProtected(false);
             }
-            titleField.setText(shownBoard.getTitle());
+            boardName.setText(shownBoard.getTitle());
             unhideWorkspace();
             displayLists();
         } catch (NotFoundException | BadRequestException e) {
@@ -1367,11 +1367,15 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    //Update the board since the new one has changed
-                    shownBoard=(Board) board;
-                    boardName.setText(shownBoard.getTitle());
-                    //Display the updates since something was changed
-                    displayLists();
+                    if (board.equals(new Board(null, null, null, null, null))) {
+                        refreshWorkspace(true);
+                    } else {
+                        //Update the board since the new one has changed
+                        shownBoard = (Board) board;
+                        boardName.setText(shownBoard.getTitle());
+                        //Display the updates since something was changed
+                        displayLists();
+                    }
                 }
             });
         }));
