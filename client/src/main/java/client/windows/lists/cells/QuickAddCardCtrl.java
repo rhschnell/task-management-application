@@ -1,5 +1,6 @@
 package client.windows.lists.cells;
 
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
 import commons.Card;
@@ -46,10 +47,31 @@ public class QuickAddCardCtrl {
     public void addCard() {
         String title = helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
 
-        if (!helperMethods.validateInputAndShowPopup(title)) return;
+        if (!checkAndHandleInput(title)) return;
+
 
         service.insertCard(new Card(title),listCtrl.getCardList());
         listCtrl.displayCards();
+    }
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**

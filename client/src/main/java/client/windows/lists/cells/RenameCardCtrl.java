@@ -1,5 +1,6 @@
 package client.windows.lists.cells;
 
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
@@ -64,12 +65,32 @@ public class RenameCardCtrl implements Initializable {
      */
     public void save(){
         String newTitle = helperMethods.getInputValidator().stripWhitespace(inputField.getText());
-        if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
+        if (!checkAndHandleInput(newTitle)) return;
 
         this.card.setTitle(newTitle);
         service.insertCard(this.card);
         this.close();
         listCtrl.displayCards();
+    }
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**
