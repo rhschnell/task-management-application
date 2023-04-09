@@ -6,26 +6,41 @@ import commons.Tag;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 @RestController
 @RequestMapping(Route.BOARD)
 public class BoardController {
     private final BoardService service;
+    private final SimpMessagingTemplate sender;
+    private Boolean testing = false;
 
+    /**
+     * Disables websockets for testing
+     * @param testing
+     */
+    public void setTesting(Boolean testing) {
+        this.testing = testing;
+    }
     /**
      * Creates a new BoardController
      *
      * @param service Instance of board repository
+     * @param sender
      */
-    public BoardController(BoardService service) {
+    public BoardController(BoardService service, SimpMessagingTemplate sender) {
         this.service = service;
+        this.sender = sender;
     }
 
 
@@ -39,7 +54,10 @@ public class BoardController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Board> insert(@RequestBody Board board) {
         try {
-            return ResponseEntity.ok(service.insert(board));
+            Board inserted = service.insert(board);
+            if(!testing)
+                sender.convertAndSend("/topic/boards/"+board.getKey(),inserted);
+            return ResponseEntity.ok(inserted);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -75,6 +93,7 @@ public class BoardController {
     @GetMapping("/{key}")
     public ResponseEntity<Board> getById(@PathVariable("key") String key) {
         try {
+
             Board returnBoard = service.getByID(key);
             return ResponseEntity.ok(returnBoard);
         } catch (IllegalArgumentException e) {

@@ -17,6 +17,7 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
 import client.windows.lists.cells.CardCtrl;
@@ -27,18 +28,23 @@ import client.windows.workspace.lock.AccessDeniedCtrl;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,7 @@ public class ListCtrl {
 
     @FXML
     private VBox completeList;
+    private List<StompSession.Subscription> cardSubscribers;
 
     @FXML
     private ScrollPane scrollPane;
@@ -74,6 +81,21 @@ public class ListCtrl {
 
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
+    private WebsocketUtils websocketUtils;
+    /**
+     * Constructor for ListCtrl
+     *
+     * @param service The ListService for this controller
+     * @param websocketUtils The websocketUtils in order to send request for updates
+     */
+    @Inject
+    public ListCtrl(ListService service, WebsocketUtils websocketUtils) {
+        this.service = service;
+        cardControllers = new ArrayList<>();
+        focusedCardIndex = -1;
+        cardSubscribers = new ArrayList<>();
+        this.websocketUtils = websocketUtils;
+    }
 
     /**
      * Sets the workspace control
@@ -108,6 +130,7 @@ public class ListCtrl {
             || keyEvent.getCode() == KeyCode.BACK_SPACE) workspaceCtrl.handleDeleteShortCut();
         if (keyEvent.getCode() == KeyCode.T) workspaceCtrl.handleTagShortcut();
     }
+
 
     /**
      * Method that checks a keyEvent and handles cases of the arrow keys
@@ -159,17 +182,6 @@ public class ListCtrl {
         return cardVBox;
     }
 
-    /**
-     * Constructor for ListCtrl
-     *
-     * @param service The ListService for this controller
-     */
-    @Inject
-    public ListCtrl(ListService service) {
-        this.service = service;
-        cardControllers = new ArrayList<>();
-        focusedCardIndex = -1;
-    }
 
     /**
      * Sets the cardList
@@ -188,13 +200,13 @@ public class ListCtrl {
     public void setListTitle(String title) {
         listTitle.setText(title);
     }
-
     /**
      * Displays the cards onto the list's inner VBox
      */
     public void displayCards() {
         updateListColors();
-
+        //New subscriber are going to be created so we need to remove the existing ones
+        unsubscribeCards();
         cardVBox.getChildren().clear();
         for (Card card : service.getCardList().getCards()) {
             cardCell = new MyFXML(createInjector(new MainModules()))
@@ -202,10 +214,13 @@ public class ListCtrl {
             CardCtrl controller = cardCell.getKey();
 
             cardControllers.add(controller);
-
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
+            controller.setBoard(workspaceCtrl.getShownBoard());
+            controller.setWorkspaceCtrl(workspaceCtrl);
+
             makeCardDraggable(cardCell);
+            controller.setListCtrl(this);
             controller.setBoardKey(getBoardKey());
             cardVBox.getChildren().add(cardCell.getValue());
         }
@@ -213,6 +228,7 @@ public class ListCtrl {
         var quickAddCard =
                 new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
                         "lists", "cells", "QuickAddCardCell.fxml");
+        quickAddCard.getKey().setShownBoard(workspaceCtrl.getShownBoard());
         quickAddCard.getKey().setListCtrl(this);
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
@@ -471,8 +487,11 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setBoard(workspaceCtrl.getShownBoard());
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().displayPresetList();
 
         String title = "Create a card";
         helperMethods.popUp(scene, title);
@@ -488,6 +507,7 @@ public class ListCtrl {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setDeleteId(service.getCardList().getId());
+        loader.getKey().setBoardKey(getBoardKey());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();
@@ -642,5 +662,60 @@ public class ListCtrl {
         helperMethods.popUp(scene, title);
     }
 
+
+
+    ///WEBSOCKETS
+    /**
+     * Register for this list updated, the parameter cardList id being set into the destination
+     */
+    public void registerForListUpdates() {
+        workspaceCtrl.addListSubscriber(websocketUtils.registerForMessages("/topic/lists/"+
+                service.getCardList().getId(), CardList.class, newCardList -> {
+                Platform.runLater(new Runnable() {
+                    @Override
+                public void run() {
+                    //Updates the cardList because a new version was received
+                        service.setCardList(newCardList);
+                    //Updates the list title if updated
+                        listTitle.setText(newCardList.getListTitle());
+                    //Updates the displayed cards because a newer version was received
+                        displayCards();
+                    //Updates the board in the workspace because a newer version is available
+                        workspaceCtrl.updateBoard();
+                    }
+                });
+            }));
+    }
+
+    /**
+     * Updates the cardList to the new version and refreshes the board in the workspace
+     */
+    public void updateCardList()
+    {
+        //Updates the cardList because a newer version is available
+        service.setCardList(service.getCardList(service.getCardList().getId()));
+        //Updates the board in the workspace because a newer is available
+        workspaceCtrl.updateBoard();
+    }
+
+    /**
+     * Unsubscribe the cards because the lists needs to be updated with new cells
+     */
+    public void unsubscribeCards()
+    {
+        if(cardSubscribers!=null)
+            for (StompSession.Subscription cardSubscriber : cardSubscribers) {
+                cardSubscriber.unsubscribe();
+            }
+    }
+
+    /**
+     * A new Card Subscriber has been created which needs to be added
+     * @param subscriber
+     */
+    public void addSubscriber(StompSession.Subscription subscriber)
+    {
+        cardSubscribers.add(subscriber);
+    }
 
 }

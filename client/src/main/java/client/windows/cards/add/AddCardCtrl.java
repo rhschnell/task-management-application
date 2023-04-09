@@ -19,15 +19,14 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
+import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
-import commons.Task;
+import commons.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -62,6 +61,9 @@ public class AddCardCtrl extends SubtaskContainer {
     private VBox appliedTagsVbox;
 
     @FXML
+    private VBox presets;
+
+    @FXML
     private TextField addSubtaskTitle;
 
     @FXML
@@ -71,9 +73,12 @@ public class AddCardCtrl extends SubtaskContainer {
     private VBox subtasks;
 
     private List<Task> taskList;
-
+    private Board shownBoard;
+    private CardColorPreset preset;
 
     private HelperMethods helperMethods;
+    private WorkspaceCtrl workspaceCtrl;
+    private List<CardColorPreset> presetList;
 
     /**
      * Constructor for AddCardCtrl
@@ -129,11 +134,27 @@ public class AddCardCtrl extends SubtaskContainer {
                 cardTitle.getText(),
                 cardDescription.getText(),
                 service.getAppliedTags(),
-                taskList);
+                taskList,
+                new ArrayList<>());
+
+        card.setPreset(getAppliedPreset());
         card.setPriority(service.getCardList().getCards().size() + 1);
         service.setAppliedTags(new ArrayList<>());
         service.addCard(card);
         service.insertCardList();
+    }
+
+    /**
+     * Gets the applied preset
+     * @return The applied preset, or default if no preset is applied
+     */
+    public CardColorPreset getAppliedPreset(){
+        for(CardColorPreset preset : presetList){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
     }
 
     /**
@@ -170,6 +191,33 @@ public class AddCardCtrl extends SubtaskContainer {
         Scene scene = new Scene(root);
         String title = "Add tag";
         helperMethods.popUp(scene, title);
+    }
+
+    /**
+     * This method displays the preset list of color presets
+     */
+    public void displayPresetList(){
+        this.presetList = workspaceCtrl.getShownBoard().getPresetList();
+        for(CardColorPreset preset : presetList){
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomCardPresetCellViewCtrl.class,
+                            "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
+            CustomCardPresetCellViewCtrl ctrl = loader.getKey();
+            ctrl.setAddCardCtrl(this);
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
+            ctrl.setPresetList(shownBoard.getPresetList());
+            ctrl.setPresetObject(preset, "AddCardCtrl");
+
+            presets.getChildren().add(loader.getValue());
+        }
+    }
+
+    /**
+     * Method that updates the displayed presets
+     */
+    public void updateDisplayedPresets(){
+        presets.getChildren().clear();
+        displayPresetList();
     }
 
     /**
@@ -262,4 +310,19 @@ public class AddCardCtrl extends SubtaskContainer {
 
     }
 
+    /**
+     * Sets the shown board
+     * @param shownBoard The shown board to be set
+     */
+    public void setBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
 }

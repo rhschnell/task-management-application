@@ -1,5 +1,6 @@
 package client.windows.cards.add;
 
+import client.serverUtils.CardColorPresetUtils;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.TagUtils;
 import com.google.inject.Inject;
@@ -15,6 +16,7 @@ import java.util.List;
 public class AddCardService {
     private final CardListUtils server;
     private final TagUtils tagUtils;
+    private final CardColorPresetUtils cardColorPresetUtils;
     private List<Tag> appliedTags;
 
     private CardList cardList;
@@ -25,12 +27,14 @@ public class AddCardService {
      *
      * @param server   Instance of the utility class that handles card lists
      * @param tagUtils Instance of the utility class that handles tags
+     * @param cardColorPresetUtils Instance of the utility class that handles color presets
      */
     @Inject
-    public AddCardService(CardListUtils server, TagUtils tagUtils) {
-
+    public AddCardService(CardListUtils server, TagUtils tagUtils,
+                          CardColorPresetUtils cardColorPresetUtils) {
         this.server = server;
         this.tagUtils = tagUtils;
+        this.cardColorPresetUtils = cardColorPresetUtils;
         appliedTags = new ArrayList<>();
     }
 

@@ -1,10 +1,11 @@
 package server.features.cardlists;
 
-import commons.Card;
 import commons.CardList;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -13,14 +14,26 @@ import java.util.List;
 @RequestMapping(Route.CARD_LIST)
 public class CardListController {
     private final CardListService service;
+    private final SimpMessagingTemplate sender;
+    private Boolean testing = false;
+
+    /**
+     * Disables websockets for testing
+     * @param testing
+     */
+    public void setTesting(Boolean testing) {
+        this.testing = testing;
+    }
 
     /**
      * Creates a new CardListController
      *
      * @param service Instance of card list repository
+     * @param sender The sender
      */
-    public CardListController(CardListService service) {
+    public CardListController(CardListService service, SimpMessagingTemplate sender) {
         this.service = service;
+        this.sender=sender;
     }
 
 
@@ -34,7 +47,9 @@ public class CardListController {
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Void> insert(@RequestBody CardList cardList) {
         try {
-            service.insert(cardList);
+            CardList inserted = service.insert(cardList);
+            if(!testing)
+                sender.convertAndSend("/topic/lists/"+cardList.getId(),inserted);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -82,15 +97,37 @@ public class CardListController {
     }
 
     /**
-     *
-     * @param card The card that needs to be removed using the delete method from the object
-     *             so the priority is preserved.
-     * @return the card that has been deleted
+     * Deletes the card with the specified id from the cardList that contains that
+     * card
+     * @param id the card's id
+     * @return the response
      */
-    @PostMapping("/removeFromCardList/")
-    public ResponseEntity<Card> removeFromCardList(@RequestBody Card card) {
+    @DeleteMapping("/deleteCard/{id}")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<Void> deleteCardById(@PathVariable("id") long id) {
         try {
-            return ResponseEntity.ok(service.removeFromCardList(card));
+            CardList list =null;
+            int place = -1;
+            for(int j=0;j<service.getRepo().findAll().size();j++)
+                for(int i=0;i<service.getRepo().findAll().get(j).getCards().size();i++)
+                {
+                    if(service.getRepo().findAll().get(j).getCards().get(i).getId()==id) {
+                        {
+                            list = service.getRepo().findAll().get(j);
+                            place = i;
+                            break;
+                        }
+
+                    }
+                }
+            if(list != null) {
+                list.removeCard(place);
+                service.getRepo().save(list);
+                if(!testing)
+                        sender.convertAndSend("/topic/lists/" + list.getId(), list);
+            }
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException e) {

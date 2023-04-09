@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AdminUtilsTest {
 

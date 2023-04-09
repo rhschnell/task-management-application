@@ -16,12 +16,15 @@ public class DeleteCardService {
         this.server = server;
     }
 
+
     /**
      * Deletes the card
      * @param card , the card that needs to be deleted
      */
+
     public void deleteCard(Card card) {
-        server.deleteFromCardList(card);
         server.deleteCard(card.getId());
+        server.deleteCardFromDatabase(card.getId());
+
     }
 }

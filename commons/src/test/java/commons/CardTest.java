@@ -28,7 +28,8 @@ class CardTest {
                 "My card",
                 "Fancy description",
                 null,
-                null
+                null,
+                100
         );
         assertNotNull(card);
     }
@@ -139,6 +140,22 @@ class CardTest {
     }
 
     @Test
+    public void deleteSubtaskByID(){
+        Task task1 = new Task(false, "Task 1");
+        task1.setId(1);
+        Task task2 = new Task(false, "Task 2");
+        task2.setId(2);
+        card.addSubTask(task1);
+        card.addSubTask(task2);
+
+        assertEquals(2, card.getSubTasks().size());
+
+        card.deleteSubTask(2L);
+        assertEquals(1, card.getSubTasks().size());
+        assertEquals(List.of(task1), card.getSubTasks());
+    }
+
+    @Test
     void hasDescription(){
         assertTrue(card.hasDescription());
     }
@@ -228,6 +245,16 @@ class CardTest {
     }
 
     @Test
+    void deleteTag(){
+        Tag tag = new Tag("New Tag", "0x00000000");
+        Tag anotherTag = new Tag("Second Tag", "0x000000FF");
+        card.addTag(tag);
+        card.addTag(anotherTag);
+        card.deleteTag(tag);
+        assertEquals(1, card.getTags().size());
+    }
+
+    @Test
     void testEquals() {
         Card c1 = new Card(
                 "Some card",
@@ -266,7 +293,7 @@ class CardTest {
 
     @Test
     void testToString() {
-        assertEquals("Card(title=Some card, description=This is a card, " +
-                     "subTasks=null, id=0, priority=0, tags=null)", card.toString());
+        assertEquals("Card(title=Some card, description=This is a card," +
+                " presets=null, subTasks=null, id=0, priority=0, tags=null)", card.toString());
     }
 }

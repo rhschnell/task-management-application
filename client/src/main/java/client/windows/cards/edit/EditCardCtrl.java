@@ -6,14 +6,14 @@ import client.serverUtils.TaskUtils;
 import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
+import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
 import client.windows.tags.view.TagListCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
-import commons.Card;
-import commons.Tag;
-import commons.Task;
+import commons.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -49,6 +49,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private Button cancelButton;
     private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
+    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private VBox subtasks;
@@ -62,9 +63,16 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @FXML
     private VBox appliedTagsVbox;
 
+    @FXML
+    private VBox presets;
+
     private Card newCard;
+    private Card oldCard;
+    private List<CardColorPreset> presetList;
 
     private List<Long> deletedSubtaskIDs;
+
+    private Board shownBoard;
 
     /**
      * Injects the service , the Helper Methods and the viewCardCtrl
@@ -92,6 +100,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * @param card The card to get the data from
      */
     public void setCard(Card card) {
+        this.oldCard = card;
         service.setCard(card);
         newCard.setTags(card.getTags());
         setAppliedTags(card.getTags());
@@ -148,19 +157,69 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     public void save() {
         ((Stage) saveButton.getScene().getWindow()).close();
         Card editedCard = service.getCard();
-        String title = cardTitle.getText();
-        String description = cardDescription.getText();
-        editedCard.setTitle(title);
+        editedCard.setTitle(cardTitle.getText());
         editedCard.setTags(newCard.getTags());
-        editedCard.setDescription(description);
+        editedCard.setDescription(cardDescription.getText());
 
-        // Delete the tasks from the database that were deleted
-        for (long taskID : deletedSubtaskIDs) {
-            taskUtils.deleteTask(taskID);
+        editedCard.setPresets(new ArrayList<>());
+        editedCard.setPreset(getAppliedPreset());
+
+        // Delete the deleted tasks from the database
+        for(int i=0;i<deletedSubtaskIDs.size();i++)
+        {
+            for(int j=0;j<editedCard.getSubTasks().size();j++)
+            {
+                if(editedCard.getSubTasks().get(j).getId()==deletedSubtaskIDs.get(i))
+                    taskUtils.deleteTask(deletedSubtaskIDs.get(i));
+            }
         }
         deletedSubtaskIDs.clear();
 
         service.insertCard(editedCard);
+        viewCardCtrl.setCard(newCard);
+        viewCardCtrl.applyTag();
+        viewCardCtrl.displayTasks();
+
+    }
+
+    /**
+     * Method to display the presets in a VBox
+     */
+    public void displayPresetList(){
+        for(CardColorPreset preset : presetList){
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomCardPresetCellViewCtrl.class,
+                            "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
+            CustomCardPresetCellViewCtrl ctrl = loader.getKey();
+            ctrl.setEditCardCtrl(this);
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
+            ctrl.setPresetList(shownBoard.getPresetList());
+            ctrl.setPresetObject(preset, "EditCardCtrl");
+            ctrl.setAppliedPreset(oldCard.getPresets().get(0));
+
+            presets.getChildren().add(loader.getValue());
+        }
+    }
+
+    /**
+     * This method updates the displayed presets
+     */
+    public void updateDisplayedPresets(){
+        presets.getChildren().clear();
+        displayPresetList();
+    }
+
+    /**
+     * Gets the preset that is applied
+     * @return The applied preset
+     */
+    public CardColorPreset getAppliedPreset(){
+        for(CardColorPreset preset : presetList){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
     }
 
     /**
@@ -181,7 +240,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         List<Tag> available = service.getTags();
-        available.removeAll(newCard.getTags());
+        if (newCard.getTags() != null)
+            available.removeAll(newCard.getTags());
         ctrl.setAvailableTags(available);
         ctrl.setAppliedTags(newCard.getTags());
         ctrl.setEditCardCtrl(this);
@@ -197,14 +257,17 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * @param appliedTags a list of tag objects
      */
     public void setAppliedTags(List<Tag> appliedTags) {
+        if (appliedTags == null) appliedTags = new ArrayList<>();
         newCard.setTags(appliedTags);
         appliedTagsVbox.getChildren().clear();
-        for (int i = 0; i < appliedTags.size(); i++) {
-            service.applyTag(appliedTags.get(i));
+
+        // Display the applied tags on screen
+        for (Tag appliedTag : appliedTags) {
+            service.applyTag(appliedTag);
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(appliedTags.get(i), "viewTag");
+            ctrl.setTagObject(appliedTag, "viewTag");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
 
@@ -241,8 +304,10 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
-        for (Task task : newCard.getSubTasks()) {
+        if (newCard.getSubTasks() == null) return;
 
+        // Display all the subtasks on screen
+        for (Task task : newCard.getSubTasks()) {
             var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
                     "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
@@ -250,6 +315,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
             makeTaskDraggable(loader, subtasks);
             subtasks.getChildren().add(loader.getValue());
         }
+
     }
 
     /**
@@ -259,7 +325,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void deleteSubtask(Task task) {
         deletedSubtaskIDs.add(task.getId());
-        newCard.getSubTasks().remove(task);
+        newCard.deleteSubTask(task);
         displayTasks();
     }
 
@@ -282,7 +348,21 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 // Insert the new task into the data object
                 Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
                 int newIndex = taskVBox.getChildren().indexOf(fxComponent) - 1;
-                service.dragAndDropDB(draggedTask, newIndex);
+
+                // If the card already has subtasks saved in the DB, then we should reflect this
+                // also in the DB.
+                if (service.getCard().getSubTasks() != null){
+                    service.dragAndDropDB(draggedTask, newIndex);
+
+                }
+                //Note that this does not have to be the case, when subtasks are
+                // created for the first time for a card.
+                else {
+                    // Shift the tasks around in the current unsaved/changed temporary card
+                    // (this is implicitly done by addSubTask)
+                    newCard.deleteSubTask(draggedTask);
+                    newCard.addSubTask(newIndex, draggedTask);
+                }
 
                 // Update the UI
                 taskVBox.getChildren().add(newIndex, draggedNode);
@@ -292,7 +372,29 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
             event.setDropCompleted(true);
             event.consume();
         });
-
     }
 
+    /**
+     * Sets the shown board
+     * @param shownBoard The shown board to be set
+     */
+    public void setShownBoard(Board shownBoard){
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
+     * Sets the preset list of color presets
+     * @param presetList The list of presets to be set
+     */
+    public void setPresetList(List<CardColorPreset> presetList){
+        this.presetList = presetList;
+    }
 }

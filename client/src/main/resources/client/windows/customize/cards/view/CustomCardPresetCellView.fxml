@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<HBox alignment="CENTER_LEFT" maxWidth="290.0" minWidth="89.0" prefHeight="25.0" prefWidth="290.0" spacing="5.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.customize.cards.view.CustomCardPresetCellViewCtrl">
+    <children>
+        <Label fx:id="presetTitle" contentDisplay="TOP" prefHeight="17.0" prefWidth="247.0" text="Urgent" wrapText="true">
+            <font>
+                <Font name="Arial" size="12.0" />
+            </font>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+        </Label>
+      <Rectangle fx:id="backgroundColor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="19.0" stroke="BLACK" strokeType="INSIDE" width="19.0">
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin>
+      </Rectangle>
+      <Rectangle fx:id="fontColor" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="19.0" stroke="BLACK" strokeType="INSIDE" width="19.0">
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin>
+      </Rectangle>
+        <CheckBox fx:id="defaultBox" mnemonicParsing="false">
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin></CheckBox>
+    </children>
+</HBox>
