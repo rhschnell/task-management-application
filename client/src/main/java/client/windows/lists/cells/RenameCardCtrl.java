@@ -1,5 +1,7 @@
 package client.windows.lists.cells;
 
+import client.utils.ErrorDialogEntry;
+import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
 import com.google.inject.Inject;
 import commons.Card;
@@ -19,6 +21,7 @@ public class RenameCardCtrl implements Initializable {
     private Card card;
     private RenameCardService service;
     private ListCtrl listCtrl;
+    private HelperMethods helperMethods;
 
 
     /**
@@ -26,10 +29,12 @@ public class RenameCardCtrl implements Initializable {
      * MUST call setCard in order to work properly
      * @see #setData(Card) (Card)
      * @param service Injected parameter of corresponding service
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public RenameCardCtrl(RenameCardService service){
+    public RenameCardCtrl(RenameCardService service, HelperMethods helperMethods){
         this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -59,12 +64,33 @@ public class RenameCardCtrl implements Initializable {
      * Saves the card into the database with the new title
      */
     public void save(){
-        String newTitle = inputField.getText();
-        if (newTitle == null || newTitle.isEmpty()) return; //TODO notify user
+        String newTitle = helperMethods.getInputValidator().stripWhitespace(inputField.getText());
+        if (!checkAndHandleInput(newTitle)) return;
+
         this.card.setTitle(newTitle);
         service.insertCard(this.card);
         this.close();
         listCtrl.displayCards();
+    }
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**

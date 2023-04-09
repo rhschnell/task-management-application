@@ -47,7 +47,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private Button saveButton;
     @FXML
     private Button cancelButton;
-    private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
@@ -86,10 +85,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Inject
     public EditCardCtrl(EditCardService service, TaskUtils taskUtils, HelperMethods helperMethods,
                         ViewCardCtrl viewCardCtrl, DataFormatManager dataFormatManager) {
-        super(dataFormatManager);
+        super(dataFormatManager, helperMethods);
         this.service = service;
         this.taskUtils = taskUtils;
-        this.helperMethods = helperMethods;
         this.viewCardCtrl = viewCardCtrl;
         appliedTagsVbox = new VBox();
         newCard = new Card();
@@ -155,9 +153,15 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Saves the changes and closes the pop-up
      */
     public void save() {
+
+        String title = super.helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
+
+        if (super.checkAndHandleUserInput(title)) return;
+
         ((Stage) saveButton.getScene().getWindow()).close();
+
         Card editedCard = service.getCard();
-        editedCard.setTitle(cardTitle.getText());
+        editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(cardDescription.getText());
 
@@ -249,7 +253,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
-        helperMethods.popUp(scene, title);
+        super.helperMethods.popUp(scene, title);
     }
 
     /**
@@ -277,12 +281,12 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Adds a task to the card and displays it based on user input
      */
     public void addTask() {
-        if (!(addTaskField.getText() != null && !addTaskField.getText().isEmpty())) {
-            return; //TODO: notify user in some way that you cannot add empty tasks
-        }
+        String title = super.helperMethods.getInputValidator().stripWhitespace(addTaskField.getText());
+        if (!super.helperMethods.validateInputAndShowPopup(title)) return;
+
         Task newTask = new Task();
         newTask.setCompleted(false);
-        newTask.setTitle(addTaskField.getText());
+        newTask.setTitle(title);
         newCard.addSubTask(newTask);
         addTaskField.clear();
         displayTasks();

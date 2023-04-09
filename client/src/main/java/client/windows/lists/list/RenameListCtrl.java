@@ -2,6 +2,7 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.workspace.joinAlerts.EmptyTitleCtrl;
 import com.google.inject.Inject;
@@ -59,30 +60,38 @@ public class RenameListCtrl implements Initializable {
         this.previousTitle = previousTitle;
     }
 
-    /**
-     * Method to validate the title of the list. It cannot be null nor empty
-     *
-     * @param text The text to validate as being the title of the new list
-     * @return Boolean indicating the validness of the given text as a list title
-     */
-    private boolean isValidTitle(String text) {
-        return text != null && !text.equals("");
-    }
-
     @FXML
     private void save() {
-        String newTitle = newListTitleField.getText();
+        String newTitle = helperMethods.getInputValidator().stripWhitespace(newListTitleField.getText());
 
-        if (!helperMethods.isValidNonEmptyInput(newTitle)) {
-            showInvalidTitlePopup();
-            return;
-        }
+        if (!checkAndHandleInput(newTitle)) return;
 
         // Apply this new title to the database
         listCtrl.renameList(newTitle);
 
         // Close the window
         close();
+    }
+
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your list title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your list name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**

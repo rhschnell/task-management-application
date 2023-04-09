@@ -18,6 +18,7 @@ package client.windows.workspace.boardSpace;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.serverUtils.WebsocketUtils;
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
@@ -211,38 +212,36 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
-        if (keyField.getText().strip().equals("")) {
+        String key = helperMethods.getInputValidator().stripWhitespace(keyField.getText());
+
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(key)) {
             emptyKeyPopUp();
             return;
         }
 
         List<String> tempList = new ArrayList<>();
-        service.getBoards().forEach(b -> tempList.add(b.getKey()));
 
-        showBoard(keyField.getText());
-
-        pwdMap.putIfAbsent(keyField.getText(), "");
-
-        // Add this board to the list of joined boards (keys) and show it in the UI
-        if (!tempList.contains(keyField.getText())) {
-            joinedKeys.add(keyField.getText());
+        for (Board b : service.getBoards()) {
+            tempList.add(b.getKey());
         }
-        System.out.println(keyField.getText());
+
+        showBoard(key);
 
         keyField.clear();
-        refreshWorkspace(true);
     }
 
     /**
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
-        if (titleField.getText().equals("")) {
+
+        String title = helperMethods.getInputValidator().stripWhitespace(titleField.getText());
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
             emptyTitlePopUp();
             return;
         }
 
-        shownBoard = new Board(titleField.getText(), null, null, null);
+        shownBoard = new Board(title, null, null, null);
         CardColorPreset defaultPreset = new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF");
         defaultPreset.setDefault(true);
         shownBoard.addPreset(defaultPreset);
@@ -635,14 +634,16 @@ public class WorkspaceCtrl implements Initializable {
      * @param targetKey The key of the board to show
      */
     public void showBoard(String targetKey) {
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
-        unsubscribeLists();
-        registerForBoardUpdates(targetKey);
         try {
             shownBoard = service.getBoard(targetKey);
+
+            for(int i = 0; i< boardSubscriber.size(); i++)
+            {
+                boardSubscriber.get(i).unsubscribe();
+            }
+            unsubscribeLists();
+            registerForBoardUpdates(targetKey);
+
             boardName.setText(shownBoard.getTitle());
             // Theoretically unnecessary, but to be sure
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
@@ -659,10 +660,18 @@ public class WorkspaceCtrl implements Initializable {
                 unlockLists();
                 shownBoard.setProtected(false);
             }
+
+            pwdMap.putIfAbsent(targetKey, "");
+            joinedKeys.add(targetKey);
             unhideWorkspace();
             displayLists();
+            refreshWorkspace(true);
         } catch (NotFoundException | BadRequestException e) {
-            System.out.println("The board you tried to join does not exist");
+            String message = "There is no board with key " + targetKey +
+                    ". Try joining a board with a different key.";
+
+            ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
+            helperMethods.showErrorDialog(nonExistingKey);
         }
     }
     /**

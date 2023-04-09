@@ -1,7 +1,10 @@
 package client.utils;
 
 import client.MyFXML;
+import client.modules.MainModules;
+import client.windows.dialogs.DialogPopupCtrl;
 import client.windows.workspace.helpWindow.HelpWindowCtrl;
+import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
@@ -12,8 +15,8 @@ import javafx.stage.Stage;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
+import static client.utils.ErrorDialogs.*;
 import static com.google.inject.Guice.createInjector;
 
 public class HelperMethods {
@@ -22,11 +25,24 @@ public class HelperMethods {
     private DataFormat cardFormat;
     private Map<String, Set<String>> memMap;
     private String serverIP;
-
+    private InputValidator inputValidator;
+    private static final int MAX_INPUT_LENGTH = 255;
     /**
      * Creates a new HelperMethods instance
+     * @param inputValidator Validator for user input
      */
-    public HelperMethods() {
+    @Inject
+    public HelperMethods(InputValidator inputValidator) {
+        this.inputValidator = inputValidator;
+        inputValidator.setMaxInputLength(MAX_INPUT_LENGTH);
+    }
+
+    /**
+     * Returns the (static) max input length that is allowed for user input
+     * @return The maximum allowed input length
+     */
+    public static int getMaxInputLength() {
+        return MAX_INPUT_LENGTH;
     }
 
     /**
@@ -184,16 +200,65 @@ public class HelperMethods {
 
 
     /**
-     * Method to validate the input of anything. The text cannot be null nor empty nor start
-     * with a whitespace.
+     * This method validates the given text and displays a popup to communicate invalid input
+     * back to the user.
      *
-     * @param text The text to validate
-     * @return Boolean indicating the validness of the given text according to the conditions
-     * mentioned above
+     * The methods to validate the text are used in order of importance.
+     * Example: if the user gives an empty input, then the input is both starting with whitespace
+     * and empty. Since input not allowed to be empty one is a more general rule than it not
+     * being allowed to start with whitespaces, this is also the message displayed to the user.
+     *
+     * @param textToValidate The text to validate
+     * @return Boolean indicating the correctness of this text
+     *
+     * @see #isValidInputNonEmpty(String)
+     * @see #isValidInputNonStartingWhitespace(String)
+     * @see #isValidInputLength(String)
+     * @see ErrorDialogs
      */
-    public boolean isValidNonEmptyInput(String text) {
-        Pattern pattern = Pattern.compile("^\\S.*"); // Has to start with a non-whitespace character
-        return text != null && pattern.matcher(text).find();
+    public boolean validateInputAndShowPopup(String textToValidate){
+        if (textToValidate == null) return false;
+        if (!inputValidator.isValidInputLength(textToValidate)) {
+            showErrorDialog(INVALID_LENGTH);
+            return false;
+        }
+
+        if (!inputValidator.isValidInputNonEmpty(textToValidate)){
+            showErrorDialog(INVALID_EMPTY);
+            return false;
+        }
+
+        if (!inputValidator.isValidInputNonStartingWhitespace(textToValidate)) {
+            showErrorDialog(INVALID_START_WHITESPACE);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Shows a simple dialog popup with a title, message and close button. The title and message
+     * are specified in the entry
+     * @param errorDialogEntry ErrorDialogEntry containing the title and message of this error dialog
+     */
+    public void showErrorDialog(ErrorDialogEntry errorDialogEntry){
+        var loader = new MyFXML(createInjector(new MainModules())).load(
+                DialogPopupCtrl.class, "client", "windows", "dialogs", "DialogPopup.fxml");
+
+        DialogPopupCtrl ctrl = loader.getKey();
+        ctrl.setMessage(errorDialogEntry.getMessage());
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        popUp(scene, errorDialogEntry.getPopupTitle());
+    }
+
+    /**
+     * Returns the input validator
+     * @return The input validator object
+     */
+    public InputValidator getInputValidator() {
+        return inputValidator;
     }
 }
 
