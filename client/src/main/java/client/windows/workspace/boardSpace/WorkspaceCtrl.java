@@ -1018,10 +1018,9 @@ public class WorkspaceCtrl implements Initializable {
                 if (event.getCode() == KeyCode.ESCAPE)
                     loader.getKey().escape();
             });
+            controller.setBoardKey(getBoardKey());
             controller.setCard(shownBoard.getCardLists().get(focusedListIndex - 1).
                     getCards().get(focusedCardIndex - 1));
-            controller.setBoardKey(getBoardKey());
-            controller.displayTasks();
             String title = "View Card";
             helperMethods.popUp(scene, title);
         }

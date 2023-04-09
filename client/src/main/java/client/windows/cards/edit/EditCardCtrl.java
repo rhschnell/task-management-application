@@ -14,6 +14,9 @@ import client.windows.tags.view.TagListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.*;
+import jakarta.ws.rs.NotFoundException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -27,6 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -67,6 +71,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     private Card newCard;
     private Card oldCard;
+    private long cardID;
     private List<CardColorPreset> presetList;
 
     private List<Long> deletedSubtaskIDs;
@@ -99,6 +104,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     public void setCard(Card card) {
         this.oldCard = card;
+        this.cardID = card.getId();
         service.setCard(card);
         newCard.setTags(card.getTags());
         setAppliedTags(card.getTags());
@@ -181,8 +187,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
         service.insertCard(editedCard);
         viewCardCtrl.setCard(newCard);
-        viewCardCtrl.applyTag();
-        viewCardCtrl.displayTasks();
 
     }
 
@@ -234,6 +238,18 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Timeline tl = new Timeline();
+        tl.setCycleCount(-1);
+        KeyFrame kf = new KeyFrame(Duration.millis(500),
+                event -> {
+                    try {
+                        refresh();
+                    } catch (NotFoundException e) {
+                        escape();
+                    }
+                });
+        tl.getKeyFrames().add(kf);
+        tl.play();
     }
 
     /**
@@ -400,5 +416,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     public void setPresetList(List<CardColorPreset> presetList){
         this.presetList = presetList;
+    }
+
+    private void refresh() {
+        service.getCard(cardID);
     }
 }

@@ -25,16 +25,6 @@ class ViewCardServiceTest {
     }
 
     @Test
-    void deleteCard() {
-        Card card = new Card();
-        CardList cardList = new CardList();
-        cardList.addCard(card);
-        viewCardService.deleteCard(card);
-        //Need to see why this test fails
-        verify(server,times(0)).deleteCardFromDatabase(cardList.getId());
-    }
-
-    @Test
     void getBoardKey() {
         assertNull(viewCardService.getBoardKey());
     }

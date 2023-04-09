@@ -52,6 +52,16 @@ public class EditCardService {
     }
 
     /**
+     * Retrieves a card with a given id from the database if it exists
+     * or null otherwise
+     * @param id the id of the card to be retrieved
+     * @return the card from the server, or null if it does not exist
+     */
+    public Card getCard(long id) {
+        return server.getCardById(id);
+    }
+
+    /**
      * Returns the available tags of the card (the tags that have not been applied yet)
      * @return the list of tags the that have not been applied to the card yet
      */
