@@ -340,7 +340,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(true);
         }
-        unlockBoardButton.setDisable(false);
+        unlockBoardButton.setVisible(true);
     }
 
     /**
@@ -360,7 +360,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(false);
         }
-        unlockBoardButton.setDisable(true);
+        unlockBoardButton.setVisible(false);
     }
 
     /**
@@ -1376,14 +1376,6 @@ public class WorkspaceCtrl implements Initializable {
     public void addListSubscriber(StompSession.Subscription subscriber)
     {
         listSubscribers.add(subscriber);
-    }
-
-    /**
-     * Updates the board because a new version of it is available
-     */
-    public void updateBoard()
-    {
-        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**
