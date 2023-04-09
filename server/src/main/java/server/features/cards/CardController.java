@@ -3,6 +3,7 @@ package server.features.cards;
 import commons.Card;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,13 +14,23 @@ import java.util.List;
 @RequestMapping(Route.CARD)
 public class CardController {
     private final CardService service;
-
+    private final SimpMessagingTemplate sender;
+    private Boolean testing = false;
+    /**
+     * Disables websockets for testing
+     * @param testing
+     */
+    public void setTesting(Boolean testing) {
+        this.testing = testing;
+    }
     /**
      * Creates a new CardController
      * @param service Instance of card repository
+     * @param sender the sender
      */
-    public CardController(CardService service) {
+    public CardController(CardService service, SimpMessagingTemplate sender) {
         this.service = service;
+        this.sender = sender;
     }
 
 
@@ -33,6 +44,8 @@ public class CardController {
     public ResponseEntity<Void> insert(@RequestBody Card card) {
         try {
             service.insert(card);
+            if(!testing)
+                sender.convertAndSend("/topic/cards/" + card.getId(), card);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

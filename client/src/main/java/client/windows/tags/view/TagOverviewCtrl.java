@@ -5,6 +5,7 @@ import client.modules.MainModules;
 import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.add.AddTagCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.application.Platform;
@@ -31,6 +32,7 @@ public class TagOverviewCtrl {
 
     @FXML
     private Button addTagButton;
+    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private Button closeButton;
@@ -109,7 +111,16 @@ public class TagOverviewCtrl {
         displayTagList();
         tagUtils.registerForUpdates(boardKey, tagList, t -> {
             Platform.runLater(this::displayTagList);
+            workspaceCtrl.updateBoard();
         });
+    }
+
+    /**
+     * Setter for the workspace in order to send a message the board has updates
+     * @param workspaceCtrl the workspaceCtrl
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**

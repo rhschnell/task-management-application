@@ -83,6 +83,9 @@ public class ViewCardCtrl {
         this.service=service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
+        appliedTagsVbox = new VBox();
+        cardTitle = new Label();
+        cardDescription=new Text();
     }
 
     /**
@@ -189,12 +192,14 @@ public class ViewCardCtrl {
      */
     public void displayTasks() {
         taskBox.getChildren().clear();
-        for (Task task : card.getSubTasks()) {
-            var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
-                    "client", "windows", "subtasks", "SubtaskCell.fxml");
-            loader.getKey().updateItem(task);
-            loader.getKey().disableEdit();
-            taskBox.getChildren().add(loader.getValue());
+        if(card.getSubTasks()!=null) {
+            for (Task task : card.getSubTasks()) {
+                var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
+                        "client", "windows", "subtasks", "SubtaskCell.fxml");
+                loader.getKey().updateItem(task);
+                loader.getKey().disableEdit();
+                taskBox.getChildren().add(loader.getValue());
+            }
         }
     }
 

@@ -168,13 +168,19 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         editedCard.setPresets(new ArrayList<>());
         editedCard.setPreset(getAppliedPreset());
 
-        // Delete the tasks from the database that were deleted
-        for (long taskID : deletedSubtaskIDs) {
-            taskUtils.deleteTask(taskID);
+        // Delete the deleted tasks from the database
+        for(int i=0;i<deletedSubtaskIDs.size();i++)
+        {
+            for(int j=0;j<editedCard.getSubTasks().size();j++)
+            {
+                if(editedCard.getSubTasks().get(j).getId()==deletedSubtaskIDs.get(i))
+                    taskUtils.deleteTask(deletedSubtaskIDs.get(i));
+            }
         }
         deletedSubtaskIDs.clear();
 
         service.insertCard(editedCard);
+        viewCardCtrl.setCard(newCard);
         viewCardCtrl.applyTag();
         viewCardCtrl.displayTasks();
 
@@ -238,7 +244,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         List<Tag> available = service.getTags();
-        available.removeAll(newCard.getTags());
+        if (newCard.getTags() != null)
+            available.removeAll(newCard.getTags());
         ctrl.setAvailableTags(available);
         ctrl.setAppliedTags(newCard.getTags());
         ctrl.setEditCardCtrl(this);
@@ -254,14 +261,17 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * @param appliedTags a list of tag objects
      */
     public void setAppliedTags(List<Tag> appliedTags) {
+        if (appliedTags == null) appliedTags = new ArrayList<>();
         newCard.setTags(appliedTags);
         appliedTagsVbox.getChildren().clear();
-        for (int i = 0; i < appliedTags.size(); i++) {
-            service.applyTag(appliedTags.get(i));
+
+        // Display the applied tags on screen
+        for (Tag appliedTag : appliedTags) {
+            service.applyTag(appliedTag);
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(appliedTags.get(i), "viewTag");
+            ctrl.setTagObject(appliedTag, "viewTag");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
 
@@ -298,8 +308,10 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
-        for (Task task : newCard.getSubTasks()) {
+        if (newCard.getSubTasks() == null) return;
 
+        // Display all the subtasks on screen
+        for (Task task : newCard.getSubTasks()) {
             var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
                     "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
@@ -307,6 +319,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
             makeTaskDraggable(loader, subtasks);
             subtasks.getChildren().add(loader.getValue());
         }
+
     }
 
     /**
@@ -316,7 +329,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void deleteSubtask(Task task) {
         deletedSubtaskIDs.add(task.getId());
-        newCard.getSubTasks().remove(task);
+        newCard.deleteSubTask(task);
         displayTasks();
     }
 
@@ -339,7 +352,21 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 // Insert the new task into the data object
                 Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
                 int newIndex = taskVBox.getChildren().indexOf(fxComponent) - 1;
-                service.dragAndDropDB(draggedTask, newIndex);
+
+                // If the card already has subtasks saved in the DB, then we should reflect this
+                // also in the DB.
+                if (service.getCard().getSubTasks() != null){
+                    service.dragAndDropDB(draggedTask, newIndex);
+
+                }
+                //Note that this does not have to be the case, when subtasks are
+                // created for the first time for a card.
+                else {
+                    // Shift the tasks around in the current unsaved/changed temporary card
+                    // (this is implicitly done by addSubTask)
+                    newCard.deleteSubTask(draggedTask);
+                    newCard.addSubTask(newIndex, draggedTask);
+                }
 
                 // Update the UI
                 taskVBox.getChildren().add(newIndex, draggedNode);

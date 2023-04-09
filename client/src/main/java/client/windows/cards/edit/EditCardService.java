@@ -39,6 +39,8 @@ public class EditCardService {
     public void setCard(Card card) {
         this.card = card;
         appliedTags=card.getTags();
+        if(appliedTags ==null)
+            appliedTags=new ArrayList<>();
     }
 
     /**
@@ -84,7 +86,7 @@ public class EditCardService {
      */
     public void applyTag(Tag tag)
     {
-        if(!appliedTags.contains(tag))
+        if(appliedTags!=null && !appliedTags.contains(tag))
             appliedTags.add(tag);
     }
 

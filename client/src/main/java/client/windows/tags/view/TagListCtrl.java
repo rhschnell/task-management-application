@@ -116,7 +116,8 @@ public class TagListCtrl {
      */
     public void setAppliedTags(List<Tag> tagList) {
         this.appliedTags = new ArrayList<>();
-        this.appliedTags.addAll(tagList);
+        if(tagList!=null)
+            this.appliedTags.addAll(tagList);
         displayAppliedTags();
     }
 
