@@ -61,7 +61,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.*;
-import java.util.prefs.PreferenceChangeEvent;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Math.abs;
@@ -716,12 +715,12 @@ public class WorkspaceCtrl implements Initializable {
         listVbox.requestFocus();
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (this.isAdmin() || !this.shownBoard.isProtected())
-            switch (event.getCode()) {
-                case UP:    moveFocusUp();      break;
-                case DOWN:  moveFocusDown();    break;
-                case LEFT:  moveFocusLeft();    break;
-                case RIGHT: moveFocusRight();   break;
-            }
+                switch (event.getCode()) {
+                    case UP:    moveFocusUp();      break;
+                    case DOWN:  moveFocusDown();    break;
+                    case LEFT:  moveFocusLeft();    break;
+                    case RIGHT: moveFocusRight();   break;
+                }
             event.consume();
         });
     }
