@@ -691,7 +691,7 @@ public class WorkspaceCtrl implements Initializable {
         ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
 
         // Can only move up/down if the focused card is not already at the top/bottom
-        if (focusedCardIndex == (shiftUpWards ? 0 :
+        if (focusedCardIndex == (shiftUpWards ? 1 :
                 focusedListController.getCardList().getCards().size())) return;
 
 
