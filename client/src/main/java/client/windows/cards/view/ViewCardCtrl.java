@@ -85,6 +85,7 @@ public class ViewCardCtrl {
         this.myFXML = myFXML;
         appliedTagsVbox = new VBox();
         cardTitle = new Label();
+        cardDescription=new Text();
     }
 
     /**
