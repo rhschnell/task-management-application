@@ -338,7 +338,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(true);
         }
-        unlockBoardButton.setDisable(false);
+        unlockBoardButton.setVisible(true);
     }
 
     /**
@@ -358,7 +358,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(false);
         }
-        unlockBoardButton.setDisable(true);
+        unlockBoardButton.setVisible(false);
     }
 
     /**
@@ -400,7 +400,7 @@ public class WorkspaceCtrl implements Initializable {
 
         // Setter Injection
         LockPopUpCtrl ctrl = loader.getKey();
-        ctrl.setBoard(shownBoard);
+        ctrl.setBoard(board);
         ctrl.setMode(mode);
         ctrl.setWorkspace(this);
 
@@ -660,9 +660,9 @@ public class WorkspaceCtrl implements Initializable {
                 unlockLists();
                 shownBoard.setProtected(false);
             }
-
             pwdMap.putIfAbsent(targetKey, "");
             joinedKeys.add(targetKey);
+            boardName.setText(shownBoard.getTitle());
             unhideWorkspace();
             displayLists();
             refreshWorkspace(true);
@@ -673,9 +673,10 @@ public class WorkspaceCtrl implements Initializable {
             ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
             helperMethods.showErrorDialog(nonExistingKey);
         }
+        refreshWorkspace(true);
     }
     /**
-     * Displays the lists into the Hbox list container
+     * Displays the lists into the HBox list container
      */
     public void displayLists() {
         //New subscriber are going to be created, so we need to remove the existing ones
@@ -721,12 +722,13 @@ public class WorkspaceCtrl implements Initializable {
     public void setMoveShortcutListeners(VBox listVbox) {
         listVbox.requestFocus();
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            switch (event.getCode()) {
-                case UP:    moveFocusUp();      break;
-                case DOWN:  moveFocusDown();    break;
-                case LEFT:  moveFocusLeft();    break;
-                case RIGHT: moveFocusRight();   break;
-            }
+            if (this.isAdmin() || !this.shownBoard.isProtected())
+                switch (event.getCode()) {
+                    case UP:    moveFocusUp();      break;
+                    case DOWN:  moveFocusDown();    break;
+                    case LEFT:  moveFocusLeft();    break;
+                    case RIGHT: moveFocusRight();   break;
+                }
             event.consume();
         });
     }
@@ -1257,6 +1259,7 @@ public class WorkspaceCtrl implements Initializable {
         this.joinedKeys = joinedKeys;
     }
 
+
     /**
      * Sets the instance of HelperMethods
      *
@@ -1320,6 +1323,7 @@ public class WorkspaceCtrl implements Initializable {
         if (admin) {
             screenTitle.setText("All Server Boards");
             leaveButton.setVisible(false);
+            leaveButton.setManaged(false);
         }
     }
 
@@ -1367,11 +1371,7 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    //Update the board since the new one has changed
-                    shownBoard=(Board) board;
-                    boardName.setText(shownBoard.getTitle());
-                    //Display the updates since something was changed
-                    displayLists();
+                    showBoard(board.getKey());
                 }
             });
         }));
@@ -1384,14 +1384,6 @@ public class WorkspaceCtrl implements Initializable {
     public void addListSubscriber(StompSession.Subscription subscriber)
     {
         listSubscribers.add(subscriber);
-    }
-
-    /**
-     * Updates the board because a new version of it is available
-     */
-    public void updateBoard()
-    {
-        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**

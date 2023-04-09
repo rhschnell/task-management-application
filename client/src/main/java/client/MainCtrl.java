@@ -63,7 +63,7 @@ public class MainCtrl {
         primary.setMinHeight(576);
         primary.setMinWidth(1024);
         //Temporarily disabled resizing because of full screen problems
-        primary.setResizable(false);
+//        primary.setResizable(false);
         this.helperMethods = helperMethods;
         helperMethods.setScenes(this.startUp, this.adminLogin, null, this.userLogin, null);
         helperMethods.setPrimaryStage(primaryStage);
