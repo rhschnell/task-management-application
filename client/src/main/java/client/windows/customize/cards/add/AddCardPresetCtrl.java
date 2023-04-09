@@ -1,5 +1,7 @@
 package client.windows.customize.cards.add;
 
+import client.utils.ErrorDialogEntry;
+import client.utils.HelperMethods;
 import client.windows.customize.CustomizeCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -12,6 +14,7 @@ import javafx.stage.Stage;
 
 public class AddCardPresetCtrl {
     private final AddCardPresetService service;
+    private final HelperMethods helperMethods;
     private WorkspaceCtrl workspaceCtrl;
     private CustomizeCtrl customizeCtrl;
 
@@ -36,22 +39,50 @@ public class AddCardPresetCtrl {
      * @param customizeCtrl Instance of CustomizeCtrl
      */
     @Inject
-    public AddCardPresetCtrl(AddCardPresetService service, CustomizeCtrl customizeCtrl){
+    public AddCardPresetCtrl(AddCardPresetService service, CustomizeCtrl customizeCtrl, HelperMethods helperMethods){
         this.service = service;
         this.customizeCtrl = customizeCtrl;
+        this.helperMethods = helperMethods;
     }
 
     /**
      * This method saves the preset that the user made and closes the window
      */
     public void save() {
+        String title = helperMethods.getInputValidator().stripWhitespace(presetTitle.getText());
+
+        if (!checkAndHandleInput(title)) {
+            presetTitle.requestFocus();
+            return;
+        }
+
         ((Stage)addPresetButton.getScene().getWindow()).close();
         CardColorPreset preset = new CardColorPreset(
-                presetTitle.getText(),
+                title,
                 backgroundColor.getValue().toString(),
                 fontColor.getValue().toString());
         customizeCtrl.addPreset(preset);
         customizeCtrl.updateDisplayedPresets();
+    }
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your preset name cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your preset name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**

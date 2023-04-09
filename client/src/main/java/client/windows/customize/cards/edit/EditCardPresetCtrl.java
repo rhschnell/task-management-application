@@ -1,5 +1,7 @@
 package client.windows.customize.cards.edit;
 
+import client.utils.ErrorDialogEntry;
+import client.utils.HelperMethods;
 import client.windows.customize.cards.CustomCardPresetCellCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -13,25 +15,18 @@ import javafx.stage.Stage;
 
 public class EditCardPresetCtrl {
     private final EditCardPresetService service;
-
+    private final HelperMethods helperMethods;
     private CustomCardPresetCellCtrl customCardPresetCellCtrl;
-
     private CardColorPreset preset;
-
     private WorkspaceCtrl workspaceCtrl;
-
     @FXML
     private TextField presetTitle;
-
     @FXML
     private ColorPicker backgroundColor;
-
     @FXML
     private ColorPicker fontColor;
-
     @FXML
     private Button cancelButton;
-
     @FXML
     private Button saveButton;
 
@@ -40,8 +35,9 @@ public class EditCardPresetCtrl {
      * @param service The corresponding service
      */
     @Inject
-    public EditCardPresetCtrl(EditCardPresetService service){
+    public EditCardPresetCtrl(EditCardPresetService service, HelperMethods helperMethods){
         this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -99,9 +95,13 @@ public class EditCardPresetCtrl {
     public void save() {
         String newBackgroundColor = backgroundColor.getValue().toString();
         String newFontColor = fontColor.getValue().toString();
-        String newTitle = presetTitle.getText();
+        String newTitle = helperMethods.getInputValidator().stripWhitespace(presetTitle.getText());
 
-        // TODO Move saving to the server to customize ctrl
+        if (!checkAndHandleInput(newTitle)) {
+            presetTitle.requestFocus();
+            return;
+        }
+
         preset.setName(newTitle);
         preset.setBackgroundColor(newBackgroundColor);
         preset.setFontColor(newFontColor);
@@ -109,6 +109,26 @@ public class EditCardPresetCtrl {
         customCardPresetCellCtrl.getCustomizeCtrl().updateDisplayedPresets();
         workspaceCtrl.refreshWorkspace(true);
         ((Stage)saveButton.getScene().getWindow()).close();
+    }
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your preset name cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your preset name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**

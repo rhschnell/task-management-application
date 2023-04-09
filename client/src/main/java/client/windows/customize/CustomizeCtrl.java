@@ -81,11 +81,8 @@ public class CustomizeCtrl {
     }
 
     /**
-<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Method to se the board's background color
-=======
      * Setter for the board background color
->>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void setBoardBackgroundColor(){
@@ -93,11 +90,8 @@ public class CustomizeCtrl {
     }
 
     /**
-<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Method to se the board's font color
-=======
      * Setter for the board font color
->>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void setBoardFontColor() {
@@ -145,11 +139,8 @@ public class CustomizeCtrl {
     }
 
     /**
-<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * Method to reset the board colors to default
-=======
      * Resets the colors of the board to default
->>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void resetBoard() {
@@ -215,7 +206,6 @@ public class CustomizeCtrl {
     }
 
     /**
-<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
      * This method updates the displayed presets
      */
     public void updateDisplayedPresets() {
