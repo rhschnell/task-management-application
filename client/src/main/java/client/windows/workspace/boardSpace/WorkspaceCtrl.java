@@ -17,6 +17,7 @@ package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
@@ -38,8 +39,7 @@ import com.sun.istack.NotNull;
 import commons.*;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -57,7 +57,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.*;
@@ -123,10 +123,12 @@ public class WorkspaceCtrl implements Initializable {
 
     private String initialListColor;
     private String initialListFontColor;
-
+    private List <StompSession.Subscription> boardSubscriber;
+    private List <StompSession.Subscription> listSubscribers;
     private boolean admin;
     @FXML private Label screenTitle;
     @FXML private Button leaveButton;
+    private WebsocketUtils websocketUtils;
 
 
     /**
@@ -135,10 +137,11 @@ public class WorkspaceCtrl implements Initializable {
      * @param service       corresponding service
      * @param cardService   injected cardService instance
      * @param helperMethods corresponding helper methods
+     * @param websocketUtils injected websocket instance
      */
     @Inject
     public WorkspaceCtrl(WorkspaceService service,
-                         CardService cardService, HelperMethods helperMethods) {
+                         CardService cardService, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
         this.service = service;
         this.cardService = cardService;
         this.helperMethods = helperMethods;
@@ -150,13 +153,17 @@ public class WorkspaceCtrl implements Initializable {
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
         this.admin = false;
+        //service.registerForMessages();
+        this.websocketUtils=websocketUtils;
     }
-
-
     /**
      * Return's to the main screen
      */
     public void disconnect() {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         if (isAdmin()) {
             helperMethods.setScene(Scenes.ADMIN);
         } else {
@@ -176,6 +183,8 @@ public class WorkspaceCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new HashSet<>();
+        boardSubscriber =new ArrayList<>();
+        listSubscribers =new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
@@ -188,19 +197,6 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-
-        Timeline tl = new Timeline();
-        tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(300),
-                event -> {
-                    try {
-                        refreshWorkspace(false);
-                    } catch (Exception ignored) {
-                    }
-                });
-        tl.getKeyFrames().add(kf);
-        tl.play();
-
         setDefaultListColors();
     }
 
@@ -216,6 +212,10 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         if (keyField.getText().strip().equals("")) {
             emptyKeyPopUp();
             return;
@@ -232,6 +232,7 @@ public class WorkspaceCtrl implements Initializable {
         if (!tempList.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
         }
+        registerForBoardUpdates(keyField.getText());
         keyField.clear();
         refreshWorkspace(true);
     }
@@ -240,6 +241,10 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         if (titleField.getText().equals("")) {
             emptyTitlePopUp();
             return;
@@ -264,6 +269,7 @@ public class WorkspaceCtrl implements Initializable {
         }
         titleField.clear();
         refreshWorkspace(true);
+        registerForBoardUpdates(key);
     }
 
     /**
@@ -292,6 +298,10 @@ public class WorkspaceCtrl implements Initializable {
      * Method to clear the workspace
      */
     public void clearWorkspace() {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         //Hide title bar
         boardName.setText("");
         titleBar.getChildren().forEach(c -> c.setVisible(false));
@@ -540,9 +550,6 @@ public class WorkspaceCtrl implements Initializable {
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
-            if (shownBoard != null) {
-                boardName.setText(shownBoard.getTitle());
-            }
         }
         updateBoardColours();
         updateListColors();
@@ -660,15 +667,12 @@ public class WorkspaceCtrl implements Initializable {
             System.out.println("The board you tried to join does not exist");
         }
     }
-
     /**
      * Displays the lists into the Hbox list container
      */
     public void displayLists() {
-        listContainer.getChildren().clear();
-        listControllers.clear();
-        boardName.setText(shownBoard.getTitle());
-
+        //New subscriber are going to be created, so we need to remove the existing ones
+        unsubscribeLists();
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
@@ -687,6 +691,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setHelperMethod(helperMethods);
             controller.setCardList(cardList);
             controller.displayCards();
+            controller.registerForListUpdates();
             setMoveShortcutListeners(loader.getKey().getCardVBox());
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
@@ -1154,6 +1159,7 @@ public class WorkspaceCtrl implements Initializable {
 
         loader.getKey().setBoardKey(shownBoard.getKey());
         loader.getKey().poll();
+        loader.getKey().setWorkspaceCtrl(this);
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -1349,4 +1355,59 @@ public class WorkspaceCtrl implements Initializable {
         String title = "Error!";
         helperMethods.popUp(scene, title);
     }
+
+    ///WEBSOCKETS
+    /**
+     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
+     * @param key the board we need to get the updated information
+     */
+    public void registerForBoardUpdates(String key) {
+        boardSubscriber.add(websocketUtils.registerForMessages("/topic/boards/"+key,Board.class, board -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    //Update the board since the new one has changed
+                    shownBoard=(Board) board;
+                    boardName.setText(shownBoard.getTitle());
+                    //Display the updates since something was changed
+                    displayLists();
+                }
+            });
+        }));
+    }
+
+    /**
+     * Ads a list subscriber to the list, so we can unsubscribe it later
+     * @param subscriber
+     */
+    public void addListSubscriber(StompSession.Subscription subscriber)
+    {
+        listSubscribers.add(subscriber);
+    }
+
+    /**
+     * Updates the board because a new version of it is available
+     */
+    public void updateBoard()
+    {
+        shownBoard = service.getBoard(shownBoard.getKey());
+    }
+
+    /**
+     * Unsubscribe all the lists because the board needs to be updated
+     */
+    public void unsubscribeLists()
+    {
+        listContainer.getChildren().clear();
+        listControllers.clear();
+        for(int i = 0; i< listControllers.size(); i++)
+        {
+            listControllers.get(i).unsubscribeCards();
+        }
+        for(int i = 0; i< listSubscribers.size(); i++)
+        {
+            listSubscribers.get(i).unsubscribe();
+        }
+    }
+
 }

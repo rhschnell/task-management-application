@@ -2,16 +2,19 @@ package client.windows.lists.cells;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
+import client.windows.lists.list.ListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
 import commons.Tag;
 import commons.Task;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -24,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.List;
@@ -60,6 +64,8 @@ public class CardCtrl implements Initializable {
 
     private final CardService service;
     private final HelperMethods helperMethods;
+    private  ListCtrl listCtrl;
+    private WebsocketUtils websocketUtils;
 
 
     /**
@@ -67,11 +73,21 @@ public class CardCtrl implements Initializable {
      *
      * @param service The CardService for this CardCtrl
      * @param helperMethods hm
+     * @param websocketUtils the websocket utils to communicate with the websockets
      */
     @Inject
-    public CardCtrl(CardService service, HelperMethods helperMethods) {
+    public CardCtrl(CardService service, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
         this.service = service;
         this.helperMethods = helperMethods;
+        this.websocketUtils=websocketUtils;
+    }
+
+    /**
+     * Setter for the listCtrl to tell the list it needs to updates when an update is received
+     * @param listCtrl
+     */
+    public void setListCtrl(ListCtrl listCtrl) {
+        this.listCtrl = listCtrl;
     }
 
     /**
@@ -283,6 +299,8 @@ public class CardCtrl implements Initializable {
     public void setBoardKey(String boardKey)
     {
         service.setBoardKey(boardKey);
+        registerForCardUpdates();
+
     }
 
     /**
@@ -330,5 +348,53 @@ public class CardCtrl implements Initializable {
      */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
         this.workspaceCtrl = workspaceCtrl;
+    }
+    ///WEBSOCKETS
+    /**
+     * Registers for the messages for this card, so when c=something is changed on this card
+     * it gets updates cause the path contains the cardId, which is unique
+     */
+    public void registerForCardUpdates() {
+        StompSession.Subscription subscriber =websocketUtils.
+                registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Card colours
+                            String backgroundColor = newCard.getPresets().get(0).getBackgroundColor();
+                            String fontColor = newCard.getPresets().get(0).getFontColor();
+                            String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
+                                    "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey," +
+                                    " 5, 0, 0.0, 1.0);";
+                            setFontColor(fontColor);
+                            setBackgroundColor(backgroundStyle);
+                            //Updates the cardList so that when we insert it again we have the latest version
+                            listCtrl.updateCardList();
+                            //Updates the card to the most recent version
+                            card=newCard;
+                            //Updates the cardTitle
+                            cardTitle.setText(newCard.getTitle());
+                            //Updates the description indicator
+                            if(newCard.getDescription()!=null)
+                                setDescriptionIconVisible(true);
+                            if(newCard.getDescription()==null || newCard.getDescription().equals(""))
+                                setDescriptionIconVisible(false);
+                            //Updates the tag indicator
+                            setDisplayTags(newCard.getTags());
+                            //Updates the subtasks indicator
+                            if(newCard.getSubTasks()==null || newCard.getSubTasks().size()==0)
+                                subtaskIndicator.setVisible(false);
+                            if(newCard.getSubTasks()!=null && newCard.getSubTasks().size()>0) {
+                                long completedTasks =
+                                        newCard.getSubTasks().stream().filter(Task::isCompleted).count();
+                                subtaskIndicator.setVisible(true);
+                                subtaskIndicator.setText(String.format("%d/%d", completedTasks,
+                                        newCard.getSubTasks().size()));
+                            }
+                        }
+                    });
+                });
+        //Adds the subscriber to the list of subscribers so when something changed we can unsubscribe
+        listCtrl.addSubscriber(subscriber);
     }
 }

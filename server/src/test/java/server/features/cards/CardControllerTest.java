@@ -5,6 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,12 @@ class CardControllerTest {
     @BeforeEach
     public void setup() {
         repo = new TestCardRepository();
-        sut = new CardController(new CardService(repo));
+        sut = new CardController(new CardService(repo),new SimpMessagingTemplate(new MessageChannel() {
+            @Override
+            public boolean send(Message<?> message, long timeout) {
+                return false;
+            }
+        }));
     }
 
 
@@ -32,7 +40,8 @@ class CardControllerTest {
 
     @Test
     void insertValid() {
-        Card toAdd = new Card("A card", "This is a card", 
+        sut.setTesting(true);
+        Card toAdd = new Card("A card", "This is a card",
                 null, null, 3);
 
         ResponseEntity<Void> response = sut.insert(toAdd);
@@ -43,7 +52,8 @@ class CardControllerTest {
 
     @Test
     void findAll() {
-        Card card1 = new Card("Card 1", "This is a card", 
+        sut.setTesting(true);
+        Card card1 = new Card("Card 1", "This is a card",
                 null, null, 0);
         Card card2 = new Card("Card2", "This is a card", 
                 null, null, 0);
@@ -59,6 +69,7 @@ class CardControllerTest {
 
     @Test
     void getByIdSuccess() {
+        sut.setTesting(true);
         Card card = new Card();
         ResponseEntity<Void> response = sut.insert(card);
 
@@ -68,6 +79,7 @@ class CardControllerTest {
 
     @Test
     void getByIdNotFound() {
+        sut.setTesting(true);
         ResponseEntity<Card> foundById = sut.getById(100);
 
         assertEquals(HttpStatus.NOT_FOUND, foundById.getStatusCode());
@@ -75,6 +87,7 @@ class CardControllerTest {
 
     @Test
     void getByIdBadRequest() {
+        sut.setTesting(true);
         ResponseEntity<Card> foundById = sut.getById(-1);
 
         assertEquals(HttpStatus.BAD_REQUEST, foundById.getStatusCode());
@@ -82,6 +95,7 @@ class CardControllerTest {
 
     @Test
     void deleteNonExisting() {
+        sut.setTesting(true);
         ResponseEntity<Void> response = sut.delete(100);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
@@ -89,6 +103,7 @@ class CardControllerTest {
 
     @Test
     void deleteBadRequest() {
+        sut.setTesting(true);
         ResponseEntity<Void> response = sut.delete(-1);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
@@ -96,6 +111,7 @@ class CardControllerTest {
 
     @Test
     void deleteExisting() {
+        sut.setTesting(true);
         Card card = new Card(
                 "My Card",
                 "Chocolate",

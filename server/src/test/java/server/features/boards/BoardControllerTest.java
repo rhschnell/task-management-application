@@ -7,6 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,11 +26,17 @@ class BoardControllerTest {
     @BeforeEach
     void before() {
         repository = new TestBoardRepository();
-        sut = new BoardController(new BoardService(repository));
+        sut = new BoardController(new BoardService(repository),new SimpMessagingTemplate(new MessageChannel() {
+            @Override
+            public boolean send(Message<?> message, long timeout) {
+                return false;
+            }
+        }));
     }
 
     @Test
     void insertSuccess() {
+        sut.setTesting(true);
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
@@ -41,11 +50,13 @@ class BoardControllerTest {
 
     @Test
     void insertBadRequest() {
+        sut.setTesting(true);
         assertEquals(HttpStatus.BAD_REQUEST, sut.insert(null).getStatusCode());
     }
 
     @Test
     void getBoardTags() {
+        sut.setTesting(true);
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
@@ -58,6 +69,7 @@ class BoardControllerTest {
     }
     @Test
     void addBoardTag() {
+        sut.setTesting(true);
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
@@ -73,6 +85,7 @@ class BoardControllerTest {
 
     @Test
     void getAll() {
+        sut.setTesting(true);
         Board board1 = new Board();
         Board board2 = new Board();
 
@@ -84,6 +97,7 @@ class BoardControllerTest {
 
     @Test
     void getByIdSuccess() {
+        sut.setTesting(true);
         Board myBoard = new Board("any key", "some title", new LinkedList<>(), null, null);
 
         ResponseEntity<Board> response = sut.insert(myBoard);
@@ -95,6 +109,7 @@ class BoardControllerTest {
 
     @Test
     void getByIdNotFound() {
+        sut.setTesting(true);
         ResponseEntity<Board> foundById = sut.getById("1");
 
         assertEquals(HttpStatus.NOT_FOUND, foundById.getStatusCode());
@@ -102,6 +117,7 @@ class BoardControllerTest {
 
     @Test
     void getByIdBadRequest() {
+        sut.setTesting(true);
         ResponseEntity<Board> foundById = sut.getById(null);
 
         assertEquals(HttpStatus.BAD_REQUEST, foundById.getStatusCode());
@@ -109,6 +125,7 @@ class BoardControllerTest {
 
     @Test
     void deleteNonExisting() {
+        sut.setTesting(true);
         ResponseEntity<Void> response = sut.delete("1");
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -117,6 +134,7 @@ class BoardControllerTest {
 
     @Test
     void deleteBadRequest() {
+        sut.setTesting(true);
         ResponseEntity<Void> response = sut.delete(null);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -125,6 +143,7 @@ class BoardControllerTest {
 
     @Test
     void deleteExisting() {
+        sut.setTesting(true);
         Board board1 = new Board("1", "Title", new ArrayList<>(), null, null);
         Board board2 = new Board("2", "Title", new ArrayList<>(), null, null);
 
