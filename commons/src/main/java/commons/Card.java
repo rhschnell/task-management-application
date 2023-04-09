@@ -15,6 +15,16 @@ public class Card implements Serializable {
     private String title;
     private String description;
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "Card_Preset",
+            joinColumns = {
+                @JoinColumn(name = "card_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                @JoinColumn(name = "preset_id", referencedColumnName = "id")
+            })
+    private List<CardColorPreset> presets;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
     @OrderBy("priority ASC")
@@ -23,7 +33,6 @@ public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
 
     private long priority;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
@@ -63,13 +72,18 @@ public class Card implements Serializable {
      * @param description      Description of the card
      * @param tags             Tags associated with this card
      * @param subTasks         Subtasks for this card
+     * @param presets          Presets associated with this card
      */
     public Card(String title, String description, List<Tag> tags,
-                List<Task> subTasks) {
+                List<Task> subTasks, List<CardColorPreset> presets) {
         this.title = title;
         this.description = description;
         this.tags = tags;
         this.subTasks = subTasks;
+        this.presets = presets;
+        if(this.presets == null) {
+            this.presets = new ArrayList<>();
+        }
     }
 
     /**
@@ -228,5 +242,13 @@ public class Card implements Serializable {
      */
     public void deleteTag(Tag tag) {
         this.tags.remove(tag);
+    }
+
+    /**
+     * Adds a new preset to the card's preset list
+     * @param preset The preset to be added
+     */
+    public void setPreset(CardColorPreset preset){
+        this.presets.add(preset);
     }
 }

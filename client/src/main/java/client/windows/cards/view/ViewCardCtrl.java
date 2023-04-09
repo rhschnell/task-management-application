@@ -15,21 +15,26 @@
  */
 package client.windows.cards.view;
 
-import client.modules.MainModules;
-import client.MyFXML;
 import client.MainCtrl;
+import client.MyFXML;
+import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.cards.edit.EditCardCtrl;
+import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.tags.view.CustomTagCellCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
+import commons.CardColorPreset;
 import commons.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -42,6 +47,7 @@ public class ViewCardCtrl {
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
     private Card card;
+    private Board shownBoard;
 
     @FXML
     private Label cardTitle;
@@ -58,7 +64,11 @@ public class ViewCardCtrl {
     @FXML
     private VBox taskBox;
 
+    @FXML
+    private Pane appliedPreset;
+
     private ViewCardService service;
+    private WorkspaceCtrl workspaceCtrl;
 
     /**
      * Constructor for ViewCardCtrl
@@ -142,6 +152,11 @@ public class ViewCardCtrl {
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setCard(card);
         loader.getKey().displayTasks();
+        loader.getKey().setShownBoard(shownBoard);
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().setPresetList(shownBoard.getPresetList());
+        loader.getKey().displayPresetList();
+
         Scene scene = new Scene(loader.getValue());
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -183,5 +198,38 @@ public class ViewCardCtrl {
                 taskBox.getChildren().add(loader.getValue());
             }
         }
+    }
+
+    /**
+     * Sets the shown board
+     * @param shownBoard The shown board to be set
+     */
+    public void setShownBoard(Board shownBoard){
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
+     * This method displays the applied preset
+     * @param preset The applied preset that needs to be displayed
+     */
+    public void displayPreset(CardColorPreset preset) {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(CustomCardPresetCellViewCtrl.class,
+                        "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
+        CustomCardPresetCellViewCtrl ctrl = loader.getKey();
+        ctrl.setViewCardCtrl(this);
+        ctrl.setWorkspaceCtrl(workspaceCtrl);
+        ctrl.setPresetList(shownBoard.getPresetList());
+        ctrl.setPresetObject(preset, "ViewCardCtrl");
+
+        appliedPreset.getChildren().add(loader.getValue());
     }
 }

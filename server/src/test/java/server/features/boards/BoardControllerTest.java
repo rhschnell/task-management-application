@@ -14,7 +14,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class BoardControllerTest {
 
@@ -38,7 +40,7 @@ class BoardControllerTest {
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
-        Board board = new Board("000000", "My Board", cardLists, null);
+        Board board = new Board("000000", "My Board", cardLists, null, null);
         board.addTag(new Tag("New Tag","White"));
         ResponseEntity<Board> response = sut.insert(board);
 
@@ -58,7 +60,7 @@ class BoardControllerTest {
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
-        Board board = new Board("000000", "My Board", cardLists, null);
+        Board board = new Board("000000", "My Board", cardLists, null, null);
         board.addTag(new Tag("New Tag","White"));
         sut.insert(board);
         ArrayList <Tag> tagResult = new ArrayList<>();
@@ -71,7 +73,7 @@ class BoardControllerTest {
         CardList cardList = new CardList();
         List<CardList> cardLists = new ArrayList<>();
         cardLists.add(cardList);
-        Board board = new Board("000000", "My Board", cardLists, null);
+        Board board = new Board("000000", "My Board", cardLists, null, null);
         board.addTag(new Tag("First Tag","White"));
         sut.insert(board);
         ArrayList <Tag> tagResult = new ArrayList<>();
@@ -96,7 +98,7 @@ class BoardControllerTest {
     @Test
     void getByIdSuccess() {
         sut.setTesting(true);
-        Board myBoard = new Board("any key", "some title", new LinkedList<>(), null);
+        Board myBoard = new Board("any key", "some title", new LinkedList<>(), null, null);
 
         ResponseEntity<Board> response = sut.insert(myBoard);
         Board saved = sut.getById(myBoard.getKey()).getBody();
@@ -142,8 +144,8 @@ class BoardControllerTest {
     @Test
     void deleteExisting() {
         sut.setTesting(true);
-        Board board1 = new Board("1", "Title", new ArrayList<>(), null);
-        Board board2 = new Board("2", "Title", new ArrayList<>(), null);
+        Board board1 = new Board("1", "Title", new ArrayList<>(), null, null);
+        Board board2 = new Board("2", "Title", new ArrayList<>(), null, null);
 
         sut.insert(board1);
         sut.insert(board2);

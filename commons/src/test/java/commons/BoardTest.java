@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class BoardTest {
 
@@ -17,16 +18,17 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board("My Board", null, new ArrayList<>());
+        board = new Board("My Board", null, new ArrayList<>(), null);
         cardList = new CardList();
         Card card = new Card(
                 "My Card",
                 "Text",
                 null,
-                null
+                null,
+                new ArrayList<>()
         );
         cardList.addCard(card);
-        board2 = new Board("My Board", null, null);
+        board2 = new Board("My Board", null, null, null);
         board2.addList(cardList);
     }
 
@@ -38,11 +40,6 @@ class BoardTest {
     @Test
     void EmptyConstructorTest() {
         assertNotNull(new Board());
-    }
-
-    @Test
-    void KeyConstructorTest() {
-        assertNotNull(new Board("00000", "Title", null, null));
     }
 
     @Test
@@ -59,7 +56,8 @@ class BoardTest {
                 "My Card",
                 "Text",
                 null,
-                null
+                null,
+                new ArrayList<>()
         );
         cardList.addCard(card);
         board.addList(cardList);

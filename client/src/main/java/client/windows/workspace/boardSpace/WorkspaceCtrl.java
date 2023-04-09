@@ -36,10 +36,7 @@ import client.windows.workspace.lock.LockPopUpCtrl;
 import client.windows.workspace.rename.RenameCtrl;
 import com.google.inject.Inject;
 import com.sun.istack.NotNull;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
+import commons.*;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 import javafx.application.Platform;
@@ -47,6 +44,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -55,6 +53,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -251,7 +250,10 @@ public class WorkspaceCtrl implements Initializable {
             return;
         }
 
-        shownBoard = new Board(titleField.getText(), null, null);
+        shownBoard = new Board(titleField.getText(), null, null, null);
+        CardColorPreset defaultPreset = new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF");
+        defaultPreset.setDefault(true);
+        shownBoard.addPreset(defaultPreset);
         shownBoard = service.insertBoard(shownBoard);
         String key = shownBoard.getKey();
 
@@ -547,6 +549,42 @@ public class WorkspaceCtrl implements Initializable {
                 controller.setBoard(service.getBoard(k));
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
+            }
+        }
+        updateBoardColours();
+        updateListColors();
+        updateCardColors();
+    }
+
+    /**
+     * Updates the card colors
+     */
+    public void updateCardColors() {
+        if(shownBoard == null) {
+            return;
+        }
+
+        for(int i = 0; i < shownBoard.getCardLists().size(); i++){
+            Node scrollPane = ((VBox) listContainer.getChildren().get(i)).getChildren().get(1);
+
+            for(int j = 0; j < shownBoard.getCardLists().get(i).getCards().size(); j++){
+                Card card = shownBoard.getCardLists().get(i).getCards().get(j);
+                String backgroundColor = card.getPresets().get(0).getBackgroundColor();
+                String fontColor = card.getPresets().get(0).getFontColor();
+
+                String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
+                        "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
+
+                if (scrollPane instanceof ScrollPane){
+                    Node cardBox = ((VBox) ((ScrollPane) scrollPane).getContent()).getChildren().get(j);
+                    cardBox.setStyle(backgroundStyle);
+                    Node cardTitle = ((HBox) ((VBox) ((HBox) ((AnchorPane) cardBox)
+                            .getChildren().get(0)).getChildren().get(0))
+                            .getChildren().get(0)).getChildren().get(0);
+                    if (cardTitle instanceof  Label){
+                        ((Label) cardTitle).setTextFill(Color.web(fontColor));
+                    }
+                }
             }
         }
     }
@@ -1200,6 +1238,7 @@ public class WorkspaceCtrl implements Initializable {
         loader.getKey().setBoard(shownBoard);
         loader.getKey().setLists(shownBoard.getCardLists());
         loader.getKey().setWorkspaceCtrl(this);
+        loader.getKey().displayPresetList();
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);

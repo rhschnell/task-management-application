@@ -1,11 +1,10 @@
 package client.windows.tags.view;
 
-import client.windows.cards.add.AddCardCtrl;
 import client.serverUtils.ServerUtils;
+import client.windows.cards.add.AddCardCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;

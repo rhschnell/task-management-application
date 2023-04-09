@@ -11,7 +11,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class CardControllerTest {
 
@@ -39,7 +41,7 @@ class CardControllerTest {
     @Test
     void insertValid() {
         sut.setTesting(true);
-        Card toAdd = new Card("A card", "This is a card", 
+        Card toAdd = new Card("A card", "This is a card",
                 null, null, 3);
 
         ResponseEntity<Void> response = sut.insert(toAdd);
@@ -51,7 +53,7 @@ class CardControllerTest {
     @Test
     void findAll() {
         sut.setTesting(true);
-        Card card1 = new Card("Card 1", "This is a card", 
+        Card card1 = new Card("Card 1", "This is a card",
                 null, null, 0);
         Card card2 = new Card("Card2", "This is a card", 
                 null, null, 0);
@@ -113,6 +115,7 @@ class CardControllerTest {
         Card card = new Card(
                 "My Card",
                 "Chocolate",
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
                 );

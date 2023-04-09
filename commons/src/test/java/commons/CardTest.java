@@ -28,7 +28,8 @@ class CardTest {
                 "My card",
                 "Fancy description",
                 null,
-                null
+                null,
+                100
         );
         assertNotNull(card);
     }
@@ -244,6 +245,16 @@ class CardTest {
     }
 
     @Test
+    void deleteTag(){
+        Tag tag = new Tag("New Tag", "0x00000000");
+        Tag anotherTag = new Tag("Second Tag", "0x000000FF");
+        card.addTag(tag);
+        card.addTag(anotherTag);
+        card.deleteTag(tag);
+        assertEquals(1, card.getTags().size());
+    }
+
+    @Test
     void testEquals() {
         Card c1 = new Card(
                 "Some card",
@@ -282,7 +293,7 @@ class CardTest {
 
     @Test
     void testToString() {
-        assertEquals("Card(title=Some card, description=This is a card, " +
-                     "subTasks=null, id=0, priority=0, tags=null)", card.toString());
+        assertEquals("Card(title=Some card, description=This is a card," +
+                " presets=null, subTasks=null, id=0, priority=0, tags=null)", card.toString());
     }
 }
