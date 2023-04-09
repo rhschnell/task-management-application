@@ -1316,6 +1316,7 @@ public class WorkspaceCtrl implements Initializable {
         if (admin) {
             screenTitle.setText("All Server Boards");
             leaveButton.setVisible(false);
+            leaveButton.setManaged(false);
         }
     }
 
