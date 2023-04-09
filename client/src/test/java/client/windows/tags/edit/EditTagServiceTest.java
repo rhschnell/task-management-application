@@ -1,13 +1,12 @@
 package client.windows.tags.edit;
 
-import static org.mockito.Mockito.*;
-
 import client.serverUtils.TagUtils;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 public class EditTagServiceTest {
     private EditTagService editTagService;

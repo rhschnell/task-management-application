@@ -1,12 +1,11 @@
 package client.windows.tags.add;
 
-import static org.mockito.Mockito.*;
-
 import client.serverUtils.BoardUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 public class AddTagServiceTest {
     private AddTagService addTagService;

@@ -15,17 +15,17 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
-
 import client.modules.MainModules;
 import client.utils.HelperMethods;
 import client.windows.login.admin.AdminLoginCtrl;
 import client.windows.login.start.StartUpCtrl;
 import client.windows.login.user.UserLoginCtrl;
 import com.google.inject.Injector;
-
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import static com.google.inject.Guice.createInjector;
 
 
 public class Main extends Application {
@@ -53,6 +53,7 @@ public class Main extends Application {
         var adminLogin = FXML
                         .load(AdminLoginCtrl.class, "client", "windows", "login", "admin", "AdminLogin.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        primaryStage.getIcons().add(new Image("/client/icons/talio-icon.png"));
         HelperMethods hm = INJECTOR.getInstance(HelperMethods.class);
         mainCtrl.initialize(primaryStage, startUp, userLogin, adminLogin, hm);
     }

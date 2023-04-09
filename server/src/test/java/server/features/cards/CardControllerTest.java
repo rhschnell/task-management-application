@@ -5,9 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class CardControllerTest {
 
@@ -96,6 +99,7 @@ class CardControllerTest {
         Card card = new Card(
                 "My Card",
                 "Chocolate",
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
                 );

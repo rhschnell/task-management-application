@@ -23,7 +23,6 @@ public class CardList {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
-
     @OrderBy("priority ASC")
     private List<Card> cards = new ArrayList<>();
 

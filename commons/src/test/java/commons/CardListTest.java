@@ -24,7 +24,8 @@ class CardListTest {
                 "My Card",
                 "Text",
                 null,
-                null
+                null,
+                new ArrayList<>()
         );
         cards = new ArrayList<>();
         cards.add(card);
@@ -119,7 +120,8 @@ class CardListTest {
                 "My Card 2",
                 "Text",
                 null,
-                null
+                null,
+                new ArrayList<>()
         );
         cardList1.addCard(card2);
         cardList1.moveCard(card, 1);
@@ -132,7 +134,8 @@ class CardListTest {
                 "My Card 2",
                 "Text",
                 null,
-                null
+                null,
+                new ArrayList<>()
         );
         cardList1.addCard(card2);
         cardList1.moveCard(0, 1);
