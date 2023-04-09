@@ -61,6 +61,7 @@ import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.*;
+import java.util.prefs.PreferenceChangeEvent;
 
 import static com.google.inject.Guice.createInjector;
 import static java.lang.Math.abs;
@@ -665,6 +666,7 @@ public class WorkspaceCtrl implements Initializable {
         } catch (NotFoundException | BadRequestException e) {
             System.out.println("The board you tried to join does not exist");
         }
+        refreshWorkspace(true);
     }
     /**
      * Displays the lists into the Hbox list container
@@ -713,6 +715,7 @@ public class WorkspaceCtrl implements Initializable {
     public void setMoveShortcutListeners(VBox listVbox) {
         listVbox.requestFocus();
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (this.isAdmin() || !this.shownBoard.isProtected())
             switch (event.getCode()) {
                 case UP:    moveFocusUp();      break;
                 case DOWN:  moveFocusDown();    break;
@@ -1249,6 +1252,7 @@ public class WorkspaceCtrl implements Initializable {
         this.joinedKeys = joinedKeys;
     }
 
+
     /**
      * Sets the instance of HelperMethods
      *
@@ -1359,15 +1363,8 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    if (board.equals(new Board(null, null, null, null, null))) {
-                        refreshWorkspace(true);
-                    } else {
-                        //Update the board since the new one has changed
-                        shownBoard = (Board) board;
-                        boardName.setText(shownBoard.getTitle());
-                        //Display the updates since something was changed
-                        displayLists();
-                    }
+                    showBoard(board.getKey());
+                    refreshWorkspace(true);
                 }
             });
         }));
