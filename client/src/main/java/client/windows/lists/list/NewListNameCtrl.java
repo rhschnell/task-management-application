@@ -1,5 +1,6 @@
 package client.windows.lists.list;
 
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
@@ -51,10 +52,34 @@ public class NewListNameCtrl implements Initializable {
     private void create() {
         String title = helperMethods.getInputValidator().stripWhitespace(listTitleField.getText());
 
-        if (!helperMethods.validateInputAndShowPopup(title)) return;
+        if (!checkAndHandleInput(title)) return;
+
         workspaceCtrl.addList(title);
         close();
     }
+
+
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your list title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your list name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Makes sure the user can press ENTER when typing in the text field for the list name to

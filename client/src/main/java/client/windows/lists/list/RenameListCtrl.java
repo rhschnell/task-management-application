@@ -2,6 +2,7 @@ package client.windows.lists.list;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.workspace.joinAlerts.EmptyTitleCtrl;
 import com.google.inject.Inject;
@@ -63,13 +64,34 @@ public class RenameListCtrl implements Initializable {
     private void save() {
         String newTitle = helperMethods.getInputValidator().stripWhitespace(newListTitleField.getText());
 
-        if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
+        if (!checkAndHandleInput(newTitle)) return;
 
         // Apply this new title to the database
         listCtrl.renameList(newTitle);
 
         // Close the window
         close();
+    }
+
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your list title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your list name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**
