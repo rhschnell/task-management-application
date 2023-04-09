@@ -33,6 +33,7 @@ public class EditCardPresetCtrl {
     /**
      * Constructor for the EditCardPresetCtrl
      * @param service The corresponding service
+     * @param helperMethods The correspondng helper methods instance
      */
     @Inject
     public EditCardPresetCtrl(EditCardPresetService service, HelperMethods helperMethods){

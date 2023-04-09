@@ -37,9 +37,12 @@ public class AddCardPresetCtrl {
      * Constructor for the AddCardPresetCtrl
      * @param service The corresponding service
      * @param customizeCtrl Instance of CustomizeCtrl
+     * @param helperMethods The correspondng helper methods instance
      */
     @Inject
-    public AddCardPresetCtrl(AddCardPresetService service, CustomizeCtrl customizeCtrl, HelperMethods helperMethods){
+    public AddCardPresetCtrl(AddCardPresetService service,
+                             CustomizeCtrl customizeCtrl,
+                             HelperMethods helperMethods){
         this.service = service;
         this.customizeCtrl = customizeCtrl;
         this.helperMethods = helperMethods;
