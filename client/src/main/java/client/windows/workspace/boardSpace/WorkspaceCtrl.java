@@ -18,6 +18,7 @@ package client.windows.workspace.boardSpace;
 import client.MyFXML;
 import client.modules.MainModules;
 import client.serverUtils.WebsocketUtils;
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
@@ -219,20 +220,14 @@ public class WorkspaceCtrl implements Initializable {
         }
 
         List<String> tempList = new ArrayList<>();
-        service.getBoards().forEach(b -> tempList.add(b.getKey()));
+
+        for (Board b : service.getBoards()) {
+            tempList.add(b.getKey());
+        }
 
         showBoard(key);
 
-        pwdMap.putIfAbsent(key, "");
-
-        // Add this board to the list of joined boards (keys) and show it in the UI
-        if (!tempList.contains(key)) {
-            joinedKeys.add(key);
-        }
-        System.out.println(keyField.getText());
-
         keyField.clear();
-        refreshWorkspace(true);
     }
 
     /**
@@ -639,14 +634,16 @@ public class WorkspaceCtrl implements Initializable {
      * @param targetKey The key of the board to show
      */
     public void showBoard(String targetKey) {
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
-        unsubscribeLists();
-        registerForBoardUpdates(targetKey);
         try {
             shownBoard = service.getBoard(targetKey);
+
+            for(int i = 0; i< boardSubscriber.size(); i++)
+            {
+                boardSubscriber.get(i).unsubscribe();
+            }
+            unsubscribeLists();
+            registerForBoardUpdates(targetKey);
+
             boardName.setText(shownBoard.getTitle());
             // Theoretically unnecessary, but to be sure
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
@@ -663,10 +660,18 @@ public class WorkspaceCtrl implements Initializable {
                 unlockLists();
                 shownBoard.setProtected(false);
             }
+
+            pwdMap.putIfAbsent(targetKey, "");
+            joinedKeys.add(targetKey);
             unhideWorkspace();
             displayLists();
+            refreshWorkspace(true);
         } catch (NotFoundException | BadRequestException e) {
-            System.out.println("The board you tried to join does not exist");
+            String message = "There is no board with key " + targetKey +
+                    ". Try joining a board with a different key.";
+
+            ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
+            helperMethods.showErrorDialog(nonExistingKey);
         }
     }
     /**
