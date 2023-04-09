@@ -13,14 +13,19 @@
 
 <VBox spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.cards.add.AddCardCtrl">
    <children>
-      <TextField fx:id="cardTitle" maxWidth="-Infinity" prefHeight="25.0" prefWidth="310.0" promptText="Add title..." style="-fx-control-inner-background: #f0f0f0; -fx-background-radius: 10; -fx-border-color: transparent;">
-         <font>
-            <Font name="Arial Bold" size="16.0" />
-         </font>
+      <HBox spacing="15.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>
-      </TextField>
+         <children>
+            <TextField fx:id="cardTitle" maxWidth="-Infinity" prefHeight="25.0" prefWidth="310.0" promptText="Add title..." style="-fx-control-inner-background: #f0f0f0; -fx-background-radius: 10; -fx-border-color: transparent;">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </TextField>
+            <Label fx:id="errorMessage" alignment="CENTER" prefHeight="34.0" prefWidth="331.0" styleClass="error-message-label" text="Label" visible="false" />
+         </children>
+      </HBox>
       <Separator prefWidth="200.0" />
       <HBox spacing="15.0">
          <children>

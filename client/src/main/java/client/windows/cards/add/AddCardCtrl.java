@@ -41,8 +41,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -72,9 +74,6 @@ public class AddCardCtrl extends SubtaskContainer {
 
     private List<Task> taskList;
 
-
-    private HelperMethods helperMethods;
-
     /**
      * Constructor for AddCardCtrl
      *
@@ -84,9 +83,8 @@ public class AddCardCtrl extends SubtaskContainer {
      */
     @Inject
     public AddCardCtrl(AddCardService service, HelperMethods helperMethods, DataFormatManager dataFormatManager) {
-        super(dataFormatManager);
+        super(dataFormatManager, helperMethods);
         this.service = service;
-        this.helperMethods = helperMethods;
     }
 
     /**
@@ -124,9 +122,9 @@ public class AddCardCtrl extends SubtaskContainer {
      * This method adds the created card to the list and closes the pop-up. Moreover, it refreshed the workspace.
      */
     public void save() {
-        String title = cardTitle.getText();
+        String title = super.helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
 
-        if (!helperMethods.validateInputAndShowPopup(title)) return;
+        if (super.checkAndHandleUserInput(title)) return;
 
         ((Stage) saveButton.getScene().getWindow()).close();
 
@@ -174,7 +172,7 @@ public class AddCardCtrl extends SubtaskContainer {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
-        helperMethods.popUp(scene, title);
+        super.helperMethods.popUp(scene, title);
     }
 
     /**
@@ -185,8 +183,8 @@ public class AddCardCtrl extends SubtaskContainer {
             taskList = new ArrayList<>();
         }
 
-        String title = helperMethods.getInputValidator().stripWhitespace(addSubtaskTitle.getText());
-        if (!helperMethods.validateInputAndShowPopup(title)) return;
+        String title = super.helperMethods.getInputValidator().stripWhitespace(addSubtaskTitle.getText());
+        if (!super.helperMethods.validateInputAndShowPopup(title)) return;
 
         Task newTask = new Task();
         newTask.setCompleted(false);
@@ -268,4 +266,17 @@ public class AddCardCtrl extends SubtaskContainer {
 
     }
 
+    /**
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 }

@@ -47,7 +47,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private Button saveButton;
     @FXML
     private Button cancelButton;
-    private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
 
     @FXML
@@ -78,10 +77,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Inject
     public EditCardCtrl(EditCardService service, TaskUtils taskUtils, HelperMethods helperMethods,
                         ViewCardCtrl viewCardCtrl, DataFormatManager dataFormatManager) {
-        super(dataFormatManager);
+        super(dataFormatManager, helperMethods);
         this.service = service;
         this.taskUtils = taskUtils;
-        this.helperMethods = helperMethods;
         this.viewCardCtrl = viewCardCtrl;
         appliedTagsVbox = new VBox();
         newCard = new Card();
@@ -147,8 +145,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     public void save() {
 
-        String title = helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
-        if (!helperMethods.validateInputAndShowPopup(title)) return;
+        String title = super.helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
+
+        if (super.checkAndHandleUserInput(title)) return;
 
         ((Stage) saveButton.getScene().getWindow()).close();
 
@@ -166,6 +165,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
         service.insertCard(editedCard);
     }
+
+
 
     /**
      * @param location  The location used to resolve relative paths for the root object, or
@@ -193,7 +194,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
-        helperMethods.popUp(scene, title);
+        super.helperMethods.popUp(scene, title);
     }
 
     /**
@@ -218,8 +219,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Adds a task to the card and displays it based on user input
      */
     public void addTask() {
-        String title = helperMethods.getInputValidator().stripWhitespace(addTaskField.getText());
-        if (!helperMethods.validateInputAndShowPopup(title)) return;
+        String title = super.helperMethods.getInputValidator().stripWhitespace(addTaskField.getText());
+        if (!super.helperMethods.validateInputAndShowPopup(title)) return;
 
         Task newTask = new Task();
         newTask.setCompleted(false);

@@ -161,3 +161,9 @@
 .board-cell:pressed {
     -fx-background-color:  derive(#ACC7BB, -20.0%);
 }
+
+.error-message-label {
+    -fx-background-color:  -light_red_color;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
