@@ -1,5 +1,7 @@
 package client.windows.tags.edit;
 
+import client.utils.ErrorDialogEntry;
+import client.utils.HelperMethods;
 import client.windows.tags.view.CustomEditTagCellCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
@@ -33,14 +35,17 @@ public class EditTagCtrl {
 
     @FXML
     private Button saveButton;
+    private HelperMethods helperMethods;
 
     /**
      * Constructor for the EditTagCtrl
      * @param service Corresponding service
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public EditTagCtrl(EditTagService service){
+    public EditTagCtrl(EditTagService service, HelperMethods helperMethods){
         this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -95,7 +100,13 @@ public class EditTagCtrl {
      * Method to save the just edited tag
      */
     public void save() {
-        String title = tagTitle.getText();
+        String title = helperMethods.getInputValidator().stripWhitespace(tagTitle.getText());
+
+        if (!checkAndHandleInput(title)) {
+            tagTitle.requestFocus();
+            return;
+        }
+
         Color newTagColor = tagColor.getValue();
         Color newFontColor = fontColor.getValue();
         tagTitle.setText(tag.getName());
@@ -106,6 +117,27 @@ public class EditTagCtrl {
         customEditTagCellCtrl.getTagOverviewCtrl().displayTagList();
 
         ((Stage)saveButton.getScene().getWindow()).close();
+    }
+
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your tag name cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your tag name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**
