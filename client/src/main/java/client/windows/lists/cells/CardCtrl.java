@@ -364,7 +364,8 @@ public class CardCtrl implements Initializable {
                             String backgroundColor = newCard.getPresets().get(0).getBackgroundColor();
                             String fontColor = newCard.getPresets().get(0).getFontColor();
                             String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
-                                    "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
+                                    "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey," +
+                                    " 5, 0, 0.0, 1.0);";
                             setFontColor(fontColor);
                             setBackgroundColor(backgroundStyle);
                             //Updates the cardList so that when we insert it again we have the latest version
