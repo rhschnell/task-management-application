@@ -32,7 +32,10 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -205,6 +208,9 @@ public class ListCtrl {
 
             controller.updateItem(card);
             controller.setDisplayTags(card.getTags());
+            controller.setBoard(workspaceCtrl.getShownBoard());
+            controller.setWorkspaceCtrl(workspaceCtrl);
+
             makeCardDraggable(cardCell);
             controller.setBoardKey(getBoardKey());
             cardVBox.getChildren().add(cardCell.getValue());
@@ -213,6 +219,7 @@ public class ListCtrl {
         var quickAddCard =
                 new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
                         "lists", "cells", "QuickAddCardCell.fxml");
+        quickAddCard.getKey().setShownBoard(workspaceCtrl.getShownBoard());
         quickAddCard.getKey().setListCtrl(this);
         quickAddCard.getKey().setBoardKey(getBoardKey());
         cardVBox.getChildren().add(quickAddCard.getValue());
@@ -471,8 +478,11 @@ public class ListCtrl {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        loader.getKey().setBoard(workspaceCtrl.getShownBoard());
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().displayPresetList();
 
         String title = "Create a card";
         helperMethods.popUp(scene, title);

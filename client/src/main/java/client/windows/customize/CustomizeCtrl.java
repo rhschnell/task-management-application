@@ -1,12 +1,18 @@
 package client.windows.customize;
 
-import client.serverUtils.BoardUtils;
-import client.serverUtils.CardListUtils;
+import client.MyFXML;
+import client.modules.MainModules;
+import client.utils.HelperMethods;
+import client.windows.customize.cards.CustomCardPresetCellCtrl;
+import client.windows.customize.cards.add.AddCardPresetCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.CardColorPreset;
 import commons.CardList;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
@@ -15,15 +21,17 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+import static com.google.inject.Guice.createInjector;
+
 public class CustomizeCtrl {
     private WorkspaceCtrl workspaceCtrl;
+    private HelperMethods helperMethods;
+
+    private final CustomizeService service;
 
     private Board board;
-    private BoardUtils boardUtils;
-
     private List<CardList> lists;
-    private CardListUtils cardListUtils;
-
+    private List<CardColorPreset> presetList;
 
     @FXML
     private Button resetBoardColorButton;
@@ -46,15 +54,15 @@ public class CustomizeCtrl {
 
     /**
      * Constructor for CustomizeCtrl
-     * @param workspaceCtrl a WorkspaceCtrl instance
-     * @param boardUtils a BoardUtils instance
-     * @param cardListUtils a CardListUtils instance
+     * @param workspaceCtrl Instance of WorkspaceCtrl
+     * @param service Corresponding service
+     * @param helperMethods Instance of HelperMethods
      */
     @Inject
-    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, BoardUtils boardUtils, CardListUtils cardListUtils) {
+    public CustomizeCtrl(WorkspaceCtrl workspaceCtrl, CustomizeService service, HelperMethods helperMethods){
         this.workspaceCtrl = workspaceCtrl;
-        this.boardUtils = boardUtils;
-        this.cardListUtils = cardListUtils;
+        this.service = service;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -67,41 +75,48 @@ public class CustomizeCtrl {
         // Also initialize the default colors from this workspace
         listBackgroundColor.setValue(Color.web(workspaceCtrl.getInitialListColor()));
         listFontColor.setValue(Color.web(workspaceCtrl.getInitialListFontColor()));
+
+        // Initializes the preset list with the presets from the board
+        this.presetList = workspaceCtrl.getShownBoard().getPresetList();
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
+     * Method to se the board's background color
+=======
      * Setter for the board background color
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
-    public void setBoardBackgroundColor() {
-        board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2, 8));
+    public void setBoardBackgroundColor(){
+        board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2,8));
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
+     * Method to se the board's font color
+=======
      * Setter for the board font color
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void setBoardFontColor() {
-        board.setFontColour(boardFontColor.getValue().toString().substring(2, 8));
+        board.setFontColour(boardFontColor.getValue().toString().substring(2,8));
     }
 
     /**
      * Method to set the list background color for all the lists
      */
     @FXML
-    public void setListBackgroundColor() {
+    public void setListBackgroundColor(){
         String newColor = listBackgroundColor.getValue().toString().substring(2, 8);
-        for (CardList list : lists) {
+        for(CardList list : lists) {
             list.setBackgroundColor(newColor);
         }
-        // Also make sure that any lists that are going to be created after this are going to get
-        // this color out of the box
-        workspaceCtrl.setInitialListColor(newColor);
     }
 
     /**
      * Getter to get the list background color
-     *
      * @return The current background color of the lists
      */
     @FXML
@@ -118,15 +133,10 @@ public class CustomizeCtrl {
         for (CardList list : lists) {
             list.setFontColor(newColor);
         }
-
-        // Also make sure that any text in lists that are going to be created after this is
-        // going to get this color out of the box
-        workspaceCtrl.setInitialListFontColor(newColor);
     }
 
     /**
      * Getter to get the list font color
-     *
      * @return The current font color of the list
      */
     @FXML
@@ -135,13 +145,17 @@ public class CustomizeCtrl {
     }
 
     /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
+     * Method to reset the board colors to default
+=======
      * Resets the colors of the board to default
+>>>>>>> client/src/main/java/client/windows/customize/CustomizeCtrl.java
      */
     @FXML
     public void resetBoard() {
         board.setFontColour("000000");
         board.setBackgroundColour("FFFFFF");
-        boardUtils.insertBoard(board);
+        service.insertBoard(board);
         boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
         boardFontColor.setValue(Color.web(board.getFontColour()));
     }
@@ -158,41 +172,68 @@ public class CustomizeCtrl {
         }
         listBackgroundColor.setValue(Color.web(defaultBackground));
         listFontColor.setValue(Color.web(defaultFont));
-
-        workspaceCtrl.setInitialListFontColor(defaultFont);
-        workspaceCtrl.setInitialListColor(defaultBackground);
     }
 
     /**
-     * Closes the window/stage
+     * This method closes the customize window
      */
-    public void close() {
-        ((Stage) closeButton.getScene().getWindow()).close();
+    public void close(){
+        ((Stage)closeButton.getScene().getWindow()).close();
     }
 
     /**
      * Method to save the current made changes to the board colors
      */
     public void save() {
-        for (CardList list : lists) {
-            cardListUtils.insertCardList(list);
-        }
-        boardUtils.insertBoard(board);
-        workspaceCtrl.refreshWorkspace(false);
-        ((Stage) closeButton.getScene().getWindow()).close();
+        ((Stage)closeButton.getScene().getWindow()).close();
+
+        workspaceCtrl.setInitialListFontColor(listFontColor.getValue().toString().substring(2, 8));
+        workspaceCtrl.setInitialListColor(listBackgroundColor.getValue().toString().substring(2, 8));
+
+        board.setPresetList(presetList);
+        service.insertBoard(board);
+        workspaceCtrl.refreshWorkspace(true);
     }
 
     /**
-     * Getter for the board
-     * @return the board
+     * This method displays the presets in the cardPresets box
+     */
+    public void displayPresetList() {
+        for(CardColorPreset preset : presetList){
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomCardPresetCellCtrl.class,
+                            "client", "windows", "customize", "cards", "CustomCardPresetCell.fxml");
+            CustomCardPresetCellCtrl ctrl = loader.getKey();
+            ctrl.setBoard(workspaceCtrl.getShownBoard());
+            ctrl.setPresetObject(preset);
+            ctrl.setCustomizeCtrl(this);
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
+            ctrl.setPresetList(presetList);
+
+            cardPresets.getChildren().add(loader.getValue());
+        }
+    }
+
+    /**
+<<<<<<< client/src/main/java/client/windows/customize/CustomizeCtrl.java
+     * This method updates the displayed presets
+     */
+    public void updateDisplayedPresets() {
+        cardPresets.getChildren().clear();
+        displayPresetList();
+    }
+
+    /**
+     * Gets the board
+     * @return The board
      */
     public Board getBoard() {
         return this.board;
     }
 
     /**
-     * Setter for the board
-     * @param shownBoard the board to be set
+     * Sets the shownBoard
+     * @param shownBoard The shown board to be set
      */
     public void setBoard(Board shownBoard) {
         board = shownBoard;
@@ -202,12 +243,10 @@ public class CustomizeCtrl {
 
     /**
      * Method to set the cardlists that are shown on the board
-     *
      * @param cardLists The cardlists
      */
-    public void setLists(List<CardList> cardLists) {
+    public void setLists(List<CardList> cardLists){
         lists = cardLists;
-
         if (!lists.isEmpty()) {
             // Set the color pickers to the corresponding colors of the (first) cardlist
             listBackgroundColor.setValue(Color.web(lists.get(0).getBackgroundColor()));
@@ -216,6 +255,32 @@ public class CustomizeCtrl {
             // The lists might be empty, but the initial color might be set already.
             //TODO: implement this functionality
         }
+    }
+
+    /**
+     * This method opens a popup window where the user can add new card color presets
+     */
+    public void addCardPreset() {
+        var loader =  new MyFXML(createInjector(new MainModules()))
+                .load(AddCardPresetCtrl.class,
+                        "client", "windows", "customize", "cards", "add", "AddCardPreset.fxml");
+
+        loader.getKey().setCustomizeCtrl(this);
+        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+
+        String title = "Create Preset";
+        helperMethods.popUp(scene, title);
+    }
+
+    /**
+     * Adds a preset to the presetList
+     * @param preset The preset to be added
+     */
+    public void addPreset(CardColorPreset preset) {
+        this.presetList.add(preset);
     }
 }
 

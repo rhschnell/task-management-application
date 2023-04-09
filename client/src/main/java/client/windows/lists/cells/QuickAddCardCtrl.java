@@ -3,12 +3,15 @@ package client.windows.lists.cells;
 import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
+import commons.Board;
 import commons.Card;
+import commons.CardColorPreset;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 
 public class QuickAddCardCtrl {
 
@@ -19,6 +22,9 @@ public class QuickAddCardCtrl {
     @FXML
     private Button addButton;
     private final HelperMethods helperMethods;
+
+    private Board shownBoard;
+
 
     /**
      * Constructor for QuickAddCardCtrl
@@ -49,9 +55,26 @@ public class QuickAddCardCtrl {
 
         if (!checkAndHandleInput(title)) return;
 
+        Card card = new Card(title);
+        card.setPresets(new ArrayList<>());
+        card.setPreset(getDefaultPreset());
 
-        service.insertCard(new Card(title),listCtrl.getCardList());
+
+        service.insertCard(card,listCtrl.getCardList());
         listCtrl.displayCards();
+    }
+
+    /**
+     * Gets the preset that is set as default
+     * @return The default preset
+     */
+    public CardColorPreset getDefaultPreset(){
+        for(CardColorPreset preset : shownBoard.getPresetList()){
+            if(preset.isDefault()){
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
     }
 
     /**
@@ -100,4 +123,11 @@ public class QuickAddCardCtrl {
         service.setBoardKey(boardKey);
     }
 
+    /**
+     * Sets the shownBoard
+     * @param shownBoard The shownBoard to be set
+     */
+    public void setShownBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
 }
