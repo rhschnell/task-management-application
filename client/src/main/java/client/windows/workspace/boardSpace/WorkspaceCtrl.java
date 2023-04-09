@@ -153,7 +153,6 @@ public class WorkspaceCtrl implements Initializable {
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
         this.admin = false;
-        //service.registerForMessages();
         this.websocketUtils=websocketUtils;
     }
     /**
@@ -212,10 +211,6 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
         if (keyField.getText().strip().equals("")) {
             emptyKeyPopUp();
             return;
@@ -232,7 +227,8 @@ public class WorkspaceCtrl implements Initializable {
         if (!tempList.contains(keyField.getText())) {
             joinedKeys.add(keyField.getText());
         }
-        registerForBoardUpdates(keyField.getText());
+        System.out.println(keyField.getText());
+
         keyField.clear();
         refreshWorkspace(true);
     }
@@ -241,10 +237,6 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
         if (titleField.getText().equals("")) {
             emptyTitlePopUp();
             return;
@@ -269,7 +261,6 @@ public class WorkspaceCtrl implements Initializable {
         }
         titleField.clear();
         refreshWorkspace(true);
-        registerForBoardUpdates(key);
     }
 
     /**
@@ -644,8 +635,15 @@ public class WorkspaceCtrl implements Initializable {
      * @param targetKey The key of the board to show
      */
     public void showBoard(String targetKey) {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
+        unsubscribeLists();
+        registerForBoardUpdates(targetKey);
         try {
             shownBoard = service.getBoard(targetKey);
+            boardName.setText(shownBoard.getTitle());
             // Theoretically unnecessary, but to be sure
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
 
