@@ -671,17 +671,11 @@ public class WorkspaceCtrl implements Initializable {
     public void setMoveShortcutListeners(VBox listVbox) {
         listVbox.requestFocus();
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.UP) {
-                moveFocusUp();
-            }
-            if (event.getCode() == KeyCode.DOWN) {
-                moveFocusDown();
-            }
-            if (event.getCode() == KeyCode.LEFT) {
-                moveFocusLeft();
-            }
-            if (event.getCode() == KeyCode.RIGHT) {
-                moveFocusRight();
+            switch (event.getCode()) {
+                case UP -> moveFocusUp();
+                case DOWN -> moveFocusDown();
+                case LEFT -> moveFocusLeft();
+                case RIGHT -> moveFocusRight();
             }
             event.consume();
         });
