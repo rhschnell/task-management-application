@@ -17,6 +17,15 @@ public class InputValidator {
     }
 
     /**
+     * Method to strip text from leading and trailing whitespaces
+     * @param input The text to strip
+     * @return The stripped input
+     */
+    public String stripWhitespace(String input){
+        return input.strip();
+    }
+
+    /**
      * Sets the maximum input length that is considered valid
      * @param maxInputLength The maximum input length
      */

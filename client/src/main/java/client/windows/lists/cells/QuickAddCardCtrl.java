@@ -44,8 +44,11 @@ public class QuickAddCardCtrl {
      * Adds a new card with a title
      */
     public void addCard() {
-        if (!helperMethods.validateInputAndShowPopup(cardTitle.getText())) return;
-        service.insertCard(new Card(cardTitle.getText()),listCtrl.getCardList());
+        String title = helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
+
+        if (!helperMethods.validateInputAndShowPopup(title)) return;
+
+        service.insertCard(new Card(title),listCtrl.getCardList());
         listCtrl.displayCards();
     }
 

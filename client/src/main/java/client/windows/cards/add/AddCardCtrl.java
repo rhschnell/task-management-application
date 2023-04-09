@@ -124,12 +124,14 @@ public class AddCardCtrl extends SubtaskContainer {
      * This method adds the created card to the list and closes the pop-up. Moreover, it refreshed the workspace.
      */
     public void save() {
+        String title = cardTitle.getText();
+
+        if (!helperMethods.validateInputAndShowPopup(title)) return;
+
         ((Stage) saveButton.getScene().getWindow()).close();
 
-        if (!helperMethods.validateInputAndShowPopup(cardTitle.getText())) return;
-
         Card card = new Card(
-                cardTitle.getText(),
+                title,
                 cardDescription.getText(),
                 service.getAppliedTags(),
                 taskList);
@@ -182,11 +184,13 @@ public class AddCardCtrl extends SubtaskContainer {
         if (taskList == null) {
             taskList = new ArrayList<>();
         }
-        if (!helperMethods.validateInputAndShowPopup(addSubtaskTitle.getText())) return;
+
+        String title = helperMethods.getInputValidator().stripWhitespace(addSubtaskTitle.getText());
+        if (!helperMethods.validateInputAndShowPopup(title)) return;
 
         Task newTask = new Task();
         newTask.setCompleted(false);
-        newTask.setTitle(addSubtaskTitle.getText());
+        newTask.setTitle(title);
         newTask.setPriority(taskList.size() + 1);
         taskList.add(newTask);
         addSubtaskTitle.clear();

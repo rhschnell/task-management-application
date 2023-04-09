@@ -49,7 +49,8 @@ public class NewListNameCtrl implements Initializable {
      */
     @FXML
     private void create() {
-        String title = listTitleField.getText();
+        String title = helperMethods.getInputValidator().stripWhitespace(listTitleField.getText());
+
         if (!helperMethods.validateInputAndShowPopup(title)) return;
         workspaceCtrl.addList(title);
         close();

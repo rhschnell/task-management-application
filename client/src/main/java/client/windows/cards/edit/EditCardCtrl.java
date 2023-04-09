@@ -146,9 +146,13 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Saves the changes and closes the pop-up
      */
     public void save() {
+
+        String title = helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
+        if (!helperMethods.validateInputAndShowPopup(title)) return;
+
         ((Stage) saveButton.getScene().getWindow()).close();
+
         Card editedCard = service.getCard();
-        String title = cardTitle.getText();
         String description = cardDescription.getText();
         editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
@@ -214,11 +218,12 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Adds a task to the card and displays it based on user input
      */
     public void addTask() {
-        if (!helperMethods.validateInputAndShowPopup(addTaskField.getText())) return;
+        String title = helperMethods.getInputValidator().stripWhitespace(addTaskField.getText());
+        if (!helperMethods.validateInputAndShowPopup(title)) return;
 
         Task newTask = new Task();
         newTask.setCompleted(false);
-        newTask.setTitle(addTaskField.getText());
+        newTask.setTitle(title);
         newCard.addSubTask(newTask);
         addTaskField.clear();
         displayTasks();

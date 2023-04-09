@@ -217,7 +217,9 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
-        if (keyField.getText().strip().equals("")) {
+        String key = helperMethods.getInputValidator().stripWhitespace(keyField.getText());
+
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(key)) {
             emptyKeyPopUp();
             return;
         }
@@ -225,13 +227,13 @@ public class WorkspaceCtrl implements Initializable {
         List<String> tempList = new ArrayList<>();
         service.getBoards().forEach(b -> tempList.add(b.getKey()));
 
-        showBoard(keyField.getText());
+        showBoard(key);
 
-        pwdMap.putIfAbsent(keyField.getText(), "");
+        pwdMap.putIfAbsent(key, "");
 
         // Add this board to the list of joined boards (keys) and show it in the UI
-        if (!tempList.contains(keyField.getText())) {
-            joinedKeys.add(keyField.getText());
+        if (!tempList.contains(key)) {
+            joinedKeys.add(key);
         }
         keyField.clear();
         refreshWorkspace(true);
@@ -241,12 +243,14 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
-        if (titleField.getText().equals("")) {
+
+        String title = helperMethods.getInputValidator().stripWhitespace(titleField.getText());
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
             emptyTitlePopUp();
             return;
         }
 
-        shownBoard = new Board(titleField.getText(), null, null);
+        shownBoard = new Board(title, null, null);
         shownBoard = service.insertBoard(shownBoard);
         String key = shownBoard.getKey();
 

@@ -61,7 +61,7 @@ public class RenameListCtrl implements Initializable {
 
     @FXML
     private void save() {
-        String newTitle = newListTitleField.getText();
+        String newTitle = helperMethods.getInputValidator().stripWhitespace(newListTitleField.getText());
 
         if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
 

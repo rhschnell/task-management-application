@@ -252,5 +252,13 @@ public class HelperMethods {
         Scene scene = new Scene(root);
         popUp(scene, errorDialogEntry.getPopupTitle());
     }
+
+    /**
+     * Returns the input validator
+     * @return The input validator object
+     */
+    public InputValidator getInputValidator() {
+        return inputValidator;
+    }
 }
 

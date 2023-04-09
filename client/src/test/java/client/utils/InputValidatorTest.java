@@ -15,6 +15,13 @@ class InputValidatorTest {
     }
 
     @Test
+    void stripWhitespace(){
+        assertEquals("without any leading or trailing whitespace?",
+                inputValidator.stripWhitespace("   without any leading or trailing whitespace?  "));
+
+    }
+
+    @Test
     void isValidInputNonStartingWhitespaceFail() {
         assertFalse(inputValidator.isValidInputNonStartingWhitespace(" starts with whitespace"));
     }

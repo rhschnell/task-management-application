@@ -63,8 +63,7 @@ public class RenameCardCtrl implements Initializable {
      * Saves the card into the database with the new title
      */
     public void save(){
-        String newTitle = inputField.getText();
-
+        String newTitle = helperMethods.getInputValidator().stripWhitespace(inputField.getText());
         if (!helperMethods.validateInputAndShowPopup(newTitle)) return;
 
         this.card.setTitle(newTitle);
