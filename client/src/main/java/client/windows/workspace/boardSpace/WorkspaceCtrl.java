@@ -672,10 +672,10 @@ public class WorkspaceCtrl implements Initializable {
         listVbox.requestFocus();
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
-                case UP -> moveFocusUp();
-                case DOWN -> moveFocusDown();
-                case LEFT -> moveFocusLeft();
-                case RIGHT -> moveFocusRight();
+                case UP:    moveFocusUp();      break;
+                case DOWN:  moveFocusDown();    break;
+                case LEFT:  moveFocusLeft();    break;
+                case RIGHT: moveFocusRight();   break;
             }
             event.consume();
         });
