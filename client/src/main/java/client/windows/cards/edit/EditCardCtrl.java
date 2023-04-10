@@ -103,6 +103,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * @param card The card to get the data from
      */
     public void setCard(Card card) {
+        deletedSubtaskIDs=new ArrayList<>();
         this.oldCard = card;
         this.cardID = card.getId();
         service.setCard(card);
@@ -151,6 +152,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * This method cancels editing the card and return to the previous window
      */
     public void escape() {
+        deletedSubtaskIDs.clear();
         ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
@@ -173,7 +175,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
         editedCard.setPresets(new ArrayList<>());
         editedCard.setPreset(getAppliedPreset());
-
+        editedCard.setSubTasks(newCard.getSubTasks());
         // Delete the deleted tasks from the database
         for(int i=0;i<deletedSubtaskIDs.size();i++)
         {
