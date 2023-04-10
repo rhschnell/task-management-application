@@ -47,22 +47,10 @@ class CardUtilsTest {
         long id = 1;
         cardUtils.deleteCard(id);
         verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.CARD + "/" + id);
+        verify(mocker.targetMock).path(Route.CARD_LIST + "/deleteCard/" + id);
         verify(mocker.targetMock).request(APPLICATION_JSON);
         verify(mocker.builderMock).accept(APPLICATION_JSON);
         verify(mocker.builderMock).delete(Card.class);
-        verify(serverUtils).getServer();
-    }
-
-    @Test
-    void deleteFromCardList() {
-        Card card = new Card();
-        cardUtils.deleteFromCardList(card);
-        verify(mocker.clientMock).target("http://nonexisting:123/");
-        verify(mocker.targetMock).path(Route.CARD_LIST + "/removeFromCardList/");
-        verify(mocker.targetMock).request(APPLICATION_JSON);
-        verify(mocker.builderMock).accept(APPLICATION_JSON);
-        verify(mocker.builderMock).post(Entity.entity(card, APPLICATION_JSON), Card.class);
         verify(serverUtils).getServer();
     }
 

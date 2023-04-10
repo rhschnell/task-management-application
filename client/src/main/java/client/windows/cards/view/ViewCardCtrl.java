@@ -27,9 +27,12 @@ import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.Card;
-import commons.CardColorPreset;
 import commons.Task;
+import jakarta.ws.rs.NotFoundException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,15 +41,20 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static com.google.inject.Guice.createInjector;
 
-public class ViewCardCtrl {
+public class ViewCardCtrl implements Initializable {
     private final HelperMethods helperMethods;
 
     private MainCtrl mainCtrl;
     private MyFXML myFXML;
     private Card card;
+    private long cardID;
     private Board shownBoard;
 
     @FXML
@@ -83,6 +91,37 @@ public class ViewCardCtrl {
         this.service=service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
+        this.cardTitle = new Label();
+        this.cardDescription = new Text();
+        this.appliedPreset = new Pane();
+        this.appliedTagsVbox = new VBox();
+        this.taskBox = new VBox();
+    }
+
+    /**
+     * Initialize method for ViewCardCtrl
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Timeline tl = new Timeline();
+        tl.setCycleCount(-1);
+        KeyFrame kf = new KeyFrame(Duration.millis(500),
+                event -> {
+                    try {
+                        refresh();
+                    } catch (NotFoundException e) {
+                        escape();
+                    }
+                });
+        tl.getKeyFrames().add(kf);
+        tl.play();
     }
 
     /**
@@ -91,9 +130,12 @@ public class ViewCardCtrl {
      */
     public void setCard(Card card) {
         this.card = card;
+        this.cardID = card.getId();
         setCardTitle(card.getTitle());
         setCardDescription(card.getDescription());
         applyTag();
+        displayTasks();
+        displayPreset();
     }
 
 
@@ -127,14 +169,6 @@ public class ViewCardCtrl {
      */
     public void setCardDescription(String description) {
         cardDescription.setText(description);
-    }
-
-    /**
-     * Method to delete the current card
-     */
-    public void delete() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
-        service.deleteCard(card);
     }
 
     /**
@@ -189,12 +223,14 @@ public class ViewCardCtrl {
      */
     public void displayTasks() {
         taskBox.getChildren().clear();
-        for (Task task : card.getSubTasks()) {
-            var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
-                    "client", "windows", "subtasks", "SubtaskCell.fxml");
-            loader.getKey().updateItem(task);
-            loader.getKey().disableEdit();
-            taskBox.getChildren().add(loader.getValue());
+        if(card.getSubTasks()!=null) {
+            for (Task task : card.getSubTasks()) {
+                var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
+                        "client", "windows", "subtasks", "SubtaskCell.fxml");
+                loader.getKey().updateItem(task);
+                loader.getKey().disableEdit();
+                taskBox.getChildren().add(loader.getValue());
+            }
         }
     }
 
@@ -216,9 +252,11 @@ public class ViewCardCtrl {
 
     /**
      * This method displays the applied preset
-     * @param preset The applied preset that needs to be displayed
      */
-    public void displayPreset(CardColorPreset preset) {
+    public void displayPreset() {
+        if(card.getPresets() == null) {
+            return;
+        }
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(CustomCardPresetCellViewCtrl.class,
                         "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
@@ -226,8 +264,11 @@ public class ViewCardCtrl {
         ctrl.setViewCardCtrl(this);
         ctrl.setWorkspaceCtrl(workspaceCtrl);
         ctrl.setPresetList(shownBoard.getPresetList());
-        ctrl.setPresetObject(preset, "ViewCardCtrl");
-
+        ctrl.setPresetObject(card.getPresets().get(0), "ViewCardCtrl");
         appliedPreset.getChildren().add(loader.getValue());
+    }
+
+    private void refresh() {
+        setCard(service.getCard(cardID));
     }
 }

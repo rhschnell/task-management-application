@@ -1,5 +1,7 @@
 package client.windows.lists.cells;
 
+import client.utils.ErrorDialogEntry;
+import client.utils.HelperMethods;
 import client.windows.lists.list.ListCtrl;
 import commons.Board;
 import commons.Card;
@@ -19,6 +21,7 @@ public class QuickAddCardCtrl {
     private TextField cardTitle;
     @FXML
     private Button addButton;
+    private final HelperMethods helperMethods;
 
     private Board shownBoard;
 
@@ -27,11 +30,13 @@ public class QuickAddCardCtrl {
      * Constructor for QuickAddCardCtrl
      * @param service a CardService instance
      * @param listCtrl a ListCtrl instance
+     * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
-    public QuickAddCardCtrl(CardService service, ListCtrl listCtrl) {
+    public QuickAddCardCtrl(CardService service, ListCtrl listCtrl, HelperMethods helperMethods) {
         this.service = service;
         this.listCtrl = listCtrl;
+        this.helperMethods = helperMethods;
     }
 
     /**
@@ -46,12 +51,16 @@ public class QuickAddCardCtrl {
      * Adds a new card with a title
      */
     public void addCard() {
-        Card card = new Card(cardTitle.getText());
+        String title = helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
 
+        if (!checkAndHandleInput(title)) return;
+
+        Card card = new Card(title);
         card.setPresets(new ArrayList<>());
         card.setPreset(getDefaultPreset());
 
-        service.insertCard(card, listCtrl.getCardList());
+
+        service.insertCard(card,listCtrl.getCardList());
         listCtrl.displayCards();
     }
 
@@ -66,6 +75,26 @@ public class QuickAddCardCtrl {
             }
         }
         return shownBoard.getPresetList().get(0);
+    }
+
+    /**
+     * Checks the user input and shows error messages accordingly
+     * @param title The title to check
+     */
+    private boolean checkAndHandleInput(String title) {
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card title cannot be empty"));
+            return false;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry(
+                    "Error!",
+                    "Your card name cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -14,6 +14,9 @@ import client.windows.tags.view.TagListCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.*;
+import jakarta.ws.rs.NotFoundException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -27,6 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -47,7 +51,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     private Button saveButton;
     @FXML
     private Button cancelButton;
-    private HelperMethods helperMethods;
     private ViewCardCtrl viewCardCtrl;
     private WorkspaceCtrl workspaceCtrl;
 
@@ -68,6 +71,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
 
     private Card newCard;
     private Card oldCard;
+    private long cardID;
     private List<CardColorPreset> presetList;
 
     private List<Long> deletedSubtaskIDs;
@@ -86,10 +90,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Inject
     public EditCardCtrl(EditCardService service, TaskUtils taskUtils, HelperMethods helperMethods,
                         ViewCardCtrl viewCardCtrl, DataFormatManager dataFormatManager) {
-        super(dataFormatManager);
+        super(dataFormatManager, helperMethods);
         this.service = service;
         this.taskUtils = taskUtils;
-        this.helperMethods = helperMethods;
         this.viewCardCtrl = viewCardCtrl;
         appliedTagsVbox = new VBox();
         newCard = new Card();
@@ -101,6 +104,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     public void setCard(Card card) {
         this.oldCard = card;
+        this.cardID = card.getId();
         service.setCard(card);
         newCard.setTags(card.getTags());
         setAppliedTags(card.getTags());
@@ -155,24 +159,34 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Saves the changes and closes the pop-up
      */
     public void save() {
+
+        String title = super.helperMethods.getInputValidator().stripWhitespace(cardTitle.getText());
+
+        if (super.checkAndHandleUserInput(title)) return;
+
         ((Stage) saveButton.getScene().getWindow()).close();
+
         Card editedCard = service.getCard();
-        editedCard.setTitle(cardTitle.getText());
+        editedCard.setTitle(title);
         editedCard.setTags(newCard.getTags());
         editedCard.setDescription(cardDescription.getText());
 
         editedCard.setPresets(new ArrayList<>());
         editedCard.setPreset(getAppliedPreset());
 
-        // Delete the tasks from the database that were deleted
-        for (long taskID : deletedSubtaskIDs) {
-            taskUtils.deleteTask(taskID);
+        // Delete the deleted tasks from the database
+        for(int i=0;i<deletedSubtaskIDs.size();i++)
+        {
+            for(int j=0;j<editedCard.getSubTasks().size();j++)
+            {
+                if(editedCard.getSubTasks().get(j).getId()==deletedSubtaskIDs.get(i))
+                    taskUtils.deleteTask(deletedSubtaskIDs.get(i));
+            }
         }
         deletedSubtaskIDs.clear();
 
         service.insertCard(editedCard);
-        viewCardCtrl.applyTag();
-        viewCardCtrl.displayTasks();
+        viewCardCtrl.setCard(newCard);
 
     }
 
@@ -224,6 +238,18 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Timeline tl = new Timeline();
+        tl.setCycleCount(-1);
+        KeyFrame kf = new KeyFrame(Duration.millis(500),
+                event -> {
+                    try {
+                        refresh();
+                    } catch (NotFoundException e) {
+                        escape();
+                    }
+                });
+        tl.getKeyFrames().add(kf);
+        tl.play();
     }
 
     /**
@@ -234,7 +260,8 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 .load(TagListCtrl.class, "client", "windows", "tags", "TagList.fxml");
         TagListCtrl ctrl = loader.getKey();
         List<Tag> available = service.getTags();
-        available.removeAll(newCard.getTags());
+        if (newCard.getTags() != null)
+            available.removeAll(newCard.getTags());
         ctrl.setAvailableTags(available);
         ctrl.setAppliedTags(newCard.getTags());
         ctrl.setEditCardCtrl(this);
@@ -242,7 +269,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         String title = "Add tag";
-        helperMethods.popUp(scene, title);
+        super.helperMethods.popUp(scene, title);
     }
 
     /**
@@ -250,14 +277,17 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * @param appliedTags a list of tag objects
      */
     public void setAppliedTags(List<Tag> appliedTags) {
+        if (appliedTags == null) appliedTags = new ArrayList<>();
         newCard.setTags(appliedTags);
         appliedTagsVbox.getChildren().clear();
-        for (int i = 0; i < appliedTags.size(); i++) {
-            service.applyTag(appliedTags.get(i));
+
+        // Display the applied tags on screen
+        for (Tag appliedTag : appliedTags) {
+            service.applyTag(appliedTag);
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
             CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setTagObject(appliedTags.get(i), "viewTag");
+            ctrl.setTagObject(appliedTag, "viewTag");
             appliedTagsVbox.getChildren().add(loader.getValue());
         }
 
@@ -267,12 +297,12 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      * Adds a task to the card and displays it based on user input
      */
     public void addTask() {
-        if (!(addTaskField.getText() != null && !addTaskField.getText().isEmpty())) {
-            return; //TODO: notify user in some way that you cannot add empty tasks
-        }
+        String title = super.helperMethods.getInputValidator().stripWhitespace(addTaskField.getText());
+        if (!super.helperMethods.validateInputAndShowPopup(title)) return;
+
         Task newTask = new Task();
         newTask.setCompleted(false);
-        newTask.setTitle(addTaskField.getText());
+        newTask.setTitle(title);
         newCard.addSubTask(newTask);
         addTaskField.clear();
         displayTasks();
@@ -294,8 +324,10 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void displayTasks() {
         subtasks.getChildren().clear();
-        for (Task task : newCard.getSubTasks()) {
+        if (newCard.getSubTasks() == null) return;
 
+        // Display all the subtasks on screen
+        for (Task task : newCard.getSubTasks()) {
             var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
                     "client", "windows", "subtasks", "SubtaskCell.fxml");
             loader.getKey().updateItem(task);
@@ -303,6 +335,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
             makeTaskDraggable(loader, subtasks);
             subtasks.getChildren().add(loader.getValue());
         }
+
     }
 
     /**
@@ -312,7 +345,7 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     @Override
     public void deleteSubtask(Task task) {
         deletedSubtaskIDs.add(task.getId());
-        newCard.getSubTasks().remove(task);
+        newCard.deleteSubTask(task);
         displayTasks();
     }
 
@@ -335,7 +368,21 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
                 // Insert the new task into the data object
                 Task draggedTask = (Task) db.getContent(getDataFormatManager().getSubtaskFormat());
                 int newIndex = taskVBox.getChildren().indexOf(fxComponent) - 1;
-                service.dragAndDropDB(draggedTask, newIndex);
+
+                // If the card already has subtasks saved in the DB, then we should reflect this
+                // also in the DB.
+                if (service.getCard().getSubTasks() != null){
+                    service.dragAndDropDB(draggedTask, newIndex);
+
+                }
+                //Note that this does not have to be the case, when subtasks are
+                // created for the first time for a card.
+                else {
+                    // Shift the tasks around in the current unsaved/changed temporary card
+                    // (this is implicitly done by addSubTask)
+                    newCard.deleteSubTask(draggedTask);
+                    newCard.addSubTask(newIndex, draggedTask);
+                }
 
                 // Update the UI
                 taskVBox.getChildren().add(newIndex, draggedNode);
@@ -369,5 +416,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
      */
     public void setPresetList(List<CardColorPreset> presetList){
         this.presetList = presetList;
+    }
+
+    private void refresh() {
+        service.getCard(cardID);
     }
 }

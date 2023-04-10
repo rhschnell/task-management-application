@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +24,17 @@ class CardListControllerTest {
     @BeforeEach
     void before() {
         repository = new TestCardListRepository();
-        cardListController = new CardListController(new CardListService(repository));
+        cardListController = new CardListController(new CardListService(repository),new SimpMessagingTemplate(new MessageChannel() {
+            @Override
+            public boolean send(Message<?> message, long timeout) {
+                return false;
+            }
+        }));
     }
 
     @Test
     void insertValid() {
+        cardListController.setTesting(true);
         Card card = new Card(
                 "My Card",
                 "Text",
@@ -49,6 +58,7 @@ class CardListControllerTest {
 
     @Test
     void getAll() {
+        cardListController.setTesting(true);
         CardList cardList1 = new CardList("Card List 1",  new ArrayList<>());
         CardList cardList2 = new CardList("Card List 2",  new ArrayList<>());
         List<CardList> expected = List.of(cardList1, cardList2);
@@ -62,6 +72,7 @@ class CardListControllerTest {
 
     @Test
     void getByIdSuccess() {
+        cardListController.setTesting(true);
         CardList myCardList = new CardList("Card List",  new ArrayList<>());
 
         cardListController.insert(myCardList);
@@ -100,6 +111,7 @@ class CardListControllerTest {
 
     @Test
     void deleteExisting() {
+        cardListController.setTesting(true);
         CardList myCardList = new CardList("Card List",  new ArrayList<>());
 
         cardListController.insert(myCardList);
@@ -109,50 +121,4 @@ class CardListControllerTest {
         assertFalse(repository.getCardLists().contains(myCardList));
     }
 
-    @Test
-    void removeFromCardList()
-    {
-        CardListService service = new CardListService(repository);
-        CardList cardList = new CardList();
-        Card card = new Card();
-        cardList.addCard(card);
-        repository.save(cardList);
-
-        assertEquals(card, service.removeFromCardList(card));
-    }
-
-    @Test
-    void removeFromCardListController()
-    {
-        CardList cardList = new CardList();
-        Card card = new Card();
-        cardList.addCard(card);
-        repository.save(cardList);
-
-        assertEquals(HttpStatus.OK, cardListController.removeFromCardList(card).getStatusCode());
-    }
-
-    @Test
-    void removeFromCardListControllerV2()
-    {
-        CardList cardList = new CardList();
-        Card card = new Card();
-        cardList.addCard(card);
-        repository.save(cardList);
-
-        assertEquals(card, cardListController.removeFromCardList(card).getBody());
-    }
-
-    @Test
-    void removeFromCardListControllerIllegalArgument()
-    {
-        assertEquals(HttpStatus.BAD_REQUEST, cardListController.removeFromCardList(null).getStatusCode());
-    }
-
-    @Test
-    void removeFromCardListNotFound()
-    {
-        Card card = new Card();
-        assertEquals(HttpStatus.NOT_FOUND, cardListController.removeFromCardList(card).getStatusCode());
-    }
 }

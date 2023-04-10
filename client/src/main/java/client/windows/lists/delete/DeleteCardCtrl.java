@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
+
 public class DeleteCardCtrl{
     private final DeleteCardService service;
     private Card deleteCard;
@@ -72,4 +73,5 @@ public class DeleteCardCtrl{
     public void setDeleteCard(Card deleteCard) {
         this.deleteCard = deleteCard;
     }
+
 }

@@ -39,6 +39,8 @@ public class EditCardService {
     public void setCard(Card card) {
         this.card = card;
         appliedTags=card.getTags();
+        if(appliedTags ==null)
+            appliedTags=new ArrayList<>();
     }
 
     /**
@@ -47,6 +49,16 @@ public class EditCardService {
      */
     public Card getCard() {
         return card;
+    }
+
+    /**
+     * Retrieves a card with a given id from the database if it exists
+     * or null otherwise
+     * @param id the id of the card to be retrieved
+     * @return the card from the server, or null if it does not exist
+     */
+    public Card getCard(long id) {
+        return server.getCardById(id);
     }
 
     /**
@@ -84,7 +96,7 @@ public class EditCardService {
      */
     public void applyTag(Tag tag)
     {
-        if(!appliedTags.contains(tag))
+        if(appliedTags!=null && !appliedTags.contains(tag))
             appliedTags.add(tag);
     }
 

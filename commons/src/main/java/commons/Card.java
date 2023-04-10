@@ -213,6 +213,21 @@ public class Card implements Serializable {
     }
 
     /**
+     * Deletes subtask by subtask ID
+     * @param subtaskID The ID of the subtask to delete
+     */
+    public void deleteSubTask(long subtaskID){
+        Task toDelete = null;
+        for (Task task : subTasks){
+            if (task.getId() == subtaskID) {
+                toDelete = task;
+                break;
+            }
+        }
+        deleteSubTask(toDelete);
+    }
+
+    /**
      * Check if this card has a description
      *
      * @return Whether this card has a description

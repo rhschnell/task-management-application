@@ -8,8 +8,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<VBox prefHeight="548" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.login.start.StartUpCtrl">
-   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="1024.0" spacing="20.0">
+<VBox prefHeight="600" prefWidth="1064" style="-fx-background-color: linear-gradient(to bottom, #DEEDE7, #FFFFFF);" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.login.start.StartUpCtrl">
+   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="1064.0" spacing="20.0">
       <children>
          <ImageView fitHeight="28.0" fitWidth="150.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -30,7 +30,7 @@
          <Insets left="20.0" />
       </padding>
    </HBox>
-   <HBox alignment="CENTER" fillHeight="false" prefHeight="500.0" prefWidth="1024.0" spacing="20.0" VBox.vgrow="ALWAYS">
+   <HBox alignment="CENTER" fillHeight="false" prefHeight="600.0" prefWidth="1024.0" spacing="20.0" VBox.vgrow="ALWAYS">
       <padding>
          <Insets bottom="50.0" />
       </padding>
