@@ -261,21 +261,21 @@ public class CardCtrl implements Initializable {
         String fontColor = card.getPresets().get(0).getFontColor();
         if(backgroundColor!=null && fontColor !=null)
         {
-        String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
+            String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
                 "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
-        setFontColor(fontColor);
-        setBackgroundColor(backgroundStyle);
+            setFontColor(fontColor);
+            setBackgroundColor(backgroundStyle);
 
-        if(card.getSubTasks() !=null) {
-            long subtasks = card.getSubTasks().size();
-            if (subtasks > 0) {
-                long completedTasks =
-                        card.getSubTasks().stream().filter(Task::isCompleted).count();
-                setSubtasksCompleted(completedTasks, card.getSubTasks().size());
-                subtaskIndicator.setVisible(true);
+            if(card.getSubTasks() !=null) {
+                long subtasks = card.getSubTasks().size();
+                if (subtasks > 0) {
+                    long completedTasks =
+                           card.getSubTasks().stream().filter(Task::isCompleted).count();
+                    setSubtasksCompleted(completedTasks, card.getSubTasks().size());
+                    subtaskIndicator.setVisible(true);
+                }
             }
-        }
-    }}
+        }}
 
     private void setFontColor(String fontColor) {
         cardTitle.setTextFill(Color.web(fontColor));

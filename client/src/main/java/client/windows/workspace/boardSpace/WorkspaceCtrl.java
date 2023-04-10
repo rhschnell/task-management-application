@@ -1397,9 +1397,13 @@ public class WorkspaceCtrl implements Initializable {
     {
         listSubscribers.add(subscriber);
     }
+
+    /**
+     * Updates the board because it exists a newer version
+     */
     public void updateBoard()
     {
-       shownBoard=service.getBoard(shownBoard.getKey());
+        shownBoard=service.getBoard(shownBoard.getKey());
     }
 
 
