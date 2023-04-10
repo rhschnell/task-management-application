@@ -31,7 +31,6 @@ public class CustomizeCtrl {
     private final CustomizeService service;
 
     private Board board;
-    private List<CardList> lists;
     private List<CardColorPreset> boardPresetList;
     private List<CardColorPreset> newPresetList;
     @FXML
@@ -74,7 +73,7 @@ public class CustomizeCtrl {
         this.workspaceCtrl = workspaceCtrl;
 
         // Also initialize the default colors from this workspace
-        listBackgroundColor.setValue(Color.web(workspaceCtrl.getInitialListColor()));
+        listBackgroundColor.setValue(Color.web(workspaceCtrl.getInitialListBGColor()));
         listFontColor.setValue(Color.web(workspaceCtrl.getInitialListFontColor()));
 
         // Initializes the preset list with the presets from the board
@@ -82,63 +81,6 @@ public class CustomizeCtrl {
         this.newPresetList = new ArrayList<>(boardPresetList);
     }
 
-    /**
-     * Method to se the board's background color
-     * Setter for the board background color
-     */
-    @FXML
-    public void setBoardBackgroundColor(){
-        board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2,8));
-    }
-
-    /**
-     * Method to se the board's font color
-     * Setter for the board font color
-     */
-    @FXML
-    public void setBoardFontColor() {
-        board.setFontColour(boardFontColor.getValue().toString().substring(2,8));
-    }
-
-    /**
-     * Method to set the list background color for all the lists
-     */
-    @FXML
-    public void setListBackgroundColor(){
-        String newColor = listBackgroundColor.getValue().toString().substring(2, 8);
-        for(CardList list : lists) {
-            list.setBackgroundColor(newColor);
-        }
-    }
-
-    /**
-     * Getter to get the list background color
-     * @return The current background color of the lists
-     */
-    @FXML
-    public String getListBackgroundColor() {
-        return listBackgroundColor.getValue().toString();
-    }
-
-    /**
-     * Method to set the list font color for all the lists
-     */
-    @FXML
-    public void setListFontColor() {
-        String newColor = listFontColor.getValue().toString().substring(2, 8);
-        for (CardList list : lists) {
-            list.setFontColor(newColor);
-        }
-    }
-
-    /**
-     * Getter to get the list font color
-     * @return The current font color of the list
-     */
-    @FXML
-    public String getListFontColor() {
-        return listFontColor.getValue().toString();
-    }
 
     /**
      * Method to reset the board colors to default
@@ -159,10 +101,7 @@ public class CustomizeCtrl {
     public void resetLists() {
         String defaultBackground = "FFFFFF";
         String defaultFont = "000000";
-        for (CardList list : lists) {
-            list.setFontColor(defaultFont);
-            list.setBackgroundColor(defaultBackground);
-        }
+
         listBackgroundColor.setValue(Color.web(defaultBackground));
         listFontColor.setValue(Color.web(defaultFont));
     }
@@ -181,16 +120,25 @@ public class CustomizeCtrl {
         ((Stage)closeButton.getScene().getWindow()).close();
 
         workspaceCtrl.setInitialListFontColor(listFontColor.getValue().toString().substring(2, 8));
-        workspaceCtrl.setInitialListColor(listBackgroundColor.getValue().toString().substring(2, 8));
+        workspaceCtrl.setInitialListBGColor(listBackgroundColor.getValue().toString().substring(2, 8));
 
         board.setPresetList(newPresetList);
         List<CardColorPreset> colorPresetsToDelete = new ArrayList<>(boardPresetList);
         colorPresetsToDelete.removeAll(newPresetList);
-        for(CardColorPreset preset : colorPresetsToDelete) {
+        for (CardColorPreset preset : colorPresetsToDelete) {
             service.deletePreset(preset);
         }
+
+        board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2, 8));
+        board.setFontColour(boardFontColor.getValue().toString().substring(2, 8));
+
+        for (CardList list : board.getCardLists()) {
+            list.setFontColor(listFontColor.getValue().toString().substring(2, 8));
+            list.setBackgroundColor(listBackgroundColor.getValue().toString().substring(2, 8));
+        }
+
         service.insertBoard(board);
-       // workspaceCtrl.refreshWorkspace(true);
+        workspaceCtrl.refreshWorkspace(false);
     }
 
     /**
@@ -202,7 +150,7 @@ public class CustomizeCtrl {
                     .load(CustomCardPresetCellCtrl.class,
                             "client", "windows", "customize", "cards", "CustomCardPresetCell.fxml");
             CustomCardPresetCellCtrl ctrl = loader.getKey();
-            ctrl.setBoard(workspaceCtrl.getShownBoard());
+            ctrl.setBoard(board);
             ctrl.setPresetObject(preset);
             ctrl.setCustomizeCtrl(this);
             ctrl.setWorkspaceCtrl(workspaceCtrl);
@@ -236,22 +184,6 @@ public class CustomizeCtrl {
         board = shownBoard;
         boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
         boardFontColor.setValue(Color.web(board.getFontColour()));
-    }
-
-    /**
-     * Method to set the cardlists that are shown on the board
-     * @param cardLists The cardlists
-     */
-    public void setLists(List<CardList> cardLists){
-        lists = cardLists;
-        if (!lists.isEmpty()) {
-            // Set the color pickers to the corresponding colors of the (first) cardlist
-            listBackgroundColor.setValue(Color.web(lists.get(0).getBackgroundColor()));
-            listFontColor.setValue(Color.web(lists.get(0).getFontColor()));
-        } else {
-            // The lists might be empty, but the initial color might be set already.
-            //TODO: implement this functionality
-        }
     }
 
     /**

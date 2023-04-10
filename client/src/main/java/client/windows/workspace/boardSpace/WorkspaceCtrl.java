@@ -54,9 +54,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -122,7 +120,7 @@ public class WorkspaceCtrl implements Initializable {
     private List<ListCtrl> listControllers;
     private final CardService cardService;
 
-    private String initialListColor;
+    private String initialListBGColor;
     private String initialListFontColor;
     private List <StompSession.Subscription> boardSubscriber;
     private List <StompSession.Subscription> listSubscribers;
@@ -204,7 +202,7 @@ public class WorkspaceCtrl implements Initializable {
      * Sets the list colors to the default
      */
     private void setDefaultListColors() {
-        this.initialListColor = "FFFFFF"; // White
+        this.initialListBGColor = "FFFFFF"; // White
         this.initialListFontColor = "000000"; // Black
     }
 
@@ -493,10 +491,7 @@ public class WorkspaceCtrl implements Initializable {
                 && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
-        if (!shownBoard.equals(serverBoard)) {              // if the shown board is not the same as server board
-           // showBoard(key);
-            //we do not need this anymore. could create a cycle.
-        }
+        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**
@@ -600,28 +595,26 @@ public class WorkspaceCtrl implements Initializable {
                            "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
 
             VBox listInUI = (VBox) listContainer.getChildren().get(i);
+            VBox boxInList = (VBox) ((ScrollPane) listInUI.getChildren().get(1)).getContent();
 
 
             // Set the color of the lists (background)
             listInUI.setStyle(style);
+            boxInList.setStyle("-fx-background-color: transparent;");
 
             // Set the title label of each list (font color)
             // This is inside the Group containing (Label, Line,TextField)
             Group group = (Group) listInUI.getChildren().get(0);
             Label listTitle = (Label) group.getChildren().get(0);
             listTitle.setTextFill(Color.web(shownBoard.getCardLists().get(i).getFontColor()));
+            initialListBGColor = shownBoard.getCardLists().get(0).getBackgroundColor();
+            initialListFontColor = shownBoard.getCardLists().get(0).getFontColor();
         }
 
-        // listContainer.getChildren().clear();
-        // for (CardList list : shownBoard.getCardLists()) {
-        //     var loader = new MyFXML(createInjector(new MainModules()))
-        //             .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
-        //     ListCtrl ctrl = loader.getKey();
-        //     ctrl.setCardList(list);
-        //     ctrl.updateListColors();
-
-        //     listContainer.getChildren().add(loader.getValue());
-        // }
+        if (listContainer.getChildren().size() == 0) {
+            initialListBGColor = "FFFFFF";
+            initialListFontColor = "000000";
+        }
     }
 
     /**
@@ -692,7 +685,7 @@ public class WorkspaceCtrl implements Initializable {
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
 
-            cardList.setBackgroundColor(initialListColor);
+            cardList.setBackgroundColor(initialListBGColor);
             cardList.setFontColor(initialListFontColor);
 
             VBox list = (VBox) loader.getValue();
@@ -1245,7 +1238,6 @@ public class WorkspaceCtrl implements Initializable {
                 .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");
 
         loader.getKey().setBoard(shownBoard);
-        loader.getKey().setLists(shownBoard.getCardLists());
         loader.getKey().setWorkspaceCtrl(this);
         loader.getKey().displayPresetList();
 
@@ -1287,10 +1279,10 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Sets the color for all newly created lists
      *
-     * @param initialListColor The color (string) for the lists
+     * @param initialListBGColor The color (string) for the lists
      */
-    public void setInitialListColor(String initialListColor) {
-        this.initialListColor = initialListColor;
+    public void setInitialListBGColor(String initialListBGColor) {
+        this.initialListBGColor = initialListBGColor;
     }
 
     /**
@@ -1298,8 +1290,8 @@ public class WorkspaceCtrl implements Initializable {
      *
      * @return The initial list color
      */
-    public String getInitialListColor() {
-        return initialListColor;
+    public String getInitialListBGColor() {
+        return initialListBGColor;
     }
 
     /**
