@@ -25,6 +25,7 @@ import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.CustomizeCtrl;
 import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.RenameCardCtrl;
+import client.windows.lists.delete.DeleteCardCtrl;
 import client.windows.lists.list.ListCtrl;
 import client.windows.lists.list.NewListNameCtrl;
 import client.windows.tags.view.TagListFromShortcutCtrl;
@@ -779,8 +780,24 @@ public class WorkspaceCtrl implements Initializable {
         // Get the highlighted card
         int toDeleteIndex = focusedCardIndex - 1;
         Card toDelete = focusedListController.getCardList().getCard(toDeleteIndex);
-        // Delete it from the card database
-        cardService.deleteCard(toDelete);
+
+        // Ask user for confirmation
+
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setDeleteCard(toDelete);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().delete();
+            }
+        });
+        String title = "Delete a card";
+        helperMethods.popUp(scene, title);
     }
 
     /**
