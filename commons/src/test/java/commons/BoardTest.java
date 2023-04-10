@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
@@ -33,13 +33,24 @@ class BoardTest {
     }
 
     @Test
-    void NotEmptyConstructorTest() {
+    void notEmptyConstructorTest() {
         assertNotNull(board);
     }
 
     @Test
-    void EmptyConstructorTest() {
+    void emptyConstructorTest() {
         assertNotNull(new Board());
+    }
+
+    @Test
+    void customConstructorTest() {
+        Board board = new Board("key", "title", null, null, null);
+        // When a null value is passed for these fields, new lists should be created instead of
+        // assigning null to the corresponding fields
+        assertNotNull(board.getCardLists());
+        assertNotNull(board.getTagList());
+        assertNotNull(board.getPresetList());
+        assertEquals("", board.getPassword());
     }
 
     @Test
@@ -109,33 +120,129 @@ class BoardTest {
     }
 
     @Test
-    void getTagList()
-    {
+    void getTagList() {
         assertNotNull(board.getTagList());
     }
 
     @Test
-    void setTagList()
-    {
+    void setTagList() {
         ArrayList<Tag> list = new ArrayList<>();
         board.setTagList(list);
         assertEquals(list, board.getTagList());
     }
 
     @Test
-    void addTag()
-    {
+    void setPassword() {
+        assertEquals("", board.getPassword());
+    }
+
+    @Test
+    void getPassword() {
+        board.setPassword("password");
+        assertEquals("password", board.getPassword());
+    }
+
+    @Test
+    void verifyPasswordNoPassword() {
+        assertTrue(board.verifyPassword("anything here should work blabla"));
+    }
+
+    @Test
+    void verifyPasswordWithSetPassword() {
+        board.setPassword("!oopp-23.passw0rd");
+        assertTrue(board.verifyPassword("!oopp-23.passw0rd"));
+    }
+
+    @Test
+    void getPresetList() {
+        assertEquals(new ArrayList<>(), board.getPresetList());
+    }
+
+    @Test
+    void setPresetList() {
+        List<CardColorPreset> presetList = List.of(new CardColorPreset(), new CardColorPreset());
+        board.setPresetList(presetList);
+        assertEquals(presetList, board.getPresetList());
+    }
+
+
+    @Test
+    void setProtected() {
+        board.setProtected(true);
+        assertTrue(board.isProtected());
+    }
+
+    @Test
+    void getProtected() {
+        assertFalse(board.isProtected());
+    }
+
+
+    @Test
+    void addTag() {
         Tag tag = new Tag();
         board.addTag(tag);
         assertEquals(tag, board.getTagList().get(0));
     }
 
     @Test
-    void removeTag()
-    {
+    void removeTag() {
         Tag tag = new Tag();
         board.addTag(tag);
         board.removeTag(tag);
         assertEquals(0, board.getTagList().size());
     }
+
+    @Test
+    void addPreset() {
+        CardColorPreset preset = new CardColorPreset();
+        assertEquals(new ArrayList<>(), board.getPresetList());
+        board.addPreset(preset);
+        assertEquals(List.of(preset), board.getPresetList());
+    }
+
+    @Test
+    void removePreset() {
+        CardColorPreset preset = new CardColorPreset();
+
+        board.addPreset(preset);
+        assertEquals(List.of(preset), board.getPresetList());
+
+        board.removePreset(preset);
+        assertEquals(new ArrayList<>(), board.getPresetList());
+
+    }
+
+    @Test
+    void equalsSameObject() {
+        assertEquals(board, board);
+    }
+
+    @Test
+    void equalsSameFields() {
+        Board board1 = new Board("Board key", "Title", null, null, null);
+        Board board2 = new Board("Board key", "Title", null, null, null);
+        assertEquals(board1, board2);
+    }
+
+    @Test
+    void equalsNull() {
+        assertNotEquals(null, board);
+    }
+
+    @Test
+    void equalsDifferentFields() {
+        Board board1 = new Board("Board key", "Title", null, null, null);
+        Board board2 = new Board("Board key", "Title", null, null, null);
+        board2.addTag(new Tag("This makes board 2 different from board 1", "White"));
+        assertNotEquals(board1, board2);
+    }
+
+    @Test
+    void testHashCode() {
+        Board board1 = new Board();
+        Board board2 = new Board();
+        assertEquals(board1.hashCode(), board2.hashCode());
+    }
 }
+

@@ -138,6 +138,9 @@ public class ListCtrl {
                     break;
                 case T:
                     workspaceCtrl.handleTagShortcut();
+                    break;
+                case C:
+                    workspaceCtrl.handleCustomizationShortcut();
             }
         }
     }

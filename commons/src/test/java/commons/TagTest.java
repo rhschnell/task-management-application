@@ -30,6 +30,43 @@ class TagTest {
     }
 
     @Test
+    void testConstructorNameTagColorFontColor(){
+        new Tag("Name", "tagColor", "fontColor");
+    }
+
+    @Test
+    void testConstructorNameTagColorFontColorID(){
+        new Tag("Name", "tagColor", "fontColor", 1L);
+    }
+
+
+    @Test
+    void testRemoveTagInAssociatedCards(){
+        List<Card> listOfCardsWithTag = new ArrayList<>();
+        Card card1 = new Card();
+        Card card2 = new Card();
+        Card card3 = new Card();
+
+        card1.addTag(tag);
+        card2.addTag(tag);
+        card3.addTag(tag);
+
+        listOfCardsWithTag.add(card1);
+        listOfCardsWithTag.add(card2);
+        listOfCardsWithTag.add(card3);
+
+
+        tag.setCards(listOfCardsWithTag);
+
+        tag.removeTagInAssociatedCards();
+
+        for (Card card : tag.getCards()){
+            assert !card.getTags().contains(tag);
+        }
+
+    }
+
+    @Test
     void testGetName() {
         assertEquals("Frontend", tag.getName());
     }
