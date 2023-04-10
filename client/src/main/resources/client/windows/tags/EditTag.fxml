@@ -13,9 +13,9 @@
 
 <VBox spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.tags.edit.EditTagCtrl">
    <children>
-      <TextField fx:id="tagTitle" maxWidth="-Infinity" onKeyPressed="#saveOnEnter" prefHeight="33.0" prefWidth="312.0" promptText="Type tag name..." style="-fx-control-inner-background: #f0f0f0; -fx-background-radius: 10; -fx-border-color: transparent;">
+      <TextField fx:id="tagTitle" maxWidth="-Infinity" onKeyPressed="#saveOnEnter" prefHeight="5.0" prefWidth="312.0" promptText="Type tag name..." style="-fx-control-inner-background: #f0f0f0; -fx-background-radius: 10; -fx-border-color: transparent;">
          <font>
-            <Font name="Arial Bold" size="16.0" />
+            <Font name="Arial Bold" size="12.0" />
          </font>
       </TextField>
       <Separator prefWidth="200.0" />

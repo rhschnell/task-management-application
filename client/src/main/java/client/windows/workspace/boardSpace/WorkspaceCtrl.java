@@ -1403,4 +1403,17 @@ public class WorkspaceCtrl implements Initializable {
         }
     }
 
+    /**
+     * Pops up the help screen
+     */
+    public void helpScreen() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "helpWindow", "HelpWindow.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Help screen";
+        helperMethods.popUp(scene, title);
+    }
+
 }
