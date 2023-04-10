@@ -1,8 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
@@ -21,6 +20,10 @@ public class Board {
 
     private String title;
     private String password;
+
+    // Omit getters and setters for this field because we make them ourselves
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private boolean secured; //could not use protected as it is a keyword in java
 
     private String boardBackgroundColour = "F6F6F6";
