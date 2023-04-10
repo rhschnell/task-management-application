@@ -86,6 +86,7 @@ public class ViewCardCtrl {
         appliedTagsVbox = new VBox();
         cardTitle = new Label();
         cardDescription=new Text();
+        taskBox=new VBox();
     }
 
     /**

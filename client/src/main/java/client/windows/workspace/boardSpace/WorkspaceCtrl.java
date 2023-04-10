@@ -1371,7 +1371,13 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    showBoard(board.getKey());
+                    //Update the board since the new one has changed
+                    shownBoard=(Board) board;
+                    boardName.setText(shownBoard.getTitle());
+                    setInitialListFontColor(shownBoard.getFontColour());
+                    setInitialListColor(shownBoard.getBackgroundColour());
+                    //Display the updates since something was changed
+                    displayLists();
                 }
             });
         }));
@@ -1385,6 +1391,11 @@ public class WorkspaceCtrl implements Initializable {
     {
         listSubscribers.add(subscriber);
     }
+    public void updateBoard()
+    {
+       shownBoard=service.getBoard(shownBoard.getKey());
+    }
+
 
     /**
      * Unsubscribe all the lists because the board needs to be updated

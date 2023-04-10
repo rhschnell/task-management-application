@@ -190,7 +190,7 @@ public class CustomizeCtrl {
             service.deletePreset(preset);
         }
         service.insertBoard(board);
-        workspaceCtrl.refreshWorkspace(true);
+       // workspaceCtrl.refreshWorkspace(true);
     }
 
     /**

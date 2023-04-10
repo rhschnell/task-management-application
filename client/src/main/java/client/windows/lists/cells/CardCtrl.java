@@ -259,6 +259,8 @@ public class CardCtrl implements Initializable {
 
         String backgroundColor = card.getPresets().get(0).getBackgroundColor();
         String fontColor = card.getPresets().get(0).getFontColor();
+        if(backgroundColor!=null && fontColor !=null)
+        {
         String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
                 "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
         setFontColor(fontColor);
@@ -273,7 +275,7 @@ public class CardCtrl implements Initializable {
                 subtaskIndicator.setVisible(true);
             }
         }
-    }
+    }}
 
     private void setFontColor(String fontColor) {
         cardTitle.setTextFill(Color.web(fontColor));
