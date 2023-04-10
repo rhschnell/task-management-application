@@ -158,6 +158,7 @@ public class CardCtrl implements Initializable {
         loader.getKey().setShownBoard(shownBoard);
         loader.getKey().setWorkspaceCtrl(workspaceCtrl);
         loader.getKey().setCard(card);
+        loader.getKey().displayTasks();
         loader.getKey().setPresetList(shownBoard.getPresetList());
 
         scene.getRoot().setOnKeyPressed(event -> {

@@ -77,7 +77,7 @@ public class Tag implements Serializable {
      * Automatically runs before tag deletion in the database
      */
     @PreRemove
-    private void removeTagInAssociatedCards() {
+    public void removeTagInAssociatedCards() {
         for (Card card : this.cards) {
             card.deleteTag(this);
         }

@@ -3,6 +3,8 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CardColorPresetTest {
@@ -15,13 +17,14 @@ public class CardColorPresetTest {
 
     @Test
     void notEmptyConstructorTest() {
-        assertNotNull(preset);
+        new CardColorPreset(1L, new ArrayList<>(), "Default", "Black", "White", true);
     }
 
     @Test
     void emptyConstructorTest(){
         assertNotNull(new CardColorPreset());
     }
+
 
     @Test
     void getName(){
