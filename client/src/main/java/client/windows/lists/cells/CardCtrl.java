@@ -155,18 +155,16 @@ public class CardCtrl implements Initializable {
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         loader.getKey().setBoardKey(service.getBoardKey());
-        loader.getKey().setCard(card);
         loader.getKey().setShownBoard(shownBoard);
         loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().setCard(card);
         loader.getKey().setPresetList(shownBoard.getPresetList());
-        loader.getKey().displayPresetList();
 
         scene.getRoot().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 loader.getKey().escape();
             }
         });
-        loader.getKey().displayTasks();
         String title = "Edit card";
         helperMethods.popUp(scene, title);
     }
@@ -199,11 +197,9 @@ public class CardCtrl implements Initializable {
             }
         });
         ViewCardCtrl controller = loader.getKey();
-        controller.setCard(cell);
         controller.setBoardKey(getBoardKey());
-        controller.displayTasks();
         controller.setShownBoard(shownBoard);
-        controller.displayPreset(cell.getPresets().get(0));
+        controller.setCard(cell);
 
         String title = "View Card";
         helperMethods.popUp(scene, title);
