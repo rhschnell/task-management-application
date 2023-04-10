@@ -37,6 +37,5 @@ public class DeleteListService {
         Board toInsert = boardUtils.getBoard(boardKey);
         toInsert.removeList(server.getCardList(id));
         boardUtils.insertBoard(toInsert);
-
     }
 }
