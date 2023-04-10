@@ -120,8 +120,6 @@ public class WorkspaceCtrl implements Initializable {
     private List<ListCtrl> listControllers;
     private final CardService cardService;
 
-    private String initialListBGColor;
-    private String initialListFontColor;
     private List <StompSession.Subscription> boardSubscriber;
     private List <StompSession.Subscription> listSubscribers;
     private boolean admin;
@@ -195,15 +193,6 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-        setDefaultListColors();
-    }
-
-    /**
-     * Sets the list colors to the default
-     */
-    private void setDefaultListColors() {
-        this.initialListBGColor = "FFFFFF"; // White
-        this.initialListFontColor = "000000"; // Black
     }
 
     /**
@@ -452,7 +441,6 @@ public class WorkspaceCtrl implements Initializable {
         refreshBoardList(key, forceBoardListRefresh);
         updateBoardColours();
         updateListColors();
-        showBoard(key);
     }
 
     /**
@@ -589,6 +577,7 @@ public class WorkspaceCtrl implements Initializable {
         if (shownBoard == null) {
             return;
         }
+
         for (int i = 0; i < listContainer.getChildren().size(); i++) {
             String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
             String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
@@ -608,8 +597,16 @@ public class WorkspaceCtrl implements Initializable {
             Group group = (Group) listInUI.getChildren().get(0);
             Label listTitle = (Label) group.getChildren().get(0);
             listTitle.setTextFill(Color.web(shownBoard.getCardLists().get(i).getFontColor()));
-            initialListBGColor = shownBoard.getCardLists().get(0).getBackgroundColor();
-            initialListFontColor = shownBoard.getCardLists().get(0).getFontColor();
+        }
+
+        listContainer.getChildren().clear();
+        for (CardList list : shownBoard.getCardLists()) {
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
+            ListCtrl ctrl = loader.getKey();
+            ctrl.setCardList(list);
+            ctrl.updateListColors();
+            listContainer.getChildren().add(loader.getValue());
         }
     }
 
@@ -618,8 +615,8 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void updateBoardColours() {
         if (shownBoard != null) {
-            listContainer.setStyle("-fx-background-color: #" + shownBoard.getBackgroundColour());
-            boardName.setTextFill(Color.web(shownBoard.getFontColour()));
+            listContainer.setStyle("-fx-background-color: #" + shownBoard.getBoardBackgroundColour());
+            boardName.setTextFill(Color.web(shownBoard.getBoardFontColour()));
         }
     }
 
@@ -667,7 +664,7 @@ public class WorkspaceCtrl implements Initializable {
 
             ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
             helperMethods.showErrorDialog(nonExistingKey);
-        }
+        } catch (Exception ignored) {}
     }
     /**
      * Displays the lists into the HBox list container
@@ -680,8 +677,8 @@ public class WorkspaceCtrl implements Initializable {
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
 
-            cardList.setBackgroundColor(initialListBGColor);
-            cardList.setFontColor(initialListFontColor);
+            cardList.setBackgroundColor(shownBoard.getListBackgroundColor());
+            cardList.setFontColor(shownBoard.getListFontColor());
 
             VBox list = (VBox) loader.getValue();
 
@@ -1269,42 +1266,6 @@ public class WorkspaceCtrl implements Initializable {
      */
     public int getFocusedCardIndex() {
         return focusedCardIndex;
-    }
-
-    /**
-     * Sets the color for all newly created lists
-     *
-     * @param initialListBGColor The color (string) for the lists
-     */
-    public void setInitialListBGColor(String initialListBGColor) {
-        this.initialListBGColor = initialListBGColor;
-    }
-
-    /**
-     * Getter for the initial list color
-     *
-     * @return The initial list color
-     */
-    public String getInitialListBGColor() {
-        return initialListBGColor;
-    }
-
-    /**
-     * Sets the color of the font for all the newly created lists.
-     *
-     * @param initialListFontColor The color (string) for the list text
-     */
-    public void setInitialListFontColor(String initialListFontColor) {
-        this.initialListFontColor = initialListFontColor;
-    }
-
-    /**
-     * Getter for the list font color
-     *
-     * @return The set list font color
-     */
-    public String getInitialListFontColor() {
-        return initialListFontColor;
     }
 
     /**

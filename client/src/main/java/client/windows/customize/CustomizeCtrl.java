@@ -73,8 +73,8 @@ public class CustomizeCtrl {
         this.workspaceCtrl = workspaceCtrl;
 
         // Also initialize the default colors from this workspace
-        listBackgroundColor.setValue(Color.web(workspaceCtrl.getInitialListBGColor()));
-        listFontColor.setValue(Color.web(workspaceCtrl.getInitialListFontColor()));
+        listBackgroundColor.setValue(Color.web(workspaceCtrl.getShownBoard().getListBackgroundColor()));
+        listFontColor.setValue(Color.web(workspaceCtrl.getShownBoard().getListFontColor()));
 
         // Initializes the preset list with the presets from the board
         this.boardPresetList = workspaceCtrl.getShownBoard().getPresetList();
@@ -88,11 +88,11 @@ public class CustomizeCtrl {
      */
     @FXML
     public void resetBoard() {
-        board.setFontColour("000000");
-        board.setBackgroundColour("F6F6F6");
+        board.setBoardFontColour("000000");
+        board.setBoardBackgroundColour("F6F6F6");
         service.insertBoard(board);
-        boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
-        boardFontColor.setValue(Color.web(board.getFontColour()));
+        boardBackgroundColor.setValue(Color.web(board.getBoardBackgroundColour()));
+        boardFontColor.setValue(Color.web(board.getBoardFontColour()));
     }
 
     /**
@@ -119,9 +119,6 @@ public class CustomizeCtrl {
     public void save() {
         ((Stage)closeButton.getScene().getWindow()).close();
 
-        workspaceCtrl.setInitialListFontColor(listFontColor.getValue().toString().substring(2, 8));
-        workspaceCtrl.setInitialListBGColor(listBackgroundColor.getValue().toString().substring(2, 8));
-
         board.setPresetList(newPresetList);
         List<CardColorPreset> colorPresetsToDelete = new ArrayList<>(boardPresetList);
         colorPresetsToDelete.removeAll(newPresetList);
@@ -129,13 +126,11 @@ public class CustomizeCtrl {
             service.deletePreset(preset);
         }
 
-        board.setBackgroundColour(boardBackgroundColor.getValue().toString().substring(2, 8));
-        board.setFontColour(boardFontColor.getValue().toString().substring(2, 8));
+        board.setBoardBackgroundColour(boardBackgroundColor.getValue().toString().substring(2, 8));
+        board.setBoardFontColour(boardFontColor.getValue().toString().substring(2, 8));
 
-        for (CardList list : board.getCardLists()) {
-            list.setFontColor(listFontColor.getValue().toString().substring(2, 8));
-            list.setBackgroundColor(listBackgroundColor.getValue().toString().substring(2, 8));
-        }
+        board.setListFontColor(listFontColor.getValue().toString().substring(2, 8));
+        board.setListBackgroundColor(listBackgroundColor.getValue().toString().substring(2, 8));
 
         service.insertBoard(board);
         workspaceCtrl.refreshWorkspace(false);
@@ -182,8 +177,8 @@ public class CustomizeCtrl {
      */
     public void setBoard(Board shownBoard) {
         board = shownBoard;
-        boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
-        boardFontColor.setValue(Color.web(board.getFontColour()));
+        boardBackgroundColor.setValue(Color.web(board.getBoardBackgroundColour()));
+        boardFontColor.setValue(Color.web(board.getBoardFontColour()));
     }
 
     /**

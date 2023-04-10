@@ -96,7 +96,6 @@ public class BoardController {
     @GetMapping("/{key}")
     public ResponseEntity<Board> getById(@PathVariable("key") String key) {
         try {
-
             Board returnBoard = service.getByID(key);
             return ResponseEntity.ok(returnBoard);
         } catch (IllegalArgumentException e) {
