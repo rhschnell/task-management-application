@@ -39,24 +39,28 @@ public class CardUtils {
     }
 
     /**
-     * Sends a request to the server to delete a certain card from the database
-     * @param id the id of the card to delete
+     * Sends a request to the server to delete the card from the cardList
+     * that contains this card so that the priority will be changed to the
+     * other card from the method in the commons, not just from the card repo
+     * @param id the card's id
      */
     public void deleteCard(long id) {
-        client.target(serverUtils.getServer()).path(Route.CARD + "/" + id)
+        client.target(serverUtils.getServer()).path(Route.CARD_LIST + "/deleteCard/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .delete(Card.class);
     }
+
     /**
-     * Deletes a card from the list of CardLists
-     * @param card The card that needs to be deleted from the list of lists
+     * Sends a request to the server to delete the card from the repository of
+     * card
+     * @param id the card's id
      */
-    public void deleteFromCardList(Card card) {
-        client.target(serverUtils.getServer()).path(Route.CARD_LIST + "/removeFromCardList/")
+    public void deleteCardFromDatabase(long id) {
+        client.target(serverUtils.getServer()).path(Route.CARD + "/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+                .delete(Card.class);
     }
 
     /**

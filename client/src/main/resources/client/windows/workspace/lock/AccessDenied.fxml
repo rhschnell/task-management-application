@@ -6,14 +6,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox prefHeight="100.0" prefWidth="281.0" spacing="10.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.lock.AccessDeniedCtrl">
+
+<VBox prefHeight="100.0" prefWidth="242.0" spacing="10.0" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.workspace.lock.AccessDeniedCtrl">
     <children>
-        <Label alignment="TOP_CENTER" focusTraversable="false" prefHeight="45.0" prefWidth="261.0" text="This board is password protected. To edit it, unlock it first." textAlignment="CENTER" wrapText="true" />
+        <Label alignment="TOP_CENTER" focusTraversable="false" prefHeight="45.0" prefWidth="234.0" text="This board is password protected. To edit it, unlock it first." textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="12.0" />
+         </font></Label>
         <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="25.0" prefWidth="245.0" spacing="30.0">
             <children>
-                <Button fx:id="cancelButton" cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="70.0" prefWidth="70.0" styleClass="blue-button" text="Close">
+                <Button fx:id="cancelButton" cancelButton="true" defaultButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="70.0" styleClass="blue-button" text="Close">
                     <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font name="Arial Bold" size="12.0" />
                     </font></Button>
             </children>
         </HBox>

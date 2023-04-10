@@ -17,6 +17,8 @@ package client.windows.workspace.boardSpace;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.WebsocketUtils;
+import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
@@ -39,8 +41,7 @@ import com.sun.istack.NotNull;
 import commons.*;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,7 +59,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.net.URL;
 import java.util.*;
@@ -124,10 +125,12 @@ public class WorkspaceCtrl implements Initializable {
 
     private String initialListColor;
     private String initialListFontColor;
-
+    private List <StompSession.Subscription> boardSubscriber;
+    private List <StompSession.Subscription> listSubscribers;
     private boolean admin;
     @FXML private Label screenTitle;
     @FXML private Button leaveButton;
+    private WebsocketUtils websocketUtils;
 
 
     /**
@@ -136,10 +139,11 @@ public class WorkspaceCtrl implements Initializable {
      * @param service       corresponding service
      * @param cardService   injected cardService instance
      * @param helperMethods corresponding helper methods
+     * @param websocketUtils injected websocket instance
      */
     @Inject
     public WorkspaceCtrl(WorkspaceService service,
-                         CardService cardService, HelperMethods helperMethods) {
+                         CardService cardService, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
         this.service = service;
         this.cardService = cardService;
         this.helperMethods = helperMethods;
@@ -151,13 +155,16 @@ public class WorkspaceCtrl implements Initializable {
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
         this.admin = false;
+        this.websocketUtils=websocketUtils;
     }
-
-
     /**
      * Return's to the main screen
      */
     public void disconnect() {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         if (isAdmin()) {
             helperMethods.setScene(Scenes.ADMIN);
         } else {
@@ -177,6 +184,8 @@ public class WorkspaceCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new HashSet<>();
+        boardSubscriber =new ArrayList<>();
+        listSubscribers =new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
@@ -189,19 +198,6 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-
-        Timeline tl = new Timeline();
-        tl.setCycleCount(-1);
-        KeyFrame kf = new KeyFrame(Duration.millis(300),
-                event -> {
-                    try {
-                        refreshWorkspace(false);
-                    } catch (Exception ignored) {
-                    }
-                });
-        tl.getKeyFrames().add(kf);
-        tl.play();
-
         setDefaultListColors();
     }
 
@@ -217,36 +213,36 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
-        if (keyField.getText().strip().equals("")) {
+        String key = helperMethods.getInputValidator().stripWhitespace(keyField.getText());
+
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(key)) {
             emptyKeyPopUp();
             return;
         }
 
         List<String> tempList = new ArrayList<>();
-        service.getBoards().forEach(b -> tempList.add(b.getKey()));
 
-        showBoard(keyField.getText());
-
-        pwdMap.putIfAbsent(keyField.getText(), "");
-
-        // Add this board to the list of joined boards (keys) and show it in the UI
-        if (!tempList.contains(keyField.getText())) {
-            joinedKeys.add(keyField.getText());
+        for (Board b : service.getBoards()) {
+            tempList.add(b.getKey());
         }
+
+        showBoard(key);
+
         keyField.clear();
-        refreshWorkspace(true);
     }
 
     /**
      * Handles the action of creating a new board with the typed title
      */
     public void create() {
-        if (titleField.getText().equals("")) {
+
+        String title = helperMethods.getInputValidator().stripWhitespace(titleField.getText());
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
             emptyTitlePopUp();
             return;
         }
 
-        shownBoard = new Board(titleField.getText(), null, null, null);
+        shownBoard = new Board(title, null, null, null);
         CardColorPreset defaultPreset = new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF");
         defaultPreset.setDefault(true);
         shownBoard.addPreset(defaultPreset);
@@ -293,6 +289,10 @@ public class WorkspaceCtrl implements Initializable {
      * Method to clear the workspace
      */
     public void clearWorkspace() {
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         //Hide title bar
         boardName.setText("");
         titleBar.getChildren().forEach(c -> c.setVisible(false));
@@ -339,7 +339,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(true);
         }
-        unlockBoardButton.setDisable(false);
+        unlockBoardButton.setVisible(true);
     }
 
     /**
@@ -359,7 +359,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Button b : lockButtonArray) {
             b.setDisable(false);
         }
-        unlockBoardButton.setDisable(true);
+        unlockBoardButton.setVisible(false);
     }
 
     /**
@@ -401,7 +401,7 @@ public class WorkspaceCtrl implements Initializable {
 
         // Setter Injection
         LockPopUpCtrl ctrl = loader.getKey();
-        ctrl.setBoard(shownBoard);
+        ctrl.setBoard(board);
         ctrl.setMode(mode);
         ctrl.setWorkspace(this);
 
@@ -541,9 +541,6 @@ public class WorkspaceCtrl implements Initializable {
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
-            if (shownBoard != null) {
-                boardName.setText(shownBoard.getTitle());
-            }
         }
         updateBoardColours();
         updateListColors();
@@ -640,6 +637,15 @@ public class WorkspaceCtrl implements Initializable {
     public void showBoard(String targetKey) {
         try {
             shownBoard = service.getBoard(targetKey);
+
+            for(int i = 0; i< boardSubscriber.size(); i++)
+            {
+                boardSubscriber.get(i).unsubscribe();
+            }
+            unsubscribeLists();
+            registerForBoardUpdates(targetKey);
+
+            boardName.setText(shownBoard.getTitle());
             // Theoretically unnecessary, but to be sure
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
 
@@ -655,21 +661,27 @@ public class WorkspaceCtrl implements Initializable {
                 unlockLists();
                 shownBoard.setProtected(false);
             }
+            pwdMap.putIfAbsent(targetKey, "");
+            joinedKeys.add(targetKey);
+            boardName.setText(shownBoard.getTitle());
             unhideWorkspace();
             displayLists();
+            refreshWorkspace(true);
         } catch (NotFoundException | BadRequestException e) {
-            System.out.println("The board you tried to join does not exist");
-        }
-    }
+            String message = "There is no board with key " + targetKey +
+                    ". Try joining a board with a different key.";
 
+            ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
+            helperMethods.showErrorDialog(nonExistingKey);
+        }
+        refreshWorkspace(true);
+    }
     /**
-     * Displays the lists into the Hbox list container
+     * Displays the lists into the HBox list container
      */
     public void displayLists() {
-        listContainer.getChildren().clear();
-        listControllers.clear();
-        boardName.setText(shownBoard.getTitle());
-
+        //New subscriber are going to be created, so we need to remove the existing ones
+        unsubscribeLists();
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
@@ -688,6 +700,7 @@ public class WorkspaceCtrl implements Initializable {
             controller.setHelperMethod(helperMethods);
             controller.setCardList(cardList);
             controller.displayCards();
+            controller.registerForListUpdates();
             setMoveShortcutListeners(loader.getKey().getCardVBox());
             controller.setListTitle(cardList.getListTitle());
             listContainer.getChildren().add(list);
@@ -710,18 +723,13 @@ public class WorkspaceCtrl implements Initializable {
     public void setMoveShortcutListeners(VBox listVbox) {
         listVbox.requestFocus();
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.UP) {
-                moveFocusUp();
-            }
-            if (event.getCode() == KeyCode.DOWN) {
-                moveFocusDown();
-            }
-            if (event.getCode() == KeyCode.LEFT) {
-                moveFocusLeft();
-            }
-            if (event.getCode() == KeyCode.RIGHT) {
-                moveFocusRight();
-            }
+            if (this.isAdmin() || !this.shownBoard.isProtected())
+                switch (event.getCode()) {
+                    case UP:    moveFocusUp();      break;
+                    case DOWN:  moveFocusDown();    break;
+                    case LEFT:  moveFocusLeft();    break;
+                    case RIGHT: moveFocusRight();   break;
+                }
             event.consume();
         });
     }
@@ -736,7 +744,7 @@ public class WorkspaceCtrl implements Initializable {
         ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
 
         // Can only move up/down if the focused card is not already at the top/bottom
-        if (focusedCardIndex == (shiftUpWards ? 0 :
+        if (focusedCardIndex == (shiftUpWards ? 1 :
                 focusedListController.getCardList().getCards().size())) return;
 
 
@@ -1178,6 +1186,7 @@ public class WorkspaceCtrl implements Initializable {
 
         loader.getKey().setBoardKey(shownBoard.getKey());
         loader.getKey().poll();
+        loader.getKey().setWorkspaceCtrl(this);
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
@@ -1274,6 +1283,7 @@ public class WorkspaceCtrl implements Initializable {
         this.joinedKeys = joinedKeys;
     }
 
+
     /**
      * Sets the instance of HelperMethods
      *
@@ -1337,6 +1347,7 @@ public class WorkspaceCtrl implements Initializable {
         if (admin) {
             screenTitle.setText("All Server Boards");
             leaveButton.setVisible(false);
+            leaveButton.setManaged(false);
         }
     }
 
@@ -1374,5 +1385,59 @@ public class WorkspaceCtrl implements Initializable {
         helperMethods.popUp(scene, title);
     }
 
+    ///WEBSOCKETS
+    /**
+     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
+     * @param key the board we need to get the updated information
+     */
+    public void registerForBoardUpdates(String key) {
+        boardSubscriber.add(websocketUtils.registerForMessages("/topic/boards/"+key,Board.class, board -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    showBoard(board.getKey());
+                }
+            });
+        }));
+    }
+
+    /**
+     * Ads a list subscriber to the list, so we can unsubscribe it later
+     * @param subscriber
+     */
+    public void addListSubscriber(StompSession.Subscription subscriber)
+    {
+        listSubscribers.add(subscriber);
+    }
+
+    /**
+     * Unsubscribe all the lists because the board needs to be updated
+     */
+    public void unsubscribeLists()
+    {
+        listContainer.getChildren().clear();
+        listControllers.clear();
+        for(int i = 0; i< listControllers.size(); i++)
+        {
+            listControllers.get(i).unsubscribeCards();
+        }
+        for(int i = 0; i< listSubscribers.size(); i++)
+        {
+            listSubscribers.get(i).unsubscribe();
+        }
+    }
+
+    /**
+     * Pops up the help screen
+     */
+    public void helpScreen() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "helpWindow", "HelpWindow.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Help screen";
+        helperMethods.popUp(scene, title);
+    }
 
 }

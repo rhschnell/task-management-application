@@ -16,7 +16,7 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class BoardUtils {
-    private final ServerUtils serverUtils;
+    private ServerUtils serverUtils = new ServerUtils();
     private Client client;
 
     /**
@@ -60,7 +60,7 @@ public class BoardUtils {
         return client.target(serverUtils.getServer()).path(Route.BOARD)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(new GenericType<List<Board>>() {});
+                .get(new GenericType<>() {});
     }
 
     /**

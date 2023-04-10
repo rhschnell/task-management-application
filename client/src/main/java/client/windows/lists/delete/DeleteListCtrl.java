@@ -41,6 +41,14 @@ public class DeleteListCtrl{
     }
 
     /**
+     * Sets the boardKey the list is part of
+     * @param boardKey the boardKey
+     */
+    public void setBoardKey(String boardKey) {
+        service.setBoardKey(boardKey);
+    }
+
+    /**
      * This method cancels deleting the list from the board
      */
     public void cancel(){

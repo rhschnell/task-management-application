@@ -1,5 +1,6 @@
 package client.windows.lists.list;
 
+import client.serverUtils.BoardUtils;
 import client.serverUtils.CardListUtils;
 import client.serverUtils.CardUtils;
 import client.serverUtils.ServerUtils;
@@ -21,7 +22,7 @@ class ListServiceTest {
     @BeforeEach
     void beforeEach()
     {
-        listService = new ListService(new CardListUtils(new ServerUtils()),new CardUtils(new ServerUtils()));
+        listService = new ListService(new CardListUtils(new ServerUtils()),new CardUtils(new ServerUtils()),new BoardUtils(new ServerUtils()));
         testList = new CardList();
         testList.setListTitle("Test List");
         testList.setId(2);

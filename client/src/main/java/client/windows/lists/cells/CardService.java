@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 
+
 public class CardService {
     private final CardListUtils cardListUtils;
     private String boardKey;
@@ -29,10 +30,9 @@ public class CardService {
      * @param card , the card that needs to be deleted
      */
     public void deleteCard(Card card) {
-        cardUtils.deleteFromCardList(card);
         cardUtils.deleteCard(card.getId());
+        cardUtils.deleteCardFromDatabase(card.getId());
     }
-
 
     /**
      * Inserts a new card into the database

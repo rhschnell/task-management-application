@@ -24,8 +24,8 @@ public class ViewCardService {
      */
     public void deleteCard(Card card)
     {
-        server.deleteFromCardList(card);
-        server.deleteCard(card.getId());
+        //server.deleteFromCardList(card);
+        //server.deleteCard(card.getId());
     }
 
     /**

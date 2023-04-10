@@ -17,10 +17,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +38,10 @@ public class CustomCardPresetCellCtrl {
     private Label presetTitle;
 
     @FXML
-    private ColorPicker cardBackgroundColor;
+    private Rectangle cardBackgroundColor;
 
     @FXML
-    private ColorPicker cardFontColor;
+    private Rectangle cardFontColor;
 
     @FXML
     private Button deleteButton;
@@ -50,7 +50,7 @@ public class CustomCardPresetCellCtrl {
     private Button editButton;
 
     @FXML
-    private CheckBox defaultBox;
+    private RadioButton defaultBox;
 
     private CardColorPreset preset;
     private Board shownBoard;
@@ -75,8 +75,8 @@ public class CustomCardPresetCellCtrl {
         this.preset = preset;
         presetTitle.setText(preset.getName());
 
-        cardBackgroundColor.setValue(Color.web(preset.getBackgroundColor()));
-        cardFontColor.setValue(Color.web(preset.getFontColor()));
+        cardBackgroundColor.setFill(Color.web(preset.getBackgroundColor()));
+        cardFontColor.setFill(Color.web(preset.getFontColor()));
 
         defaultBox.setSelected(preset.isDefault());
         defaultBox.setOnAction(event -> {
@@ -100,22 +100,11 @@ public class CustomCardPresetCellCtrl {
     }
 
     /**
-     * This method deletes the preset from the database
+     * Delete the preset from the list of presets
      */
     public void delete() {
-        server.deletePreset(preset.getId());
-
-        Board shownBoard = workspaceCtrl.getShownBoard();
-        shownBoard.removePreset(preset);
+        presetList.remove(preset);
         customizeCtrl.updateDisplayedPresets();
-        for(CardList cardList : workspaceCtrl.getShownBoard().getCardLists()){
-            for(Card c : cardList.getCards()){
-                if(c.getPresets().get(0).equals(preset)){
-                    c.setPresets(new ArrayList<>());
-                    c.setPreset(shownBoard.getPresetList().get(0));
-                }
-            }
-        }
     }
 
     /**
