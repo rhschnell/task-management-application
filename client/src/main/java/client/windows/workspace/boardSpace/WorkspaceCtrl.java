@@ -441,6 +441,7 @@ public class WorkspaceCtrl implements Initializable {
         refreshBoardList(key, forceBoardListRefresh);
         updateBoardColours();
         updateListColors();
+        showBoard(key);
     }
 
     /**
@@ -597,16 +598,6 @@ public class WorkspaceCtrl implements Initializable {
             Group group = (Group) listInUI.getChildren().get(0);
             Label listTitle = (Label) group.getChildren().get(0);
             listTitle.setTextFill(Color.web(shownBoard.getCardLists().get(i).getFontColor()));
-        }
-
-        listContainer.getChildren().clear();
-        for (CardList list : shownBoard.getCardLists()) {
-            var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
-            ListCtrl ctrl = loader.getKey();
-            ctrl.setCardList(list);
-            ctrl.updateListColors();
-            listContainer.getChildren().add(loader.getValue());
         }
     }
 
@@ -1328,8 +1319,11 @@ public class WorkspaceCtrl implements Initializable {
                     if (board.getKey() != null) {
                         //Update the board since the new one has changed
                         showBoard(board.getKey());
+                        refreshWorkspace(true);
+                    } else {
+                        leaveBoard(shownBoard);
+                        clearWorkspace();
                     }
-                    refreshWorkspace(true);
                 }
             });
         }));
