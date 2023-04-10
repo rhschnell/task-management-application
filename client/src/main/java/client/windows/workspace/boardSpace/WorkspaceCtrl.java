@@ -23,6 +23,7 @@ import client.utils.HelperMethods;
 import client.utils.Scenes;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.CustomizeCtrl;
+import client.windows.lists.cells.CardCtrl;
 import client.windows.lists.cells.CardService;
 import client.windows.lists.cells.RenameCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
@@ -834,6 +835,29 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
+     * Handles the shortcut for customizing card color presets "C"
+     *
+     * This opens the edit window, since this is where you edit card presets
+     */
+    public void handleCustomizationShortcut() {
+        //TODO: implement
+        // Just open the edit window...
+        if (!focusedIndicesAreValid()) return;
+        ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
+        Card highlightedCard = focusedListController.getCardList().getCard(focusedCardIndex - 1);
+        // Get the highlighted card from the database, because we get merge conflicts in Hibernate
+        highlightedCard = cardService.getCardByID(highlightedCard.getId());
+
+        CardCtrl cardCtrl = new MyFXML(createInjector(new MainModules()))
+                .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml").getKey();
+
+
+        cardCtrl.setBoard(shownBoard);
+        cardCtrl.updateItem(highlightedCard);
+        cardCtrl.edit();
+    }
+
+    /**
      * Returns the ListVbox in which the focusedCard is located
      *
      * @return the ListBox that contains the focused card
@@ -1401,5 +1425,4 @@ public class WorkspaceCtrl implements Initializable {
         String title = "Help screen";
         helperMethods.popUp(scene, title);
     }
-
 }
