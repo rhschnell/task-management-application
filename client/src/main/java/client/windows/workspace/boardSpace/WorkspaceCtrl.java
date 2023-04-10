@@ -1369,7 +1369,7 @@ public class WorkspaceCtrl implements Initializable {
 
     ///WEBSOCKETS
     /**
-     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
+     * Register for messages for the entered key, this way we will receive updates just for the board we are on
      * @param key the board we need to get the updated information
      */
     public void registerForBoardUpdates(String key) {
@@ -1377,13 +1377,7 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    //Update the board since the new one has changed
-                    shownBoard=(Board) board;
-                    boardName.setText(shownBoard.getTitle());
-                    updateBoardColours();
-                    updateListColors();
-                    //Display the updates since something was changed
-                    displayLists();
+                    refreshWorkspace(true);
                 }
             });
         }));
