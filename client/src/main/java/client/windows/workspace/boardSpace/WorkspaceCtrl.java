@@ -206,6 +206,11 @@ public class WorkspaceCtrl implements Initializable {
             emptyKeyPopUp();
             return;
         }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry("Error!",
+                    "The title cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return;
+        }
 
         List<String> tempList = new ArrayList<>();
 
@@ -228,6 +233,11 @@ public class WorkspaceCtrl implements Initializable {
         String title = helperMethods.getInputValidator().stripWhitespace(titleField.getText());
         if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
             emptyTitlePopUp();
+            return;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry("Error!",
+                    "The title cannot be longer than " + HelperMethods.getMaxInputLength()));
             return;
         }
 
