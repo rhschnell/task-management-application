@@ -17,7 +17,8 @@
             <Font name="Arial Bold" size="12.0" />
          </font>
       </Button>
-      <TextField fx:id="inputField" layoutX="13.0" layoutY="18.0" onKeyPressed="#saveOnEnter" prefHeight="25.0" prefWidth="237.0" promptText="New card title" style="-fx-background-radius: 10;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <TextField fx:id="inputField" layoutX="13.0" layoutY="18.0" onKeyPressed="#save"
+                 prefHeight="25.0" prefWidth="237.0" promptText="New card title" style="-fx-background-radius: 10;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <font>
             <Font size="12.0" />
          </font>
