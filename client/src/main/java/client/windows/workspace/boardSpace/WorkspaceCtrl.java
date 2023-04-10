@@ -404,7 +404,7 @@ public class WorkspaceCtrl implements Initializable {
         helperMethods.popUp(new Scene(loader.getValue()), title);
 
         // Fix lock button state in workspace
-        if (shownBoard.equals(board) && mode.equals("unlock")) {
+        if (board.equals(shownBoard) && mode.equals("unlock")) {
             unlockBoardButton.setDisable(true);
             unlockLists();
             unlockButtons();
