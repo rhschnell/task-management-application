@@ -108,7 +108,7 @@ public class EditCardPresetCtrl {
         preset.setFontColor(newFontColor);
 
         customCardPresetCellCtrl.getCustomizeCtrl().updateDisplayedPresets();
-        workspaceCtrl.refreshWorkspace(true);
+       // workspaceCtrl.refreshWorkspace(true);
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 

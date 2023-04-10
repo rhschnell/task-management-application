@@ -101,7 +101,7 @@ public class AdminLoginCtrl implements Initializable {
             helperMethods.setServerIP(serverAddress.getText());
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
             loader.getKey().setHelperMethods(helperMethods);
-            loader.getKey().refreshWorkspace(true);
+            loader.getKey().refreshBoardList("", true);
             helperMethods.setScene(new Scene(loader.getValue()));
 
             showWelcome();

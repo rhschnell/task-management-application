@@ -54,9 +54,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -122,8 +120,6 @@ public class WorkspaceCtrl implements Initializable {
     private List<ListCtrl> listControllers;
     private final CardService cardService;
 
-    private String initialListColor;
-    private String initialListFontColor;
     private List <StompSession.Subscription> boardSubscriber;
     private List <StompSession.Subscription> listSubscribers;
     private boolean admin;
@@ -197,25 +193,22 @@ public class WorkspaceCtrl implements Initializable {
             setPasswordButton,
             addListButton
         };
-        setDefaultListColors();
-    }
-
-    /**
-     * Sets the list colors to the default
-     */
-    private void setDefaultListColors() {
-        this.initialListColor = "FFFFFF"; // White
-        this.initialListFontColor = "000000"; // Black
     }
 
     /**
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
+
         String key = helperMethods.getInputValidator().stripWhitespace(keyField.getText());
 
         if (!helperMethods.getInputValidator().isValidInputNonEmpty(key)) {
             emptyKeyPopUp();
+            return;
+        }
+        if (!helperMethods.getInputValidator().isValidInputLength(key)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry("Error!",
+                    "The title cannot be longer than " + HelperMethods.getMaxInputLength()));
             return;
         }
 
@@ -224,9 +217,11 @@ public class WorkspaceCtrl implements Initializable {
         for (Board b : service.getBoards()) {
             tempList.add(b.getKey());
         }
-
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         showBoard(key);
-
         keyField.clear();
     }
 
@@ -240,6 +235,11 @@ public class WorkspaceCtrl implements Initializable {
             emptyTitlePopUp();
             return;
         }
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+            helperMethods.showErrorDialog(new ErrorDialogEntry("Error!",
+                    "The title cannot be longer than " + HelperMethods.getMaxInputLength()));
+            return;
+        }
 
         shownBoard = new Board(title, null, null, null);
         CardColorPreset defaultPreset = new CardColorPreset("Default", "0xDEEDE7FF", "0x000000FF");
@@ -249,7 +249,10 @@ public class WorkspaceCtrl implements Initializable {
         String key = shownBoard.getKey();
 
         List<String> tempList = new ArrayList<>(joinedKeys);
-
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         showBoard(key);
 
         pwdMap.putIfAbsent(key, "");
@@ -411,7 +414,7 @@ public class WorkspaceCtrl implements Initializable {
         helperMethods.popUp(new Scene(loader.getValue()), title);
 
         // Fix lock button state in workspace
-        if (shownBoard.equals(board) && mode.equals("unlock")) {
+        if (board.equals(shownBoard) && mode.equals("unlock")) {
             unlockBoardButton.setDisable(true);
             unlockLists();
             unlockButtons();
@@ -487,9 +490,7 @@ public class WorkspaceCtrl implements Initializable {
                 && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
-        if (!shownBoard.equals(serverBoard)) {              // if the shown board is not the same as server board
-            showBoard(key);                                 // reshow the board
-        }
+        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**
@@ -586,17 +587,20 @@ public class WorkspaceCtrl implements Initializable {
         if (shownBoard == null) {
             return;
         }
+
         for (int i = 0; i < listContainer.getChildren().size(); i++) {
-            String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
+            String backgroundColor = shownBoard.getListBackgroundColor();
             String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
                            + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
                            "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
 
             VBox listInUI = (VBox) listContainer.getChildren().get(i);
+            VBox boxInList = (VBox) ((ScrollPane) listInUI.getChildren().get(1)).getContent();
 
 
             // Set the color of the lists (background)
             listInUI.setStyle(style);
+            boxInList.setStyle("-fx-background-color: transparent;");
 
             // Set the title label of each list (font color)
             // This is inside the Group containing (Label, Line,TextField)
@@ -604,17 +608,6 @@ public class WorkspaceCtrl implements Initializable {
             Label listTitle = (Label) group.getChildren().get(0);
             listTitle.setTextFill(Color.web(shownBoard.getCardLists().get(i).getFontColor()));
         }
-
-        // listContainer.getChildren().clear();
-        // for (CardList list : shownBoard.getCardLists()) {
-        //     var loader = new MyFXML(createInjector(new MainModules()))
-        //             .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
-        //     ListCtrl ctrl = loader.getKey();
-        //     ctrl.setCardList(list);
-        //     ctrl.updateListColors();
-
-        //     listContainer.getChildren().add(loader.getValue());
-        // }
     }
 
     /**
@@ -622,8 +615,8 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void updateBoardColours() {
         if (shownBoard != null) {
-            listContainer.setStyle("-fx-background-color: #" + shownBoard.getBackgroundColour());
-            boardName.setTextFill(Color.web(shownBoard.getFontColour()));
+            listContainer.setStyle("-fx-background-color: #" + shownBoard.getBoardBackgroundColour());
+            boardName.setTextFill(Color.web(shownBoard.getBoardFontColour()));
         }
     }
 
@@ -635,13 +628,12 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void showBoard(String targetKey) {
         try {
+            unsubscribeLists();
             shownBoard = service.getBoard(targetKey);
-
             for(int i = 0; i< boardSubscriber.size(); i++)
             {
                 boardSubscriber.get(i).unsubscribe();
             }
-            unsubscribeLists();
             registerForBoardUpdates(targetKey);
 
             boardName.setText(shownBoard.getTitle());
@@ -665,15 +657,14 @@ public class WorkspaceCtrl implements Initializable {
             boardName.setText(shownBoard.getTitle());
             unhideWorkspace();
             displayLists();
-            refreshWorkspace(true);
+            refreshBoardList(shownBoard.getKey(), true);
         } catch (NotFoundException | BadRequestException e) {
             String message = "There is no board with key " + targetKey +
                     ". Try joining a board with a different key.";
 
             ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
             helperMethods.showErrorDialog(nonExistingKey);
-        }
-        refreshWorkspace(true);
+        } catch (Exception ignored) {}
     }
     /**
      * Displays the lists into the HBox list container
@@ -686,8 +677,8 @@ public class WorkspaceCtrl implements Initializable {
                     .load(ListCtrl.class, "client", "windows", "lists", "list", "List.fxml");
             CardList cardList = shownBoard.getCardLists().get(i);
 
-            cardList.setBackgroundColor(initialListColor);
-            cardList.setFontColor(initialListFontColor);
+            cardList.setBackgroundColor(shownBoard.getListBackgroundColor());
+            cardList.setFontColor(shownBoard.getListFontColor());
 
             VBox list = (VBox) loader.getValue();
 
@@ -1238,7 +1229,6 @@ public class WorkspaceCtrl implements Initializable {
                 .load(CustomizeCtrl.class, "client", "windows", "customize", "Customize.fxml");
 
         loader.getKey().setBoard(shownBoard);
-        loader.getKey().setLists(shownBoard.getCardLists());
         loader.getKey().setWorkspaceCtrl(this);
         loader.getKey().displayPresetList();
 
@@ -1275,42 +1265,6 @@ public class WorkspaceCtrl implements Initializable {
      */
     public int getFocusedCardIndex() {
         return focusedCardIndex;
-    }
-
-    /**
-     * Sets the color for all newly created lists
-     *
-     * @param initialListColor The color (string) for the lists
-     */
-    public void setInitialListColor(String initialListColor) {
-        this.initialListColor = initialListColor;
-    }
-
-    /**
-     * Getter for the initial list color
-     *
-     * @return The initial list color
-     */
-    public String getInitialListColor() {
-        return initialListColor;
-    }
-
-    /**
-     * Sets the color of the font for all the newly created lists.
-     *
-     * @param initialListFontColor The color (string) for the list text
-     */
-    public void setInitialListFontColor(String initialListFontColor) {
-        this.initialListFontColor = initialListFontColor;
-    }
-
-    /**
-     * Getter for the list font color
-     *
-     * @return The set list font color
-     */
-    public String getInitialListFontColor() {
-        return initialListFontColor;
     }
 
     /**
@@ -1362,7 +1316,7 @@ public class WorkspaceCtrl implements Initializable {
 
     ///WEBSOCKETS
     /**
-     * Register for messages for the entered key, this way wwe will receive updates just for the board we are on
+     * Register for messages for the entered key, this way we will receive updates just for the board we are on
      * @param key the board we need to get the updated information
      */
     public void registerForBoardUpdates(String key) {
@@ -1370,7 +1324,14 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    showBoard(board.getKey());
+                    if (board.getKey() != null) {
+                        //Update the board since the new one has changed
+                        showBoard(board.getKey());
+                        refreshWorkspace(true);
+                    } else {
+                        clearWorkspace();
+                        refreshBoardList("", true);
+                    }
                 }
             });
         }));
@@ -1384,6 +1345,15 @@ public class WorkspaceCtrl implements Initializable {
     {
         listSubscribers.add(subscriber);
     }
+
+    /**
+     * Updates the board because it exists a newer version
+     */
+    public void updateBoard()
+    {
+        shownBoard=service.getBoard(shownBoard.getKey());
+    }
+
 
     /**
      * Unsubscribe all the lists because the board needs to be updated
@@ -1400,6 +1370,19 @@ public class WorkspaceCtrl implements Initializable {
         {
             listSubscribers.get(i).unsubscribe();
         }
+    }
+
+    /**
+     * Pops up the help screen
+     */
+    public void helpScreen() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(AccessDeniedCtrl.class, "client", "windows", "workspace", "helpWindow", "HelpWindow.fxml");
+
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        String title = "Help screen";
+        helperMethods.popUp(scene, title);
     }
 
 }
