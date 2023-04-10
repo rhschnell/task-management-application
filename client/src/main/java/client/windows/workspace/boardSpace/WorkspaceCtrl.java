@@ -206,7 +206,7 @@ public class WorkspaceCtrl implements Initializable {
             emptyKeyPopUp();
             return;
         }
-        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
+        if (!helperMethods.getInputValidator().isValidInputLength(key)) {
             helperMethods.showErrorDialog(new ErrorDialogEntry("Error!",
                     "The title cannot be longer than " + HelperMethods.getMaxInputLength()));
             return;
