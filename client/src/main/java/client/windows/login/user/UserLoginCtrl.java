@@ -87,7 +87,7 @@ public class UserLoginCtrl implements Initializable {
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
             loader.getKey().setHelperMethods(helperMethods);
             loader.getKey().setJoinedKeys(helperMethods.getMemMap().get(serverAddress.getText()));
-            loader.getKey().refreshWorkspace(true);
+            loader.getKey().refreshBoardList("", true);
             helperMethods.setScene(new Scene(loader.getValue()));
 
 

@@ -452,6 +452,7 @@ public class WorkspaceCtrl implements Initializable {
         refreshBoardList(key, forceBoardListRefresh);
         updateBoardColours();
         updateListColors();
+        showBoard(key);
     }
 
     /**
@@ -610,11 +611,6 @@ public class WorkspaceCtrl implements Initializable {
             initialListBGColor = shownBoard.getCardLists().get(0).getBackgroundColor();
             initialListFontColor = shownBoard.getCardLists().get(0).getFontColor();
         }
-
-        if (listContainer.getChildren().size() == 0) {
-            initialListBGColor = "FFFFFF";
-            initialListFontColor = "000000";
-        }
     }
 
     /**
@@ -664,7 +660,7 @@ public class WorkspaceCtrl implements Initializable {
             boardName.setText(shownBoard.getTitle());
             unhideWorkspace();
             displayLists();
-            refreshWorkspace(true);
+            refreshBoardList(shownBoard.getKey(), true);
         } catch (NotFoundException | BadRequestException e) {
             String message = "There is no board with key " + targetKey +
                     ". Try joining a board with a different key.";
@@ -672,7 +668,6 @@ public class WorkspaceCtrl implements Initializable {
             ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
             helperMethods.showErrorDialog(nonExistingKey);
         }
-        refreshWorkspace(true);
     }
     /**
      * Displays the lists into the HBox list container
@@ -1369,8 +1364,10 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    //Update the board since the new one has changed
-                    showBoard(board.getKey());
+                    if (board.getKey() != null) {
+                        //Update the board since the new one has changed
+                        showBoard(board.getKey());
+                    }
                     refreshWorkspace(true);
                 }
             });

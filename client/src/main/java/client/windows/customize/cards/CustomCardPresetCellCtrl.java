@@ -79,6 +79,9 @@ public class CustomCardPresetCellCtrl {
         cardFontColor.setFill(Color.web(preset.getFontColor()));
 
         defaultBox.setSelected(preset.isDefault());
+        if (preset.isDefault()) {
+            deleteButton.setVisible(false);
+        }
         defaultBox.setOnAction(event -> {
             preset.setDefault(defaultBox.isSelected());
             if(preset.isDefault()){
