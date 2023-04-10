@@ -221,8 +221,15 @@ public class Board {
                 && Objects.equals(presetList, board.presetList);
     }
 
+    /**
+     * Hashcode method
+     * @return hashcode of object
+     */
     @Override
     public int hashCode() {
-        return Objects.hash(key, title, secured, boardBackgroundColour, boardFontColour, listBackgroundColor, listFontColor, cardLists, tagList, presetList);
+        return Objects.hash(key, title,
+                secured, boardBackgroundColour,
+                boardFontColour, listBackgroundColor,
+                listFontColor, cardLists, tagList, presetList);
     }
 }
