@@ -151,7 +151,7 @@ public class SubtaskCellCtrl implements Initializable {
     private void showSaveIcon(){
         HBox hBox = (HBox) checkBox.getParent();
 
-        ImageView saveIcon = new ImageView("/client/icons/save.png");
+        ImageView saveIcon = new ImageView("/client/icons/save-filled.png");
 
         saveIcon.setFitWidth(21);
         saveIcon.setFitHeight(21);
