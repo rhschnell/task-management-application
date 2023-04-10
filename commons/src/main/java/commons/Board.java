@@ -23,7 +23,7 @@ public class Board {
     private String password;
     private boolean secured; //could not use protected as it is a keyword in java
 
-    private String backgroundColour = "FFFFFF";
+    private String backgroundColour = "F6F6F6";
     private String fontColour = "000000";
 
     @OneToMany(cascade = CascadeType.ALL)

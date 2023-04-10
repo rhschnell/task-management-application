@@ -1,107 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.*?>
-<VBox fx:id="layout" prefHeight="529.0" prefWidth="333.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.customize.CustomizeCtrl">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="layout" prefWidth="333.0" spacing="5.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.customize.CustomizeCtrl">
     <children>
-        <Label prefHeight="37.0" prefWidth="220.0" text="Customization">
-            <font>
-                <Font name="Arial Bold" size="18.0" />
-            </font>
-        </Label>
-        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-        <Label text="Board Colors">
-            <font>
-                <Font name="Arial Bold" size="13.0" />
-            </font>
-        </Label>
-        <HBox alignment="CENTER_LEFT" spacing="30.0">
-            <children>
-                <Label text="Background:">
-                    <font>
-                        <Font name="Arial" size="12.0" />
-                    </font>
-                </Label>
-                <ColorPicker fx:id="boardBackgroundColor" onAction="#setBoardBackgroundColor" />
-                <Button fx:id="resetBoardColorButton" mnemonicParsing="false" onAction="#resetBoard" prefHeight="2.0" prefWidth="41.0" styleClass="gray-button" text="Reset">
-                    <font>
-                        <Font size="11.0" />
-                    </font>
-                </Button>
-            </children>
-        </HBox>
-        <HBox alignment="CENTER_LEFT" spacing="70.0">
-            <children>
-                <Label text="Font:">
-                    <font>
-                        <Font name="Arial" size="12.0" />
-                    </font>
-                </Label>
-                <ColorPicker fx:id="boardFontColor" onAction="#setBoardFontColor" />
-            </children>
-        </HBox>
-        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-        <Label prefWidth="68.0" text="List Colors">
-            <font>
-                <Font name="Arial Bold" size="13.0" />
-            </font>
-        </Label>
-        <HBox alignment="CENTER_LEFT" spacing="30.0">
-            <children>
-                <Label text="Background:">
-                    <font>
-                        <Font name="Arial" size="12.0" />
-                    </font>
-                </Label>
-                <ColorPicker fx:id="listBackgroundColor" onAction="#setListBackgroundColor" />
-                <Button fx:id="resetListColorButton" mnemonicParsing="false" onAction="#resetLists" prefHeight="2.0" prefWidth="41.0" styleClass="gray-button" text="Reset">
-                    <font>
-                        <Font size="11.0" />
-                    </font>
-                </Button>
-            </children>
-        </HBox>
-        <HBox alignment="CENTER_LEFT" spacing="70.0">
-            <children>
-                <Label text="Font:">
-                    <font>
-                        <Font name="Arial" size="12.0" />
-                    </font>
-                </Label>
-                <ColorPicker fx:id="listFontColor" onAction="#setListFontColor" />
-            </children>
-        </HBox>
-        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080" />
-        <Label text="Card colors">
-            <font>
-                <Font name="Arial Bold" size="13.0" />
-            </font>
-        </Label>
-        <ScrollPane prefHeight="131.0" prefWidth="300.0">
-            <content>
-                <VBox fx:id="cardPresets" prefHeight="131.0" prefWidth="297.0" />
-            </content>
-        </ScrollPane>
-      <Button mnemonicParsing="false" onAction="#addCardPreset" text="Add Card Color">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-        <Line endX="200.0" startX="-110.0" startY="-3.814697265625E-6" stroke="#808080">
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin></Line>
-      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="313.0" spacing="10.0">
+      <HBox alignment="CENTER_LEFT">
          <children>
-            <Button mnemonicParsing="false" onAction="#save" text="Save">
+              <Label prefHeight="16.0" prefWidth="308.0" text="Board colors">
+                  <font>
+                      <Font name="Arial Bold" size="14.0" />
+                  </font>
+              </Label>
+                <Button fx:id="resetBoardColorButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#resetBoard" prefHeight="12.0" prefWidth="45.0" styleClass="red-button" text="Reset">
+                    <font>
+                        <Font name="Arial Bold" size="11.0" />
+                    </font>
+                </Button>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </HBox>
+        <HBox alignment="CENTER_LEFT">
+            <children>
+                <Label prefHeight="26.0" prefWidth="273.0" text="Background">
+                    <font>
+                        <Font name="Arial" size="12.0" />
+                    </font>
+                </Label>
+                <ColorPicker fx:id="boardBackgroundColor" minWidth="-Infinity" onAction="#setBoardBackgroundColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+            </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+        </HBox>
+        <HBox alignment="CENTER_LEFT">
+            <children>
+                <Label prefHeight="27.0" prefWidth="353.0" text="Font">
+                    <font>
+                        <Font name="Arial" size="12.0" />
+                    </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+                </Label>
+                <ColorPicker fx:id="boardFontColor" minWidth="-Infinity" onAction="#setBoardFontColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+            </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+        </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER_LEFT">
+         <children>
+              <Label prefHeight="16.0" prefWidth="292.0" text="List colors">
+                  <font>
+                      <Font name="Arial Bold" size="14.0" />
+                  </font>
+              </Label>
+                <Button fx:id="resetListColorButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#resetLists" prefHeight="6.0" prefWidth="45.0" styleClass="red-button" text="Reset">
+                    <font>
+                        <Font name="Arial Bold" size="11.0" />
+                    </font>
+                </Button>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Label prefHeight="26.0" prefWidth="315.0" text="Background">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Label>
+            <ColorPicker fx:id="listBackgroundColor" minWidth="-Infinity" onAction="#setListBackgroundColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Label prefHeight="27.0" prefWidth="273.0" text="Font">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <ColorPicker fx:id="listFontColor" minWidth="-Infinity" onAction="#setListFontColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <HBox>
+         <children>
+              <Label prefHeight="23.0" prefWidth="231.0" text="Card colors">
+                  <font>
+                      <Font name="Arial Bold" size="14.0" />
+                  </font>
+              </Label>
+            <Button mnemonicParsing="false" onAction="#addCardPreset" prefHeight="4.0" prefWidth="81.0" styleClass="blue-button" text="Add preset">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
                </font>
             </Button>
-              <Button fx:id="closeButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Close">
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" maxWidth="344.0" minWidth="89.0" prefHeight="20.0" prefWidth="297.0" spacing="10.0" stylesheets="/client/style/stylesheet.css">
+         <children>
+            <Label fx:id="presetTitle" contentDisplay="TOP" prefHeight="17.0" prefWidth="111.0" text="Preset title" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="presetTitle1" contentDisplay="TOP" prefHeight="17.0" prefWidth="20.0" text="B" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <Label fx:id="presetTitle11" contentDisplay="TOP" prefHeight="17.0" prefWidth="14.0" text="F" wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <Label fx:id="presetTitle111" contentDisplay="TOP" prefHeight="17.0" prefWidth="28.0" text="Def." wrapText="true">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </HBox>
+        <ScrollPane hbarPolicy="NEVER" prefHeight="84.0" prefWidth="321.0">
+            <content>
+                <VBox fx:id="cardPresets" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="305.0" spacing="10.0">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></VBox>
+            </content>
+         <VBox.margin>
+            <Insets right="-8.0" />
+         </VBox.margin>
+        </ScrollPane>
+      <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER_LEFT" prefWidth="313.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="56.0" styleClass="blue-button" text="Save">
+               <font>
+                  <Font name="Arial Bold" size="12.0" />
+               </font>
+            </Button>
+              <Button fx:id="closeButton" cancelButton="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#close" prefHeight="23.0" prefWidth="56.0" styleClass="red-button" text="Cancel">
                   <font>
                       <Font name="Arial Bold" size="12.0" />
                   </font>
