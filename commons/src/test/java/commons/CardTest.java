@@ -3,6 +3,7 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,6 +54,14 @@ class CardTest {
     }
 
     @Test
+    void constructorWithNullPresets(){
+        Card card = new Card("Title", "Description", null, null,
+                (List<CardColorPreset>) null);
+
+        assertNotNull(card.getPresets());
+
+    }
+    @Test
     void createCardWithTitle(){
         card = new Card("New card");
         assertNotNull(card);
@@ -73,6 +82,15 @@ class CardTest {
     }
 
     @Test
+    void addSubTaskWithNull(){
+        Card card = new Card("Title", "Description", null, null,
+                (List<CardColorPreset>) null);
+        card.addSubTask(new Task());
+        assertNotNull(card.getSubTasks());
+
+    }
+
+    @Test
     void addSubTaskByIndex(){
         Task task = new Task(false, "Task title");
         Task task2 = new Task(true, "Second task");
@@ -82,6 +100,14 @@ class CardTest {
         assertEquals(List.of(task2, task), card.getSubTasks());
     }
 
+    @Test
+    void removeTag(){
+        Tag tag = new Tag();
+        card.addTag(tag);
+        assertEquals(List.of(tag), card.getTags());
+        card.removeTag(tag);
+        assertEquals(new ArrayList<>(),card.getTags());
+    }
 
     @Test
     void deleteTagByName() {
@@ -160,6 +186,12 @@ class CardTest {
         assertTrue(card.hasDescription());
     }
 
+    @Test
+    void setPreset(){
+        CardColorPreset preset = new CardColorPreset();
+        card.setPreset(preset);
+        assertEquals(List.of(preset), card.getPresets());
+    }
     @Test
     void noDescription(){
         card.setDescription(null);

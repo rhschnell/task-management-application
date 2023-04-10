@@ -249,6 +249,7 @@ public class Card implements Serializable {
      * @param preset The preset to be added
      */
     public void setPreset(CardColorPreset preset){
+        if (this.presets == null) this.presets = new ArrayList<>();
         this.presets.add(preset);
     }
 }
