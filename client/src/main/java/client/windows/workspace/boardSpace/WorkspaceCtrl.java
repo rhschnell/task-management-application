@@ -212,6 +212,7 @@ public class WorkspaceCtrl implements Initializable {
      * Handles the action of connecting to a board with the typed invite key
      */
     public void connect() {
+
         String key = helperMethods.getInputValidator().stripWhitespace(keyField.getText());
 
         if (!helperMethods.getInputValidator().isValidInputNonEmpty(key)) {
@@ -224,9 +225,11 @@ public class WorkspaceCtrl implements Initializable {
         for (Board b : service.getBoards()) {
             tempList.add(b.getKey());
         }
-
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         showBoard(key);
-
         keyField.clear();
     }
 
@@ -249,7 +252,10 @@ public class WorkspaceCtrl implements Initializable {
         String key = shownBoard.getKey();
 
         List<String> tempList = new ArrayList<>(joinedKeys);
-
+        for(int i = 0; i< boardSubscriber.size(); i++)
+        {
+            boardSubscriber.get(i).unsubscribe();
+        }
         showBoard(key);
 
         pwdMap.putIfAbsent(key, "");
@@ -488,7 +494,8 @@ public class WorkspaceCtrl implements Initializable {
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
         if (!shownBoard.equals(serverBoard)) {              // if the shown board is not the same as server board
-            showBoard(key);                                 // reshow the board
+           // showBoard(key);
+            //we do not need this anymore. could create a cycle.
         }
     }
 
@@ -635,13 +642,12 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void showBoard(String targetKey) {
         try {
+            unsubscribeLists();
             shownBoard = service.getBoard(targetKey);
-
             for(int i = 0; i< boardSubscriber.size(); i++)
             {
                 boardSubscriber.get(i).unsubscribe();
             }
-            unsubscribeLists();
             registerForBoardUpdates(targetKey);
 
             boardName.setText(shownBoard.getTitle());
