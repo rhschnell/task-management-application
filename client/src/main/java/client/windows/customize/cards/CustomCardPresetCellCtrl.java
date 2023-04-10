@@ -17,7 +17,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.paint.Color;
@@ -101,22 +100,11 @@ public class CustomCardPresetCellCtrl {
     }
 
     /**
-     * This method deletes the preset from the database
+     * Delete the preset from the list of presets
      */
     public void delete() {
-        server.deletePreset(preset.getId());
-
-        Board shownBoard = workspaceCtrl.getShownBoard();
-        shownBoard.removePreset(preset);
+        presetList.remove(preset);
         customizeCtrl.updateDisplayedPresets();
-        for(CardList cardList : workspaceCtrl.getShownBoard().getCardLists()){
-            for(Card c : cardList.getCards()){
-                if(c.getPresets().get(0).equals(preset)){
-                    c.setPresets(new ArrayList<>());
-                    c.setPreset(shownBoard.getPresetList().get(0));
-                }
-            }
-        }
     }
 
     /**

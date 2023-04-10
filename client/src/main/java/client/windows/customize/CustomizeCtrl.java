@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.inject.Guice.createInjector;
@@ -31,8 +32,8 @@ public class CustomizeCtrl {
 
     private Board board;
     private List<CardList> lists;
-    private List<CardColorPreset> presetList;
-
+    private List<CardColorPreset> boardPresetList;
+    private List<CardColorPreset> newPresetList;
     @FXML
     private Button resetBoardColorButton;
     @FXML
@@ -77,7 +78,8 @@ public class CustomizeCtrl {
         listFontColor.setValue(Color.web(workspaceCtrl.getInitialListFontColor()));
 
         // Initializes the preset list with the presets from the board
-        this.presetList = workspaceCtrl.getShownBoard().getPresetList();
+        this.boardPresetList = workspaceCtrl.getShownBoard().getPresetList();
+        this.newPresetList = new ArrayList<>(boardPresetList);
     }
 
     /**
@@ -145,7 +147,7 @@ public class CustomizeCtrl {
     @FXML
     public void resetBoard() {
         board.setFontColour("000000");
-        board.setBackgroundColour("FFFFFF");
+        board.setBackgroundColour("F6F6F6");
         service.insertBoard(board);
         boardBackgroundColor.setValue(Color.web(board.getBackgroundColour()));
         boardFontColor.setValue(Color.web(board.getFontColour()));
@@ -181,7 +183,12 @@ public class CustomizeCtrl {
         workspaceCtrl.setInitialListFontColor(listFontColor.getValue().toString().substring(2, 8));
         workspaceCtrl.setInitialListColor(listBackgroundColor.getValue().toString().substring(2, 8));
 
-        board.setPresetList(presetList);
+        board.setPresetList(newPresetList);
+        List<CardColorPreset> colorPresetsToDelete = new ArrayList<>(boardPresetList);
+        colorPresetsToDelete.removeAll(newPresetList);
+        for(CardColorPreset preset : colorPresetsToDelete) {
+            service.deletePreset(preset);
+        }
         service.insertBoard(board);
         workspaceCtrl.refreshWorkspace(true);
     }
@@ -190,7 +197,7 @@ public class CustomizeCtrl {
      * This method displays the presets in the cardPresets box
      */
     public void displayPresetList() {
-        for(CardColorPreset preset : presetList){
+        for(CardColorPreset preset : newPresetList){
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomCardPresetCellCtrl.class,
                             "client", "windows", "customize", "cards", "CustomCardPresetCell.fxml");
@@ -199,7 +206,7 @@ public class CustomizeCtrl {
             ctrl.setPresetObject(preset);
             ctrl.setCustomizeCtrl(this);
             ctrl.setWorkspaceCtrl(workspaceCtrl);
-            ctrl.setPresetList(presetList);
+            ctrl.setPresetList(newPresetList);
 
             cardPresets.getChildren().add(loader.getValue());
         }
@@ -270,7 +277,7 @@ public class CustomizeCtrl {
      * @param preset The preset to be added
      */
     public void addPreset(CardColorPreset preset) {
-        this.presetList.add(preset);
+        this.newPresetList.add(preset);
     }
 }
 

@@ -50,4 +50,12 @@ public class CustomizeService {
     public void insertPreset(CardColorPreset preset){
         cardColorPresetUtils.insertPreset(preset);
     }
+
+    /**
+     * Deletes the preset from the server
+     * @param preset The preset to be deleted
+     */
+    public void deletePreset(CardColorPreset preset){
+        cardColorPresetUtils.deletePreset(preset.getId());
+    }
 }
