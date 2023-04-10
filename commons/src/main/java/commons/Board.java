@@ -23,8 +23,12 @@ public class Board {
     private String password;
     private boolean secured; //could not use protected as it is a keyword in java
 
-    private String backgroundColour = "F6F6F6";
-    private String fontColour = "000000";
+    private String boardBackgroundColour = "F6F6F6";
+    private String boardFontColour = "000000";
+
+
+    private String listBackgroundColor = "FFFFFF";
+    private String listFontColor = "000000";
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "key")
@@ -205,13 +209,27 @@ public class Board {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board board = (Board) o;
-        return Objects.equals(key, board.key) &&
-                Objects.equals(title, board.title) &&
-                Objects.equals(password, board.password) &&
-                Objects.equals(backgroundColour, board.backgroundColour) &&
-                Objects.equals(fontColour, board.fontColour) &&
-                Objects.equals(cardLists, board.cardLists) &&
-                Objects.equals(tagList, board.tagList) &&
-                Objects.equals(presetList, board.presetList);
+        return secured == board.secured
+                && Objects.equals(key, board.key)
+                && Objects.equals(title, board.title)
+                && Objects.equals(boardBackgroundColour, board.boardBackgroundColour)
+                && Objects.equals(boardFontColour, board.boardFontColour)
+                && Objects.equals(listBackgroundColor, board.listBackgroundColor)
+                && Objects.equals(listFontColor, board.listFontColor)
+                && Objects.equals(cardLists, board.cardLists)
+                && Objects.equals(tagList, board.tagList)
+                && Objects.equals(presetList, board.presetList);
+    }
+
+    /**
+     * Hashcode method
+     * @return hashcode of object
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, title,
+                secured, boardBackgroundColour,
+                boardFontColour, listBackgroundColor,
+                listFontColor, cardLists, tagList, presetList);
     }
 }

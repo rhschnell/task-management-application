@@ -694,7 +694,8 @@ public class ListCtrl {
                     //Updates the displayed cards because a newer version was received
                         displayCards();
                     //Updates the board in the workspace because a newer version is available
-                        workspaceCtrl.refreshWorkspace(false);
+                       // workspaceCtrl.refreshWorkspace(false);
+                        workspaceCtrl.updateBoard();
                     }
                 });
             }));
@@ -708,7 +709,8 @@ public class ListCtrl {
         //Updates the cardList because a newer version is available
         service.setCardList(service.getCardList(service.getCardList().getId()));
         //Updates the board in the workspace because a newer is available
-        workspaceCtrl.refreshWorkspace(false);
+        //workspaceCtrl.refreshWorkspace(false);
+        workspaceCtrl.updateBoard();
     }
 
     /**

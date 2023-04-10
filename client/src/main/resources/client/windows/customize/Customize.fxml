@@ -36,7 +36,7 @@
                         <Font name="Arial" size="12.0" />
                     </font>
                 </Label>
-                <ColorPicker fx:id="boardBackgroundColor" minWidth="-Infinity" onAction="#setBoardBackgroundColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+                <ColorPicker fx:id="boardBackgroundColor" minWidth="-Infinity" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
             </children>
          <VBox.margin>
             <Insets left="10.0" />
@@ -52,7 +52,7 @@
                   <Insets />
                </HBox.margin>
                 </Label>
-                <ColorPicker fx:id="boardFontColor" minWidth="-Infinity" onAction="#setBoardFontColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+                <ColorPicker fx:id="boardFontColor" minWidth="-Infinity" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
             </children>
          <VBox.margin>
             <Insets left="10.0" />
@@ -83,7 +83,7 @@
                   <Font name="Arial" size="12.0" />
                </font>
             </Label>
-            <ColorPicker fx:id="listBackgroundColor" minWidth="-Infinity" onAction="#setListBackgroundColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+            <ColorPicker fx:id="listBackgroundColor" minWidth="-Infinity" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
          </children>
          <VBox.margin>
             <Insets left="10.0" />
@@ -99,7 +99,7 @@
                   <Insets />
                </HBox.margin>
             </Label>
-            <ColorPicker fx:id="listFontColor" minWidth="-Infinity" onAction="#setListFontColor" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
+            <ColorPicker fx:id="listFontColor" minWidth="-Infinity" prefHeight="25.0" prefWidth="45.0" style="-fx-background-radius: 10;" />
          </children>
          <VBox.margin>
             <Insets left="10.0" />
