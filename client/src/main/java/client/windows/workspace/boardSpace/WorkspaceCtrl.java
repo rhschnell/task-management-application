@@ -1377,6 +1377,8 @@ public class WorkspaceCtrl implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    //Update the board since the new one has changed
+                    showBoard(board.getKey());
                     refreshWorkspace(true);
                 }
             });
