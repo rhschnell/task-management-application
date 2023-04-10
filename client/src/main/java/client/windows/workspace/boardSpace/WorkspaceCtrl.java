@@ -441,7 +441,6 @@ public class WorkspaceCtrl implements Initializable {
         refreshBoardList(key, forceBoardListRefresh);
         updateBoardColours();
         updateListColors();
-        showBoard(key);
     }
 
     /**
@@ -580,7 +579,7 @@ public class WorkspaceCtrl implements Initializable {
         }
 
         for (int i = 0; i < listContainer.getChildren().size(); i++) {
-            String backgroundColor = shownBoard.getCardLists().get(0).getBackgroundColor();
+            String backgroundColor = shownBoard.getListBackgroundColor();
             String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
                            + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
                            "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
@@ -1321,8 +1320,8 @@ public class WorkspaceCtrl implements Initializable {
                         showBoard(board.getKey());
                         refreshWorkspace(true);
                     } else {
-                        leaveBoard(shownBoard);
                         clearWorkspace();
+                        refreshBoardList("", true);
                     }
                 }
             });
