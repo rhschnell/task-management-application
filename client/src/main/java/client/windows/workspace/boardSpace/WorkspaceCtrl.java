@@ -1380,8 +1380,8 @@ public class WorkspaceCtrl implements Initializable {
                     //Update the board since the new one has changed
                     shownBoard=(Board) board;
                     boardName.setText(shownBoard.getTitle());
-                    setInitialListFontColor(shownBoard.getFontColour());
-                    setInitialListColor(shownBoard.getBackgroundColour());
+                    updateBoardColours();
+                    updateListColors();
                     //Display the updates since something was changed
                     displayLists();
                 }
