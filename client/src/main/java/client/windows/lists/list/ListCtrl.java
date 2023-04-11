@@ -622,15 +622,9 @@ public class ListCtrl {
                 accessDeniedPopUp();
             });
         }
-        renameButton.setOnMouseClicked(e -> {
-            accessDeniedPopUp();
-        });
-        deleteButton.setOnMouseClicked(e -> {
-            accessDeniedPopUp();
-        });
-        createCardButton.setOnMouseClicked(e -> {
-            accessDeniedPopUp();
-        });
+        renameButton.setDisable(true);
+        deleteButton.setDisable(true);
+        createCardButton.setDisable(true);
         Node quickAddCard = cardVBox.getChildren().get(cardVBox.getChildren().size() - 1);
         quickAddCard.setVisible(false);
         quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
@@ -650,15 +644,9 @@ public class ListCtrl {
                 ctrl.delete();
             });
         }
-        renameButton.setOnMouseClicked(e -> {
-            onRenameButtonClicked();
-        });
-        deleteButton.setOnMouseClicked(e -> {
-            deleteScreen();
-        });
-        createCardButton.setOnMouseClicked(e -> {
-            addCardScreen();
-        });
+        renameButton.setDisable(false);
+        deleteButton.setDisable(false);
+        createCardButton.setDisable(false);
 
         Node quickAddCard = cardVBox.getChildren().get(cardVBox.getChildren().size() - 1);
         quickAddCard.setVisible(true);
