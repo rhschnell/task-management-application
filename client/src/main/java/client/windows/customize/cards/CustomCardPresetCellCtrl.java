@@ -2,6 +2,7 @@ package client.windows.customize.cards;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.BoardUtils;
 import client.serverUtils.CardColorPresetUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
@@ -55,6 +56,7 @@ public class CustomCardPresetCellCtrl {
     private CardColorPreset preset;
     private Board shownBoard;
     private List<CardColorPreset> presetList;
+    private BoardUtils boardUtils;
 
     /**
      * Constructor for the CustomCardPresetCellCtrl
@@ -62,9 +64,10 @@ public class CustomCardPresetCellCtrl {
      * @param helperMethods Instance of HelperMethods
      */
     @Inject
-    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods){
+    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods,BoardUtils boardUtils){
         this.server = server;
         this.helperMethods = helperMethods;
+        this.boardUtils=boardUtils;
     }
 
     /***
@@ -84,17 +87,28 @@ public class CustomCardPresetCellCtrl {
         }
         defaultBox.setOnAction(event -> {
             preset.setDefault(defaultBox.isSelected());
+            CardColorPreset presetPastDefault = null;
             if(preset.isDefault()){
                 for(CardColorPreset p : presetList){
                     if(p != preset){
+                        if(p.isDefault())
+                            presetPastDefault=p;
                         p.setDefault(false);
                     }
                 }
-
-                for(CardList cardList : workspaceCtrl.getShownBoard().getCardLists()){
+                if(!customizeCtrl.getBoard().getPresetList().contains(preset)) {
+                    customizeCtrl.getBoard().addPreset(preset);
+                    boardUtils.insertBoard(customizeCtrl.getBoard());
+                    customizeCtrl.refreshBoard();
+                    preset.setId(customizeCtrl.getBoard().getPresetList().get(customizeCtrl.getBoard().getPresetList().size()-1).getId());
+                }
+                for(CardList cardList : customizeCtrl.getBoard().getCardLists()){
                     for(Card card : cardList.getCards()){
-                        card.setPresets(new ArrayList<>());
-                        card.setPreset(preset);
+                        System.out.println(card.getPresets());
+                        if(card.getPresets().get(0).getBackgroundColor().equals(presetPastDefault.getBackgroundColor()) && card.getPresets().get(0).getFontColor().equals(presetPastDefault.getFontColor())) {
+                            card.setPresets(new ArrayList<>());
+                            card.setPreset(preset);
+                        }
                     }
                 }
             }

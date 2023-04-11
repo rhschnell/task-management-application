@@ -179,6 +179,10 @@ public class CustomizeCtrl {
         boardBackgroundColor.setValue(Color.web(board.getBoardBackgroundColour()));
         boardFontColor.setValue(Color.web(board.getBoardFontColour()));
     }
+    public void refreshBoard()
+    {
+        board = service.getBoard(board.getKey());
+    }
 
     /**
      * This method opens a popup window where the user can add new card color presets
@@ -205,5 +209,6 @@ public class CustomizeCtrl {
     public void addPreset(CardColorPreset preset) {
         this.newPresetList.add(preset);
     }
+
 }
 

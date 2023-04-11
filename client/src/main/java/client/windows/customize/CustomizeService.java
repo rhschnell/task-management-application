@@ -34,6 +34,10 @@ public class CustomizeService {
     public void insertBoard(Board board){
         boardUtils.insertBoard(board);
     }
+    public Board getBoard(String boardKey){
+       return boardUtils.getBoard(boardKey);
+    }
+
 
     /**
      * Inserts the cardlist to the server, or updates it
