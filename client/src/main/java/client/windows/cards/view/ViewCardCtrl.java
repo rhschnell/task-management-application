@@ -65,6 +65,8 @@ public class ViewCardCtrl implements Initializable {
 
     @FXML
     private Button cancelButton;
+    @FXML
+    private Button editButton;
 
     @FXML
     private VBox appliedTagsVbox;
@@ -80,15 +82,16 @@ public class ViewCardCtrl implements Initializable {
 
     /**
      * Constructor for ViewCardCtrl
+     *
      * @param helperMethods hm
-     * @param service The service to use in this controller
-     * @param mainCtrl The main controller to use in this controller
-     * @param myFXML The MyFXML injector to use in this controller
+     * @param service       The service to use in this controller
+     * @param mainCtrl      The main controller to use in this controller
+     * @param myFXML        The MyFXML injector to use in this controller
      */
     @Inject
     public ViewCardCtrl(HelperMethods helperMethods, ViewCardService service, MainCtrl mainCtrl, MyFXML myFXML) {
         this.helperMethods = helperMethods;
-        this.service=service;
+        this.service = service;
         this.mainCtrl = mainCtrl;
         this.myFXML = myFXML;
         this.cardTitle = new Label();
@@ -100,13 +103,11 @@ public class ViewCardCtrl implements Initializable {
 
     /**
      * Initialize method for ViewCardCtrl
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -122,10 +123,12 @@ public class ViewCardCtrl implements Initializable {
                 });
         tl.getKeyFrames().add(kf);
         tl.play();
+
     }
 
     /**
      * A setter for the card shown in the View Card window
+     *
      * @param card the card
      */
     public void setCard(Card card) {
@@ -144,10 +147,10 @@ public class ViewCardCtrl implements Initializable {
      */
     public void applyTag() {
         appliedTagsVbox.getChildren().clear();
-        if(card.getTags()!=null) {
+        if (card.getTags() != null) {
             for (int i = 0; i < card.getTags().size(); i++) {
                 var loader = new MyFXML(createInjector(new MainModules()))
-                        .load(CustomTagCellCtrl.class, "client", "windows", "tags","CustomTagCell.fxml");
+                        .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
                 CustomTagCellCtrl ctrl = loader.getKey();
                 ctrl.setTagObject(card.getTags().get(i), "viewTag");
                 appliedTagsVbox.getChildren().add(loader.getValue());
@@ -157,6 +160,7 @@ public class ViewCardCtrl implements Initializable {
 
     /**
      * A setter for the card title shown in the View Card window
+     *
      * @param title the card title
      */
     public void setCardTitle(String title) {
@@ -165,6 +169,7 @@ public class ViewCardCtrl implements Initializable {
 
     /**
      * A setter for the card description shown in the View Card window
+     *
      * @param description the card description
      */
     public void setCardDescription(String description) {
@@ -175,7 +180,7 @@ public class ViewCardCtrl implements Initializable {
      * Escapes the window
      */
     public void escape() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
@@ -197,12 +202,13 @@ public class ViewCardCtrl implements Initializable {
                 loader.getKey().escape();
             }
         });
-        helperMethods.popUp(scene,"Edit Card");
+        helperMethods.popUp(scene, "Edit Card");
         displayTasks();
     }
 
     /**
      * Gets the key of the board associated to this card
+     *
      * @return The associated board's key
      */
     public String getBoardKey() {
@@ -211,10 +217,10 @@ public class ViewCardCtrl implements Initializable {
 
     /**
      * Sets the key of the board associated to this card
+     *
      * @param boardKey New key
      */
-    public void setBoardKey(String boardKey)
-    {
+    public void setBoardKey(String boardKey) {
         service.setBoardKey(boardKey);
     }
 
@@ -223,7 +229,7 @@ public class ViewCardCtrl implements Initializable {
      */
     public void displayTasks() {
         taskBox.getChildren().clear();
-        if(card.getSubTasks()!=null) {
+        if (card.getSubTasks() != null) {
             for (Task task : card.getSubTasks()) {
                 var loader = new MyFXML(createInjector()).load(SubtaskCellCtrl.class,
                         "client", "windows", "subtasks", "SubtaskCell.fxml");
@@ -236,25 +242,55 @@ public class ViewCardCtrl implements Initializable {
 
     /**
      * Sets the shown board
+     *
      * @param shownBoard The shown board to be set
      */
-    public void setShownBoard(Board shownBoard){
+    public void setShownBoard(Board shownBoard) {
         this.shownBoard = shownBoard;
     }
 
     /**
      * Sets the workspaceCtrl
+     *
      * @param workspaceCtrl The WorkspaceCtrl to be set
      */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
         this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
+     * Makes sure the edit button is disabled when the board is locked and enabled when the board
+     * is not locked
+     */
+    public void checkAndHandleLocking() {
+        if (shownBoard.isProtected() && !workspaceCtrl.isAdmin()) {
+            disableEdit();
+        } else {
+            enableEdit();
+        }
+    }
+
+    /**
+     * Disables the edit button to show access denied popup
+     * Used when the board is locked
+     */
+    public void disableEdit() {
+        editButton.setDisable(true);
+    }
+
+    /**
+     * Enables the edit button
+     * Used when the board is getting unlocked again
+     */
+    public void enableEdit() {
+        editButton.setDisable(false);
     }
 
     /**
      * This method displays the applied preset
      */
     public void displayPreset() {
-        if(card.getPresets() == null) {
+        if (card.getPresets() == null) {
             return;
         }
         var loader = new MyFXML(createInjector(new MainModules()))
