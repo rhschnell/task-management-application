@@ -96,6 +96,10 @@ public class AddCardCtrl extends SubtaskContainer {
         this.service = service;
     }
 
+    public void setIP(String ip) {
+        service.setIP(ip);
+    }
+
     /**
      * Sets the card list for this card
      * @param cardList The card list to which this card belongs

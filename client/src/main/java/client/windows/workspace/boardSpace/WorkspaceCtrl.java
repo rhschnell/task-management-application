@@ -418,8 +418,7 @@ public class WorkspaceCtrl implements Initializable {
         // Fix lock button state in workspace
         if (board.equals(shownBoard) && mode.equals("unlock")) {
             unlockBoardButton.setDisable(true);
-            unlockLists();
-            unlockButtons();
+            unlockWorkspace();
         }
         refreshWorkspace(true);
     }
@@ -446,6 +445,7 @@ public class WorkspaceCtrl implements Initializable {
         String key = "";
         try {
             key = shownBoard.getKey();
+            displayLists();
             refreshBoard(key);
         } catch (Exception ignored) {}
 
@@ -469,8 +469,7 @@ public class WorkspaceCtrl implements Initializable {
         Board serverBoard = service.getBoard(key);
 
         // If the password was changed, the shown board should be locked, EXCEPT if admin
-        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !serverBoard.verifyPassword("")
-            && !isAdmin()) {
+        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !isAdmin()) {
             shownBoard.setProtected(true);
         } else if (isAdmin()) {
             shownBoard.setProtected(false); // Should not be needed but for stability purposes
@@ -482,21 +481,20 @@ public class WorkspaceCtrl implements Initializable {
                         && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))// saved password is correct
                         && shownBoard.isProtected())                     // AND the board is locked on screen)
                         || isAdmin()) {                                  // OR admin {
-            unlockButtons();                                             // unlock the board
-            unlockLists();
+            unlockWorkspace();
             shownBoard.setProtected(false);
 
         } else if (!pwdMap.containsKey(shownBoard.getKey())            // else if we do not know a password for it
                 || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {// OR stored incorrect password
-            lockLists();                                                          // saved for it {
-            lockButtons();                                                        // lock the board on screen
+            lockWorkspace();                                                      // saved for it {
+                                                                                  // lock the board on screen
             shownBoard.setProtected(true);
         }
         if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))    // if saved password board is incorrect
                 && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
-        shownBoard = service.getBoard(shownBoard.getKey());
+//        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**
@@ -643,23 +641,21 @@ public class WorkspaceCtrl implements Initializable {
             // Theoretically unnecessary, but to be sure
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
 
+            displayLists();
             if (!isAdmin()) {
                 helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
             }
             if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
-                lockButtons();
-                lockLists();
+                lockWorkspace();
                 shownBoard.setProtected(true);
             } else {
-                unlockButtons();
-                unlockLists();
+                unlockWorkspace();
                 shownBoard.setProtected(false);
             }
             pwdMap.putIfAbsent(targetKey, "");
             joinedKeys.add(targetKey);
             boardName.setText(shownBoard.getTitle());
             unhideWorkspace();
-            displayLists();
             refreshBoardList(shownBoard.getKey(), true);
         } catch (NotFoundException | BadRequestException e) {
             String message = "There is no board with key " + targetKey +
@@ -669,6 +665,23 @@ public class WorkspaceCtrl implements Initializable {
             helperMethods.showErrorDialog(nonExistingKey);
         } catch (Exception ignored) {}
     }
+
+    /**
+     * Lock :)
+     */
+    private void lockWorkspace() {
+        lockButtons();
+        lockLists();
+    }
+
+    /**
+     *  Unlock :(
+     */
+    private void unlockWorkspace() {
+        unlockButtons();
+        unlockLists();
+    }
+
     /**
      * Displays the lists into the HBox list container
      */

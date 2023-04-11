@@ -26,6 +26,14 @@ public class CardListUtils {
     }
 
     /**
+     *
+     * @param ip
+     */
+    public void setIP(String ip) {
+        serverUtils.setServer(ip);
+    }
+
+    /**
      * Sends a post request to the server to add a card list to the database
      * @param cardList The card list to add
      */

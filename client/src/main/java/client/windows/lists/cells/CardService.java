@@ -24,6 +24,11 @@ public class CardService {
         this.cardListUtils = cardListUtils;
     }
 
+    public void setIP(String ip) {
+        cardListUtils.setIP(ip);
+        cardUtils.setIP(ip);
+    }
+
     /**
      * Deletes the card
      *

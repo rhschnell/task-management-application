@@ -38,6 +38,10 @@ public class AddCardService {
         appliedTags = new ArrayList<>();
     }
 
+    public void setIP(String ip) {
+        server.setIP(ip);
+    }
+
     /**
      * Gets the board key
      *

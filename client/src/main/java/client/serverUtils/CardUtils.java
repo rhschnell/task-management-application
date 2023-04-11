@@ -27,6 +27,10 @@ public class CardUtils {
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
+    public void setIP(String ip) {
+        serverUtils.setServer(ip);
+    }
+
     /**
      * Sends a post request to the server to add a Card to the database
      * @param card The card to add to the database
