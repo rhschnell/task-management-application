@@ -1,8 +1,10 @@
 package client.windows.tags.edit;
 
+import client.serverUtils.BoardUtils;
 import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.windows.tags.view.CustomEditTagCellCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -36,16 +38,20 @@ public class EditTagCtrl {
     @FXML
     private Button saveButton;
     private HelperMethods helperMethods;
+    private WorkspaceCtrl workspaceCtrl;
+    private BoardUtils boardUtils;
 
     /**
      * Constructor for the EditTagCtrl
      * @param service Corresponding service
      * @param helperMethods Injected instance of HelperMethods
+     * @param boardUtils to update the Board
      */
     @Inject
-    public EditTagCtrl(EditTagService service, HelperMethods helperMethods){
+    public EditTagCtrl(EditTagService service, HelperMethods helperMethods, BoardUtils boardUtils){
         this.service = service;
         this.helperMethods = helperMethods;
+        this.boardUtils=boardUtils;
     }
 
     /**
@@ -57,6 +63,14 @@ public class EditTagCtrl {
         setTagTitle(tag.getName());
         setTagColor(Color.web(tag.getTagColor()));
         setFontColor(Color.web(tag.getFontColor()));
+    }
+
+    /**
+     * Setter for workspaceCtrl
+     * @param workspaceCtrl
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
@@ -114,8 +128,10 @@ public class EditTagCtrl {
         tag.setTagColor(newTagColor.toString());
         tag.setFontColor(newFontColor.toString());
         service.insertTag(tag);
+        workspaceCtrl.updateBoard();
         customEditTagCellCtrl.getTagOverviewCtrl().displayTagList();
-
+        workspaceCtrl.updateBoard();
+        boardUtils.insertBoard(boardUtils.getBoard(workspaceCtrl.getBoardKey()));
         ((Stage)saveButton.getScene().getWindow()).close();
     }
 

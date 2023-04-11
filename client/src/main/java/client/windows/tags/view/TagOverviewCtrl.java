@@ -2,6 +2,7 @@ package client.windows.tags.view;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.BoardUtils;
 import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.add.AddTagCtrl;
@@ -36,17 +37,20 @@ public class TagOverviewCtrl {
 
     @FXML
     private Button closeButton;
+    private BoardUtils boardUtils;
 
     /**
      * Constructor for the TagOverviewCtrl
      * @param helperMethods hm
      * @param tagUtils Instance of the utility class for tags
+     * @param boardUtils Intance of the boardUtils to also update the board when a tag update is received
      */
     @Inject
-    public TagOverviewCtrl(HelperMethods helperMethods, TagUtils tagUtils) {
+    public TagOverviewCtrl(HelperMethods helperMethods, TagUtils tagUtils, BoardUtils boardUtils) {
         this.helperMethods = helperMethods;
         this.tagUtils = tagUtils;
         this.tagList = new ArrayList<>();
+        this.boardUtils = boardUtils;
     }
 
     /**
@@ -72,6 +76,7 @@ public class TagOverviewCtrl {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomEditTagCellCtrl.class, "client", "windows", "tags", "CustomEditTagCell.fxml");
             CustomEditTagCellCtrl ctrl = loader.getKey();
+            ctrl.setWorkspaceCtrl(workspaceCtrl);
             ctrl.setTagObject(tagList.get(i));
             ctrl.setTagOverviewCtrl(this);
             displayedTags.getChildren().add(loader.getValue());
@@ -112,7 +117,8 @@ public class TagOverviewCtrl {
         tagUtils.registerForUpdates(boardKey, tagList, t -> {
             Platform.runLater(this::displayTagList);
             //workspaceCtrl.refreshWorkspace(false);
-            workspaceCtrl.updateBoard();
+            boardUtils.insertBoard(boardUtils.getBoard(boardKey));
+
         });
     }
 

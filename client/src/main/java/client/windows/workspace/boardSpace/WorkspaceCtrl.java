@@ -1190,10 +1190,9 @@ public class WorkspaceCtrl implements Initializable {
     public void tagOverview() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(TagOverviewCtrl.class, "client", "windows", "tags", "TagOverview.fxml");
-
+        loader.getKey().setWorkspaceCtrl(this);
         loader.getKey().setBoardKey(shownBoard.getKey());
         loader.getKey().poll();
-        loader.getKey().setWorkspaceCtrl(this);
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
