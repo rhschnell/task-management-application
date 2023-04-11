@@ -4,7 +4,6 @@ import client.MyFXML;
 import client.modules.MainModules;
 import client.serverUtils.WebsocketUtils;
 import client.utils.HelperMethods;
-import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.lists.delete.DeleteCardCtrl;
 import client.windows.lists.list.ListCtrl;
