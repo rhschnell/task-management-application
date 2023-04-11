@@ -200,6 +200,8 @@ public class CardCtrl implements Initializable {
         ViewCardCtrl controller = loader.getKey();
         controller.setBoardKey(getBoardKey());
         controller.setShownBoard(shownBoard);
+        controller.setWorkspaceCtrl(workspaceCtrl);
+        controller.checkAndHandleLocking();
         controller.setCard(cell);
 
         String title = "View Card";

@@ -122,20 +122,22 @@ public class WorkspaceCtrl implements Initializable {
     private List<ListCtrl> listControllers;
     private final CardService cardService;
 
-    private List <StompSession.Subscription> boardSubscriber;
-    private List <StompSession.Subscription> listSubscribers;
+    private List<StompSession.Subscription> boardSubscribers;
+    private List<StompSession.Subscription> listSubscribers;
     private boolean admin;
-    @FXML private Label screenTitle;
-    @FXML private Button leaveButton;
+    @FXML
+    private Label screenTitle;
+    @FXML
+    private Button leaveButton;
     private WebsocketUtils websocketUtils;
 
 
     /**
      * Constructor for WorkspaceCtrl
      *
-     * @param service       corresponding service
-     * @param cardService   injected cardService instance
-     * @param helperMethods corresponding helper methods
+     * @param service        corresponding service
+     * @param cardService    injected cardService instance
+     * @param helperMethods  corresponding helper methods
      * @param websocketUtils injected websocket instance
      */
     @Inject
@@ -152,16 +154,14 @@ public class WorkspaceCtrl implements Initializable {
         mouseMoveThreshold = 0.5;
         this.pwdMap = new HashMap<>();
         this.admin = false;
-        this.websocketUtils=websocketUtils;
+        this.websocketUtils = websocketUtils;
     }
+
     /**
      * Return's to the main screen
      */
     public void disconnect() {
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
+        unsubscribeBoards();
         if (isAdmin()) {
             helperMethods.setScene(Scenes.ADMIN);
         } else {
@@ -181,8 +181,8 @@ public class WorkspaceCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         joinedKeys = new HashSet<>();
-        boardSubscriber =new ArrayList<>();
-        listSubscribers =new ArrayList<>();
+        boardSubscribers = new ArrayList<>();
+        listSubscribers = new ArrayList<>();
         clearWorkspace(); // No board -> board controls
 
         // Initialize array of buttons that need to be disabled if board is locked
@@ -219,10 +219,7 @@ public class WorkspaceCtrl implements Initializable {
         for (Board b : service.getBoards()) {
             tempList.add(b.getKey());
         }
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
+        unsubscribeBoards();
         showBoard(key);
         keyField.clear();
     }
@@ -251,10 +248,7 @@ public class WorkspaceCtrl implements Initializable {
         String key = shownBoard.getKey();
 
         List<String> tempList = new ArrayList<>(joinedKeys);
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
+        unsubscribeBoards();
         showBoard(key);
 
         pwdMap.putIfAbsent(key, "");
@@ -280,11 +274,11 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Makes sure the user can create a board by pressing ENTER after typing the title
+     *
      * @param event The event that gets handled and checked for the ENTER key
      */
     public void createOnEnter(KeyEvent event) {
-        if(event.getCode().equals(KeyCode.ENTER))
-        {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             create();
         }
     }
@@ -293,10 +287,7 @@ public class WorkspaceCtrl implements Initializable {
      * Method to clear the workspace
      */
     public void clearWorkspace() {
-        for(int i = 0; i< boardSubscriber.size(); i++)
-        {
-            boardSubscriber.get(i).unsubscribe();
-        }
+        unsubscribeBoards();
         //Hide title bar
         boardName.setText("");
         titleBar.getChildren().forEach(c -> c.setVisible(false));
@@ -438,6 +429,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Refreshes the workspace
+     *
      * @param forceBoardListRefresh If true forces the refresh even though no board has been deleted
      */
     public void refreshWorkspace(boolean forceBoardListRefresh) {
@@ -447,12 +439,12 @@ public class WorkspaceCtrl implements Initializable {
             key = shownBoard.getKey();
             displayLists();
             refreshBoard(key);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         // Refresh the board list (joined boards)
         refreshBoardList(key, forceBoardListRefresh);
         if (shownBoard != null) {
-            displayLists();
             updateBoardColours();
             updateListColors();
             updateCardColors();
@@ -469,18 +461,21 @@ public class WorkspaceCtrl implements Initializable {
         Board serverBoard = service.getBoard(key);
 
         // If the password was changed, the shown board should be locked, EXCEPT if admin
-        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !isAdmin()) {
+        if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !serverBoard.verifyPassword("")
+            && !isAdmin()) {
+            lockWorkspace();
             shownBoard.setProtected(true);
         } else if (isAdmin()) {
+            unlockWorkspace();
             shownBoard.setProtected(false); // Should not be needed but for stability purposes
         }
 
         // If shown board is locked client side, and we remember the password
         if (shownBoard.verifyPassword("") || (                   // If board doesn't have password OR
                 pwdMap.containsKey(shownBoard.getKey())                  // (We have a saved password for it AND
-                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))// saved password is correct
-                        && shownBoard.isProtected())                     // AND the board is locked on screen)
-                        || isAdmin()) {                                  // OR admin {
+                && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))// saved password is correct
+                && shownBoard.isProtected())                     // AND the board is locked on screen)
+            || isAdmin()) {                                  // OR admin {
             unlockWorkspace();
             shownBoard.setProtected(false);
 
@@ -491,7 +486,7 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard.setProtected(true);
         }
         if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))    // if saved password board is incorrect
-                && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
+            && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
 //        shownBoard = service.getBoard(shownBoard.getKey());
@@ -518,7 +513,7 @@ public class WorkspaceCtrl implements Initializable {
                 // if the password we saved is no longer correct
                 // AND the password is not empty AND we stored a password
                 if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))
-                        && !isAdmin()) {// AND not admin
+                    && !isAdmin()) {// AND not admin
                     forced = true; // then force a total refresh of the displayed list
                     pwdMap.remove(k); // and delete the incorrect, stored password
                 }
@@ -552,14 +547,14 @@ public class WorkspaceCtrl implements Initializable {
      * Updates the card colors
      */
     public void updateCardColors() {
-        if(shownBoard == null) {
+        if (shownBoard == null) {
             return;
         }
 
-        for(int i = 0; i < shownBoard.getCardLists().size(); i++){
+        for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
             Node scrollPane = ((VBox) listContainer.getChildren().get(i)).getChildren().get(1);
 
-            for(int j = 0; j < shownBoard.getCardLists().get(i).getCards().size(); j++){
+            for (int j = 0; j < shownBoard.getCardLists().get(i).getCards().size(); j++) {
                 Card card = shownBoard.getCardLists().get(i).getCards().get(j);
                 String backgroundColor = card.getPresets().get(0).getBackgroundColor();
                 String fontColor = card.getPresets().get(0).getFontColor();
@@ -567,13 +562,13 @@ public class WorkspaceCtrl implements Initializable {
                 String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
                         "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
 
-                if (scrollPane instanceof ScrollPane){
+                if (scrollPane instanceof ScrollPane) {
                     Node cardBox = ((VBox) ((ScrollPane) scrollPane).getContent()).getChildren().get(j);
                     cardBox.setStyle(backgroundStyle);
                     Node cardTitle = ((HBox) ((VBox) ((HBox) ((AnchorPane) cardBox)
                             .getChildren().get(0)).getChildren().get(0))
                             .getChildren().get(0)).getChildren().get(0);
-                    if (cardTitle instanceof  Label){
+                    if (cardTitle instanceof Label) {
                         ((Label) cardTitle).setTextFill(Color.web(fontColor));
                     }
                 }
@@ -631,10 +626,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             unsubscribeLists();
             shownBoard = service.getBoard(targetKey);
-            for (int i = 0; i < boardSubscriber.size(); i++)
-            {
-                boardSubscriber.get(i).unsubscribe();
-            }
+            unsubscribeBoards();
             registerForBoardUpdates(targetKey);
 
             boardName.setText(shownBoard.getTitle());
@@ -645,7 +637,8 @@ public class WorkspaceCtrl implements Initializable {
             if (!isAdmin()) {
                 helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
             }
-            if (!shownBoard.verifyPassword("") && !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {
+            if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
+                && !isAdmin()) {
                 lockWorkspace();
                 shownBoard.setProtected(true);
             } else {
@@ -659,27 +652,37 @@ public class WorkspaceCtrl implements Initializable {
             refreshBoardList(shownBoard.getKey(), true);
         } catch (NotFoundException | BadRequestException e) {
             String message = "There is no board with key " + targetKey +
-                    ". Try joining a board with a different key.";
+                             ". Try joining a board with a different key.";
 
             ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
             helperMethods.showErrorDialog(nonExistingKey);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     /**
-     * Lock :)
+     * Unsubscribes all the boards
      */
-    private void lockWorkspace() {
-        lockButtons();
-        lockLists();
+    private void unsubscribeBoards() {
+        for (StompSession.Subscription subscription : boardSubscribers) {
+            subscription.unsubscribe();
+        }
     }
 
     /**
-     *  Unlock :(
+     * Locks the entire workspace so the whole board is view-only
      */
     private void unlockWorkspace() {
         unlockButtons();
         unlockLists();
+    }
+
+    /**
+     * Unlocks
+     */
+    private void lockWorkspace() {
+        lockButtons();
+        lockLists();
     }
 
     /**
@@ -851,7 +854,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Handles the shortcut for customizing card color presets "C"
-     *
+     * <p>
      * This opens the edit window, since this is where you edit card presets
      */
     public void handleCustomizationShortcut() {
@@ -1076,6 +1079,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Method to delete a board from the database
+     *
      * @param board the board to be deleted
      */
     public void deleteBoard(Board board) {
@@ -1095,6 +1099,7 @@ public class WorkspaceCtrl implements Initializable {
     /**
      * Handles the action of deleting a board from the workspace by opening a
      * confirmation popup.
+     *
      * @param board the board to be deleted
      */
     public void deleteScreen(Board board) {
@@ -1327,6 +1332,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Setter for admin mode in workspace
+     *
      * @param admin true/false
      */
     public void setAdmin(boolean admin) {
@@ -1340,6 +1346,7 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Getter for admin mode of workspace
+     *
      * @return true if admin, else false
      */
     public boolean isAdmin() {
@@ -1373,12 +1380,14 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     ///WEBSOCKETS
+
     /**
      * Register for messages for the entered key, this way we will receive updates just for the board we are on
+     *
      * @param key the board we need to get the updated information
      */
     public void registerForBoardUpdates(String key) {
-        boardSubscriber.add(websocketUtils.registerForMessages("/topic/boards/"+key,Board.class, board -> {
+        boardSubscribers.add(websocketUtils.registerForMessages("/topic/boards/" + key, Board.class, board -> {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -1397,37 +1406,43 @@ public class WorkspaceCtrl implements Initializable {
 
     /**
      * Ads a list subscriber to the list, so we can unsubscribe it later
+     *
      * @param subscriber
      */
-    public void addListSubscriber(StompSession.Subscription subscriber)
-    {
+    public void addListSubscriber(StompSession.Subscription subscriber) {
         listSubscribers.add(subscriber);
     }
 
     /**
      * Updates the board because it exists a newer version
      */
-    public void updateBoard()
-    {
-        shownBoard=service.getBoard(shownBoard.getKey());
+    public void updateBoard() {
+        shownBoard = service.getBoard(shownBoard.getKey());
+        if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
+            && !isAdmin()) {
+            shownBoard.setProtected(true);
+            lockWorkspace();
+        }
+        refreshBoardList(shownBoard.getKey(), true); // Also update the board list
     }
 
 
     /**
      * Unsubscribe all the lists because the board needs to be updated
      */
-    public void unsubscribeLists()
-    {
+    public void unsubscribeLists() {
         listContainer.getChildren().clear();
+
+        for (ListCtrl listController : listControllers) {
+            listController.unsubscribeCards();
+        }
         listControllers.clear();
-        for(int i = 0; i< listControllers.size(); i++)
-        {
-            listControllers.get(i).unsubscribeCards();
+
+
+        for (StompSession.Subscription listSubscriber : listSubscribers) {
+            listSubscriber.unsubscribe();
         }
-        for(int i = 0; i< listSubscribers.size(); i++)
-        {
-            listSubscribers.get(i).unsubscribe();
-        }
+        listSubscribers.clear();
     }
 
     /**
