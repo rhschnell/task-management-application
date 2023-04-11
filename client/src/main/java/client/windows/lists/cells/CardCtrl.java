@@ -150,24 +150,7 @@ public class CardCtrl implements Initializable {
      * Pops up the edit card window
      */
     public void edit() {
-        var loader = new MyFXML(createInjector(new MainModules()))
-                .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
-        Parent root = loader.getValue();
-        Scene scene = new Scene(root);
-        loader.getKey().setBoardKey(service.getBoardKey());
-        loader.getKey().setShownBoard(shownBoard);
-        loader.getKey().setWorkspaceCtrl(workspaceCtrl);
-        loader.getKey().setCard(card);
-        loader.getKey().displayTasks();
-        loader.getKey().setPresetList(shownBoard.getPresetList());
-
-        scene.getRoot().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                loader.getKey().escape();
-            }
-        });
-        String title = "Edit card";
-        helperMethods.popUp(scene, title);
+        workspaceCtrl.openFocusedCard();
     }
 
 
