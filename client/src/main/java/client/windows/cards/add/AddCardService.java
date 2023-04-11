@@ -39,6 +39,14 @@ public class AddCardService {
     }
 
     /**
+     * setter for ip
+     * @param ip ip
+     */
+    public void setIP(String ip) {
+        server.setIP(ip);
+    }
+
+    /**
      * Gets the board key
      *
      * @return The board key
