@@ -34,8 +34,14 @@ public class CustomizeService {
     public void insertBoard(Board board){
         boardUtils.insertBoard(board);
     }
+
+    /**
+     * Gets the board
+     * @param boardKey
+     * @return the board
+     */
     public Board getBoard(String boardKey){
-       return boardUtils.getBoard(boardKey);
+        return boardUtils.getBoard(boardKey);
     }
 
 

@@ -62,9 +62,11 @@ public class CustomCardPresetCellCtrl {
      * Constructor for the CustomCardPresetCellCtrl
      * @param server The CardColorPresetUtils server
      * @param helperMethods Instance of HelperMethods
+     * @param boardUtils to update the Board
      */
     @Inject
-    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods,BoardUtils boardUtils){
+    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods,
+                                    BoardUtils boardUtils){
         this.server = server;
         this.helperMethods = helperMethods;
         this.boardUtils=boardUtils;
@@ -96,21 +98,7 @@ public class CustomCardPresetCellCtrl {
                         p.setDefault(false);
                     }
                 }
-                if(!customizeCtrl.getBoard().getPresetList().contains(preset)) {
-                    customizeCtrl.getBoard().addPreset(preset);
-                    boardUtils.insertBoard(customizeCtrl.getBoard());
-                    customizeCtrl.refreshBoard();
-                    preset.setId(customizeCtrl.getBoard().getPresetList().get(customizeCtrl.getBoard().getPresetList().size()-1).getId());
-                }
-                for(CardList cardList : customizeCtrl.getBoard().getCardLists()){
-                    for(Card card : cardList.getCards()){
-                        System.out.println(card.getPresets());
-                        if(card.getPresets().get(0).getBackgroundColor().equals(presetPastDefault.getBackgroundColor()) && card.getPresets().get(0).getFontColor().equals(presetPastDefault.getFontColor())) {
-                            card.setPresets(new ArrayList<>());
-                            card.setPreset(preset);
-                        }
-                    }
-                }
+                customizeCtrl.setToChangeDefault(preset,presetPastDefault);
             }
             customizeCtrl.updateDisplayedPresets();
         });
@@ -121,6 +109,27 @@ public class CustomCardPresetCellCtrl {
      */
     public void delete() {
         presetList.remove(preset);
+        Board updatedBoard = customizeCtrl.getBoard();
+        List<CardColorPreset> newListPresets = new ArrayList<>();
+        updatedBoard.removePreset(preset);
+        for(CardList cardList : updatedBoard.getCardLists())
+        {
+            for (Card card: cardList.getCards())
+            {
+                if(card.getPresets().contains(preset)) {
+                    newListPresets = card.getPresets();
+                    newListPresets.remove(preset);
+                    if(newListPresets.size()==0)
+                    {
+                        card.setPreset(updatedBoard.getPresetList().get(0));
+                    }
+                    else
+                        card.setPresets(newListPresets);
+                }
+            }
+        }
+        boardUtils.insertBoard(updatedBoard);
+        customizeCtrl.refreshBoard();
         customizeCtrl.updateDisplayedPresets();
     }
 
