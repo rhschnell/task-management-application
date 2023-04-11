@@ -23,6 +23,15 @@ public class WorkspaceService {
     }
 
     /**
+     * Setter for IP in utils
+     * @param serverIP IP
+     */
+    public void setServerIP(String serverIP) {
+        server.setServer(serverIP);
+    }
+
+
+    /**
      * Inserts the board to the server, or updates it
      * @param board the board to be inserted or update
      * @return the inserted board, taken from the server
