@@ -7,6 +7,7 @@ import client.utils.DataFormatManager;
 import client.utils.HelperMethods;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.cards.view.CustomCardPresetCellViewCtrl;
+import client.windows.lists.delete.DeleteCardCtrl;
 import client.windows.subtasks.SubtaskCellCtrl;
 import client.windows.subtasks.SubtaskContainer;
 import client.windows.tags.view.CustomTagCellCtrl;
@@ -306,6 +307,24 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         newCard.addSubTask(newTask);
         addTaskField.clear();
         displayTasks();
+    }
+
+    public void deleteCard() {
+        var loader = new MyFXML(createInjector(new MainModules()))
+                .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
+        Parent root = loader.getValue();
+        Scene scene = new Scene(root);
+        loader.getKey().setDeleteCard(oldCard);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().escape();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().delete();
+            }
+        });
+        String title = "Delete a card";
+        helperMethods.popUp(scene, title);
     }
 
     /**

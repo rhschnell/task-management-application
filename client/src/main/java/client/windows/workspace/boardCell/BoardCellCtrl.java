@@ -127,10 +127,12 @@ public class BoardCellCtrl implements Initializable {
      * Method to change locked state of board
      */
     public void swapLock() {
-        if (board.verifyPassword("")) {
+        if (board.isProtected()) {
+            unlock();
+        } else {
             lock();
-            updateProtectionIcon();
         }
+        updateProtectionIcon();
     }
 
     /**

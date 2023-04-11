@@ -80,6 +80,11 @@ public class EditCardService {
         server.insertCard(card);
     }
 
+    /**
+     * Method to delete card from database
+     * @param card the card to be deleted
+     */
+    public void deleteCard(Card card) {server.deleteCard(card.getId());}
 
     /**
      * Returns the tags from the service
