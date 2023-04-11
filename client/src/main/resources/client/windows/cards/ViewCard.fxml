@@ -69,7 +69,11 @@
                         <Insets />
                      </opaqueInsets>
                   </Label>
-                  <Pane fx:id="appliedPreset" prefHeight="75.0" prefWidth="306.0" />
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="250.0" minHeight="0.0" prefHeight="75.0" prefWidth="314.0">
+                     <content>
+                        <Pane fx:id="appliedPreset" prefHeight="75.0" prefWidth="306.0" />
+                     </content>
+                  </ScrollPane>
                   <Separator prefWidth="200.0">
                      <opaqueInsets>
                         <Insets bottom="10.0" top="10.0" />

@@ -188,8 +188,6 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         deletedSubtaskIDs.clear();
 
         service.insertCard(editedCard);
-        viewCardCtrl.setCard(newCard);
-
     }
 
     /**
@@ -421,6 +419,15 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
     }
 
     private void refresh() {
-        service.getCard(cardID);
+        if(!newCard.equals(service.getCard(cardID))) {
+            newCard = service.getCard(cardID);
+            service.setCard(newCard);
+            setCardTitle(newCard.getTitle());
+            setCardDescription(newCard.getDescription());
+            setAppliedTags(newCard.getTags());
+            displayTasks();
+            setPresetList(newCard.getPresets());
+            updateDisplayedPresets();
+        }
     }
 }

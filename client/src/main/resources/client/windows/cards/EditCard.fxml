@@ -73,7 +73,11 @@
                         <Insets />
                      </opaqueInsets>
                   </Label>
-                  <VBox fx:id="presets" maxHeight="1.7976931348623157E308" prefHeight="80.0" prefWidth="310.0" spacing="10.0" />
+                  <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="318.0">
+                     <content>
+                        <VBox fx:id="presets" maxHeight="1.7976931348623157E308" prefHeight="74.0" prefWidth="310.0" spacing="10.0" />
+                     </content>
+                  </ScrollPane>
                   <Separator prefWidth="200.0">
                      <opaqueInsets>
                         <Insets />
