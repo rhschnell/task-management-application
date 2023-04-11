@@ -552,7 +552,9 @@ public class WorkspaceCtrl implements Initializable {
                         .load(BoardCellCtrl.class, "client", "windows", "workspace", "boardCell",
                                 "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
-                controller.setBoard(service.getBoard(k));
+                Board newBoard = service.getBoard(k);
+                if (!newBoard.verifyPassword(pwdMap.get(k))) {newBoard.setProtected(true);}
+                controller.setBoard(newBoard);
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
             }
