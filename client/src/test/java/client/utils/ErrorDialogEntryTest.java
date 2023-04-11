@@ -1,17 +1,65 @@
 package client.utils;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ErrorDialogEntryTest {
+class ErrorDialogEntryTest {
+
+    private ErrorDialogEntry errorDialogEntry;
+    @BeforeEach
+    void setUp() {
+        this.errorDialogEntry = new ErrorDialogEntry("Title", "Error message");
+    }
 
     @Test
-    void testConstructorAndGetters() {
-        String title = "Title";
-        String message = "Message";
-        ErrorDialogEntry entry = new ErrorDialogEntry(title, message);
-        assertEquals(title, entry.getPopupTitle());
-        assertEquals(message, entry.getMessage());
+    void getPopupTitle() {
+        assertEquals("Title", errorDialogEntry.getPopupTitle());
+    }
+
+    @Test
+    void getMessage() {
+        assertEquals("Error message", errorDialogEntry.getMessage());
+    }
+
+    @Test
+    void setPopupTitle() {
+        errorDialogEntry.setPopupTitle("New title");
+        assertEquals("New title", errorDialogEntry.getPopupTitle());
+    }
+
+    @Test
+    void setMessage() {
+        errorDialogEntry.setMessage("New message");
+        assertEquals("New message", errorDialogEntry.getMessage());
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        assertEquals(errorDialogEntry, errorDialogEntry);
+    }
+
+    @Test
+    void testEqualsSameValues(){
+        assertEquals(errorDialogEntry, new ErrorDialogEntry("Title", "Error message"));
+    }
+
+    @Test
+    void testEqualsNull(){
+        assertNotEquals(errorDialogEntry, null);
+    }
+
+    @Test
+    void testEqualsDifferentValues(){
+        assertNotEquals(errorDialogEntry, new ErrorDialogEntry("Different title", "Different " +
+                                                                                  "message"));
+    }
+
+    @Test
+    void testHashCode() {
+        // Create new object same
+        ErrorDialogEntry sameAsDefault = new ErrorDialogEntry("Title", "Error message");
+        assertEquals(errorDialogEntry.hashCode(), sameAsDefault.hashCode());
     }
 }

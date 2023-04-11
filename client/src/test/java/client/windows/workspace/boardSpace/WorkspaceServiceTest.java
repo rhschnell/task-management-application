@@ -2,11 +2,15 @@ package client.windows.workspace.boardSpace;
 
 import client.serverUtils.BoardUtils;
 import commons.Board;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -31,9 +35,15 @@ class WorkspaceServiceTest {
 
   @Test
   public void getBoard() {
-      String key = "test board";
+      String key = "Test Board";
       workspaceService.getBoard(key);
       verify(boardUtils, times(1)).getBoard(key);
+  }
+
+  @Test
+  public void getBoards() {
+      workspaceService.getBoards();
+      verify(boardUtils, times(1)).getBoards();
   }
 
   @Test

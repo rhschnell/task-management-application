@@ -15,15 +15,20 @@ public class DataFormatManagerTest {
     }
 
     @Test
-    public void getCardFormat() {
-        DataFormat cardFormat = dataFormatManager.getCardFormat();
-        assertNotNull(cardFormat, "Card format should not be null");
+    void testExistingDataFormats(){
+        // Create a new dataFormatManager to test if the code can handle already existing formats
+        DataFormatManager dataFormatManager1 = new DataFormatManager();
+        assertEquals(DataFormat.lookupMimeType("card"), dataFormatManager1.getCardFormat());
+        assertEquals(DataFormat.lookupMimeType("task"), dataFormatManager1.getSubtaskFormat());
     }
 
     @Test
-    public void getSubtaskFormat() {
-        DataFormat subtaskFormat = dataFormatManager.getSubtaskFormat();
-        assertNotNull(subtaskFormat, "Subtask format should not be null");
+    void getCardFormat() {
+        assertEquals(DataFormat.lookupMimeType("card"), this.dataFormatManager.getCardFormat());
+    }
+
+    @Test
+    void getSubtaskFormat() {
+        assertEquals(DataFormat.lookupMimeType("task"), this.dataFormatManager.getSubtaskFormat());
     }
 }
-

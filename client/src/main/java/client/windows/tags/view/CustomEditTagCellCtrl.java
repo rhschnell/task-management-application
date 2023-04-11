@@ -6,6 +6,7 @@ import client.serverUtils.BoardUtils;
 import client.serverUtils.TagUtils;
 import client.utils.HelperMethods;
 import client.windows.tags.edit.EditTagCtrl;
+import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Tag;
 import javafx.fxml.FXML;
@@ -34,6 +35,7 @@ public class CustomEditTagCellCtrl {
 
     @FXML
     private Button deleteButton;
+    private WorkspaceCtrl workspaceCtrl;
 
     @FXML
     private Circle tagColor;
@@ -72,6 +74,14 @@ public class CustomEditTagCellCtrl {
     }
 
     /**
+     * Setter for workspaceCtrl
+     * @param workspaceCtrl
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
      * Method to delete a tag from the board
      */
     public void deleteTag(){
@@ -91,6 +101,7 @@ public class CustomEditTagCellCtrl {
         Scene scene = new Scene(root);
 
         EditTagCtrl controller = loader.getKey();
+        controller.setWorkspaceCtrl(workspaceCtrl);
         controller.setTag(tag);
         controller.setColorPicker();
         controller.setFontColorPicker();
