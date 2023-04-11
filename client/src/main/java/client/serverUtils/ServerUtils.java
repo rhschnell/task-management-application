@@ -19,6 +19,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 
 
 public class ServerUtils {
@@ -59,10 +60,8 @@ public class ServerUtils {
                     .request()
                     .get();
             return true;
-        } catch (jakarta.ws.rs.ProcessingException e) {
-            if (e.getCause() instanceof ConnectException) {
-                System.out.println("Turn on the server before trying to connect");
-            } else {
+        } catch (jakarta.ws.rs.ProcessingException  e) {
+            if (!(e.getCause() instanceof ConnectException || e.getCause() instanceof UnknownHostException)) {
                 e.printStackTrace();
             }
             return false;
