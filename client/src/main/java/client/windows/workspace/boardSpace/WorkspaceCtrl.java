@@ -409,8 +409,7 @@ public class WorkspaceCtrl implements Initializable {
         // Fix lock button state in workspace
         if (board.equals(shownBoard) && mode.equals("unlock")) {
             unlockBoardButton.setDisable(true);
-            unlockLists();
-            unlockButtons();
+            unlockWorkspace();
         }
         refreshWorkspace(true);
     }
@@ -438,6 +437,7 @@ public class WorkspaceCtrl implements Initializable {
         String key = "";
         try {
             key = shownBoard.getKey();
+            displayLists();
             refreshBoard(key);
         } catch (Exception ignored) {
         }
@@ -481,15 +481,15 @@ public class WorkspaceCtrl implements Initializable {
 
         } else if (!pwdMap.containsKey(shownBoard.getKey())            // else if we do not know a password for it
                 || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {// OR stored incorrect password
-            lockLists();                                                          // saved for it {
-            lockButtons();                                                        // lock the board on screen
+            lockWorkspace();                                                      // saved for it {
+                                                                                  // lock the board on screen
             shownBoard.setProtected(true);
         }
         if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))    // if saved password board is incorrect
             && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
-        shownBoard = service.getBoard(shownBoard.getKey());
+//        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**
@@ -735,18 +735,10 @@ public class WorkspaceCtrl implements Initializable {
         listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (this.isAdmin() || !this.shownBoard.isProtected())
                 switch (event.getCode()) {
-                    case UP:
-                        moveFocusUp();
-                        break;
-                    case DOWN:
-                        moveFocusDown();
-                        break;
-                    case LEFT:
-                        moveFocusLeft();
-                        break;
-                    case RIGHT:
-                        moveFocusRight();
-                        break;
+                    case UP:    moveFocusUp();      break;
+                    case DOWN:  moveFocusDown();    break;
+                    case LEFT:  moveFocusLeft();    break;
+                    case RIGHT: moveFocusRight();   break;
                 }
             event.consume();
         });

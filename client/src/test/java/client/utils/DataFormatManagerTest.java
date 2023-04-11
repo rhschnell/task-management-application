@@ -4,15 +4,15 @@ import javafx.scene.input.DataFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DataFormatManagerTest {
-
+public class DataFormatManagerTest {
     private DataFormatManager dataFormatManager;
 
     @BeforeEach
-    void setup(){
-        this.dataFormatManager = new DataFormatManager();
+    public void setup() {
+        dataFormatManager = new DataFormatManager();
     }
 
     @Test

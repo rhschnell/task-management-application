@@ -245,6 +245,7 @@ public class ListCtrl {
         quickAddCard.getKey().setShownBoard(workspaceCtrl.getShownBoard());
         quickAddCard.getKey().setListCtrl(this);
         quickAddCard.getKey().setBoardKey(getBoardKey());
+        quickAddCard.getKey().setHelperMethods(helperMethods);
         cardVBox.getChildren().add(quickAddCard.getValue());
         makeQuickCardReceiveDrag(quickAddCard);
         quickAddCard.getValue().setOnDragDetected(event -> {
@@ -507,6 +508,7 @@ public class ListCtrl {
         loader.getKey().setCardList(service.getCardList());
         loader.getKey().setBoardKey(getBoardKey());
         loader.getKey().setWorkspaceCtrl(workspaceCtrl);
+        loader.getKey().setIP(helperMethods.getServerIP());
         loader.getKey().displayPresetList();
 
         String title = "Create a card";
@@ -627,7 +629,7 @@ public class ListCtrl {
         createCardButton.setDisable(true);
         Node quickAddCard = cardVBox.getChildren().get(cardVBox.getChildren().size() - 1);
         quickAddCard.setVisible(false);
-        quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
+//        quickAddCard.managedProperty().bind(quickAddCard.visibleProperty());
     }
 
     /**

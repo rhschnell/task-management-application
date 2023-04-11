@@ -2,6 +2,7 @@ package client.serverUtils;
 
 import commons.Board;
 import commons.Route;
+import commons.Tag;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
@@ -24,8 +25,7 @@ class BoardUtilsTest {
     private HTTPMocker mocker;
 
     @BeforeEach
-    void setup()
-    {
+    void setup() {
         serverUtils = Mockito.mock(ServerUtils.class);
         boardUtils = new BoardUtils(serverUtils);
         mocker = new HTTPMocker(Board.class);
@@ -81,8 +81,33 @@ class BoardUtilsTest {
     }
 
     @Test
-    void getServer()
-    {
+    void insertNewTag() {
+        String boardKey = "1";
+        Tag tag = new Tag();
+        boardUtils.insertNewTag(boardKey, tag);
+        verify(mocker.clientMock).target("http://nonexisting:123/");
+        verify(mocker.targetMock).path(Route.BOARD + "/addBoardTag/" + boardKey);
+        verify(mocker.targetMock).request(APPLICATION_JSON);
+        verify(mocker.builderMock).accept(APPLICATION_JSON);
+        verify(mocker.builderMock).post(Entity.entity(tag, APPLICATION_JSON), Board.class);
+        verify(serverUtils).getServer();
+    }
+
+    @Test
+    void removeBoardTag() {
+        String boardKey = "1";
+        Tag tag = new Tag();
+        boardUtils.removeBoardTag(boardKey, tag);
+        verify(mocker.clientMock).target("http://nonexisting:123/");
+        verify(mocker.targetMock).path(Route.BOARD + "/removeBoardTag/" + boardKey);
+        verify(mocker.targetMock).request(APPLICATION_JSON);
+        verify(mocker.builderMock).accept(APPLICATION_JSON);
+        verify(mocker.builderMock).post(Entity.entity(tag, APPLICATION_JSON), Board.class);
+        verify(serverUtils).getServer();
+    }
+
+    @Test
+    void getServer() {
         BoardUtils utils = new BoardUtils(new ServerUtils());
         assertNotNull(utils.getServer());
     }
