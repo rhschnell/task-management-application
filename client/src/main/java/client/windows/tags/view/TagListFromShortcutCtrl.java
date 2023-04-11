@@ -64,6 +64,14 @@ public class TagListFromShortcutCtrl extends TagListCtrl {
     }
 
     /**
+     * Escapes the window when pressing "ESC"
+     */
+    public void escape() {
+        ((Stage) saveButton.getScene().getWindow()).close();
+    }
+
+
+    /**
      * Sets the cardList in which the card needs to be saved
      * @param cardList The cardList in which the card with tags needs to be saved.
      */
