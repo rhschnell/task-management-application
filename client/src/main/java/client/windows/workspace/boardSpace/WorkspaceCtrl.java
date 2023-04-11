@@ -889,7 +889,7 @@ public class WorkspaceCtrl implements Initializable {
         CardCtrl cardCtrl = new MyFXML(createInjector(new MainModules()))
                 .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml").getKey();
 
-
+        cardCtrl.setWorkspaceCtrl(this);
         cardCtrl.setBoard(shownBoard);
         cardCtrl.updateItem(highlightedCard);
         cardCtrl.edit();
