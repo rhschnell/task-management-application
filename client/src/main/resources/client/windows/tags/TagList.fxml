@@ -20,7 +20,7 @@
       </Text>
       <ScrollPane hbarPolicy="NEVER" prefHeight="107.0" prefWidth="360.0" styleClass="pretty-list-view">
          <content>
-            <VBox fx:id="availableTagsBox" prefHeight="88.0" prefWidth="358.0" style="-fx-background-color: transparent;" styleClass="pretty-list-view" />
+            <VBox fx:id="availableTagsBox" prefHeight="88.0" prefWidth="358.0" spacing="5.0" style="-fx-background-color: transparent;" styleClass="pretty-list-view" />
          </content>
          <VBox.margin>
             <Insets right="-8.0" />
@@ -40,7 +40,7 @@
             <Insets right="-8.0" />
          </VBox.margin>
          <content>
-            <VBox fx:id="appliedTagsBox" prefHeight="87.0" prefWidth="357.0" />
+            <VBox fx:id="appliedTagsBox" prefHeight="87.0" prefWidth="357.0" spacing="5.0" />
          </content>
       </ScrollPane>
       <Separator prefWidth="200.0" />
