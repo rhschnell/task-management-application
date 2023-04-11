@@ -124,13 +124,9 @@ public class CustomizeCtrl {
      * Method to reset the board colors to default
      * Resets the colors of the board to default
      */
-    @FXML
     public void resetBoard() {
         board.setBoardFontColour("000000");
         board.setBoardBackgroundColour("F6F6F6");
-        service.insertBoard(board);
-        boardBackgroundColor.setValue(Color.web(board.getBoardBackgroundColour()));
-        boardFontColor.setValue(Color.web(board.getBoardFontColour()));
     }
 
     /**
