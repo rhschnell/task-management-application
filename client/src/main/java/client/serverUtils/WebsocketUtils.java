@@ -24,18 +24,25 @@ public class WebsocketUtils {
     public WebsocketUtils(ServerUtils serverUtils){
         this.serverUtils = serverUtils;
     }
-    private final String url = "ws://" + serverUtils.getServer().substring(7) + "/websocket";
-    private final StompSession session = connect(url);
+
+    public void setUrl(String url) {
+        WebsocketUtils.url = "ws://" + url + "/websocket";
+        session = connect(WebsocketUtils.url);
+    }
+
+    private static String url;
+    private static StompSession session;
 
     /**
      * Connects the subscriber to the url
      * @param url the url to connect to
-     * @return
+     * @return session of stomp
      */
     private StompSession connect(String url) {
         var client = new WebSocketStompClient(new StandardWebSocketClient());
         client.setMessageConverter(new MappingJackson2MessageConverter());
         try {
+            System.out.println(url);
             return client.connect(url, new StompSessionHandlerAdapter() {}).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

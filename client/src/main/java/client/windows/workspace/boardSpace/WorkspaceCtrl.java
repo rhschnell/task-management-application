@@ -140,7 +140,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     @Inject
     public WorkspaceCtrl(WorkspaceService service,
-                         CardService cardService, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
+                         CardService cardService, HelperMethods helperMethods, WebsocketUtils websocketUtils) {
         this.service = service;
         this.cardService = cardService;
         this.helperMethods = helperMethods;
@@ -451,8 +451,12 @@ public class WorkspaceCtrl implements Initializable {
 
         // Refresh the board list (joined boards)
         refreshBoardList(key, forceBoardListRefresh);
-        updateBoardColours();
-        updateListColors();
+        if (shownBoard != null) {
+            displayLists();
+            updateBoardColours();
+            updateListColors();
+            updateCardColors();
+        }
     }
 
     /**
@@ -544,9 +548,6 @@ public class WorkspaceCtrl implements Initializable {
                 boardList.getChildren().add(boardCell.getValue());
             }
         }
-        updateBoardColours();
-        updateListColors();
-        updateCardColors();
     }
 
     /**
@@ -632,7 +633,7 @@ public class WorkspaceCtrl implements Initializable {
         try {
             unsubscribeLists();
             shownBoard = service.getBoard(targetKey);
-            for(int i = 0; i< boardSubscriber.size(); i++)
+            for (int i = 0; i < boardSubscriber.size(); i++)
             {
                 boardSubscriber.get(i).unsubscribe();
             }
@@ -672,6 +673,7 @@ public class WorkspaceCtrl implements Initializable {
      * Displays the lists into the HBox list container
      */
     public void displayLists() {
+        listContainer.getChildren().clear();
         //New subscriber are going to be created, so we need to remove the existing ones
         unsubscribeLists();
         for (int i = 0; i < shownBoard.getCardLists().size(); i++) {
@@ -1298,6 +1300,7 @@ public class WorkspaceCtrl implements Initializable {
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
         service.setServerIP(helperMethods.getServerIP());
+        websocketUtils.setUrl(helperMethods.getServerIP().substring(7));
     }
 
     /**
