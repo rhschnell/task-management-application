@@ -50,7 +50,7 @@
       <Separator prefWidth="200.0" />
       <HBox prefHeight="0.0" prefWidth="310.0">
          <children>
-            <Button fx:id="saveButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="71.0" styleClass="blue-button" text="Add tag">
+            <Button fx:id="saveButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#save" prefHeight="23.0" prefWidth="71.0" styleClass="blue-button" text="Save">
                <font>
                   <Font name="Arial Bold" size="12.0" />
                </font>
