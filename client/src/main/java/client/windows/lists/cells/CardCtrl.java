@@ -177,7 +177,7 @@ public class CardCtrl implements Initializable {
     public void click() {
         long clickTime = System.currentTimeMillis();
         if (clickTime - lastClickTime < 300) {
-            viewCard(card);
+            workspaceCtrl.openFocusedCard();
         }
         lastClickTime = clickTime;
     }
