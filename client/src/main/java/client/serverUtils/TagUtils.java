@@ -104,7 +104,7 @@ public class TagUtils {
      * @param tagList the tagList which contains the last version of the tags we need to display on the board
      * @param consumer the consumer that needs to receive updates
      */
-    public  void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
+    public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
         execution = Executors.newSingleThreadExecutor();
         execution.submit(() -> {
             while (!Thread.interrupted()) {

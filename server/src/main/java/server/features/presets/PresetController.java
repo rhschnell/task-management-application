@@ -3,6 +3,7 @@ package server.features.presets;
 import commons.CardColorPreset;
 import commons.Route;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,9 +17,11 @@ public class PresetController {
 
     /**
      * Creates a new PresetController
-     * @param service Instance of preset repository
+     *
+     * @param service               Instance of preset repository
+     * @param simpMessagingTemplate
      */
-    public PresetController(PresetService service){
+    public PresetController(PresetService service, SimpMessagingTemplate simpMessagingTemplate){
         this.service = service;
     }
 
