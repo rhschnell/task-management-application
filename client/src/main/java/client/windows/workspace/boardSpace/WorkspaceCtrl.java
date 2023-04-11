@@ -868,8 +868,11 @@ public class WorkspaceCtrl implements Initializable {
         tagListCtrl.setCardList(focusedListController.getCardList());
 
         tagListCtrl.setType("edit");
-
         Scene scene = new Scene(loader.getValue());
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE)
+                loader.getKey().escape();
+        });
         helperMethods.popUp(scene, "Manage card tags");
     }
 
