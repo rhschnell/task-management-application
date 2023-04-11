@@ -13,11 +13,20 @@
 
 <VBox spacing="10.0" style="-fx-background-color: white;" stylesheets="/client/style/stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.windows.cards.view.ViewCardCtrl">
    <children>
-      <Label fx:id="cardTitle" text="Label">
-         <font>
-            <Font name="Arial Bold" size="16.0" />
-         </font>
-      </Label>
+      <HBox>
+         <children>
+            <Label fx:id="cardTitle" prefHeight="20.0" prefWidth="523.0" text="Label">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="10.0" text="Read-Only">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
       <Separator prefWidth="200.0" />
       <HBox spacing="15.0">
          <children>
