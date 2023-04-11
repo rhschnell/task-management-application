@@ -14,12 +14,15 @@ public class LockPopUpCtrl {
     private Board board;
     private WorkspaceCtrl workspace;
 
-    @FXML private TextField inputField;
-    @FXML private Label errorMsg;
+    @FXML
+    private TextField inputField;
+    @FXML
+    private Label errorMsg;
     private String mode;
 
     /**
      * Creates a new instance of a LockPopUpCtrl
+     *
      * @param service The service that handles the locking of boards
      */
     @Inject
@@ -28,10 +31,41 @@ public class LockPopUpCtrl {
     }
 
     /**
+     * Setter for the board this popUp applies to
+     *
+     * @param board board
+     */
+    public void setBoard(Board board) {
+        this.board = (board);
+        service.setBoard(board);
+    }
+
+    /**
+     * Setter for the mode of the lock (i.e., "lock" or "unlock")
+     *
+     * @param mode the mode
+     */
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+
+    // SETTERS AND GETTERS
+
+    /**
+     * Setter for the WorkspaceCtrl
+     *
+     * @param workspace a WorkspaceCtrl instance
+     */
+    public void setWorkspace(WorkspaceCtrl workspace) {
+        this.workspace = workspace;
+    }
+
+    /**
      * Method called when cancel button pressed
      */
     public void cancel() {
-        ((Stage)inputField.getScene().getWindow()).close();
+        ((Stage) inputField.getScene().getWindow()).close();
     }
 
     /**
@@ -61,33 +95,5 @@ public class LockPopUpCtrl {
             workspace.getPwdMap().put(board.getKey(), inputField.getText());
             board.setProtected(false);
         }
-    }
-
-
-
-    // SETTERS AND GETTERS
-    /**
-     * Setter for the board this popUp applies to
-     * @param board board
-     */
-    public void setBoard(Board board) {
-        this.board = (board);
-        service.setBoard(board);
-    }
-
-    /**
-     * Setter for the mode of the lock (i.e., "lock" or "unlock")
-     * @param mode the mode
-     */
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
-
-    /**
-     * Setter for the WorkspaceCtrl
-     * @param workspace a WorkspaceCtrl instance
-     */
-    public void setWorkspace(WorkspaceCtrl workspace) {
-        this.workspace = workspace;
     }
 }

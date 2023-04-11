@@ -12,7 +12,8 @@ public class AdminLoginService {
 
     /**
      * Constructor for AdminLoginService
-     * @param server a server util
+     *
+     * @param server        a server util
      * @param helperMethods hm instance
      */
     @Inject

@@ -34,6 +34,7 @@ public class Main extends Application {
 
     /**
      * Launches the app
+     *
      * @param args program arguments
      */
     public static void main(String[] args) {
@@ -51,7 +52,7 @@ public class Main extends Application {
         var startUp = FXML.load(StartUpCtrl.class, "client", "windows", "login", "start", "StartUp.fxml");
         var userLogin = FXML.load(UserLoginCtrl.class, "client", "windows", "login", "user", "UserLogin.fxml");
         var adminLogin = FXML
-                        .load(AdminLoginCtrl.class, "client", "windows", "login", "admin", "AdminLogin.fxml");
+                .load(AdminLoginCtrl.class, "client", "windows", "login", "admin", "AdminLogin.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         primaryStage.getIcons().add(new Image("/client/icons/talio-icon.png"));
         HelperMethods hm = INJECTOR.getInstance(HelperMethods.class);

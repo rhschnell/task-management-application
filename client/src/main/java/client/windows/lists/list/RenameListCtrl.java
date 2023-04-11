@@ -60,6 +60,15 @@ public class RenameListCtrl implements Initializable {
         this.previousTitle = previousTitle;
     }
 
+    /**
+     * Sets the text of the title field
+     *
+     * @param text The text to set
+     */
+    public void setTitleText(String text) {
+        newListTitleField.setText(text);
+    }
+
     @FXML
     private void save() {
         String newTitle = helperMethods.getInputValidator().stripWhitespace(newListTitleField.getText());
@@ -73,9 +82,9 @@ public class RenameListCtrl implements Initializable {
         close();
     }
 
-
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -100,13 +109,12 @@ public class RenameListCtrl implements Initializable {
     private void showInvalidTitlePopup() {
         var loader = new MyFXML(createInjector(new MainModules())).load(
                 EmptyTitleCtrl.class, "client", "windows", "workspace", "joinAlerts", "EmptyTitle" +
-                                                                                      ".fxml");
+                        ".fxml");
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
         helperMethods.popUp(scene, "Invalid title");
     }
-
 
     /**
      * Makes sure the user can press ENTER when typing in the text field for the list name to
@@ -137,15 +145,6 @@ public class RenameListCtrl implements Initializable {
      */
     private void close() {
         ((Stage) newListTitleField.getScene().getWindow()).close();
-    }
-
-    /**
-     * Sets the text of the title field
-     *
-     * @param text The text to set
-     */
-    public void setTitleText(String text) {
-        newListTitleField.setText(text);
     }
 
     /**

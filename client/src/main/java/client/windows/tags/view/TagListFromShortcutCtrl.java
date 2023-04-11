@@ -28,18 +28,18 @@ import org.hibernate.cfg.NotYetImplementedException;
 
 public class TagListFromShortcutCtrl extends TagListCtrl {
 
+    private final CardService cardService;
     @FXML
     private Button saveButton;
-
     private Card card;
     private CardList cardList;
-    private final CardService cardService;
 
     /**
      * Constructor for the TagListFromShortcutCtrl
-     * @param addCardCtrl the addCardCtrl
+     *
+     * @param addCardCtrl  the addCardCtrl
      * @param editCardCtrl the editCardCtrl
-     * @param cardService the cardService
+     * @param cardService  the cardService
      */
     @Inject
     public TagListFromShortcutCtrl(AddCardCtrl addCardCtrl, EditCardCtrl editCardCtrl,
@@ -49,12 +49,30 @@ public class TagListFromShortcutCtrl extends TagListCtrl {
     }
 
     /**
+     * Sets the cardList in which the card needs to be saved
+     *
+     * @param cardList The cardList in which the card with tags needs to be saved.
+     */
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
+    }
+
+    /**
+     * Sets the card on which the tags can be applied
+     *
+     * @param card The card of which the tags are managed
+     */
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    /**
      * Saves the current stage of the displayed tag management
      */
     public void onSave() {
         if (getType().equals("add"))
             throw new NotYetImplementedException();
-        if (getType().equals("edit")){
+        if (getType().equals("edit")) {
             // Save the tags in the card
             card.setTags(getAppliedTags());
             cardService.updateCard(card);
@@ -64,18 +82,9 @@ public class TagListFromShortcutCtrl extends TagListCtrl {
     }
 
     /**
-     * Sets the cardList in which the card needs to be saved
-     * @param cardList The cardList in which the card with tags needs to be saved.
+     * Escapes the window when pressing "ESC"
      */
-    public void setCardList(CardList cardList) {
-        this.cardList = cardList;
-    }
-
-    /**
-     * Sets the card on which the tags can be applied
-     * @param card The card of which the tags are managed
-     */
-    public void setCard(Card card) {
-        this.card = card;
+    public void escape() {
+        ((Stage) saveButton.getScene().getWindow()).close();
     }
 }

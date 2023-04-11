@@ -9,6 +9,7 @@ public class RenameService {
 
     /**
      * Injectable constructor for the RenameService
+     *
      * @param server the utility to communicate with the server
      */
     @Inject
@@ -18,6 +19,7 @@ public class RenameService {
 
     /**
      * Insert given board into the database.
+     *
      * @param board Board to be inserted
      */
     public void insertBoard(Board board) {

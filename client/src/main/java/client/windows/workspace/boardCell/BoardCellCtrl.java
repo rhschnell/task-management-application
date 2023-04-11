@@ -15,11 +15,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class BoardCellCtrl implements Initializable {
+    private final HelperMethods helperMethods;
     private WorkspaceCtrl workspaceCtrl;
     private Board board;
-
-    private final HelperMethods helperMethods;
-
     @FXML
     private ImageView protectionIcon;
     @FXML
@@ -29,11 +27,44 @@ public class BoardCellCtrl implements Initializable {
 
     /**
      * Creates a new instance of BoardCellCtrl
+     *
      * @param helperMethods The instance of HelperMethods used for utilities
      */
     @Inject
     public BoardCellCtrl(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
+    }
+
+    /**
+     * Getter for the board
+     *
+     * @return board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * Setter for the board
+     *
+     * @param board The board to set
+     */
+    public void setBoard(Board board) {
+        this.board = board;
+        this.boardTitle.setText(board.getTitle());
+        updateProtectionIcon();
+    }
+
+    /**
+     * Sets the workspace controller that this controller links back to
+     *
+     * @param workspaceCtrl The workspace controller to set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+        if (workspaceCtrl.isAdmin()) {
+            leaveDeleteIcon.setImage(new Image("/client/icons/trash-can.png"));
+        }
     }
 
     /**
@@ -48,35 +79,6 @@ public class BoardCellCtrl implements Initializable {
      */
     public void showMyBoard() {
         workspaceCtrl.showBoard(board.getKey());
-    }
-
-    /**
-     * Sets the workspace controller that this controller links back to
-     * @param workspaceCtrl The workspace controller to set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
-        if (workspaceCtrl.isAdmin()) {
-            leaveDeleteIcon.setImage(new Image("/client/icons/trash-can.png"));
-        }
-    }
-
-    /**
-     * Setter for the board
-     * @param board The board to set
-     */
-    public void setBoard(Board board) {
-        this.board = board;
-        this.boardTitle.setText(board.getTitle());
-        updateProtectionIcon();
-    }
-
-    /**
-     * Getter for the board
-     * @return board
-     */
-    public Board getBoard() {
-        return board;
     }
 
     /**
@@ -127,10 +129,12 @@ public class BoardCellCtrl implements Initializable {
      * Method to change locked state of board
      */
     public void swapLock() {
-        if (board.verifyPassword("")) {
+        if (board.isProtected()) {
+            unlock();
+        } else {
             lock();
-            updateProtectionIcon();
         }
+        updateProtectionIcon();
     }
 
     /**

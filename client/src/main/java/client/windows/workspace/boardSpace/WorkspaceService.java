@@ -15,6 +15,7 @@ public class WorkspaceService {
 
     /**
      * Constructor for the WorkspaceService
+     *
      * @param server the BoardUtils server
      */
     @Inject
@@ -23,16 +24,26 @@ public class WorkspaceService {
     }
 
     /**
+     * Gets all boards from the database
+     *
+     * @return List of boards that are in the database
+     */
+    public List<Board> getBoards() {
+        return server.getBoards();
+    }
+
+    /**
      * Setter for IP in utils
+     *
      * @param serverIP IP
      */
     public void setServerIP(String serverIP) {
         server.setServer(serverIP);
     }
 
-
     /**
      * Inserts the board to the server, or updates it
+     *
      * @param board the board to be inserted or update
      * @return the inserted board, taken from the server
      */
@@ -42,6 +53,7 @@ public class WorkspaceService {
 
     /**
      * Gets the board with the specified key from the server
+     *
      * @param key the key for the board to retrieve
      * @return the board that has the specified key
      */
@@ -50,15 +62,8 @@ public class WorkspaceService {
     }
 
     /**
-     * Gets all boards from the database
-     * @return List of boards that are in the database
-     */
-    public List<Board> getBoards() {
-        return server.getBoards();
-    }
-
-    /**
-     *Deletes the board from the server
+     * Deletes the board from the server
+     *
      * @param board the board to be deleted
      */
     public void deleteBoard(Board board) {
@@ -67,6 +72,7 @@ public class WorkspaceService {
 
     /**
      * Copies the entered string to the system clipboard
+     *
      * @param key String to copy
      */
     public void copyKey(String key) {

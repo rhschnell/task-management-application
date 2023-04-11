@@ -15,7 +15,7 @@ public class CardService {
     /**
      * Inject the servers
      *
-     * @param cardUtils Utility class that provides functionality for cards
+     * @param cardUtils     Utility class that provides functionality for cards
      * @param cardListUtils Utility class that provides functionality for card lists
      */
     @Inject
@@ -25,7 +25,26 @@ public class CardService {
     }
 
     /**
+     * Gets the boardKey
+     *
+     * @return The board key
+     */
+    public String getBoardKey() {
+        return boardKey;
+    }
+
+    /**
+     * Sets the boardKey
+     *
+     * @param boardKey The new board key
+     */
+    public void setBoardKey(String boardKey) {
+        this.boardKey = boardKey;
+    }
+
+    /**
      * Setter for ip
+     *
      * @param ip ip
      */
     public void setIP(String ip) {
@@ -57,9 +76,10 @@ public class CardService {
 
     /**
      * Updates a card by inserting it again into the database
+     *
      * @param card the Card that needs to be updated
      */
-    public void updateCard(Card card){
+    public void updateCard(Card card) {
         cardUtils.insertCard(card);
     }
 
@@ -73,25 +93,8 @@ public class CardService {
     }
 
     /**
-     * Gets the boardKey
-     *
-     * @return The board key
-     */
-    public String getBoardKey() {
-        return boardKey;
-    }
-
-    /**
-     * Sets the boardKey
-     *
-     * @param boardKey The new board key
-     */
-    public void setBoardKey(String boardKey) {
-        this.boardKey = boardKey;
-    }
-
-    /**
      * Getter for a card based on its ID
+     *
      * @param id the id of the card to be retrieved
      * @return the card with that ID
      */

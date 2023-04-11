@@ -28,6 +28,42 @@ public class LeaveCtrl {
     }
 
     /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl The new workspace controller
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
+     * Sets the HelperMethods
+     *
+     * @param hm the new helper methods instance
+     */
+    public void setHelperMethods(HelperMethods hm) {
+        this.hm = hm;
+    }
+
+    /**
+     * Sets the joinedKeys
+     *
+     * @param joinedKeys The new joined keys list
+     */
+    public void setJoinedKeys(Set<String> joinedKeys) {
+        this.joinedKeys = joinedKeys;
+    }
+
+    /**
+     * Sets the leaveBoard
+     *
+     * @param leaveBoard The board to set as leaveBoard
+     */
+    public void setLeaveBoard(Board leaveBoard) {
+        this.leaveBoard = leaveBoard;
+    }
+
+    /**
      * Leaves the board
      */
     public void leave() {
@@ -48,38 +84,5 @@ public class LeaveCtrl {
      */
     public void cancel() {
         ((Stage) leaveButton.getScene().getWindow()).close();
-    }
-
-
-    /**
-     * Sets the workspaceCtrl
-     * @param workspaceCtrl The new workspace controller
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
-    }
-
-    /**
-     * Sets the HelperMethods
-     * @param hm the new helper methods instance
-     */
-    public void setHelperMethods(HelperMethods hm) {
-        this.hm = hm;
-    }
-
-    /**
-     * Sets the joinedKeys
-     * @param joinedKeys The new joined keys list
-     */
-    public void setJoinedKeys(Set<String> joinedKeys) {
-        this.joinedKeys = joinedKeys;
-    }
-
-    /**
-     * Sets the leaveBoard
-     * @param leaveBoard The board to set as leaveBoard
-     */
-    public void setLeaveBoard(Board leaveBoard) {
-        this.leaveBoard = leaveBoard;
     }
 }

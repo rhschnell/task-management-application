@@ -32,20 +32,22 @@ public class EditCardPresetCtrl {
 
     /**
      * Constructor for the EditCardPresetCtrl
-     * @param service The corresponding service
+     *
+     * @param service       The corresponding service
      * @param helperMethods The correspondng helper methods instance
      */
     @Inject
-    public EditCardPresetCtrl(EditCardPresetService service, HelperMethods helperMethods){
+    public EditCardPresetCtrl(EditCardPresetService service, HelperMethods helperMethods) {
         this.service = service;
         this.helperMethods = helperMethods;
     }
 
     /**
-     *  Setter for the preset
+     * Setter for the preset
+     *
      * @param preset The new preset
      */
-    public void setPreset(CardColorPreset preset){
+    public void setPreset(CardColorPreset preset) {
         this.preset = preset;
         setPresetTitle(preset.getName());
         setPresetBackgroundColor(Color.web(preset.getBackgroundColor()));
@@ -54,6 +56,7 @@ public class EditCardPresetCtrl {
 
     /**
      * Setter for the font color of the preset
+     *
      * @param color The new font color of the preset
      */
     public void setPresetFontColor(Color color) {
@@ -62,6 +65,7 @@ public class EditCardPresetCtrl {
 
     /**
      * Setter for the background color of the preset
+     *
      * @param color The new background color of the preset
      */
     public void setPresetBackgroundColor(Color color) {
@@ -70,6 +74,7 @@ public class EditCardPresetCtrl {
 
     /**
      * Setter for the title of the preset
+     *
      * @param title The new title of the preset
      */
     public void setPresetTitle(String title) {
@@ -77,16 +82,34 @@ public class EditCardPresetCtrl {
     }
 
     /**
+     * Method to set the customCardPresetCellCtrl
+     *
+     * @param customCardPresetCellCtrl The new customCardPresetCelLCtrl
+     */
+    public void setCustomCardPresetCellCtrl(CustomCardPresetCellCtrl customCardPresetCellCtrl) {
+        this.customCardPresetCellCtrl = customCardPresetCellCtrl;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
      * Method to set the ColorPicker for the font color in the edit preset popup
      */
-    public void setFontColorPicker(){
+    public void setFontColorPicker() {
         fontColor.setValue(Color.web(preset.getFontColor()));
     }
 
     /**
      * Method to set the ColorPicker for the background color in the edit preset popup
      */
-    public void setBackgroundColorPicker(){
+    public void setBackgroundColorPicker() {
         backgroundColor.setValue(Color.web(preset.getBackgroundColor()));
     }
 
@@ -108,11 +131,12 @@ public class EditCardPresetCtrl {
         preset.setFontColor(newFontColor);
 
         customCardPresetCellCtrl.getCustomizeCtrl().updateDisplayedPresets();
-        ((Stage)saveButton.getScene().getWindow()).close();
+        ((Stage) saveButton.getScene().getWindow()).close();
     }
 
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -135,22 +159,6 @@ public class EditCardPresetCtrl {
      * Method to close the popup window when the cancel button is clicked
      */
     public void cancel() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
-    }
-
-    /**
-     * Method to set the customCardPresetCellCtrl
-     * @param customCardPresetCellCtrl The new customCardPresetCelLCtrl
-     */
-    public void setCustomCardPresetCellCtrl(CustomCardPresetCellCtrl customCardPresetCellCtrl){
-        this.customCardPresetCellCtrl = customCardPresetCellCtrl;
-    }
-
-    /**
-     * Sets the workspaceCtrl
-     * @param workspaceCtrl The WorkspaceCtrl to be set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
-        this.workspaceCtrl = workspaceCtrl;
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 }

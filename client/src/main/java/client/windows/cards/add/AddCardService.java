@@ -25,8 +25,8 @@ public class AddCardService {
     /**
      * Creates a new AddCardService instance
      *
-     * @param server   Instance of the utility class that handles card lists
-     * @param tagUtils Instance of the utility class that handles tags
+     * @param server               Instance of the utility class that handles card lists
+     * @param tagUtils             Instance of the utility class that handles tags
      * @param cardColorPresetUtils Instance of the utility class that handles color presets
      */
     @Inject
@@ -36,14 +36,6 @@ public class AddCardService {
         this.tagUtils = tagUtils;
         this.cardColorPresetUtils = cardColorPresetUtils;
         appliedTags = new ArrayList<>();
-    }
-
-    /**
-     * setter for ip
-     * @param ip ip
-     */
-    public void setIP(String ip) {
-        server.setIP(ip);
     }
 
     /**
@@ -65,28 +57,21 @@ public class AddCardService {
     }
 
     /**
-     * Sets the cardList that will need to be updated with the new card
-     *
-     * @param cardList The new card list
-     */
-    public void setCardList(CardList cardList) {
-        this.cardList = cardList;
-    }
-
-    /**
-     * Inserts an updated cardList into the server
-     */
-    public void insertCardList() {
-        server.insertCardList(cardList);
-    }
-
-    /**
      * Returns the CardList from where the AddCard method was called
      *
      * @return the cardList
      */
     public CardList getCardList() {
         return cardList;
+    }
+
+    /**
+     * Sets the cardList that will need to be updated with the new card
+     *
+     * @param cardList The new card list
+     */
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 
     /**
@@ -118,17 +103,6 @@ public class AddCardService {
     }
 
     /**
-     * Adds a tag to the list of the applied tags of the card
-     *
-     * @param tag the tag that needs to be added to the card
-     */
-    public void applyTag(Tag tag) {
-        if (!appliedTags.contains(tag))
-            appliedTags.add(tag);
-    }
-
-
-    /**
      * Returns the available tags of the card (the tags that have not been applied yet)
      *
      * @return the list of tags the that have not been applied to the card yet
@@ -137,6 +111,32 @@ public class AddCardService {
         List<Tag> availableTags = new ArrayList<>(tagUtils.getBoardTags(boardKey));
         availableTags.removeAll(appliedTags);
         return availableTags;
+    }
+
+    /**
+     * setter for ip
+     *
+     * @param ip ip
+     */
+    public void setIP(String ip) {
+        server.setIP(ip);
+    }
+
+    /**
+     * Inserts an updated cardList into the server
+     */
+    public void insertCardList() {
+        server.insertCardList(cardList);
+    }
+
+    /**
+     * Adds a tag to the list of the applied tags of the card
+     *
+     * @param tag the tag that needs to be added to the card
+     */
+    public void applyTag(Tag tag) {
+        if (!appliedTags.contains(tag))
+            appliedTags.add(tag);
     }
 
     /**

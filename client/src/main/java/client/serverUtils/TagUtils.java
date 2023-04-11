@@ -39,6 +39,7 @@ public class TagUtils {
 
     /**
      * Sets the client
+     *
      * @param client the client
      */
     public void setClient(Client client) {
@@ -47,7 +48,8 @@ public class TagUtils {
 
     /**
      * Adds a tag to a card
-     * @param tag the tag to be added
+     *
+     * @param tag    the tag to be added
      * @param cardId the id of the card to which the tag should be added
      */
     public void addTagToCard(Tag tag, long cardId) {
@@ -86,6 +88,7 @@ public class TagUtils {
 
     /**
      * Gets the tags from the board with a key
+     *
      * @param key the key from which to get the tags
      * @return the list of tags from the board with that key
      */
@@ -100,8 +103,9 @@ public class TagUtils {
 
     /**
      * Register for the updated
-     * @param key the key of the board od which we need to receive tag updates
-     * @param tagList the tagList which contains the last version of the tags we need to display on the board
+     *
+     * @param key      the key of the board od which we need to receive tag updates
+     * @param tagList  the tagList which contains the last version of the tags we need to display on the board
      * @param consumer the consumer that needs to receive updates
      */
     public void registerForUpdates(String key, List<Tag> tagList, Consumer<Tag> consumer) {
@@ -122,11 +126,11 @@ public class TagUtils {
                         ((LinkedHashMap) t.getSecond()).get("tagColor").toString(),
                         ((LinkedHashMap) t.getSecond()).get("fontColor").toString(),
                         Long.valueOf((Integer) ((LinkedHashMap) t.getSecond()).get("id")));
-                if(t.getFirst().equals("Add")) {
+                if (t.getFirst().equals("Add")) {
                     tagList.add(displayTag);
                     consumer.accept(displayTag);
                 }
-                if(t.getFirst().equals("Remove")) {
+                if (t.getFirst().equals("Remove")) {
                     tagList.remove(displayTag);
                     consumer.accept(displayTag);
                 }

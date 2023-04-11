@@ -16,20 +16,21 @@ public class AdminUtils {
 
     /**
      * Creates a new BoardUtils object
+     *
      * @param serverUtils The ServerUtils object (injected) to use in requests.
      */
     @Inject
-    public AdminUtils(ServerUtils serverUtils){
+    public AdminUtils(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
     /**
      * Sets a new client
+     *
      * @param client The new client
      */
-    public void setClient(Client client)
-    {
+    public void setClient(Client client) {
         this.client = client;
     }
 
@@ -40,8 +41,8 @@ public class AdminUtils {
      */
     public void sendPassword(String pass) {
         client.target(serverUtils.getServer()).path(Route.ADMIN)
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .post(Entity.entity(pass, APPLICATION_JSON), Void.class);
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(pass, APPLICATION_JSON), Void.class);
     }
 }

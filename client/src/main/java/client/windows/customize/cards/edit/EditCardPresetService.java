@@ -9,18 +9,20 @@ public class EditCardPresetService {
 
     /**
      * Constructor for the EditCardPresetService
+     *
      * @param server The corresponding server
      */
     @Inject
-    public EditCardPresetService(CardColorPresetUtils server){
+    public EditCardPresetService(CardColorPresetUtils server) {
         this.server = server;
     }
 
     /**
      * Method to insert a new preset into the database
+     *
      * @param preset The preset to be inserted
      */
-    public void insertPreset(CardColorPreset preset){
+    public void insertPreset(CardColorPreset preset) {
         server.insertPreset(preset);
     }
 }

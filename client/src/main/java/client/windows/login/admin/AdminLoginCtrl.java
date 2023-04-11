@@ -49,7 +49,8 @@ public class AdminLoginCtrl implements Initializable {
 
     /**
      * Constructor for AdminLoginCtrl
-     * @param service corresponding service
+     *
+     * @param service       corresponding service
      * @param helperMethods corresponding helper methods
      */
     @Inject
@@ -59,14 +60,10 @@ public class AdminLoginCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -81,8 +78,8 @@ public class AdminLoginCtrl implements Initializable {
      * Middleware that tries to connect to the user specified server. If successful, redirects
      * the user to the workspace. Otherwise, shows an error message.
      */
-    public void connect(){
-        if (!service.serverPing(serverAddress.getText())){
+    public void connect() {
+        if (!service.serverPing(serverAddress.getText())) {
             showServerIncorrect();
             return;
         } else if (passwordField.getText().isBlank()) {
@@ -114,12 +111,11 @@ public class AdminLoginCtrl implements Initializable {
 
     /**
      * Makes sure the user can join a board by pressing ENTER after typing the key
+     *
      * @param event The event that gets handled and checked for the ENTER key
      */
-    public void connectOnEnter(KeyEvent event)
-    {
-        if(event.getCode().equals(KeyCode.ENTER))
-        {
+    public void connectOnEnter(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             connect();
         }
     }

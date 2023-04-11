@@ -43,22 +43,24 @@ public class EditTagCtrl {
 
     /**
      * Constructor for the EditTagCtrl
-     * @param service Corresponding service
+     *
+     * @param service       Corresponding service
      * @param helperMethods Injected instance of HelperMethods
-     * @param boardUtils to update the Board
+     * @param boardUtils    to update the Board
      */
     @Inject
-    public EditTagCtrl(EditTagService service, HelperMethods helperMethods, BoardUtils boardUtils){
+    public EditTagCtrl(EditTagService service, HelperMethods helperMethods, BoardUtils boardUtils) {
         this.service = service;
         this.helperMethods = helperMethods;
-        this.boardUtils=boardUtils;
+        this.boardUtils = boardUtils;
     }
 
     /**
      * Setter for the tag
+     *
      * @param tag The new tag
      */
-    public void setTag(Tag tag){
+    public void setTag(Tag tag) {
         this.tag = tag;
         setTagTitle(tag.getName());
         setTagColor(Color.web(tag.getTagColor()));
@@ -67,6 +69,7 @@ public class EditTagCtrl {
 
     /**
      * Setter for workspaceCtrl
+     *
      * @param workspaceCtrl
      */
     public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
@@ -75,38 +78,51 @@ public class EditTagCtrl {
 
     /**
      * Setter for the title of the tag
+     *
      * @param title The new title of the tag
      */
-    public void setTagTitle(String title){
+    public void setTagTitle(String title) {
         tagTitle.setText(title);
     }
 
     /**
      * Setter for the color of tag
+     *
      * @param color The new color of the tag
      */
-    public void setTagColor(Color color){
+    public void setTagColor(Color color) {
         tagColor.setId(color.toString());
     }
 
     /**
      * Setter for the color of font of the tag
-     * @param  color The new color of the font
+     *
+     * @param color The new color of the font
      */
-    public void setFontColor(Color color){
+    public void setFontColor(Color color) {
         fontColor.setId(color.toString());
     }
+
+    /**
+     * Method to set the customTagCellCtrl
+     *
+     * @param customEditTagCellCtrl The new CustomTagCellCtrl
+     */
+    public void setCustomTagCellCtrl(CustomEditTagCellCtrl customEditTagCellCtrl) {
+        this.customEditTagCellCtrl = customEditTagCellCtrl;
+    }
+
     /**
      * Method to set the color picker in the edit tag popup
      */
-    public void setColorPicker(){
+    public void setColorPicker() {
         tagColor.setValue(Color.web(tag.getTagColor()));
     }
 
     /**
      * Sets the Font Color Picker in the edit tag popup
      */
-    public void setFontColorPicker(){
+    public void setFontColorPicker() {
         fontColor.setValue(Color.web(tag.getFontColor()));
     }
 
@@ -132,12 +148,12 @@ public class EditTagCtrl {
         customEditTagCellCtrl.getTagOverviewCtrl().displayTagList();
         workspaceCtrl.updateBoard();
         boardUtils.insertBoard(boardUtils.getBoard(workspaceCtrl.getBoardKey()));
-        ((Stage)saveButton.getScene().getWindow()).close();
+        ((Stage) saveButton.getScene().getWindow()).close();
     }
-
 
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -158,12 +174,11 @@ public class EditTagCtrl {
 
     /**
      * When pressing enter the edit is saved
+     *
      * @param event The key event that needs to be handled
      */
-    public void saveOnEnter(KeyEvent event)
-    {
-        if(event.getCode().equals(KeyCode.ENTER))
-        {
+    public void saveOnEnter(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
             save();
         }
     }
@@ -172,15 +187,7 @@ public class EditTagCtrl {
      * Method to close the popup window when the cancel button is clicked
      */
     public void cancel() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
-    }
-
-    /**
-     * Method to set the customTagCellCtrl
-     * @param customEditTagCellCtrl The new CustomTagCellCtrl
-     */
-    public void setCustomTagCellCtrl(CustomEditTagCellCtrl customEditTagCellCtrl) {
-        this.customEditTagCellCtrl = customEditTagCellCtrl;
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
 }

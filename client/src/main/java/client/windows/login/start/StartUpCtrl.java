@@ -28,6 +28,7 @@ public class StartUpCtrl implements Initializable {
 
     /**
      * Constructor for AdminLoginCtrl
+     *
      * @param hm a HelperMethods instance
      */
     @Inject
@@ -36,14 +37,10 @@ public class StartUpCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {

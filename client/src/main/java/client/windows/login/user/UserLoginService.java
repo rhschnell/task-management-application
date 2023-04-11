@@ -10,7 +10,8 @@ public class UserLoginService {
 
     /**
      * Creates a new UserLoginService
-     * @param server The utility class for the server
+     *
+     * @param server        The utility class for the server
      * @param helperMethods Instance of HelperMethods
      */
     @Inject

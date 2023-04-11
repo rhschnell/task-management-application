@@ -9,6 +9,7 @@ public class DeleteCardService {
 
     /**
      * Injects the server
+     *
      * @param server the cardutils
      */
     @Inject
@@ -19,6 +20,7 @@ public class DeleteCardService {
 
     /**
      * Deletes the card
+     *
      * @param card , the card that needs to be deleted
      */
 

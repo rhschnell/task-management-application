@@ -41,9 +41,10 @@ public class TagOverviewCtrl {
 
     /**
      * Constructor for the TagOverviewCtrl
+     *
      * @param helperMethods hm
-     * @param tagUtils Instance of the utility class for tags
-     * @param boardUtils Intance of the boardUtils to also update the board when a tag update is received
+     * @param tagUtils      Instance of the utility class for tags
+     * @param boardUtils    Intance of the boardUtils to also update the board when a tag update is received
      */
     @Inject
     public TagOverviewCtrl(HelperMethods helperMethods, TagUtils tagUtils, BoardUtils boardUtils) {
@@ -51,6 +52,33 @@ public class TagOverviewCtrl {
         this.tagUtils = tagUtils;
         this.tagList = new ArrayList<>();
         this.boardUtils = boardUtils;
+    }
+
+    /**
+     * Gets the boardKey
+     *
+     * @return the boardKey
+     */
+    public String getBoardKey() {
+        return boardKey;
+    }
+
+    /**
+     * Setter for the board
+     *
+     * @param boardKey The new board to be set
+     */
+    public void setBoardKey(String boardKey) {
+        this.boardKey = boardKey;
+    }
+
+    /**
+     * Setter for the workspace in order to send a message the board has updates
+     *
+     * @param workspaceCtrl the workspaceCtrl
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
@@ -88,15 +116,7 @@ public class TagOverviewCtrl {
      */
     public void close() {
         stop();
-        ((Stage)closeButton.getScene().getWindow()).close();
-    }
-
-    /**
-     * Setter for the board
-     * @param boardKey The new board to be set
-     */
-    public void setBoardKey(String boardKey) {
-        this.boardKey = boardKey;
+        ((Stage) closeButton.getScene().getWindow()).close();
     }
 
     /**
@@ -120,21 +140,5 @@ public class TagOverviewCtrl {
             boardUtils.insertBoard(boardUtils.getBoard(boardKey));
 
         });
-    }
-
-    /**
-     * Setter for the workspace in order to send a message the board has updates
-     * @param workspaceCtrl the workspaceCtrl
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
-    }
-
-    /**
-     * Gets the boardKey
-     * @return the boardKey
-     */
-    public String getBoardKey() {
-        return boardKey;
     }
 }

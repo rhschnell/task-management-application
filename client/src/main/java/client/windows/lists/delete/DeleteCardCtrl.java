@@ -22,8 +22,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-
-public class DeleteCardCtrl{
+public class DeleteCardCtrl {
     private final DeleteCardService service;
     private Card deleteCard;
 
@@ -35,6 +34,7 @@ public class DeleteCardCtrl{
 
     /**
      * Constructor for DeleteListCtrl
+     *
      * @param service corresponding service
      */
     @Inject
@@ -42,19 +42,26 @@ public class DeleteCardCtrl{
         this.service = service;
     }
 
-
+    /**
+     * Sets the card to be deleted
+     *
+     * @param deleteCard the card
+     */
+    public void setDeleteCard(Card deleteCard) {
+        this.deleteCard = deleteCard;
+    }
 
     /**
      * This method cancels deleting the list from the board
      */
-    public void cancel(){
+    public void cancel() {
         ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method deletes the list from the board
      */
-    public void delete(){
+    public void delete() {
         ((Stage) deleteButton.getScene().getWindow()).close();
         service.deleteCard(this.deleteCard);
     }
@@ -62,16 +69,8 @@ public class DeleteCardCtrl{
     /**
      * This method closes the window/stage
      */
-    public void escape(){
+    public void escape() {
         ((Stage) cancelButton.getScene().getWindow()).close();
-    }
-
-    /**
-     * Sets the card to be deleted
-     * @param deleteCard the card
-     */
-    public void setDeleteCard(Card deleteCard) {
-        this.deleteCard = deleteCard;
     }
 
 }

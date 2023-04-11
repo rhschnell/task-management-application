@@ -35,6 +35,7 @@ public class MyFXML {
 
     /**
      * Constructor for MyFXML
+     *
      * @param injector the injector to be used
      */
     @Inject
@@ -44,10 +45,11 @@ public class MyFXML {
 
     /**
      * Loads the FXML corresponding to the given path
-     * @param c the class of the controller
+     *
+     * @param c     the class of the controller
      * @param parts the path of the FXML file
+     * @param <T>   the type of the controller
      * @return a pair of the controller and the corresponding parent of the scene
-     * @param <T> the type of the controller
      */
     public <T> Pair<T, Parent> load(Class<T> c, String... parts) {
         try {
@@ -62,6 +64,7 @@ public class MyFXML {
 
     /**
      * Getter for the location of the FXML based on the given parts
+     *
      * @param parts the parts of the URL
      * @return the URL comprised of the given parts
      */

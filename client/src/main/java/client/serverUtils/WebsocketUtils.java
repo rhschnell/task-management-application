@@ -14,19 +14,23 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class WebsocketUtils {
+    private static String url;
+    private static StompSession session;
     private ServerUtils serverUtils = new ServerUtils();
 
     /**
      * The serverUtils in order to communicate
+     *
      * @param serverUtils the serverUtils
      */
     @Inject
-    public WebsocketUtils(ServerUtils serverUtils){
+    public WebsocketUtils(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
     }
 
     /**
      * Setter for url
+     *
      * @param url new url
      */
     public void setUrl(String url) {
@@ -34,11 +38,9 @@ public class WebsocketUtils {
         session = connect(WebsocketUtils.url);
     }
 
-    private static String url;
-    private static StompSession session;
-
     /**
      * Connects the subscriber to the url
+     *
      * @param url the url to connect to
      * @return session of stomp
      */
@@ -47,7 +49,8 @@ public class WebsocketUtils {
         client.setMessageConverter(new MappingJackson2MessageConverter());
         try {
             System.out.println(url);
-            return client.connect(url, new StompSessionHandlerAdapter() {}).get();
+            return client.connect(url, new StompSessionHandlerAdapter() {
+            }).get();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
@@ -58,13 +61,14 @@ public class WebsocketUtils {
 
     /**
      * Register for the updates
+     *
      * @param dest
      * @param type
      * @param consumer
-     * @return the return object
      * @param <T>
+     * @return the return object
      */
-    public <T>StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+    public <T> StompSession.Subscription registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
         return session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
