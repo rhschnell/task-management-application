@@ -676,22 +676,22 @@ public class ListCtrl {
      */
     public void registerForListUpdates() {
         workspaceCtrl.addListSubscriber(websocketUtils.registerForMessages("/topic/lists/" +
-                service.getCardList().getId(), CardList.class, newCardList -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    //Updates the cardList because a new version was received
-                    service.setCardList(newCardList);
-                    //Updates the list title if updated
-                    listTitle.setText(newCardList.getListTitle());
-                    //Updates the displayed cards because a newer version was received
-                    displayCards();
-                    //Updates the board in the workspace because a newer version is available
-                    // workspaceCtrl.refreshWorkspace(false);
-                    workspaceCtrl.updateBoard();
-                }
-            });
-        }));
+            service.getCardList().getId(), CardList.class, newCardList -> {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Updates the cardList because a new version was received
+                        service.setCardList(newCardList);
+                        //Updates the list title if updated
+                        listTitle.setText(newCardList.getListTitle());
+                        //Updates the displayed cards because a newer version was received
+                        displayCards();
+                        //Updates the board in the workspace because a newer version is available
+                        // workspaceCtrl.refreshWorkspace(false);
+                        workspaceCtrl.updateBoard();
+                    }
+                });
+            }));
     }
 
     /**

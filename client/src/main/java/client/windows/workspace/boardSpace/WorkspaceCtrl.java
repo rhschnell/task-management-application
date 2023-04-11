@@ -334,13 +334,13 @@ public class WorkspaceCtrl implements Initializable {
 
         // Initialize array of buttons that need to be disabled if board is locked
         this.lockButtonArray = new Button[]{
-                renameButton,
-                personalizeButton,
-                tagsButton,
-                deleteButton,
-                removePasswordButton,
-                setPasswordButton,
-                addListButton
+            renameButton,
+            personalizeButton,
+            tagsButton,
+            deleteButton,
+            removePasswordButton,
+            setPasswordButton,
+            addListButton
         };
     }
 
