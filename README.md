@@ -11,7 +11,7 @@ Whether you're a student, a professional, or just trying to keep your tasks orga
 | ![](https://secure.gravatar.com/avatar/a4911cb080d8c93adedacd8b8139bfc9?s=50&d=identicon)              | Sander Bakker       | s.a.bakker-4@student.tudelft.nl  |
 | ![](https://secure.gravatar.com/avatar/5d43da0605c1b110db18086636df4960?s=50&d=identicon)               | Yurian Lagrand      | Y.G.Lagrand@student.tudelft.nl   |
 | Yet another picture                                                                                     | Tudor Tanasescu     | T.I.Tanasescu@student.tudelft.nl |
-| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5956/avatar.png?width=400) | Filip-Andrei Cirtog | f.cirtog-1@student.tudelft.nl    |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5956/avatar.png?width=48)                | Filip-Andrei Cirtog | f.cirtog-1@student.tudelft.nl    |
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Ruben Schnell       | r.h.schnell@student.tudelft.nl   |
 | ![](https://secure.gravatar.com/avatar/1d3ce3594077ebf31c0b743df197d9bb?s=50&d=identicon)               | Rares Bites         | R.Bites@student.tudelft.nl       |
 
