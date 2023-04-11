@@ -37,11 +37,11 @@
             <property name="allowedAnnotations" value="Main"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
         </module>
-	<module name="JavadocMethod">
-	    <property name="accessModifiers" value="public"/>
-	    <property name="allowMissingParamTags" value="false"/>
-	    <property name="allowMissingReturnTag" value="false"/>
-	</module>
+        <module name="JavadocMethod">
+            <property name="accessModifiers" value="public"/>
+            <property name="allowMissingParamTags" value="false"/>
+            <property name="allowMissingReturnTag" value="false"/>
+        </module>
         <module name="MethodLength">
             <property name="severity" value="warning"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
