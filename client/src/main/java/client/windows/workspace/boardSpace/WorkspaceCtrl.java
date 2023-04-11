@@ -1297,6 +1297,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
+        service.setServerIP(helperMethods.getServerIP());
     }
 
     /**
