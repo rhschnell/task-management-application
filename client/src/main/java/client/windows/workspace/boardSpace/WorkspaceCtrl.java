@@ -1431,6 +1431,7 @@ public class WorkspaceCtrl implements Initializable {
             shownBoard.setProtected(true);
             lockWorkspace();
         }
+        refreshBoardList(shownBoard.getKey(), true); // Also update the board list
     }
 
 
