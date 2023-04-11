@@ -28,6 +28,14 @@ public class CardUtils {
     }
 
     /**
+     * setter for ip
+     * @param ip
+     */
+    public void setIP(String ip) {
+        serverUtils.setServer(ip);
+    }
+
+    /**
      * Sends a post request to the server to add a Card to the database
      * @param card The card to add to the database
      */

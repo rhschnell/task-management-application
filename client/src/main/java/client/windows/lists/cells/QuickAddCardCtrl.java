@@ -21,7 +21,7 @@ public class QuickAddCardCtrl {
     private TextField cardTitle;
     @FXML
     private Button addButton;
-    private final HelperMethods helperMethods;
+    private HelperMethods helperMethods;
 
     private Board shownBoard;
 
@@ -37,6 +37,16 @@ public class QuickAddCardCtrl {
         this.service = service;
         this.listCtrl = listCtrl;
         this.helperMethods = helperMethods;
+    }
+
+    /**
+     * Setter for hm
+     * @param helperMethods hm
+     */
+    public void setHelperMethods(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
+        service.setIP(helperMethods.getServerIP());
+
     }
 
     /**

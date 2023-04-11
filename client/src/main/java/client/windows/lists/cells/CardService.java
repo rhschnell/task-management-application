@@ -25,6 +25,15 @@ public class CardService {
     }
 
     /**
+     * Setter for ip
+     * @param ip ip
+     */
+    public void setIP(String ip) {
+        cardListUtils.setIP(ip);
+        cardUtils.setIP(ip);
+    }
+
+    /**
      * Deletes the card
      *
      * @param card , the card that needs to be deleted
