@@ -25,6 +25,10 @@ public class WebsocketUtils {
         this.serverUtils = serverUtils;
     }
 
+    /**
+     * Setter for url
+     * @param url new url
+     */
     public void setUrl(String url) {
         WebsocketUtils.url = "ws://" + url + "/websocket";
         session = connect(WebsocketUtils.url);
