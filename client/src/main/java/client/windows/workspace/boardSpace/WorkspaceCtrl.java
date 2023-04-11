@@ -574,18 +574,21 @@ public class WorkspaceCtrl implements Initializable {
                 Card card = shownBoard.getCardLists().get(i).getCards().get(j);
                 String backgroundColor = card.getPresets().get(0).getBackgroundColor();
                 String fontColor = card.getPresets().get(0).getFontColor();
+                if (backgroundColor != null && fontColor != null) {
+                    String backgroundStyle = "-fx-background-color: #" +
+                            backgroundColor.substring(2, 8) +
+                            "; -fx-background-radius: 10; -fx-effect:"+"" +
+                            " dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
 
-                String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
-                        "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
-
-                if (scrollPane instanceof ScrollPane) {
-                    Node cardBox = ((VBox) ((ScrollPane) scrollPane).getContent()).getChildren().get(j);
-                    cardBox.setStyle(backgroundStyle);
-                    Node cardTitle = ((HBox) ((VBox) ((HBox) ((AnchorPane) cardBox)
-                            .getChildren().get(0)).getChildren().get(0))
-                            .getChildren().get(0)).getChildren().get(0);
-                    if (cardTitle instanceof Label) {
-                        ((Label) cardTitle).setTextFill(Color.web(fontColor));
+                    if (scrollPane instanceof ScrollPane) {
+                        Node cardBox = ((VBox) ((ScrollPane) scrollPane).getContent()).getChildren().get(j);
+                        cardBox.setStyle(backgroundStyle);
+                        Node cardTitle = ((HBox) ((VBox) ((HBox) ((AnchorPane) cardBox)
+                                .getChildren().get(0)).getChildren().get(0))
+                                .getChildren().get(0)).getChildren().get(0);
+                        if (cardTitle instanceof Label) {
+                            ((Label) cardTitle).setTextFill(Color.web(fontColor));
+                        }
                     }
                 }
             }

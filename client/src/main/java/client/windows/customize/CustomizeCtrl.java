@@ -8,7 +8,9 @@ import client.windows.customize.cards.add.AddCardPresetCtrl;
 import client.windows.workspace.boardSpace.WorkspaceCtrl;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.Card;
 import commons.CardColorPreset;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -51,6 +53,10 @@ public class CustomizeCtrl {
     @FXML
     private VBox cardPresets;
 
+    private CardColorPreset newDefault;
+    private CardColorPreset pastDefault;
+
+
     /**
      * Constructor for CustomizeCtrl
      * @param workspaceCtrl Instance of WorkspaceCtrl
@@ -62,6 +68,39 @@ public class CustomizeCtrl {
         this.workspaceCtrl = workspaceCtrl;
         this.service = service;
         this.helperMethods = helperMethods;
+    }
+
+    /**
+     * Sets the past default and the new default card presets so when saved the actions can be done
+     * @param newDefault the new default
+     * @param pastDefault the past default
+     */
+    public void setToChangeDefault(CardColorPreset newDefault,CardColorPreset pastDefault) {
+        this.newDefault=newDefault;
+        this.pastDefault = pastDefault;
+    }
+
+    /**
+     * Changes the default card presets with the updated user choice
+     */
+    public void setDefaultToChange()
+    {
+
+        if(!getBoard().getPresetList().contains(newDefault)) {
+            getBoard().addPreset(newDefault);
+            service.insertBoard(getBoard());
+            refreshBoard();
+            newDefault.setId(getBoard().getPresetList().get(getBoard().getPresetList().size()-1).getId());
+        }
+        for(CardList cardList : getBoard().getCardLists()){
+            for(Card card : cardList.getCards()){
+                if(card.getPresets().get(0).getBackgroundColor().equals(pastDefault.getBackgroundColor())
+                        && card.getPresets().get(0).getFontColor().equals(pastDefault.getFontColor())) {
+                    card.setPresets(new ArrayList<>());
+                    card.setPreset(newDefault);
+                }
+            }
+        }
     }
 
     /**
@@ -109,6 +148,7 @@ public class CustomizeCtrl {
      * This method closes the customize window
      */
     public void close(){
+        workspaceCtrl.updateBoard();
         ((Stage)closeButton.getScene().getWindow()).close();
     }
 
@@ -117,7 +157,8 @@ public class CustomizeCtrl {
      */
     public void save() {
         ((Stage)closeButton.getScene().getWindow()).close();
-
+        if(newDefault!=null && pastDefault!=null)
+            setDefaultToChange();
         board.setPresetList(newPresetList);
         List<CardColorPreset> colorPresetsToDelete = new ArrayList<>(boardPresetList);
         colorPresetsToDelete.removeAll(newPresetList);
@@ -134,6 +175,7 @@ public class CustomizeCtrl {
         service.insertBoard(board);
         workspaceCtrl.refreshWorkspace(false);
     }
+
 
     /**
      * This method displays the presets in the cardPresets box
@@ -181,6 +223,14 @@ public class CustomizeCtrl {
     }
 
     /**
+     * Refreshes the board with the last version
+     */
+    public void refreshBoard()
+    {
+        board = service.getBoard(board.getKey());
+    }
+
+    /**
      * This method opens a popup window where the user can add new card color presets
      */
     public void addCardPreset() {
@@ -205,5 +255,6 @@ public class CustomizeCtrl {
     public void addPreset(CardColorPreset preset) {
         this.newPresetList.add(preset);
     }
+
 }
 

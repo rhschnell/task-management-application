@@ -36,6 +36,16 @@ public class CustomizeService {
     }
 
     /**
+     * Gets the board
+     * @param boardKey
+     * @return the board
+     */
+    public Board getBoard(String boardKey){
+        return boardUtils.getBoard(boardKey);
+    }
+
+
+    /**
      * Inserts the cardlist to the server, or updates it
      * @param list The cardlist to be inserted or updated
      */

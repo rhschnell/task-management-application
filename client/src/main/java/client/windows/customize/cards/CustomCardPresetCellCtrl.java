@@ -2,6 +2,7 @@ package client.windows.customize.cards;
 
 import client.MyFXML;
 import client.modules.MainModules;
+import client.serverUtils.BoardUtils;
 import client.serverUtils.CardColorPresetUtils;
 import client.utils.HelperMethods;
 import client.windows.cards.add.AddCardCtrl;
@@ -55,16 +56,20 @@ public class CustomCardPresetCellCtrl {
     private CardColorPreset preset;
     private Board shownBoard;
     private List<CardColorPreset> presetList;
+    private BoardUtils boardUtils;
 
     /**
      * Constructor for the CustomCardPresetCellCtrl
      * @param server The CardColorPresetUtils server
      * @param helperMethods Instance of HelperMethods
+     * @param boardUtils to update the Board
      */
     @Inject
-    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods){
+    public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods,
+                                    BoardUtils boardUtils){
         this.server = server;
         this.helperMethods = helperMethods;
+        this.boardUtils=boardUtils;
     }
 
     /***
@@ -84,19 +89,16 @@ public class CustomCardPresetCellCtrl {
         }
         defaultBox.setOnAction(event -> {
             preset.setDefault(defaultBox.isSelected());
+            CardColorPreset presetPastDefault = null;
             if(preset.isDefault()){
                 for(CardColorPreset p : presetList){
                     if(p != preset){
+                        if(p.isDefault())
+                            presetPastDefault=p;
                         p.setDefault(false);
                     }
                 }
-
-                for(CardList cardList : workspaceCtrl.getShownBoard().getCardLists()){
-                    for(Card card : cardList.getCards()){
-                        card.setPresets(new ArrayList<>());
-                        card.setPreset(preset);
-                    }
-                }
+                customizeCtrl.setToChangeDefault(preset,presetPastDefault);
             }
             customizeCtrl.updateDisplayedPresets();
         });
@@ -107,6 +109,27 @@ public class CustomCardPresetCellCtrl {
      */
     public void delete() {
         presetList.remove(preset);
+        Board updatedBoard = customizeCtrl.getBoard();
+        List<CardColorPreset> newListPresets = new ArrayList<>();
+        updatedBoard.removePreset(preset);
+        for(CardList cardList : updatedBoard.getCardLists())
+        {
+            for (Card card: cardList.getCards())
+            {
+                if(card.getPresets().contains(preset)) {
+                    newListPresets = card.getPresets();
+                    newListPresets.remove(preset);
+                    if(newListPresets.size()==0)
+                    {
+                        card.setPreset(updatedBoard.getPresetList().get(0));
+                    }
+                    else
+                        card.setPresets(newListPresets);
+                }
+            }
+        }
+        boardUtils.insertBoard(updatedBoard);
+        customizeCtrl.refreshBoard();
         customizeCtrl.updateDisplayedPresets();
     }
 
