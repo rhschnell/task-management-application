@@ -75,6 +75,4 @@ public class WorkspaceService {
         clipMap.put(DataFormat.PLAIN_TEXT, key);
         clipboard.setContent(clipMap);
     }
-
-
 }
