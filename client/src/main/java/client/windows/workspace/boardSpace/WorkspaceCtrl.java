@@ -633,17 +633,19 @@ public class WorkspaceCtrl implements Initializable {
             // Theoretically unnecessary, but to be sure
             helperMethods.getMemMap().computeIfAbsent(helperMethods.getServerIP(), k -> new HashSet<>());
 
-            displayLists();
+
             if (!isAdmin()) {
                 helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
             }
             if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
                 && !isAdmin()) {
-                lockWorkspace();
                 shownBoard.setProtected(true);
+                displayLists();
+                lockWorkspace();
             } else {
-                unlockWorkspace();
                 shownBoard.setProtected(false);
+                displayLists();
+                unlockWorkspace();
             }
             pwdMap.putIfAbsent(targetKey, "");
             joinedKeys.add(targetKey);
