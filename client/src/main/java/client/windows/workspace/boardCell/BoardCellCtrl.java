@@ -127,10 +127,12 @@ public class BoardCellCtrl implements Initializable {
      * Method to change locked state of board
      */
     public void swapLock() {
-        if (board.verifyPassword("")) {
+        if (!board.verifyPassword(workspaceCtrl.getPwdMap().get(board.getKey()))) {
+            unlock();
+        } else {
             lock();
-            updateProtectionIcon();
         }
+        updateProtectionIcon();
     }
 
     /**
