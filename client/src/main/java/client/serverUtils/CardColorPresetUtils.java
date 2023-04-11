@@ -21,8 +21,8 @@ public class CardColorPresetUtils {
      */
     @Inject
     public CardColorPresetUtils(ServerUtils serverUtils){
-        this.client = ClientBuilder.newClient(new ClientConfig());
         this.serverUtils = serverUtils;
+        this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
     /**
@@ -30,11 +30,11 @@ public class CardColorPresetUtils {
      * @param preset The preset to add
      */
     public void insertPreset(CardColorPreset preset){
-        ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.CARD_COLOR_PRESET)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(preset, APPLICATION_JSON), CardColorPreset.class);
+        client
+            .target(serverUtils.getServer()).path(Route.CARD_COLOR_PRESET)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(preset, APPLICATION_JSON), CardColorPreset.class);
     }
 
     /**
@@ -42,10 +42,18 @@ public class CardColorPresetUtils {
      * @param id The id of the preset to delete
      */
     public void deletePreset(long id){
-        ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.CARD_COLOR_PRESET + "/" + id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete(Response.class);
+        client
+            .target(serverUtils.getServer()).path(Route.CARD_COLOR_PRESET + "/" + id)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete(Response.class);
+    }
+
+    /**
+     * Setter to set the client
+     * @param client The client to be set
+     */
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

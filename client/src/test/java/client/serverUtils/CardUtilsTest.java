@@ -65,4 +65,29 @@ class CardUtilsTest {
         });
         verify(serverUtils).getServer();
     }
+
+    @Test
+    void deleteCardFromDatabase() {
+        long cardId = 123L;
+
+        cardUtils.deleteCardFromDatabase(cardId);
+        verify(mocker.clientMock).target("http://nonexisting:123/");
+        verify(mocker.targetMock).path(Route.CARD + "/" + cardId);
+        verify(mocker.targetMock).request(APPLICATION_JSON);
+        verify(mocker.builderMock).accept(APPLICATION_JSON);
+        verify(mocker.builderMock).delete(Card.class);
+        verify(serverUtils).getServer();
+    }
+
+    @Test
+    void getCardByID() {
+        long cardId = 123L;
+        cardUtils.getCardById(cardId);
+        verify(mocker.clientMock).target("http://nonexisting:123/");
+        verify(mocker.targetMock).path(Route.CARD + "/123");
+        verify(mocker.targetMock).request(APPLICATION_JSON);
+        verify(mocker.builderMock).accept(APPLICATION_JSON);
+        verify(mocker.builderMock).get(Card.class);
+        verify(serverUtils).getServer();
+    }
 }
