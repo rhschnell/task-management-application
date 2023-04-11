@@ -1051,6 +1051,7 @@ public class WorkspaceCtrl implements Initializable {
                     loader.getKey().escape();
             });
             controller.setBoardKey(getBoardKey());
+            controller.setShownBoard(shownBoard);
             controller.setCard(shownBoard.getCardLists().get(focusedListIndex - 1).
                     getCards().get(focusedCardIndex - 1));
             String title = "View Card";
