@@ -559,8 +559,10 @@ public class WorkspaceCtrl implements Initializable {
                 String backgroundColor = card.getPresets().get(0).getBackgroundColor();
                 String fontColor = card.getPresets().get(0).getFontColor();
                 if (backgroundColor != null && fontColor != null) {
-                    String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
-                            "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
+                    String backgroundStyle = "-fx-background-color: #" +
+                            backgroundColor.substring(2, 8) +
+                            "; -fx-background-radius: 10; -fx-effect:"+"" +
+                            " dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
 
                     if (scrollPane instanceof ScrollPane) {
                         Node cardBox = ((VBox) ((ScrollPane) scrollPane).getContent()).getChildren().get(j);
