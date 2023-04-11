@@ -139,7 +139,6 @@ public class BoardCellCtrl implements Initializable {
      * Sets the board to be unlocked and updates the icons
      */
     public void unlock() {
-        workspaceCtrl.refreshWorkspace(true);
         workspaceCtrl.lockUnlock(board, "unlock");
         updateProtectionIcon();
     }

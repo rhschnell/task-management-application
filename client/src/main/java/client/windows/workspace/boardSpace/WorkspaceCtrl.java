@@ -505,7 +505,6 @@ public class WorkspaceCtrl implements Initializable {
             && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
-//        shownBoard = service.getBoard(shownBoard.getKey());
     }
 
     /**
