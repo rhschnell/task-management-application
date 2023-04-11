@@ -34,9 +34,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -309,6 +307,9 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         displayTasks();
     }
 
+    /**
+     * Deletes card
+     */
     public void deleteCard() {
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(DeleteCardCtrl.class, "client", "windows", "lists", "delete", "DeleteCard.fxml");
@@ -437,16 +438,25 @@ public class EditCardCtrl extends SubtaskContainer implements Initializable {
         this.presetList = presetList;
     }
 
+    /**
+     * Refreshes overview
+     */
     private void refresh() {
-        if(!newCard.equals(service.getCard(cardID))) {
-            newCard = service.getCard(cardID);
-            service.setCard(newCard);
-            setCardTitle(newCard.getTitle());
-            setCardDescription(newCard.getDescription());
-            setAppliedTags(newCard.getTags());
-            displayTasks();
-            setPresetList(newCard.getPresets());
-            updateDisplayedPresets();
+        Card serverCard = service.getCard(cardID);
+        List<Task> clientTasks = oldCard.getSubTasks();
+        List<Task> serverTasks = serverCard.getSubTasks();
+
+        if(!oldCard.equals(serverCard)) {
+            cardTitle.setText(serverCard.getTitle());
+            newCard.setTitle(serverCard.getTitle());
+            oldCard.setTitle(serverCard.getTitle());
+            cardDescription.setText(serverCard.getDescription());
+            newCard.setDescription(serverCard.getDescription());
+            oldCard.setDescription(serverCard.getDescription());
         }
+
+//        serverTasks.removeAll(clientTasks);
+//        newCard.getSubTasks().addAll(serverTasks);
+//        if (serverTasks.size() > 0) {displayTasks();}
     }
 }
