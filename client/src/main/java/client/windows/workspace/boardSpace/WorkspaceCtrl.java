@@ -411,9 +411,18 @@ public class WorkspaceCtrl implements Initializable {
 
         // Set title depending on if board locket
         String title = board.isProtected() ? "Unlock board" : "Set password";
+        Scene scene = new Scene(loader.getValue());
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().cancel();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().confirm();
+            }
+        });
 
         // Create popup through helper method
-        helperMethods.popUp(new Scene(loader.getValue()), title);
+        helperMethods.popUp(scene, title);
 
         // Fix lock button state in workspace
         if (board.equals(shownBoard) && mode.equals("unlock")) {
@@ -1212,6 +1221,11 @@ public class WorkspaceCtrl implements Initializable {
 
         Parent root = loader.getValue();
         Scene scene = new Scene(root);
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().close();
+            }
+        });
 
         String title = "Tag Overview";
         helperMethods.popUp(scene, title);
@@ -1272,6 +1286,16 @@ public class WorkspaceCtrl implements Initializable {
                 .load(RenameCtrl.class, "client", "windows", "workspace", "rename", "Rename.fxml");
 
         Scene scene = new Scene(loader.getValue());
+
+        scene.getRoot().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                loader.getKey().cancel();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                loader.getKey().save();
+            }
+        });
+
         loader.getKey().setRemoteCtrl(this);
         helperMethods.popUp(scene, "Rename board: " + this.getShownBoard().getTitle());
         refreshWorkspace(true);
