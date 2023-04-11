@@ -21,6 +21,7 @@ import client.serverUtils.WebsocketUtils;
 import client.utils.ErrorDialogEntry;
 import client.utils.HelperMethods;
 import client.utils.Scenes;
+import client.windows.cards.edit.EditCardCtrl;
 import client.windows.cards.view.ViewCardCtrl;
 import client.windows.customize.CustomizeCtrl;
 import client.windows.lists.cells.CardCtrl;
@@ -214,11 +215,17 @@ public class WorkspaceCtrl implements Initializable {
             return;
         }
 
-        List<String> tempList = new ArrayList<>();
+        try {
+            service.getBoard(key);
+        } catch (Exception e) {
+            String message = "There is no board with key " + key +
+                    ". Try joining a board with a different key.";
 
-        for (Board b : service.getBoards()) {
-            tempList.add(b.getKey());
+            ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
+            helperMethods.showErrorDialog(nonExistingKey);
+            return;
         }
+
         unsubscribeBoards();
         showBoard(key);
         keyField.clear();
@@ -872,7 +879,6 @@ public class WorkspaceCtrl implements Initializable {
      * This opens the edit window, since this is where you edit card presets
      */
     public void handleCustomizationShortcut() {
-        //TODO: implement
         // Just open the edit window...
         if (!focusedIndicesAreValid()) return;
         ListCtrl focusedListController = listControllers.get(focusedListIndex - 1);
@@ -1071,7 +1077,7 @@ public class WorkspaceCtrl implements Initializable {
      * Opens a pop-up that displays the information that the focused card contains
      */
     public void openFocusedCard() {
-        if (focusedIndicesAreValid()) {
+        if (focusedIndicesAreValid() && shownBoard.isProtected()) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(ViewCardCtrl.class, "client", "windows", "cards", "ViewCard.fxml");
 
@@ -1088,6 +1094,25 @@ public class WorkspaceCtrl implements Initializable {
                     getCards().get(focusedCardIndex - 1));
             String title = "View Card";
             helperMethods.popUp(scene, title);
+        } else if (focusedIndicesAreValid()) {
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(EditCardCtrl.class, "client", "windows", "cards", "EditCard.fxml");
+            loader.getKey().setBoardKey(getBoardKey());
+            loader.getKey().setCard(shownBoard.getCardLists().get(focusedListIndex - 1).
+                    getCards().get(focusedCardIndex - 1));
+            loader.getKey().displayTasks();
+            loader.getKey().setShownBoard(shownBoard);
+            loader.getKey().setWorkspaceCtrl(this);
+            loader.getKey().setPresetList(shownBoard.getPresetList());
+            loader.getKey().displayPresetList();
+
+            Scene scene = new Scene(loader.getValue());
+            scene.getRoot().setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    loader.getKey().escape();
+                }
+            });
+            helperMethods.popUp(scene, "Edit Card");
         }
     }
 
