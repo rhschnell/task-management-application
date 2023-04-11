@@ -97,7 +97,40 @@ public class AddCardCtrl extends SubtaskContainer {
     }
 
     /**
+     * Gets the boardKey
+     *
+     * @return the boardKey
+     */
+    public String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    /**
+     * Sets the boardKey
+     *
+     * @param boardKey the boardKey to be set
+     */
+    public void setBoardKey(String boardKey) {
+        service.setBoardKey(boardKey);
+    }
+
+    /**
+     * Gets the applied preset
+     *
+     * @return The applied preset, or default if no preset is applied
+     */
+    public CardColorPreset getAppliedPreset() {
+        for (CardColorPreset preset : presetList) {
+            if (preset.isDefault()) {
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
+    }
+
+    /**
      * Setter for ip
+     *
      * @param ip ip
      */
     public void setIP(String ip) {
@@ -106,6 +139,7 @@ public class AddCardCtrl extends SubtaskContainer {
 
     /**
      * Sets the card list for this card
+     *
      * @param cardList The card list to which this card belongs
      */
     public void setCardList(CardList cardList) {
@@ -113,19 +147,40 @@ public class AddCardCtrl extends SubtaskContainer {
     }
 
     /**
-     * Sets the boardKey
-     * @param boardKey the boardKey to be set
+     * Sets the applied tags to the VBOX of the displayed cards
+     *
+     * @param appliedTags the Array of tags that needs to be displayed
      */
-    public void setBoardKey(String boardKey) {
-        service.setBoardKey(boardKey);
+    public void setAppliedTags(List<Tag> appliedTags) {
+        service.setAppliedTags(new ArrayList<>());
+        appliedTagsVbox.getChildren().clear();
+        for (int i = 0; i < appliedTags.size(); i++) {
+            service.applyTag(appliedTags.get(i));
+            var loader = new MyFXML(createInjector(new MainModules()))
+                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
+            CustomTagCellCtrl ctrl = loader.getKey();
+            ctrl.setAddCardCtrl(this);
+            ctrl.setTagObject(appliedTags.get(i), "viewTag");
+            appliedTagsVbox.getChildren().add(loader.getValue());
+        }
     }
 
     /**
-     * Gets the boardKey
-     * @return the boardKey
+     * Sets the shown board
+     *
+     * @param shownBoard The shown board to be set
      */
-    public String getBoardKey() {
-        return service.getBoardKey();
+    public void setBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
@@ -160,38 +215,6 @@ public class AddCardCtrl extends SubtaskContainer {
     }
 
     /**
-     * Gets the applied preset
-     * @return The applied preset, or default if no preset is applied
-     */
-    public CardColorPreset getAppliedPreset(){
-        for(CardColorPreset preset : presetList){
-            if(preset.isDefault()){
-                return preset;
-            }
-        }
-        return shownBoard.getPresetList().get(0);
-    }
-
-    /**
-     * Sets the applied tags to the VBOX of the displayed cards
-     * @param appliedTags the Array of tags that needs to be displayed
-     */
-    public void setAppliedTags(List<Tag> appliedTags) {
-        service.setAppliedTags(new ArrayList<>());
-        appliedTagsVbox.getChildren().clear();
-        for (int i = 0; i < appliedTags.size(); i++) {
-            service.applyTag(appliedTags.get(i));
-            var loader = new MyFXML(createInjector(new MainModules()))
-                    .load(CustomTagCellCtrl.class, "client", "windows", "tags", "CustomTagCell.fxml");
-            CustomTagCellCtrl ctrl = loader.getKey();
-            ctrl.setAddCardCtrl(this);
-            ctrl.setTagObject(appliedTags.get(i), "viewTag");
-            appliedTagsVbox.getChildren().add(loader.getValue());
-        }
-    }
-
-
-    /**
      * Displays the pop-up (TagList) in order to choose and add a tag.
      */
     public void addTagPopup() {
@@ -211,9 +234,9 @@ public class AddCardCtrl extends SubtaskContainer {
     /**
      * This method displays the preset list of color presets
      */
-    public void displayPresetList(){
+    public void displayPresetList() {
         this.presetList = workspaceCtrl.getShownBoard().getPresetList();
-        for(CardColorPreset preset : presetList){
+        for (CardColorPreset preset : presetList) {
             var loader = new MyFXML(createInjector(new MainModules()))
                     .load(CustomCardPresetCellViewCtrl.class,
                             "client", "windows", "customize", "cards", "view", "CustomCardPresetCellView.fxml");
@@ -230,7 +253,7 @@ public class AddCardCtrl extends SubtaskContainer {
     /**
      * Method that updates the displayed presets
      */
-    public void updateDisplayedPresets(){
+    public void updateDisplayedPresets() {
         presets.getChildren().clear();
         displayPresetList();
     }
@@ -257,6 +280,7 @@ public class AddCardCtrl extends SubtaskContainer {
 
     /**
      * Handles key events to make sure the user can add tasks by pressing ENTER
+     *
      * @param event The key event to be handled
      */
     public void handleKeyPressed(KeyEvent event) {
@@ -284,6 +308,7 @@ public class AddCardCtrl extends SubtaskContainer {
 
     /**
      * Deletes the subtask from the card and refreshes the display
+     *
      * @param task The subtask to remove
      */
     @Override
@@ -324,22 +349,6 @@ public class AddCardCtrl extends SubtaskContainer {
             event.consume();
         });
 
-    }
-
-    /**
-     * Sets the shown board
-     * @param shownBoard The shown board to be set
-     */
-    public void setBoard(Board shownBoard) {
-        this.shownBoard = shownBoard;
-    }
-
-    /**
-     * Sets the workspaceCtrl
-     * @param workspaceCtrl The WorkspaceCtrl to be set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**

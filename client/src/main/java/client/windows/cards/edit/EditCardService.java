@@ -22,29 +22,20 @@ public class EditCardService {
 
     /**
      * Constructor for the CardService
-     * @param server a CardUtils instance
+     *
+     * @param server   a CardUtils instance
      * @param tagUtils a TagUtils instance
      */
     @Inject
     public EditCardService(CardUtils server, TagUtils tagUtils) {
         this.server = server;
-        this.tagUtils=tagUtils;
+        this.tagUtils = tagUtils;
         appliedTags = new ArrayList<>();
     }
 
     /**
-     * Sets the card that needs to be stored in the edit-card pop-up
-     * @param card the card that needs to be stored
-     */
-    public void setCard(Card card) {
-        this.card = card;
-        appliedTags=card.getTags();
-        if(appliedTags ==null)
-            appliedTags=new ArrayList<>();
-    }
-
-    /**
      * Returns the card stored in the editCard pop-up
+     *
      * @return the card that needs to be returned
      */
     public Card getCard() {
@@ -52,61 +43,40 @@ public class EditCardService {
     }
 
     /**
-     * Retrieves a card with a given id from the database if it exists
-     * or null otherwise
-     * @param id the id of the card to be retrieved
-     * @return the card from the server, or null if it does not exist
+     * Sets the card that needs to be stored in the edit-card pop-up
+     *
+     * @param card the card that needs to be stored
      */
-    public Card getCard(long id) {
-        return server.getCardById(id);
+    public void setCard(Card card) {
+        this.card = card;
+        appliedTags = card.getTags();
+        if (appliedTags == null)
+            appliedTags = new ArrayList<>();
     }
 
     /**
      * Returns the available tags of the card (the tags that have not been applied yet)
+     *
      * @return the list of tags the that have not been applied to the card yet
      */
-    public List<Tag> getAvailableTags()
-    {
+    public List<Tag> getAvailableTags() {
         List<Tag> availableTags = new ArrayList<>(tagUtils.getBoardTags(boardKey));
         availableTags.removeAll(appliedTags);
         return availableTags;
     }
 
     /**
-     * Method to update the edited card by inserting it to the server
-     * @param card the card to be inserted
-     */
-    public void insertCard(Card card) {
-        server.insertCard(card);
-    }
-
-    /**
-     * Method to delete card from database
-     * @param card the card to be deleted
-     */
-    public void deleteCard(Card card) {server.deleteCard(card.getId());}
-
-    /**
      * Returns the tags from the service
+     *
      * @return the list of tags of the board
      */
-    public List<Tag> getTags()
-    {
+    public List<Tag> getTags() {
         return tagUtils.getBoardTags(boardKey);
     }
 
     /**
-     * Adds a tag to the list of the applied tags of the card
-     * @param tag the tag that needs to be added to the card
-     */
-    public void applyTag(Tag tag)
-    {
-        if(appliedTags!=null && !appliedTags.contains(tag))
-            appliedTags.add(tag);
-    }
-
-    /**
      * Returns a list of tags that are applied on this card
+     *
      * @return Applied tags for this card
      */
     public List<Tag> getAppliedTags() {
@@ -115,6 +85,7 @@ public class EditCardService {
 
     /**
      * Getter for the key of the board
+     *
      * @return the key of the board
      */
     public String getBoardKey() {
@@ -123,6 +94,7 @@ public class EditCardService {
 
     /**
      * Setter for the key of the board
+     *
      * @param boardKey the key of the board
      */
     public void setBoardKey(String boardKey) {
@@ -130,10 +102,50 @@ public class EditCardService {
     }
 
     /**
+     * Retrieves a card with a given id from the database if it exists
+     * or null otherwise
+     *
+     * @param id the id of the card to be retrieved
+     * @return the card from the server, or null if it does not exist
+     */
+    public Card getCard(long id) {
+        return server.getCardById(id);
+    }
+
+    /**
+     * Method to update the edited card by inserting it to the server
+     *
+     * @param card the card to be inserted
+     */
+    public void insertCard(Card card) {
+        server.insertCard(card);
+    }
+
+    /**
+     * Method to delete card from database
+     *
+     * @param card the card to be deleted
+     */
+    public void deleteCard(Card card) {
+        server.deleteCard(card.getId());
+    }
+
+    /**
+     * Adds a tag to the list of the applied tags of the card
+     *
+     * @param tag the tag that needs to be added to the card
+     */
+    public void applyTag(Tag tag) {
+        if (appliedTags != null && !appliedTags.contains(tag))
+            appliedTags.add(tag);
+    }
+
+    /**
      * Updates the card to reflect a drag-and-drop action, where tasks are reordered. Their
      * priorities are reordered and reflected in the card.
+     *
      * @param draggedTask The task to insert at a new place
-     * @param newIndex The index of the new place to insert the dragged task
+     * @param newIndex    The index of the new place to insert the dragged task
      * @throws NotFoundException if the task to drag is not part of the provided list
      */
     public void dragAndDropDB(Task draggedTask, int newIndex) {

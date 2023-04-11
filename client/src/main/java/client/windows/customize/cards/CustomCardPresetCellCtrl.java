@@ -60,23 +60,42 @@ public class CustomCardPresetCellCtrl {
 
     /**
      * Constructor for the CustomCardPresetCellCtrl
-     * @param server The CardColorPresetUtils server
+     *
+     * @param server        The CardColorPresetUtils server
      * @param helperMethods Instance of HelperMethods
-     * @param boardUtils to update the Board
+     * @param boardUtils    to update the Board
      */
     @Inject
     public CustomCardPresetCellCtrl(CardColorPresetUtils server, HelperMethods helperMethods,
-                                    BoardUtils boardUtils){
+                                    BoardUtils boardUtils) {
         this.server = server;
         this.helperMethods = helperMethods;
-        this.boardUtils=boardUtils;
+        this.boardUtils = boardUtils;
+    }
+
+    /**
+     * Gets the customizeCtrl
+     *
+     * @return The customizeCtrl
+     */
+    public CustomizeCtrl getCustomizeCtrl() {
+        return this.customizeCtrl;
+    }
+
+    /**
+     * Sets the customizeCtrl
+     *
+     * @param customizeCtrl the CustomizeCtrl to be set
+     */
+    public void setCustomizeCtrl(CustomizeCtrl customizeCtrl) {
+        this.customizeCtrl = customizeCtrl;
     }
 
     /***
      * Method to set the color preset in the overview
      * @param preset The preset to be set
      */
-    public void setPresetObject(CardColorPreset preset){
+    public void setPresetObject(CardColorPreset preset) {
         this.preset = preset;
         presetTitle.setText(preset.getName());
 
@@ -90,18 +109,45 @@ public class CustomCardPresetCellCtrl {
         defaultBox.setOnAction(event -> {
             preset.setDefault(defaultBox.isSelected());
             CardColorPreset presetPastDefault = null;
-            if(preset.isDefault()){
-                for(CardColorPreset p : presetList){
-                    if(p != preset){
-                        if(p.isDefault())
-                            presetPastDefault=p;
+            if (preset.isDefault()) {
+                for (CardColorPreset p : presetList) {
+                    if (p != preset) {
+                        if (p.isDefault())
+                            presetPastDefault = p;
                         p.setDefault(false);
                     }
                 }
-                customizeCtrl.setToChangeDefault(preset,presetPastDefault);
+                customizeCtrl.setToChangeDefault(preset, presetPastDefault);
             }
             customizeCtrl.updateDisplayedPresets();
         });
+    }
+
+    /**
+     * Sets the preset list of color presets
+     *
+     * @param presetList The list of presets to be set
+     */
+    public void setPresetList(List<CardColorPreset> presetList) {
+        this.presetList = presetList;
+    }
+
+    /**
+     * Sets the board
+     *
+     * @param shownBoard The board to be set
+     */
+    public void setBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl the WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
@@ -112,18 +158,14 @@ public class CustomCardPresetCellCtrl {
         Board updatedBoard = customizeCtrl.getBoard();
         List<CardColorPreset> newListPresets = new ArrayList<>();
         updatedBoard.removePreset(preset);
-        for(CardList cardList : updatedBoard.getCardLists())
-        {
-            for (Card card: cardList.getCards())
-            {
-                if(card.getPresets().contains(preset)) {
+        for (CardList cardList : updatedBoard.getCardLists()) {
+            for (Card card : cardList.getCards()) {
+                if (card.getPresets().contains(preset)) {
                     newListPresets = card.getPresets();
                     newListPresets.remove(preset);
-                    if(newListPresets.size()==0)
-                    {
+                    if (newListPresets.size() == 0) {
                         card.setPreset(updatedBoard.getPresetList().get(0));
-                    }
-                    else
+                    } else
                         card.setPresets(newListPresets);
                 }
             }
@@ -137,7 +179,7 @@ public class CustomCardPresetCellCtrl {
      * This method allows the user to edit the custom-made preset
      */
     public void edit() {
-        var loader =  new MyFXML(createInjector(new MainModules()))
+        var loader = new MyFXML(createInjector(new MainModules()))
                 .load(EditCardPresetCtrl.class,
                         "client", "windows", "customize", "cards", "edit", "EditCardPreset.fxml");
 
@@ -153,44 +195,5 @@ public class CustomCardPresetCellCtrl {
 
         String title = "Edit Preset";
         helperMethods.popUp(scene, title);
-    }
-
-    /**
-     * Sets the customizeCtrl
-     * @param customizeCtrl the CustomizeCtrl to be set
-     */
-    public void setCustomizeCtrl(CustomizeCtrl customizeCtrl) {
-        this.customizeCtrl = customizeCtrl;
-    }
-
-    /**
-     * Gets the customizeCtrl
-     * @return The customizeCtrl
-     */
-    public CustomizeCtrl getCustomizeCtrl() {
-        return this.customizeCtrl;
-    }
-
-    /**
-     * Sets the preset list of color presets
-     * @param presetList The list of presets to be set
-     */
-    public void setPresetList(List<CardColorPreset> presetList){
-        this.presetList = presetList;
-    }
-    /**
-     * Sets the board
-     * @param shownBoard The board to be set
-     */
-    public void setBoard(Board shownBoard) {
-        this.shownBoard = shownBoard;
-    }
-
-    /**
-     * Sets the workspaceCtrl
-     * @param workspaceCtrl the WorkspaceCtrl to be set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
-        this.workspaceCtrl = workspaceCtrl;
     }
 }

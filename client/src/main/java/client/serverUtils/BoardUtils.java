@@ -21,16 +21,58 @@ public class BoardUtils {
 
     /**
      * Creates a new BoardUtils object
+     *
      * @param serverUtils The ServerUtils object (injected) to use in requests.
      */
     @Inject
-    public BoardUtils(ServerUtils serverUtils){
+    public BoardUtils(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
     /**
+     * Sends a request to the server to get all boards from the database
+     *
+     * @return List of all boards in the database
+     */
+    public List<Board> getBoards() {
+        return client.target(serverUtils.getServer()).path(Route.BOARD)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
+     * Getter for the server address
+     *
+     * @return the server address
+     */
+    public String getServer() {
+        return serverUtils.getServer();
+    }
+
+    /**
+     * Setter for the server address
+     *
+     * @param server the server address
+     */
+    public void setServer(String server) {
+        serverUtils.setServer(server);
+    }
+
+    /**
+     * Setter for the client
+     *
+     * @param client the client
+     */
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    /**
      * Sends a request to the server to delete a certain board from the database
+     *
      * @param key of board to delete
      */
     public void deleteBoard(String key) {
@@ -42,6 +84,7 @@ public class BoardUtils {
 
     /**
      * Sends a request to the server to retrieve a certain board from the database
+     *
      * @param key the key of the board to find
      * @return the desired board
      */
@@ -50,17 +93,6 @@ public class BoardUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Board.class);
-    }
-
-    /**
-     * Sends a request to the server to get all boards from the database
-     * @return List of all boards in the database
-     */
-    public List<Board> getBoards() {
-        return client.target(serverUtils.getServer()).path(Route.BOARD)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {});
     }
 
     /**
@@ -79,12 +111,13 @@ public class BoardUtils {
 
     /**
      * This method inserts a new tag to a given board
+     *
      * @param key the key of the board
      * @param tag the tag to be inserted
      */
     public void insertNewTag(String key, Tag tag) {
         client
-                .target(serverUtils.getServer()).path(Route.BOARD+"/addBoardTag/"+key)
+                .target(serverUtils.getServer()).path(Route.BOARD + "/addBoardTag/" + key)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
@@ -92,41 +125,16 @@ public class BoardUtils {
 
     /**
      * This method removes a tag from a board
+     *
      * @param key the key of the board
      * @param tag the tag to be removed
      */
     public void removeBoardTag(String key, Tag tag) {
         client
-                .target(serverUtils.getServer()).path(Route.BOARD+"/removeBoardTag/"+key)
+                .target(serverUtils.getServer()).path(Route.BOARD + "/removeBoardTag/" + key)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(tag, APPLICATION_JSON), Board.class);
-    }
-
-    /**
-     * Setter for the server address
-     * @param server the server address
-     */
-    public void setServer(String server) {
-        serverUtils.setServer(server);
-    }
-
-    /**
-     * Getter for the server address
-     * @return the server address
-     */
-    public String getServer()
-    {
-        return serverUtils.getServer();
-    }
-
-    /**
-     * Setter for the client
-     * @param client the client
-     */
-    public void setClient(Client client)
-    {
-        this.client = client;
     }
 
 }

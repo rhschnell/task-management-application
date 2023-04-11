@@ -21,7 +21,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class DeleteListCtrl{
+public class DeleteListCtrl {
     private final DeleteListService service;
     private long deleteId;
 
@@ -33,6 +33,7 @@ public class DeleteListCtrl{
 
     /**
      * Constructor for DeleteListCtrl
+     *
      * @param service corresponding service
      */
     @Inject
@@ -42,6 +43,7 @@ public class DeleteListCtrl{
 
     /**
      * Sets the boardKey the list is part of
+     *
      * @param boardKey the boardKey
      */
     public void setBoardKey(String boardKey) {
@@ -49,32 +51,33 @@ public class DeleteListCtrl{
     }
 
     /**
+     * Setter for the id of the list to be deleted
+     *
+     * @param deleteId the id of the list you want to delte
+     */
+    public void setDeleteId(long deleteId) {
+        this.deleteId = deleteId;
+    }
+
+    /**
      * This method cancels deleting the list from the board
      */
-    public void cancel(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
+    public void cancel() {
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method closes the window/stage
      */
-    public void escape(){
-        ((Stage)cancelButton.getScene().getWindow()).close();
+    public void escape() {
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method deletes the list from the board
      */
-    public void delete(){
-        ((Stage)deleteButton.getScene().getWindow()).close();
+    public void delete() {
+        ((Stage) deleteButton.getScene().getWindow()).close();
         service.deleteCardList(this.deleteId);
-    }
-
-    /**
-     * Setter for the id of the list to be deleted
-     * @param deleteId the id of the list you want to delte
-     */
-    public void setDeleteId(long deleteId) {
-        this.deleteId = deleteId;
     }
 }

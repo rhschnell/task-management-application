@@ -27,18 +27,20 @@ public class RenameCardCtrl implements Initializable {
     /**
      * Injectable constructor for the RenameCardCtrl
      * MUST call setCard in order to work properly
-     * @see #setData(Card) (Card)
-     * @param service Injected parameter of corresponding service
+     *
+     * @param service       Injected parameter of corresponding service
      * @param helperMethods Injected instance of HelperMethods
+     * @see #setData(Card) (Card)
      */
     @Inject
-    public RenameCardCtrl(RenameCardService service, HelperMethods helperMethods){
+    public RenameCardCtrl(RenameCardService service, HelperMethods helperMethods) {
         this.service = service;
         this.helperMethods = helperMethods;
     }
 
     /**
      * Sets the list controller associated to this card
+     *
      * @param listCtrl The list controller
      */
     public void setListCtrl(ListCtrl listCtrl) {
@@ -50,6 +52,7 @@ public class RenameCardCtrl implements Initializable {
      * and selects all the text in the textfield
      * <p>
      * MUST be intitalized!
+     *
      * @param card The card to rename
      */
     public void setData(Card card) {
@@ -61,9 +64,18 @@ public class RenameCardCtrl implements Initializable {
     }
 
     /**
+     * Sets the service for this controller
+     *
+     * @param service The new RenameCardService
+     */
+    public void setService(RenameCardService service) {
+        this.service = service;
+    }
+
+    /**
      * Saves the card into the database with the new title
      */
-    public void save(){
+    public void save() {
         String newTitle = helperMethods.getInputValidator().stripWhitespace(inputField.getText());
         if (!checkAndHandleInput(newTitle)) return;
 
@@ -75,6 +87,7 @@ public class RenameCardCtrl implements Initializable {
 
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -96,7 +109,7 @@ public class RenameCardCtrl implements Initializable {
     /**
      * Closes the window
      */
-    public void cancel(){
+    public void cancel() {
         inputField.clear();
         close();
     }
@@ -105,15 +118,7 @@ public class RenameCardCtrl implements Initializable {
      * This method is used to close the window.
      */
     private void close() {
-        ((Stage)inputField.getScene().getWindow()).close();
-    }
-
-    /**
-     * Sets the service for this controller
-     * @param service The new RenameCardService
-     */
-    public void setService(RenameCardService service) {
-        this.service = service;
+        ((Stage) inputField.getScene().getWindow()).close();
     }
 
     /**
@@ -128,7 +133,7 @@ public class RenameCardCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         inputField.setOnKeyPressed(event -> {
-            switch (event.getCode()){
+            switch (event.getCode()) {
                 case ENTER:
                     save();
                     break;

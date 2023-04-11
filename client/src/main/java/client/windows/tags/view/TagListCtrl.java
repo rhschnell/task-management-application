@@ -53,7 +53,8 @@ public class TagListCtrl {
 
     /**
      * Constructor for the TagListCtrl
-     * @param addCardCtrl an AddCardCtrl instance
+     *
+     * @param addCardCtrl  an AddCardCtrl instance
      * @param editCardCtrl an EditCardCtrl instance
      */
     @Inject
@@ -67,7 +68,17 @@ public class TagListCtrl {
     }
 
     /**
+     * Getter for the type of the TagListCtrl (e.g., "edit" or "add")
+     *
+     * @return the type of the TagListCtrl
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
      * Setter for the type of the TagListCtrl (e.g., "edit" or "add")
+     *
      * @param type the type of the TagListCtrl
      */
     public void setType(String type) {
@@ -75,11 +86,24 @@ public class TagListCtrl {
     }
 
     /**
-     * Getter for the type of the TagListCtrl (e.g., "edit" or "add")
-     * @return the type of the TagListCtrl
+     * Returns the currently applied tags
+     *
+     * @return The currently applied tags
      */
-    public String getType() {
-        return type;
+    public List<Tag> getAppliedTags() {
+        return appliedTags;
+    }
+
+    /**
+     * Sets the AppliedTags VBOX to contain all the tags that are applied on the card
+     *
+     * @param tagList The list of tags representing all the applied tags on the card
+     */
+    public void setAppliedTags(List<Tag> tagList) {
+        this.appliedTags = new ArrayList<>();
+        if (tagList != null)
+            this.appliedTags.addAll(tagList);
+        displayAppliedTags();
     }
 
     /**
@@ -93,6 +117,23 @@ public class TagListCtrl {
         displayAvailableTags();
     }
 
+    /**
+     * Sets the addCardCtrl
+     *
+     * @param addCardCtrl The new add card controller
+     */
+    public void setAddCardCtrl(AddCardCtrl addCardCtrl) {
+        this.addCardCtrl = addCardCtrl;
+    }
+
+    /**
+     * Sets the editCardCtrl
+     *
+     * @param editCardCtrl The new edit card controller
+     */
+    public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
+        this.editCardCtrl = editCardCtrl;
+    }
 
     /**
      * Displays the set of available tags on screen
@@ -107,26 +148,6 @@ public class TagListCtrl {
             ctrl.setTagListCtrl(this);
             availableTagsBox.getChildren().add(loader.getValue());
         }
-    }
-
-    /**
-     * Sets the AppliedTags VBOX to contain all the tags that are applied on the card
-     *
-     * @param tagList The list of tags representing all the applied tags on the card
-     */
-    public void setAppliedTags(List<Tag> tagList) {
-        this.appliedTags = new ArrayList<>();
-        if(tagList!=null)
-            this.appliedTags.addAll(tagList);
-        displayAppliedTags();
-    }
-
-    /**
-     * Returns the currently applied tags
-     * @return The currently applied tags
-     */
-    public List<Tag> getAppliedTags() {
-        return appliedTags;
     }
 
     /**
@@ -146,6 +167,7 @@ public class TagListCtrl {
 
     /**
      * Refreshes the lists while removing the tag
+     *
      * @param tag the tag to remove
      */
     public void refreshRemove(Tag tag) {
@@ -157,6 +179,7 @@ public class TagListCtrl {
 
     /**
      * Refreshes the lists while adding the list
+     *
      * @param tag the list to add
      */
     public void refreshAdd(Tag tag) {
@@ -165,23 +188,6 @@ public class TagListCtrl {
         displayAppliedTags();
         displayAvailableTags();
     }
-
-    /**
-     * Sets the addCardCtrl
-     * @param addCardCtrl The new add card controller
-     */
-    public void setAddCardCtrl(AddCardCtrl addCardCtrl) {
-        this.addCardCtrl = addCardCtrl;
-    }
-
-    /**
-     * Sets the editCardCtrl
-     * @param editCardCtrl The new edit card controller
-     */
-    public void setEditCardCtrl(EditCardCtrl editCardCtrl) {
-        this.editCardCtrl = editCardCtrl;
-    }
-
 
     /**
      * Escapes the pop-up in which the AvailableCard and the AppliedTags are displayed

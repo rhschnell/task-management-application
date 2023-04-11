@@ -41,6 +41,16 @@ public class RenameCtrl implements Initializable {
     }
 
     /**
+     * Setter for workspaceCtrl, MUST be called after constructor.
+     *
+     * @param workspaceCtrl the instance to be injected
+     */
+    public void setRemoteCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+        this.inputField.setText(workspaceCtrl.getShownBoard().getTitle());
+    }
+
+    /**
      * This method is executed upon clicking the save button in the popup.
      * It sets the title of the board to the current text of the
      * inputField and then inserts this into the database through
@@ -57,7 +67,6 @@ public class RenameCtrl implements Initializable {
         service.insertBoard(board);
         close();
     }
-
 
     /**
      * Checks the user input and shows error messages accordingly
@@ -107,17 +116,6 @@ public class RenameCtrl implements Initializable {
     private void close() {
         ((Stage) inputField.getScene().getWindow()).close();
     }
-
-    /**
-     * Setter for workspaceCtrl, MUST be called after constructor.
-     *
-     * @param workspaceCtrl the instance to be injected
-     */
-    public void setRemoteCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
-        this.inputField.setText(workspaceCtrl.getShownBoard().getTitle());
-    }
-
 
     /**
      * Called to initialize a controller after its root element has been

@@ -25,6 +25,7 @@ public class NewListNameCtrl implements Initializable {
 
     /**
      * Creates a new instance of NewListNameCtrl
+     *
      * @param helperMethods Instance of HelperMethods that helps display popups in this class
      */
     @Inject
@@ -59,9 +60,9 @@ public class NewListNameCtrl implements Initializable {
     }
 
 
-
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -91,8 +92,7 @@ public class NewListNameCtrl implements Initializable {
     private void handleKeyEvents(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             create();
-        }
-        else if (event.getCode() == KeyCode.ESCAPE){
+        } else if (event.getCode() == KeyCode.ESCAPE) {
             cancel();
         }
     }

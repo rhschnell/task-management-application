@@ -30,6 +30,7 @@ public class DataFormatManager {
 
     /**
      * Gets the card format
+     *
      * @return the card fromat
      */
     public DataFormat getCardFormat() {
@@ -38,6 +39,7 @@ public class DataFormatManager {
 
     /**
      * Gets the subtask format
+     *
      * @return the subtask format
      */
     public DataFormat getSubtaskFormat() {

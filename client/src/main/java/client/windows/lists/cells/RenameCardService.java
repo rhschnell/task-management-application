@@ -9,6 +9,7 @@ public class RenameCardService {
 
     /**
      * Injectable constructor for the RenameCardService
+     *
      * @param server the utility to communicate with the server
      */
     @Inject
@@ -18,6 +19,7 @@ public class RenameCardService {
 
     /**
      * Insert given card into the database.
+     *
      * @param card card to be inserted
      */
     public void insertCard(Card card) {

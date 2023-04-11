@@ -28,8 +28,9 @@ public class QuickAddCardCtrl {
 
     /**
      * Constructor for QuickAddCardCtrl
-     * @param service a CardService instance
-     * @param listCtrl a ListCtrl instance
+     *
+     * @param service       a CardService instance
+     * @param listCtrl      a ListCtrl instance
      * @param helperMethods Injected instance of HelperMethods
      */
     @Inject
@@ -40,13 +41,64 @@ public class QuickAddCardCtrl {
     }
 
     /**
+     * Gets the preset that is set as default
+     *
+     * @return The default preset
+     */
+    public CardColorPreset getDefaultPreset() {
+        for (CardColorPreset preset : shownBoard.getPresetList()) {
+            if (preset.isDefault()) {
+                return preset;
+            }
+        }
+        return shownBoard.getPresetList().get(0);
+    }
+
+    /**
+     * Getter for the key of the board
+     *
+     * @return the key of the board
+     */
+    public String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    /**
+     * Setter for the key of the board
+     *
+     * @param boardKey the key of the board
+     */
+    public void setBoardKey(String boardKey) {
+        service.setBoardKey(boardKey);
+    }
+
+    /**
      * Setter for hm
+     *
      * @param helperMethods hm
      */
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
         service.setIP(helperMethods.getServerIP());
 
+    }
+
+    /**
+     * Set the ListCtrl the QuickAdd is on
+     *
+     * @param listCtrl the listCtrl that needs to be setted
+     */
+    public void setListCtrl(ListCtrl listCtrl) {
+        this.listCtrl = listCtrl;
+    }
+
+    /**
+     * Sets the shownBoard
+     *
+     * @param shownBoard The shownBoard to be set
+     */
+    public void setShownBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
     }
 
     /**
@@ -70,25 +122,13 @@ public class QuickAddCardCtrl {
         card.setPreset(getDefaultPreset());
 
 
-        service.insertCard(card,listCtrl.getCardList());
+        service.insertCard(card, listCtrl.getCardList());
         listCtrl.displayCards();
     }
 
     /**
-     * Gets the preset that is set as default
-     * @return The default preset
-     */
-    public CardColorPreset getDefaultPreset(){
-        for(CardColorPreset preset : shownBoard.getPresetList()){
-            if(preset.isDefault()){
-                return preset;
-            }
-        }
-        return shownBoard.getPresetList().get(0);
-    }
-
-    /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -105,39 +145,5 @@ public class QuickAddCardCtrl {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Set the ListCtrl the QuickAdd is on
-     * @param listCtrl the listCtrl that needs to be setted
-     */
-    public void setListCtrl(ListCtrl listCtrl) {
-        this.listCtrl = listCtrl;
-    }
-
-    /**
-     * Getter for the key of the board
-     * @return the key of the board
-     */
-    public String getBoardKey()
-    {
-        return service.getBoardKey();
-    }
-
-    /**
-     * Setter for the key of the board
-     * @param boardKey the key of the board
-     */
-    public void setBoardKey(String boardKey)
-    {
-        service.setBoardKey(boardKey);
-    }
-
-    /**
-     * Sets the shownBoard
-     * @param shownBoard The shownBoard to be set
-     */
-    public void setShownBoard(Board shownBoard) {
-        this.shownBoard = shownBoard;
     }
 }

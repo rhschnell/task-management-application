@@ -43,6 +43,7 @@ import com.google.inject.Scopes;
 public class MainModules implements Module {
     /**
      * Contributes bindings and other configurations for this module to binder.
+     *
      * @param binder the binder
      */
     @Override

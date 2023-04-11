@@ -26,6 +26,20 @@ public class TaskUtils {
     }
 
     /**
+     * Sends a get request to the server to get all cards from the database
+     *
+     * @return All cards in the database
+     */
+    public List<Task> getTasks() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(serverUtils.getServer()).path(Route.TASK)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
      * Sends a post request to the server to add a Task to the database
      *
      * @param card The card to add to the database
@@ -63,19 +77,5 @@ public class TaskUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Task.class);
-    }
-
-    /**
-     * Sends a get request to the server to get all cards from the database
-     *
-     * @return All cards in the database
-     */
-    public List<Task> getTasks() {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(serverUtils.getServer()).path(Route.TASK)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {
-                });
     }
 }

@@ -21,7 +21,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 
-public class DeleteBoardCtrl{
+public class DeleteBoardCtrl {
 
     @FXML
     private Button deleteButton;
@@ -35,24 +35,33 @@ public class DeleteBoardCtrl{
 
     /**
      * Sets the workspaceCtrl
+     *
      * @param workspaceCtrl the workspaceCtrl to be set
      */
-    public void setWorkspaceCtrl (WorkspaceCtrl workspaceCtrl)
-    {
-        this.workspaceCtrl=workspaceCtrl;
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
+     * A setter for the board
+     *
+     * @param board the board to be set
+     */
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     /**
      * This method cancels deleting the list from the board
      */
-    public void cancel(){
+    public void cancel() {
         ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
     /**
      * This method deletes the list from the board
      */
-    public void delete(){
+    public void delete() {
         ((Stage) deleteButton.getScene().getWindow()).close();
         workspaceCtrl.deleteBoard(board);
     }
@@ -60,15 +69,7 @@ public class DeleteBoardCtrl{
     /**
      * Escapes the deleteBoardCtrl pop-up
      */
-    public void escape(){
+    public void escape() {
         ((Stage) cancelButton.getScene().getWindow()).close();
-    }
-
-    /**
-     * A setter for the board
-     * @param board the board to be set
-     */
-    public void setBoard(Board board) {
-        this.board = board;
     }
 }

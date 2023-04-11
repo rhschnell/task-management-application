@@ -27,15 +27,6 @@ public class ServerUtils {
     private String server = "http://localhost:8080/";
 
     /**
-     * Sets the server's IP
-     *
-     * @param serverIP The new server IP
-     */
-    public void setServer(String serverIP) {
-        server = serverIP;
-    }
-
-    /**
      * Gets the current server IP
      *
      * @return The server's IP
@@ -45,12 +36,21 @@ public class ServerUtils {
     }
 
     /**
+     * Sets the server's IP
+     *
+     * @param serverIP The new server IP
+     */
+    public void setServer(String serverIP) {
+        server = serverIP;
+    }
+
+    /**
      * Tries to ping the current server.
      *
      * @return True if the ping was successful, else false.
      * Adapted from
      * <a href="https://stackoverflow.com/questions/11506321/how-to-ping-an-ip-address">
-     *     StackOverflow
+     * StackOverflow
      * </a>
      */
     public boolean pingServer() {
@@ -60,7 +60,7 @@ public class ServerUtils {
                     .request()
                     .get();
             return true;
-        } catch (jakarta.ws.rs.ProcessingException  e) {
+        } catch (jakarta.ws.rs.ProcessingException e) {
             if (!(e.getCause() instanceof ConnectException || e.getCause() instanceof UnknownHostException)) {
                 e.printStackTrace();
             }

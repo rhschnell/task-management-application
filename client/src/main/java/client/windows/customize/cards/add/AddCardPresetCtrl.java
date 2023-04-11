@@ -35,17 +35,36 @@ public class AddCardPresetCtrl {
 
     /**
      * Constructor for the AddCardPresetCtrl
-     * @param service The corresponding service
+     *
+     * @param service       The corresponding service
      * @param customizeCtrl Instance of CustomizeCtrl
      * @param helperMethods The correspondng helper methods instance
      */
     @Inject
     public AddCardPresetCtrl(AddCardPresetService service,
                              CustomizeCtrl customizeCtrl,
-                             HelperMethods helperMethods){
+                             HelperMethods helperMethods) {
         this.service = service;
         this.customizeCtrl = customizeCtrl;
         this.helperMethods = helperMethods;
+    }
+
+    /**
+     * Sets the customizeCtrl
+     *
+     * @param customizeCtrl The customizeCtrl to be set
+     */
+    public void setCustomizeCtrl(CustomizeCtrl customizeCtrl) {
+        this.customizeCtrl = customizeCtrl;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl The workspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
@@ -59,7 +78,7 @@ public class AddCardPresetCtrl {
             return;
         }
 
-        ((Stage)addPresetButton.getScene().getWindow()).close();
+        ((Stage) addPresetButton.getScene().getWindow()).close();
         CardColorPreset preset = new CardColorPreset(
                 title,
                 backgroundColor.getValue().toString(),
@@ -70,6 +89,7 @@ public class AddCardPresetCtrl {
 
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
@@ -92,22 +112,6 @@ public class AddCardPresetCtrl {
      * This method cancels adding the created preset to the board
      */
     public void cancel() {
-        ((Stage)cancelButton.getScene().getWindow()).close();
-    }
-
-    /**
-     * Sets the customizeCtrl
-     * @param customizeCtrl The customizeCtrl to be set
-     */
-    public void setCustomizeCtrl(CustomizeCtrl customizeCtrl){
-        this.customizeCtrl = customizeCtrl;
-    }
-
-    /**
-     * Sets the workspaceCtrl
-     * @param workspaceCtrl The workspaceCtrl to be set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
-        this.workspaceCtrl = workspaceCtrl;
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 }

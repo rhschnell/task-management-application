@@ -1,4 +1,5 @@
 package client.serverUtils;
+
 import commons.CardList;
 import commons.Route;
 import jakarta.ws.rs.client.Client;
@@ -17,16 +18,16 @@ public class CardListUtils {
 
     /**
      * Creates a new BoardUtils object
+     *
      * @param serverUtils The ServerUtils object (injected) to use in requests.
      */
     @Inject
-    public CardListUtils(ServerUtils serverUtils){
+    public CardListUtils(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
     /**
-     *
      * @param ip
      */
     public void setIP(String ip) {
@@ -34,7 +35,17 @@ public class CardListUtils {
     }
 
     /**
+     * Setter for the client
+     *
+     * @param client the client to be set
+     */
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    /**
      * Sends a post request to the server to add a card list to the database
+     *
      * @param cardList The card list to add
      */
     public void insertCardList(CardList cardList) {
@@ -43,8 +54,10 @@ public class CardListUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
+
     /**
      * Sends a request to the server to delete a certain card list from the database
+     *
      * @param id of card list delete
      */
     public void deleteCardList(long id) {
@@ -56,6 +69,7 @@ public class CardListUtils {
 
     /**
      * Sends a request to the server to retrieve a certain card list from the database
+     *
      * @param id key of the card list to find
      * @return the desired card list
      */
@@ -64,14 +78,5 @@ public class CardListUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(CardList.class);
-    }
-
-    /**
-     * Setter for the client
-     * @param client the client to be set
-     */
-    public void setClient(Client client)
-    {
-        this.client = client;
     }
 }

@@ -54,6 +54,15 @@ public class SubtaskCellCtrl implements Initializable {
     }
 
     /**
+     * Gets the task associated to this controller
+     *
+     * @return The task associated to this controller
+     */
+    public Task getTask() {
+        return task;
+    }
+
+    /**
      * Setter for the editCardCtrl
      *
      * @param editCardCtrl the editCardCtrl
@@ -100,7 +109,7 @@ public class SubtaskCellCtrl implements Initializable {
         if (event.getCode() == KeyCode.ENTER) {
             saveChanges();
 
-        } else if (!savedIconIsShown){
+        } else if (!savedIconIsShown) {
             showSaveIcon();
         }
     }
@@ -135,7 +144,6 @@ public class SubtaskCellCtrl implements Initializable {
         dragAndDropIcon.setDisable(true);
     }
 
-
     /**
      * Hides the save icon bny deleting it from the UI component
      */
@@ -148,7 +156,7 @@ public class SubtaskCellCtrl implements Initializable {
     /**
      * Dynamically adds a save icon to the UI component
      */
-    private void showSaveIcon(){
+    private void showSaveIcon() {
         HBox hBox = (HBox) checkBox.getParent();
 
         ImageView saveIcon = new ImageView("/client/icons/save-filled.png");
@@ -171,16 +179,6 @@ public class SubtaskCellCtrl implements Initializable {
         hideSaveIcon();
         dragAndDropIcon.requestFocus(); // Move the focus to another object to indicate that the
         // editing has been successful
-    }
-
-
-    /**
-     * Gets the task associated to this controller
-     *
-     * @return The task associated to this controller
-     */
-    public Task getTask() {
-        return task;
     }
 
     /**

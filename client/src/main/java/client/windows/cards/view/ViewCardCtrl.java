@@ -102,6 +102,75 @@ public class ViewCardCtrl implements Initializable {
     }
 
     /**
+     * Gets the key of the board associated to this card
+     *
+     * @return The associated board's key
+     */
+    public String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    /**
+     * Sets the key of the board associated to this card
+     *
+     * @param boardKey New key
+     */
+    public void setBoardKey(String boardKey) {
+        service.setBoardKey(boardKey);
+    }
+
+    /**
+     * A setter for the card shown in the View Card window
+     *
+     * @param card the card
+     */
+    public void setCard(Card card) {
+        this.card = card;
+        this.cardID = card.getId();
+        setCardTitle(card.getTitle());
+        setCardDescription(card.getDescription());
+        applyTag();
+        displayTasks();
+        displayPreset();
+    }
+
+    /**
+     * A setter for the card title shown in the View Card window
+     *
+     * @param title the card title
+     */
+    public void setCardTitle(String title) {
+        cardTitle.setText(title);
+    }
+
+    /**
+     * A setter for the card description shown in the View Card window
+     *
+     * @param description the card description
+     */
+    public void setCardDescription(String description) {
+        cardDescription.setText(description);
+    }
+
+    /**
+     * Sets the shown board
+     *
+     * @param shownBoard The shown board to be set
+     */
+    public void setShownBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
+    }
+
+    /**
      * Initialize method for ViewCardCtrl
      *
      * @param location  The location used to resolve relative paths for the root object, or
@@ -127,22 +196,6 @@ public class ViewCardCtrl implements Initializable {
     }
 
     /**
-     * A setter for the card shown in the View Card window
-     *
-     * @param card the card
-     */
-    public void setCard(Card card) {
-        this.card = card;
-        this.cardID = card.getId();
-        setCardTitle(card.getTitle());
-        setCardDescription(card.getDescription());
-        applyTag();
-        displayTasks();
-        displayPreset();
-    }
-
-
-    /**
      * Adds a tag to the card view
      */
     public void applyTag() {
@@ -156,24 +209,6 @@ public class ViewCardCtrl implements Initializable {
                 appliedTagsVbox.getChildren().add(loader.getValue());
             }
         }
-    }
-
-    /**
-     * A setter for the card title shown in the View Card window
-     *
-     * @param title the card title
-     */
-    public void setCardTitle(String title) {
-        cardTitle.setText(title);
-    }
-
-    /**
-     * A setter for the card description shown in the View Card window
-     *
-     * @param description the card description
-     */
-    public void setCardDescription(String description) {
-        cardDescription.setText(description);
     }
 
     /**
@@ -207,24 +242,6 @@ public class ViewCardCtrl implements Initializable {
     }
 
     /**
-     * Gets the key of the board associated to this card
-     *
-     * @return The associated board's key
-     */
-    public String getBoardKey() {
-        return service.getBoardKey();
-    }
-
-    /**
-     * Sets the key of the board associated to this card
-     *
-     * @param boardKey New key
-     */
-    public void setBoardKey(String boardKey) {
-        service.setBoardKey(boardKey);
-    }
-
-    /**
      * Allows us to add subtasks to a list
      */
     public void displayTasks() {
@@ -238,24 +255,6 @@ public class ViewCardCtrl implements Initializable {
                 taskBox.getChildren().add(loader.getValue());
             }
         }
-    }
-
-    /**
-     * Sets the shown board
-     *
-     * @param shownBoard The shown board to be set
-     */
-    public void setShownBoard(Board shownBoard) {
-        this.shownBoard = shownBoard;
-    }
-
-    /**
-     * Sets the workspaceCtrl
-     *
-     * @param workspaceCtrl The WorkspaceCtrl to be set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
-        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**

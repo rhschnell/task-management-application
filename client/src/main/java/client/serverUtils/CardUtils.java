@@ -19,16 +19,31 @@ public class CardUtils {
 
     /**
      * Creates a new CardUtils object
+     *
      * @param serverUtils The ServerUtils object (injected) to use in requests.
      */
     @Inject
-    public CardUtils(ServerUtils serverUtils){
+    public CardUtils(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
     /**
+     * Sends a get request to the server to get all cards from the database
+     *
+     * @return All cards in the database
+     */
+    public List<Card> getCards() {
+        return client.target(serverUtils.getServer()).path(Route.CARD)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<>() {
+                });
+    }
+
+    /**
      * setter for ip
+     *
      * @param ip
      */
     public void setIP(String ip) {
@@ -36,7 +51,17 @@ public class CardUtils {
     }
 
     /**
+     * Setter for the client
+     *
+     * @param client the client to be set
+     */
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    /**
      * Sends a post request to the server to add a Card to the database
+     *
      * @param card The card to add to the database
      */
     public void insertCard(Card card) {
@@ -50,6 +75,7 @@ public class CardUtils {
      * Sends a request to the server to delete the card from the cardList
      * that contains this card so that the priority will be changed to the
      * other card from the method in the commons, not just from the card repo
+     *
      * @param id the card's id
      */
     public void deleteCard(long id) {
@@ -62,6 +88,7 @@ public class CardUtils {
     /**
      * Sends a request to the server to delete the card from the repository of
      * card
+     *
      * @param id the card's id
      */
     public void deleteCardFromDatabase(long id) {
@@ -72,27 +99,8 @@ public class CardUtils {
     }
 
     /**
-     * Sends a get request to the server to get all cards from the database
-     * @return All cards in the database
-     */
-    public List<Card> getCards() {
-        return client.target(serverUtils.getServer()).path(Route.CARD)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {});
-    }
-
-    /**
-     * Setter for the client
-     * @param client the client to be set
-     */
-    public void setClient(Client client)
-    {
-        this.client = client;
-    }
-
-    /**
      * Getter for the card with a given ID
+     *
      * @param id the ID of the card to retrieve
      * @return the card with that ID
      */

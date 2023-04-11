@@ -52,9 +52,8 @@ import java.util.List;
 import static com.google.inject.Guice.createInjector;
 
 public class ListCtrl {
-    private HelperMethods helperMethods;
     private final ListService service;
-
+    private HelperMethods helperMethods;
     private DataFormat cardFormat;
 
     @FXML
@@ -82,10 +81,11 @@ public class ListCtrl {
     private WorkspaceCtrl workspaceCtrl;
     private Separator separator;
     private WebsocketUtils websocketUtils;
+
     /**
      * Constructor for ListCtrl
      *
-     * @param service The ListService for this controller
+     * @param service        The ListService for this controller
      * @param websocketUtils The websocketUtils in order to send request for updates
      */
     @Inject
@@ -95,6 +95,62 @@ public class ListCtrl {
         focusedCardIndex = -1;
         cardSubscribers = new ArrayList<>();
         this.websocketUtils = websocketUtils;
+    }
+
+    /**
+     * Returns whether the currently selected list in the workspace is this list
+     *
+     * @return whether the currently selected list in the workspace is this list
+     */
+    public boolean isSelected() {
+        // The selected indices must be valid (condition()) and the focused list VBox must be the
+        // one associated to this controller
+        return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
+    }
+
+    /**
+     * Getter for the VBox containing the displayed cards of the list
+     *
+     * @return the card VBox
+     */
+    public VBox getCardVBox() {
+        return cardVBox;
+    }
+
+    /**
+     * Gets the board key
+     *
+     * @return the key
+     */
+    public String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    /**
+     * Sets the key of the board the list is in
+     *
+     * @param key The new corresponding board key
+     */
+    public void setBoardKey(String key) {
+        service.setBoardKey(key);
+    }
+
+    /**
+     * Returns the CardList of the Controller
+     *
+     * @return The card list associated to this controller
+     */
+    public CardList getCardList() {
+        return service.getCardList();
+    }
+
+    /**
+     * Sets the cardList
+     *
+     * @param cardList to set
+     */
+    public void setCardList(CardList cardList) {
+        service.setCardList(cardList);
     }
 
     /**
@@ -145,67 +201,6 @@ public class ListCtrl {
         }
     }
 
-
-    /**
-     * Method that checks a keyEvent and handles cases of the arrow keys
-     *
-     * @param keyEvent The keyEvent fired
-     */
-    private void handleArrowKeys(KeyEvent keyEvent) {
-        switch (keyEvent.getCode()) {
-            case UP:
-                // If shift is down, reorder cards, otherwise move focus
-                if (keyEvent.isShiftDown()) {
-                    workspaceCtrl.handleReorderingShortcut(true);
-                } else {
-                    workspaceCtrl.moveFocusUp();
-                }
-                break;
-            case DOWN:
-                // If shift is down, reorder cards, otherwise move focus
-                if (keyEvent.isShiftDown()) {
-                    workspaceCtrl.handleReorderingShortcut(false);
-                } else {
-                    workspaceCtrl.moveFocusDown();
-                }
-                break;
-            case LEFT:
-                workspaceCtrl.moveFocusLeft();
-                break;
-            case RIGHT:
-                workspaceCtrl.moveFocusRight();
-        }
-    }
-
-    /**
-     * Returns whether the currently selected list in the workspace is this list
-     *
-     * @return whether the currently selected list in the workspace is this list
-     */
-    public boolean isSelected() {
-        // The selected indices must be valid (condition()) and the focused list VBox must be the
-        // one associated to this controller
-        return workspaceCtrl.focusedIndicesAreValid() && workspaceCtrl.getFocusPosition() == this.cardVBox;
-    }
-
-    /**
-     * Getter for the VBox containing the displayed cards of the list
-     * @return the card VBox
-     */
-    public VBox getCardVBox() {
-        return cardVBox;
-    }
-
-
-    /**
-     * Sets the cardList
-     *
-     * @param cardList to set
-     */
-    public void setCardList(CardList cardList) {
-        service.setCardList(cardList);
-    }
-
     /**
      * Setter for the list title
      *
@@ -213,60 +208,6 @@ public class ListCtrl {
      */
     public void setListTitle(String title) {
         listTitle.setText(title);
-    }
-    /**
-     * Displays the cards onto the list's inner VBox
-     */
-    public void displayCards() {
-        updateListColors();
-        //New subscriber are going to be created so we need to remove the existing ones
-        unsubscribeCards();
-        cardVBox.getChildren().clear();
-        for (Card card : service.getCardList().getCards()) {
-            cardCell = new MyFXML(createInjector(new MainModules()))
-                    .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
-            CardCtrl controller = cardCell.getKey();
-
-            cardControllers.add(controller);
-            controller.updateItem(card);
-            controller.setDisplayTags(card.getTags());
-            controller.setBoard(workspaceCtrl.getShownBoard());
-            controller.setWorkspaceCtrl(workspaceCtrl);
-
-            makeCardDraggable(cardCell);
-            controller.setListCtrl(this);
-            controller.setBoardKey(getBoardKey());
-            cardVBox.getChildren().add(cardCell.getValue());
-        }
-
-        var quickAddCard =
-                new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
-                        "lists", "cells", "QuickAddCardCell.fxml");
-        quickAddCard.getKey().setShownBoard(workspaceCtrl.getShownBoard());
-        quickAddCard.getKey().setListCtrl(this);
-        quickAddCard.getKey().setBoardKey(getBoardKey());
-        quickAddCard.getKey().setHelperMethods(helperMethods);
-        cardVBox.getChildren().add(quickAddCard.getValue());
-        makeQuickCardReceiveDrag(quickAddCard);
-        quickAddCard.getValue().setOnDragDetected(event -> {
-        });
-    }
-
-    /**
-     * Sets the cardCell draggable by setting events to the listeners
-     *
-     * @param cardCell the cardCell that needs to be draggable
-     */
-    private void makeCardDraggable(Pair<CardCtrl, Parent> cardCell) {
-        setMouseEvents(cardCell);
-        if (workspaceCtrl.isAdmin() || !workspaceCtrl.getShownBoard().isProtected()) {
-            setDragOver(cardCell);
-            setDragDetected(cardCell);
-            setDragOver(cardCell);
-            setDragExited(cardCell);
-            setDragEntered(cardCell);
-            setOnDragDropped(cardCell);
-        }
     }
 
     /**
@@ -305,7 +246,7 @@ public class ListCtrl {
     private void setDragOver(Pair<CardCtrl, Parent> destination) {
         destination.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != destination.getValue() &&
-                event.getDragboard().hasContent(cardFormat)) {
+                    event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -384,30 +325,99 @@ public class ListCtrl {
     }
 
     /**
-     * Sets the key of the board the list is in
+     * Sets the helperMethod
      *
-     * @param key The new corresponding board key
+     * @param hm The new instance of helper methods
      */
-    public void setBoardKey(String key) {
-        service.setBoardKey(key);
+    public void setHelperMethod(HelperMethods hm) {
+        this.helperMethods = hm;
+        this.cardFormat = this.helperMethods.getCardFormat();
     }
 
     /**
-     * Gets the board key
+     * Method that checks a keyEvent and handles cases of the arrow keys
      *
-     * @return the key
+     * @param keyEvent The keyEvent fired
      */
-    public String getBoardKey() {
-        return service.getBoardKey();
+    private void handleArrowKeys(KeyEvent keyEvent) {
+        switch (keyEvent.getCode()) {
+            case UP:
+                // If shift is down, reorder cards, otherwise move focus
+                if (keyEvent.isShiftDown()) {
+                    workspaceCtrl.handleReorderingShortcut(true);
+                } else {
+                    workspaceCtrl.moveFocusUp();
+                }
+                break;
+            case DOWN:
+                // If shift is down, reorder cards, otherwise move focus
+                if (keyEvent.isShiftDown()) {
+                    workspaceCtrl.handleReorderingShortcut(false);
+                } else {
+                    workspaceCtrl.moveFocusDown();
+                }
+                break;
+            case LEFT:
+                workspaceCtrl.moveFocusLeft();
+                break;
+            case RIGHT:
+                workspaceCtrl.moveFocusRight();
+        }
     }
 
     /**
-     * Returns the CardList of the Controller
-     *
-     * @return The card list associated to this controller
+     * Displays the cards onto the list's inner VBox
      */
-    public CardList getCardList() {
-        return service.getCardList();
+    public void displayCards() {
+        updateListColors();
+        //New subscriber are going to be created so we need to remove the existing ones
+        unsubscribeCards();
+        cardVBox.getChildren().clear();
+        for (Card card : service.getCardList().getCards()) {
+            cardCell = new MyFXML(createInjector(new MainModules()))
+                    .load(CardCtrl.class, "client", "windows", "lists", "cells", "Card.fxml");
+            CardCtrl controller = cardCell.getKey();
+
+            cardControllers.add(controller);
+            controller.updateItem(card);
+            controller.setDisplayTags(card.getTags());
+            controller.setBoard(workspaceCtrl.getShownBoard());
+            controller.setWorkspaceCtrl(workspaceCtrl);
+
+            makeCardDraggable(cardCell);
+            controller.setListCtrl(this);
+            controller.setBoardKey(getBoardKey());
+            cardVBox.getChildren().add(cardCell.getValue());
+        }
+
+        var quickAddCard =
+                new MyFXML(createInjector(new MainModules())).load(QuickAddCardCtrl.class, "client", "windows",
+                        "lists", "cells", "QuickAddCardCell.fxml");
+        quickAddCard.getKey().setShownBoard(workspaceCtrl.getShownBoard());
+        quickAddCard.getKey().setListCtrl(this);
+        quickAddCard.getKey().setBoardKey(getBoardKey());
+        quickAddCard.getKey().setHelperMethods(helperMethods);
+        cardVBox.getChildren().add(quickAddCard.getValue());
+        makeQuickCardReceiveDrag(quickAddCard);
+        quickAddCard.getValue().setOnDragDetected(event -> {
+        });
+    }
+
+    /**
+     * Sets the cardCell draggable by setting events to the listeners
+     *
+     * @param cardCell the cardCell that needs to be draggable
+     */
+    private void makeCardDraggable(Pair<CardCtrl, Parent> cardCell) {
+        setMouseEvents(cardCell);
+        if (workspaceCtrl.isAdmin() || !workspaceCtrl.getShownBoard().isProtected()) {
+            setDragOver(cardCell);
+            setDragDetected(cardCell);
+            setDragOver(cardCell);
+            setDragExited(cardCell);
+            setDragEntered(cardCell);
+            setOnDragDropped(cardCell);
+        }
     }
 
     /**
@@ -432,7 +442,7 @@ public class ListCtrl {
     private void quickCardDragOver(Pair<QuickAddCardCtrl, Parent> destination) {
         destination.getValue().setOnDragOver(event -> {
             if (event.getGestureSource() != destination.getValue() &&
-                event.getDragboard().hasContent(cardFormat)) {
+                    event.getDragboard().hasContent(cardFormat)) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -447,7 +457,7 @@ public class ListCtrl {
     private void quickCardDragEntered(Pair<QuickAddCardCtrl, Parent> destination) {
         destination.getValue().setOnDragEntered(event -> {
             if (event.getGestureSource() != destination.getValue() &&
-                event.getDragboard().hasContent(cardFormat)) {
+                    event.getDragboard().hasContent(cardFormat)) {
                 int index = ((VBox) destination.getValue().getParent()).getChildren().
                         indexOf(destination.getValue());
                 ((VBox) destination.getValue().getParent()).getChildren().add(index, separator);
@@ -583,21 +593,11 @@ public class ListCtrl {
     public void updateListColors() {
         String backgroundColor = getCardList().getBackgroundColor();
         String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
-                       + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
-                       "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+                + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+                "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
         cardVBox.setStyle("-fx-background-color: #" + backgroundColor);
         completeList.setStyle(style);
         listTitle.setTextFill(Color.web(getCardList().getFontColor()));
-    }
-
-    /**
-     * Sets the helperMethod
-     *
-     * @param hm The new instance of helper methods
-     */
-    public void setHelperMethod(HelperMethods hm) {
-        this.helperMethods = hm;
-        this.cardFormat = this.helperMethods.getCardFormat();
     }
 
     /**
@@ -669,36 +669,35 @@ public class ListCtrl {
     }
 
 
-
     ///WEBSOCKETS
+
     /**
      * Register for this list updated, the parameter cardList id being set into the destination
      */
     public void registerForListUpdates() {
-        workspaceCtrl.addListSubscriber(websocketUtils.registerForMessages("/topic/lists/"+
+        workspaceCtrl.addListSubscriber(websocketUtils.registerForMessages("/topic/lists/" +
                 service.getCardList().getId(), CardList.class, newCardList -> {
-                Platform.runLater(new Runnable() {
-                    @Override
+            Platform.runLater(new Runnable() {
+                @Override
                 public void run() {
                     //Updates the cardList because a new version was received
-                        service.setCardList(newCardList);
+                    service.setCardList(newCardList);
                     //Updates the list title if updated
-                        listTitle.setText(newCardList.getListTitle());
+                    listTitle.setText(newCardList.getListTitle());
                     //Updates the displayed cards because a newer version was received
-                        displayCards();
+                    displayCards();
                     //Updates the board in the workspace because a newer version is available
-                       // workspaceCtrl.refreshWorkspace(false);
-                        workspaceCtrl.updateBoard();
-                    }
-                });
-            }));
+                    // workspaceCtrl.refreshWorkspace(false);
+                    workspaceCtrl.updateBoard();
+                }
+            });
+        }));
     }
 
     /**
      * Updates the cardList to the new version and refreshes the board in the workspace
      */
-    public void updateCardList()
-    {
+    public void updateCardList() {
         //Updates the cardList because a newer version is available
         service.setCardList(service.getCardList(service.getCardList().getId()));
         //Updates the board in the workspace because a newer is available
@@ -709,9 +708,8 @@ public class ListCtrl {
     /**
      * Unsubscribe the cards because the lists needs to be updated with new cells
      */
-    public void unsubscribeCards()
-    {
-        if(cardSubscribers!=null)
+    public void unsubscribeCards() {
+        if (cardSubscribers != null)
             for (StompSession.Subscription cardSubscriber : cardSubscribers) {
                 cardSubscriber.unsubscribe();
             }
@@ -719,10 +717,10 @@ public class ListCtrl {
 
     /**
      * A new Card Subscriber has been created which needs to be added
+     *
      * @param subscriber
      */
-    public void addSubscriber(StompSession.Subscription subscriber)
-    {
+    public void addSubscriber(StompSession.Subscription subscriber) {
         cardSubscribers.add(subscriber);
     }
 

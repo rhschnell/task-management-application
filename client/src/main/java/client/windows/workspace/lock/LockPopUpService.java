@@ -11,6 +11,7 @@ public class LockPopUpService {
 
     /**
      * Constructor for the LockPopUpService
+     *
      * @param server a BoardUtils instance
      */
     @Inject
@@ -19,17 +20,8 @@ public class LockPopUpService {
     }
 
     /**
-     * A utility method to verify the password of the board against passed text
-     * @param board the board used for the verification
-     * @param text the text to be checked
-     * @return a boolean that is true if the password is correct and false otherwise
-     */
-    public boolean verifyPassword(Board board, String text) {
-        return board.verifyPassword(text);
-    }
-
-    /**
      * Setter for this controller's board
+     *
      * @param board board
      */
     public void setBoard(Board board) {
@@ -38,6 +30,7 @@ public class LockPopUpService {
 
     /**
      * Setter for protected status, calls setter in board class
+     *
      * @param b whether the board is protected or not
      */
     public void setProtected(boolean b) {
@@ -47,6 +40,7 @@ public class LockPopUpService {
 
     /**
      * Setter for password, calls setter in board class
+     *
      * @param pwd the new password to be set
      */
     public void setPassword(String pwd) {
@@ -55,7 +49,19 @@ public class LockPopUpService {
     }
 
     /**
+     * A utility method to verify the password of the board against passed text
+     *
+     * @param board the board used for the verification
+     * @param text  the text to be checked
+     * @return a boolean that is true if the password is correct and false otherwise
+     */
+    public boolean verifyPassword(Board board, String text) {
+        return board.verifyPassword(text);
+    }
+
+    /**
      * Makes sure to update the database with new information
+     *
      * @param board containing new information
      */
     private void updateDB(Board board) {

@@ -72,12 +72,13 @@ public class AddTagCtrl {
 
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     private boolean checkAndHandleInput(String title) {
         if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
             helperMethods.showErrorDialog(new ErrorDialogEntry("Error!", "Your tag name cannot " +
-                                                                         "be empty"));
+                    "be empty"));
             return false;
         }
         if (!helperMethods.getInputValidator().isValidInputLength(title)) {

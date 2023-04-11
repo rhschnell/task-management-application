@@ -9,18 +9,20 @@ public class AddCardPresetService {
 
     /**
      * Constructor for the AddCardPresetService
+     *
      * @param server the BoardUtils server
      */
     @Inject
-    AddCardPresetService(BoardUtils server){
+    AddCardPresetService(BoardUtils server) {
         this.server = server;
     }
 
     /**
      * Inserts the board to the server, or updates it
+     *
      * @param board the board to be inserted or update
      */
-    public void insertBoard(Board board){
+    public void insertBoard(Board board) {
         server.insertBoard(board);
     }
 }

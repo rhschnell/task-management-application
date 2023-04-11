@@ -19,16 +19,17 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-public abstract class SubtaskContainer implements Initializable{
+public abstract class SubtaskContainer implements Initializable {
     private final DataFormatManager dataFormatManager;
+    protected HelperMethods helperMethods;
     @FXML
     private Label errorMessage;
-    protected HelperMethods helperMethods;
 
     /**
      * Constructor for the SubtaskContainer
+     *
      * @param dataFormatManager a DataFormatManager instance
-     * @param helperMethods Injected instance of HelperMethods
+     * @param helperMethods     Injected instance of HelperMethods
      */
     @Inject
     public SubtaskContainer(DataFormatManager dataFormatManager, HelperMethods helperMethods) {
@@ -37,7 +38,32 @@ public abstract class SubtaskContainer implements Initializable{
     }
 
     /**
+     * Returns the data format manager used by this container
+     *
+     * @return This container's data format manager
+     */
+    public DataFormatManager getDataFormatManager() {
+        return dataFormatManager;
+    }
+
+    /**
+     * Sets the action for when a subtask is being dragged over another subtask
+     *
+     * @param fxComponent The JavaFX UI component
+     */
+    private void setOnDragOver(Parent fxComponent) {
+        fxComponent.setOnDragOver(event -> {
+            if (event.getGestureSource() != fxComponent &&
+                    event.getDragboard().hasContent(dataFormatManager.getSubtaskFormat())) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+    }
+
+    /**
      * Deletes the subtask passed to the method
+     *
      * @param task the subtask you want to delete
      */
     public abstract void deleteSubtask(Task task);
@@ -68,7 +94,6 @@ public abstract class SubtaskContainer implements Initializable{
         setOnDragDropped(fxComponent, taskVBox);
     }
 
-
     /**
      * Sets the action for when drag is detected on a subtask
      *
@@ -91,21 +116,6 @@ public abstract class SubtaskContainer implements Initializable{
     }
 
     /**
-     * Sets the action for when a subtask is being dragged over another subtask
-     *
-     * @param fxComponent The JavaFX UI component
-     */
-    private void setOnDragOver(Parent fxComponent) {
-        fxComponent.setOnDragOver(event -> {
-            if (event.getGestureSource() != fxComponent &&
-                event.getDragboard().hasContent(dataFormatManager.getSubtaskFormat())) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
-        });
-    }
-
-    /**
      * Sets the action for when a subtask is being entered while dragged
      *
      * @param fxComponent The JavaFX UI component
@@ -115,7 +125,7 @@ public abstract class SubtaskContainer implements Initializable{
     private void setOnDragEntered(Parent fxComponent, VBox taskVBox, Separator separator) {
         fxComponent.setOnDragEntered(event -> {
             if (event.getGestureSource() != fxComponent &&
-                event.getDragboard().hasContent(dataFormatManager.getSubtaskFormat())) {
+                    event.getDragboard().hasContent(dataFormatManager.getSubtaskFormat())) {
                 int index = taskVBox.getChildren().indexOf(fxComponent);
                 taskVBox.getChildren().add(index, separator);
 
@@ -149,16 +159,15 @@ public abstract class SubtaskContainer implements Initializable{
      */
     public abstract void setOnDragDropped(Parent fxComponent, VBox taskVBox);
 
-
     /**
      * Shows the user an error in the dedicated place on the window.
-     *
+     * <p>
      * This method is moved in this class because the implementing classes AddCardCtrl and
      * EditCardCtrl share the same UI, and therefore share the same functionality of showing errors
      *
      * @param errorDialogEntry The error dialog containing the error title and message
      */
-    public void showErrorMessage(ErrorDialogEntry errorDialogEntry){
+    public void showErrorMessage(ErrorDialogEntry errorDialogEntry) {
         this.errorMessage.requestFocus();
         this.errorMessage.setVisible(true);
         this.errorMessage.setText(errorDialogEntry.getMessage());
@@ -167,35 +176,26 @@ public abstract class SubtaskContainer implements Initializable{
     /**
      * Hides the error message label
      */
-    public void hideErrorMessageLabel(){
+    public void hideErrorMessageLabel() {
         this.errorMessage.setVisible(false);
     }
 
-
     /**
      * Checks the user input and shows error messages accordingly
+     *
      * @param title The title to check
      */
     protected boolean checkAndHandleUserInput(String title) {
-        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)){
+        if (!helperMethods.getInputValidator().isValidInputNonEmpty(title)) {
             showErrorMessage(new ErrorDialogEntry("Error!", "The card title cannot be empty"));
             return true;
         }
-        if (!helperMethods.getInputValidator().isValidInputLength(title)){
+        if (!helperMethods.getInputValidator().isValidInputLength(title)) {
             showErrorMessage(new ErrorDialogEntry("Error!", "The card title cannot be longer " +
-                                                            "than " + HelperMethods.getMaxInputLength()));
+                    "than " + HelperMethods.getMaxInputLength()));
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns the data format manager used by this container
-     *
-     * @return This container's data format manager
-     */
-    public DataFormatManager getDataFormatManager() {
-        return dataFormatManager;
     }
 
 

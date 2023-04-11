@@ -35,12 +35,11 @@ public class HelpWindowCtrl {
     }
 
 
-
     /**
      * This method closes the pop-up
      */
-    public void close(){
-        ((Stage)closeButton.getScene().getWindow()).close();
+    public void close() {
+        ((Stage) closeButton.getScene().getWindow()).close();
     }
 
 }

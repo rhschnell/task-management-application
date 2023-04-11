@@ -57,7 +57,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.springframework.messaging.simp.stomp.StompSession;
 
@@ -69,8 +71,12 @@ import static java.lang.Math.abs;
 
 public class WorkspaceCtrl implements Initializable {
     private final WorkspaceService service;
+    private final CardService cardService;
+    private final Map<String, String> pwdMap;
+    private final double mouseMoveThreshold;
+    private final List<ListCtrl> listControllers;
+    private final WebsocketUtils websocketUtils;
     private HelperMethods helperMethods;
-
     @FXML
     private Label boardName;
     @FXML
@@ -87,7 +93,6 @@ public class WorkspaceCtrl implements Initializable {
     private TextField titleField;
     @FXML
     private Button copyButton;
-
     // Locking needs
     @FXML
     private Button renameButton;
@@ -104,12 +109,8 @@ public class WorkspaceCtrl implements Initializable {
     @FXML
     private Button addListButton;
     private Button[] lockButtonArray;
-
     @FXML
     private Button unlockBoardButton;
-
-    private Map<String, String> pwdMap;
-
     private Set<String> joinedKeys;
     private int focusedCardIndex;
     private int focusedListIndex;
@@ -118,11 +119,6 @@ public class WorkspaceCtrl implements Initializable {
     private double oldMouseYPosition;
     private double newMouseXPosition;
     private double newMouseYPosition;
-    private double mouseMoveThreshold;
-
-    private List<ListCtrl> listControllers;
-    private final CardService cardService;
-
     private List<StompSession.Subscription> boardSubscribers;
     private List<StompSession.Subscription> listSubscribers;
     private boolean admin;
@@ -130,7 +126,6 @@ public class WorkspaceCtrl implements Initializable {
     private Label screenTitle;
     @FXML
     private Button leaveButton;
-    private WebsocketUtils websocketUtils;
 
 
     /**
@@ -156,6 +151,157 @@ public class WorkspaceCtrl implements Initializable {
         this.pwdMap = new HashMap<>();
         this.admin = false;
         this.websocketUtils = websocketUtils;
+    }
+
+    /**
+     * Gets the password map containing all the board keys and the corresponding passwords
+     *
+     * @return The password map
+     */
+    public Map<String, String> getPwdMap() {
+        return pwdMap;
+    }
+
+    /**
+     * Returns the ListVbox in which the focusedCard is located
+     *
+     * @return the ListBox that contains the focused card
+     */
+    public VBox getFocusPosition() {
+        return (VBox) ((ScrollPane) ((VBox) (listContainer.getChildren().get(focusedListIndex - 1))).
+                getChildren().get(1)).getContent();
+    }
+
+    /**
+     * Gets the focused list index
+     *
+     * @return The focusedListIndex
+     */
+    public int getFocusedListIndex() {
+        return focusedListIndex;
+    }
+
+    /**
+     * Gets the board key
+     *
+     * @return the board key
+     */
+    public String getBoardKey() {
+        return shownBoard.getKey();
+    }
+
+    /**
+     * Method to get the currently shown board
+     *
+     * @return The board that is shown
+     */
+    public Board getShownBoard() {
+        return shownBoard;
+    }
+
+    /**
+     * Gets the index of the currently focused card
+     *
+     * @return The current focusedCardIndex
+     */
+    public int getFocusedCardIndex() {
+        return focusedCardIndex;
+    }
+
+    /**
+     * Getter for admin mode of workspace
+     *
+     * @return true if admin, else false
+     */
+    public boolean isAdmin() {
+        return this.admin;
+    }
+
+    /**
+     * Setter for admin mode in workspace
+     *
+     * @param admin true/false
+     */
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+        if (admin) {
+            screenTitle.setText("All Server Boards");
+            leaveButton.setVisible(false);
+            leaveButton.setManaged(false);
+        }
+    }
+
+    /*
+     START OF LOCK / UNLOCK METHODS
+     */
+
+    /**
+     * Set listener on the listVbox so that we can know when and where to move the focus
+     *
+     * @param listVbox A VBOX containing cards
+     */
+    public void setMoveShortcutListeners(VBox listVbox) {
+        listVbox.requestFocus();
+        listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (this.isAdmin() || !this.shownBoard.isProtected())
+                switch (event.getCode()) {
+                    case UP:
+                        moveFocusUp();
+                        break;
+                    case DOWN:
+                        moveFocusDown();
+                        break;
+                    case LEFT:
+                        moveFocusLeft();
+                        break;
+                    case RIGHT:
+                        moveFocusRight();
+                        break;
+                }
+            event.consume();
+        });
+    }
+
+    /**
+     * Sets the list of the keys for the joined board for this workspace
+     *
+     * @param joinedKeys The keys of the joined boards
+     */
+    public void setJoinedKeys(Set<String> joinedKeys) {
+        this.joinedKeys = joinedKeys;
+    }
+
+    /**
+     * Sets the instance of HelperMethods
+     *
+     * @param helperMethods The instance of HelperMethods to set
+     */
+    public void setHelperMethods(HelperMethods helperMethods) {
+        this.helperMethods = helperMethods;
+        service.setServerIP(helperMethods.getServerIP());
+        websocketUtils.setUrl(helperMethods.getServerIP().substring(7));
+    }
+
+    /**
+     * Delay method
+     * Source: <a href="https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code">...</a>
+     *
+     * @param millis       amount of milliseconds to delay
+     * @param continuation empty
+     */
+    private static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(millis);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
     }
 
     /**
@@ -188,13 +334,13 @@ public class WorkspaceCtrl implements Initializable {
 
         // Initialize array of buttons that need to be disabled if board is locked
         this.lockButtonArray = new Button[]{
-            renameButton,
-            personalizeButton,
-            tagsButton,
-            deleteButton,
-            removePasswordButton,
-            setPasswordButton,
-            addListButton
+                renameButton,
+                personalizeButton,
+                tagsButton,
+                deleteButton,
+                removePasswordButton,
+                setPasswordButton,
+                addListButton
         };
     }
 
@@ -279,6 +425,10 @@ public class WorkspaceCtrl implements Initializable {
         }
     }
 
+    /*
+    END OF LOCK / UNLOCK METHODS
+     */
+
     /**
      * Makes sure the user can create a board by pressing ENTER after typing the title
      *
@@ -319,10 +469,6 @@ public class WorkspaceCtrl implements Initializable {
         boardControls.setVisible(true);
         boardControls.setManaged(true);
     }
-
-    /*
-     START OF LOCK / UNLOCK METHODS
-     */
 
     /**
      * Method used for locking the lists when the board gets set to locked
@@ -431,19 +577,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Gets the password map containing all the board keys and the corresponding passwords
-     *
-     * @return The password map
-     */
-    public Map<String, String> getPwdMap() {
-        return pwdMap;
-    }
-
-    /*
-    END OF LOCK / UNLOCK METHODS
-     */
-
-    /**
      * Refreshes the workspace
      *
      * @param forceBoardListRefresh If true forces the refresh even though no board has been deleted
@@ -478,7 +611,7 @@ public class WorkspaceCtrl implements Initializable {
 
         // If the password was changed, the shown board should be locked, EXCEPT if admin
         if (!serverBoard.verifyPassword(shownBoard.getPassword()) && !serverBoard.verifyPassword("")
-            && !isAdmin()) {
+                && !isAdmin()) {
             lockWorkspace();
             shownBoard.setProtected(true);
         } else if (isAdmin()) {
@@ -489,20 +622,20 @@ public class WorkspaceCtrl implements Initializable {
         // If shown board is locked client side, and we remember the password
         if (shownBoard.verifyPassword("") || (                   // If board doesn't have password OR
                 pwdMap.containsKey(shownBoard.getKey())                  // (We have a saved password for it AND
-                && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))// saved password is correct
-                && shownBoard.isProtected())                     // AND the board is locked on screen)
-            || isAdmin()) {                                  // OR admin {
+                        && shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))// saved password is correct
+                        && shownBoard.isProtected())                     // AND the board is locked on screen)
+                || isAdmin()) {                                  // OR admin {
             unlockWorkspace();
             shownBoard.setProtected(false);
 
         } else if (!pwdMap.containsKey(shownBoard.getKey())            // else if we do not know a password for it
                 || !shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))) {// OR stored incorrect password
             lockWorkspace();                                                      // saved for it {
-                                                                                  // lock the board on screen
+            // lock the board on screen
             shownBoard.setProtected(true);
         }
         if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))    // if saved password board is incorrect
-            && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
+                && !"".equals(pwdMap.get(shownBoard.getKey()))) {          // and the board does have a password
             pwdMap.put(shownBoard.getKey(), "");                           // reset the saved password
         }
     }
@@ -528,7 +661,7 @@ public class WorkspaceCtrl implements Initializable {
                 // if the password we saved is no longer correct
                 // AND the password is not empty AND we stored a password
                 if (!b.verifyPassword(pwdMap.get(k)) && !b.verifyPassword("") && !"".equals(pwdMap.get(k))
-                    && !isAdmin()) {// AND not admin
+                        && !isAdmin()) {// AND not admin
                     forced = true; // then force a total refresh of the displayed list
                     pwdMap.remove(k); // and delete the incorrect, stored password
                 }
@@ -552,7 +685,9 @@ public class WorkspaceCtrl implements Initializable {
                                 "BoardCell.fxml");
                 BoardCellCtrl controller = boardCell.getKey();
                 Board newBoard = service.getBoard(k);
-                if (!newBoard.verifyPassword(pwdMap.get(k))) {newBoard.setProtected(true);}
+                if (!newBoard.verifyPassword(pwdMap.get(k))) {
+                    newBoard.setProtected(true);
+                }
                 controller.setBoard(newBoard);
                 controller.setWorkspaceCtrl(this);
                 boardList.getChildren().add(boardCell.getValue());
@@ -578,7 +713,7 @@ public class WorkspaceCtrl implements Initializable {
                 if (backgroundColor != null && fontColor != null) {
                     String backgroundStyle = "-fx-background-color: #" +
                             backgroundColor.substring(2, 8) +
-                            "; -fx-background-radius: 10; -fx-effect:"+"" +
+                            "; -fx-background-radius: 10; -fx-effect:" + "" +
                             " dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
 
                     if (scrollPane instanceof ScrollPane) {
@@ -607,8 +742,8 @@ public class WorkspaceCtrl implements Initializable {
         for (int i = 0; i < listContainer.getChildren().size(); i++) {
             String backgroundColor = shownBoard.getListBackgroundColor();
             String style = "-fx-border-radius: 10; -fx-border-color: transparent; -fx-background-color: #"
-                           + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
-                           "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
+                    + backgroundColor + "; -fx-background-radius: 10; -fx-effect: " +
+                    "dropshadow(gaussian, grey, 10, 0, 0.0, 3.0);";
 
             VBox listInUI = (VBox) listContainer.getChildren().get(i);
             VBox boxInList = (VBox) ((ScrollPane) listInUI.getChildren().get(1)).getContent();
@@ -658,7 +793,7 @@ public class WorkspaceCtrl implements Initializable {
                 helperMethods.getMemMap().get(helperMethods.getServerIP()).add(shownBoard.getKey());
             }
             if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
-                && !isAdmin()) {
+                    && !isAdmin()) {
                 shownBoard.setProtected(true);
                 displayLists();
                 lockWorkspace();
@@ -674,7 +809,7 @@ public class WorkspaceCtrl implements Initializable {
             refreshBoardList(shownBoard.getKey(), true);
         } catch (NotFoundException | BadRequestException e) {
             String message = "There is no board with key " + targetKey +
-                             ". Try joining a board with a different key.";
+                    ". Try joining a board with a different key.";
 
             ErrorDialogEntry nonExistingKey = new ErrorDialogEntry("Error!", message);
             helperMethods.showErrorDialog(nonExistingKey);
@@ -748,25 +883,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Set listener on the listVbox so that we can know when and where to move the focus
-     *
-     * @param listVbox A VBOX containing cards
-     */
-    public void setMoveShortcutListeners(VBox listVbox) {
-        listVbox.requestFocus();
-        listVbox.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (this.isAdmin() || !this.shownBoard.isProtected())
-                switch (event.getCode()) {
-                    case UP:    moveFocusUp();      break;
-                    case DOWN:  moveFocusDown();    break;
-                    case LEFT:  moveFocusLeft();    break;
-                    case RIGHT: moveFocusRight();   break;
-                }
-            event.consume();
-        });
-    }
-
-    /**
      * Method for handling the shortcut Shift + Up/Down
      *
      * @param shiftUpWards If true, the reordering will shift the selected cards upwards.
@@ -803,7 +919,7 @@ public class WorkspaceCtrl implements Initializable {
         Card selectedCard = focusedListController.getCardList().getCard(focusedCardIndex - 1);
         var loader = new MyFXML(createInjector())
                 .load(RenameCardCtrl.class, "client", "windows", "lists", "cells", "RenameCard" +
-                                                                                   ".fxml");
+                        ".fxml");
         loader.getKey().setData(selectedCard);
         loader.getKey().setListCtrl(focusedListController);
         Scene scene = new Scene(loader.getValue());
@@ -900,25 +1016,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Returns the ListVbox in which the focusedCard is located
-     *
-     * @return the ListBox that contains the focused card
-     */
-    public VBox getFocusPosition() {
-        return (VBox) ((ScrollPane) ((VBox) (listContainer.getChildren().get(focusedListIndex - 1))).
-                getChildren().get(1)).getContent();
-    }
-
-    /**
-     * Gets the focused list index
-     *
-     * @return The focusedListIndex
-     */
-    public int getFocusedListIndex() {
-        return focusedListIndex;
-    }
-
-    /**
      * Verifies if the focused indices actually contain cards or are not valid
      * Example: left keypad on the first list won't make the list focused index
      * valid
@@ -927,10 +1024,10 @@ public class WorkspaceCtrl implements Initializable {
      */
     public boolean focusedIndicesAreValid() {
         return focusedCardIndex > 0
-               && focusedListIndex > 0
-               && focusedListIndex <= shownBoard.getCardLists().size()
-               && focusedCardIndex <= shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size()
-               && shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() > 0;
+                && focusedListIndex > 0
+                && focusedListIndex <= shownBoard.getCardLists().size()
+                && focusedCardIndex <= shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size()
+                && shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size() > 0;
     }
 
     /**
@@ -949,7 +1046,7 @@ public class WorkspaceCtrl implements Initializable {
     public void resetFocus() {
 
         if (abs(newMouseXPosition - oldMouseXPosition) < mouseMoveThreshold
-            && abs(newMouseYPosition - oldMouseYPosition) < mouseMoveThreshold) return;
+                && abs(newMouseYPosition - oldMouseYPosition) < mouseMoveThreshold) return;
 
         if (focusedIndicesAreValid()) {
             VBox vbox = getFocusPosition();
@@ -960,7 +1057,6 @@ public class WorkspaceCtrl implements Initializable {
         focusedCardIndex = -1;
         focusedListIndex = -1;
     }
-
 
     /**
      * Moves the focused one place up
@@ -1013,7 +1109,7 @@ public class WorkspaceCtrl implements Initializable {
         if (focusedListIndex <= 0)
             focusedListIndex = 1;
         if (focusedCardIndex > 0 && shownBoard.getCardLists()
-                                            .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
+                .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
             focusedCardIndex = shownBoard.getCardLists().get(focusedListIndex - 1).getCards().size();
         if (focusedIndicesAreValid()) {
             highlightSelectedCard();
@@ -1030,8 +1126,8 @@ public class WorkspaceCtrl implements Initializable {
         if (focusedListIndex >= shownBoard.getCardLists().size())
             focusedListIndex = shownBoard.getCardLists().size();
         if (focusedCardIndex > 0 && focusedListIndex > 0
-            && shownBoard.getCardLists()
-                       .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
+                && shownBoard.getCardLists()
+                .get(focusedListIndex - 1).getCards().size() <= focusedCardIndex)
             focusedCardIndex = shownBoard.getCardLists()
                     .get(focusedListIndex - 1).getCards().size();
         if (focusedIndicesAreValid()) {
@@ -1049,7 +1145,7 @@ public class WorkspaceCtrl implements Initializable {
      */
     public void setFocusedCard(int cardIndex, int listIndex) {
         if (abs(newMouseXPosition - oldMouseXPosition) < mouseMoveThreshold
-            && abs(newMouseYPosition - oldMouseYPosition) < mouseMoveThreshold) return;
+                && abs(newMouseYPosition - oldMouseYPosition) < mouseMoveThreshold) return;
 
         focusedCardIndex = cardIndex;
         focusedListIndex = listIndex;
@@ -1201,7 +1297,7 @@ public class WorkspaceCtrl implements Initializable {
         // show popup for list title first
         var loader = new MyFXML(createInjector(new MainModules()))
                 .load(NewListNameCtrl.class, "client", "windows", "lists", "list", "NewListTitle" +
-                                                                                   ".fxml");
+                        ".fxml");
 
         NewListNameCtrl controller = loader.getKey();
         controller.setWorkspaceCtrl(this);
@@ -1228,24 +1324,6 @@ public class WorkspaceCtrl implements Initializable {
         }
         shownBoard.addList(newCardList);
         service.insertBoard(shownBoard);
-    }
-
-    /**
-     * Gets the board key
-     *
-     * @return the board key
-     */
-    public String getBoardKey() {
-        return shownBoard.getKey();
-    }
-
-    /**
-     * Method to get the currently shown board
-     *
-     * @return The board that is shown
-     */
-    public Board getShownBoard() {
-        return shownBoard;
     }
 
     /**
@@ -1295,28 +1373,6 @@ public class WorkspaceCtrl implements Initializable {
     }
 
     /**
-     * Delay method
-     * Source: <a href="https://stackoverflow.com/questions/26454149/make-javafx-wait-and-continue-with-code">...</a>
-     *
-     * @param millis       amount of milliseconds to delay
-     * @param continuation empty
-     */
-    private static void delay(long millis, Runnable continuation) {
-        Task<Void> sleeper = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(millis);
-                } catch (InterruptedException ignored) {
-                }
-                return null;
-            }
-        };
-        sleeper.setOnSucceeded(event -> continuation.run());
-        new Thread(sleeper).start();
-    }
-
-    /**
      * Method to rename boards.
      * Called by Rename button in workspace
      */
@@ -1356,59 +1412,6 @@ public class WorkspaceCtrl implements Initializable {
 
         String title = "Customize";
         helperMethods.popUp(scene, title);
-    }
-
-    /**
-     * Sets the list of the keys for the joined board for this workspace
-     *
-     * @param joinedKeys The keys of the joined boards
-     */
-    public void setJoinedKeys(Set<String> joinedKeys) {
-        this.joinedKeys = joinedKeys;
-    }
-
-
-    /**
-     * Sets the instance of HelperMethods
-     *
-     * @param helperMethods The instance of HelperMethods to set
-     */
-    public void setHelperMethods(HelperMethods helperMethods) {
-        this.helperMethods = helperMethods;
-        service.setServerIP(helperMethods.getServerIP());
-        websocketUtils.setUrl(helperMethods.getServerIP().substring(7));
-    }
-
-    /**
-     * Gets the index of the currently focused card
-     *
-     * @return The current focusedCardIndex
-     */
-    public int getFocusedCardIndex() {
-        return focusedCardIndex;
-    }
-
-    /**
-     * Setter for admin mode in workspace
-     *
-     * @param admin true/false
-     */
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-        if (admin) {
-            screenTitle.setText("All Server Boards");
-            leaveButton.setVisible(false);
-            leaveButton.setManaged(false);
-        }
-    }
-
-    /**
-     * Getter for admin mode of workspace
-     *
-     * @return true if admin, else false
-     */
-    public boolean isAdmin() {
-        return this.admin;
     }
 
     /**
@@ -1477,7 +1480,7 @@ public class WorkspaceCtrl implements Initializable {
     public void updateBoard() {
         shownBoard = service.getBoard(shownBoard.getKey());
         if (!shownBoard.verifyPassword(pwdMap.get(shownBoard.getKey()))
-            && !isAdmin()) {
+                && !isAdmin()) {
             shownBoard.setProtected(true);
             lockWorkspace();
         }

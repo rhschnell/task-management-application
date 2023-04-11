@@ -35,6 +35,8 @@ import java.util.ResourceBundle;
 import static com.google.inject.Guice.createInjector;
 
 public class CardCtrl implements Initializable {
+    private final CardService service;
+    private final HelperMethods helperMethods;
     @FXML
     private AnchorPane pane;
     @FXML
@@ -51,38 +53,80 @@ public class CardCtrl implements Initializable {
     private Circle tagCircle3;
     @FXML
     private ImageView descriptionIcon;
-
     @FXML
     private Label subtaskIndicator;
-
-
     private Card card;
     private Board shownBoard;
     private long lastClickTime;
     private WorkspaceCtrl workspaceCtrl;
-
-    private final CardService service;
-    private final HelperMethods helperMethods;
-    private  ListCtrl listCtrl;
+    private ListCtrl listCtrl;
     private WebsocketUtils websocketUtils;
 
 
     /**
      * Creates a new instance of CardCtrl
      *
-     * @param service The CardService for this CardCtrl
-     * @param helperMethods hm
+     * @param service        The CardService for this CardCtrl
+     * @param helperMethods  hm
      * @param websocketUtils the websocket utils to communicate with the websockets
      */
     @Inject
-    public CardCtrl(CardService service, HelperMethods helperMethods,WebsocketUtils websocketUtils) {
+    public CardCtrl(CardService service, HelperMethods helperMethods, WebsocketUtils websocketUtils) {
         this.service = service;
         this.helperMethods = helperMethods;
-        this.websocketUtils=websocketUtils;
+        this.websocketUtils = websocketUtils;
+    }
+
+    /**
+     * Returns the card
+     *
+     * @return the card that the controller stores
+     */
+    public Card getCard() {
+        return card;
+    }
+
+    /**
+     * Getter for the board key
+     *
+     * @return the key of the board
+     */
+    private String getBoardKey() {
+        return service.getBoardKey();
+    }
+
+    /**
+     * Setter for the board key
+     *
+     * @param boardKey the value of the board key to be set
+     */
+    public void setBoardKey(String boardKey) {
+        service.setBoardKey(boardKey);
+        registerForCardUpdates();
+
+    }
+
+    /**
+     * Getter for the edit button of the CardCtrl
+     *
+     * @return the edit button
+     */
+    public ImageView getEditButton() {
+        return editButton;
+    }
+
+    /**
+     * Getter for the delete button of the CardCtrl
+     *
+     * @return the delete button
+     */
+    public ImageView getDeleteButton() {
+        return deleteButton;
     }
 
     /**
      * Setter for the listCtrl to tell the list it needs to updates when an update is received
+     *
      * @param listCtrl
      */
     public void setListCtrl(ListCtrl listCtrl) {
@@ -107,21 +151,56 @@ public class CardCtrl implements Initializable {
         tagCircle1.setVisible(false);
         tagCircle2.setVisible(false);
         tagCircle3.setVisible(false);
-        if (tags!=null && tags.size() > 0) {
+        if (tags != null && tags.size() > 0) {
             tagCircle1.setFill(Paint.valueOf(tags.get(0).getTagColor()));
             tagCircle1.setVisible(true);
 
         }
-        if (tags!=null && tags.size() > 1) {
+        if (tags != null && tags.size() > 1) {
             tagCircle2.setFill(Paint.valueOf(tags.get(1).getTagColor()));
             tagCircle2.setVisible(true);
 
         }
-        if (tags!=null && tags.size() > 2) {
+        if (tags != null && tags.size() > 2) {
             tagCircle3.setFill(Paint.valueOf(tags.get(2).getTagColor()));
             tagCircle3.setVisible(true);
 
         }
+    }
+
+    /**
+     * Sets the visibility of the icon that indicates that a card has a description
+     *
+     * @param visible Boolean indicating the appropriate visibility status of the icon
+     */
+    public void setDescriptionIconVisible(boolean visible) {
+        descriptionIcon.setVisible(visible);
+    }
+
+    private void setFontColor(String fontColor) {
+        cardTitle.setTextFill(Color.web(fontColor));
+    }
+
+    private void setBackgroundColor(String style) {
+        pane.setStyle(style);
+    }
+
+    /**
+     * Sets the shownBoard
+     *
+     * @param shownBoard The shownBoard to be set
+     */
+    public void setBoard(Board shownBoard) {
+        this.shownBoard = shownBoard;
+    }
+
+    /**
+     * Sets the workspaceCtrl
+     *
+     * @param workspaceCtrl The WorkspaceCtrl to be set
+     */
+    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl) {
+        this.workspaceCtrl = workspaceCtrl;
     }
 
     /**
@@ -152,7 +231,6 @@ public class CardCtrl implements Initializable {
         workspaceCtrl.openFocusedCard();
     }
 
-
     /**
      * This function is called when clicking, and when double-clicking within 300ms, the viewCard is opened
      */
@@ -166,6 +244,7 @@ public class CardCtrl implements Initializable {
 
     /**
      * Opens the ViewCard FXML , displaying the cell card
+     *
      * @param cell the card that needs to be displayed
      */
     public void viewCard(Card cell) {
@@ -191,23 +270,6 @@ public class CardCtrl implements Initializable {
     }
 
     /**
-     * Returns the card
-     * @return the card that the controller stores
-     */
-    public Card getCard() {
-        return card;
-    }
-
-    /**
-     * Sets the visibility of the icon that indicates that a card has a description
-     *
-     * @param visible Boolean indicating the appropriate visibility status of the icon
-     */
-    public void setDescriptionIconVisible(boolean visible) {
-        descriptionIcon.setVisible(visible);
-    }
-
-    /**
      * Sets the subtasks indicator in the UI to reflect the number of completed subtasks for this
      * card as ratio completed/total
      *
@@ -229,85 +291,34 @@ public class CardCtrl implements Initializable {
 
     /**
      * Updates the underlying card with the one given
+     *
      * @param item the card to update with
      */
     public void updateItem(Card item) {
         this.card = item;
         setCardTitle(item.getTitle());
-        if(item.getTags()!=null)
+        if (item.getTags() != null)
             this.setDisplayTags(item.getTags());
         setDescriptionIconVisible(item.hasDescription());
 
         String backgroundColor = card.getPresets().get(0).getBackgroundColor();
         String fontColor = card.getPresets().get(0).getFontColor();
-        if(backgroundColor!=null && fontColor !=null)
-        {
+        if (backgroundColor != null && fontColor != null) {
             String backgroundStyle = "-fx-background-color: #" + backgroundColor.substring(2, 8) +
-                "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
+                    "; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, grey, 5, 0, 0.0, 1.0);";
             setFontColor(fontColor);
             setBackgroundColor(backgroundStyle);
 
-            if(card.getSubTasks() !=null) {
+            if (card.getSubTasks() != null) {
                 long subtasks = card.getSubTasks().size();
                 if (subtasks > 0) {
                     long completedTasks =
-                           card.getSubTasks().stream().filter(Task::isCompleted).count();
+                            card.getSubTasks().stream().filter(Task::isCompleted).count();
                     setSubtasksCompleted(completedTasks, card.getSubTasks().size());
                     subtaskIndicator.setVisible(true);
                 }
             }
-        }}
-
-    private void setFontColor(String fontColor) {
-        cardTitle.setTextFill(Color.web(fontColor));
-    }
-
-    private void setBackgroundColor(String style){
-        pane.setStyle(style);
-    }
-
-    /**
-     * Getter for the board key
-     * @return the key of the board
-     */
-    private String getBoardKey()
-    {
-        return service.getBoardKey();
-    }
-
-    /**
-     * Setter for the board key
-     * @param boardKey the value of the board key to be set
-     */
-    public void setBoardKey(String boardKey)
-    {
-        service.setBoardKey(boardKey);
-        registerForCardUpdates();
-
-    }
-
-    /**
-     * Getter for the edit button of the CardCtrl
-     * @return the edit button
-     */
-    public ImageView getEditButton() {
-        return editButton;
-    }
-
-    /**
-     * Getter for the delete button of the CardCtrl
-     * @return the delete button
-     */
-    public ImageView getDeleteButton() {
-        return deleteButton;
-    }
-
-    /**
-     * Sets the shownBoard
-     * @param shownBoard The shownBoard to be set
-     */
-    public void setBoard(Board shownBoard){
-        this.shownBoard = shownBoard;
+        }
     }
 
     /**
@@ -324,22 +335,15 @@ public class CardCtrl implements Initializable {
         deleteButton.setCursor(Cursor.HAND);
         editButton.setCursor(Cursor.HAND);
     }
-
-    /**
-     * Sets the workspaceCtrl
-     * @param workspaceCtrl The WorkspaceCtrl to be set
-     */
-    public void setWorkspaceCtrl(WorkspaceCtrl workspaceCtrl){
-        this.workspaceCtrl = workspaceCtrl;
-    }
     ///WEBSOCKETS
+
     /**
      * Registers for the messages for this card, so when c=something is changed on this card
      * it gets updates cause the path contains the cardId, which is unique
      */
     public void registerForCardUpdates() {
-        StompSession.Subscription subscriber =websocketUtils.
-                registerForMessages("/topic/cards/"+card.getId(), Card.class, newCard -> {
+        StompSession.Subscription subscriber = websocketUtils.
+                registerForMessages("/topic/cards/" + card.getId(), Card.class, newCard -> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -354,20 +358,20 @@ public class CardCtrl implements Initializable {
                             //Updates the cardList so that when we insert it again we have the latest version
                             listCtrl.updateCardList();
                             //Updates the card to the most recent version
-                            card=newCard;
+                            card = newCard;
                             //Updates the cardTitle
                             cardTitle.setText(newCard.getTitle());
                             //Updates the description indicator
-                            if(newCard.getDescription()!=null)
+                            if (newCard.getDescription() != null)
                                 setDescriptionIconVisible(true);
-                            if(newCard.getDescription()==null || newCard.getDescription().equals(""))
+                            if (newCard.getDescription() == null || newCard.getDescription().equals(""))
                                 setDescriptionIconVisible(false);
                             //Updates the tag indicator
                             setDisplayTags(newCard.getTags());
                             //Updates the subtasks indicator
-                            if(newCard.getSubTasks()==null || newCard.getSubTasks().size()==0)
+                            if (newCard.getSubTasks() == null || newCard.getSubTasks().size() == 0)
                                 subtaskIndicator.setVisible(false);
-                            if(newCard.getSubTasks()!=null && newCard.getSubTasks().size()>0) {
+                            if (newCard.getSubTasks() != null && newCard.getSubTasks().size() > 0) {
                                 long completedTasks =
                                         newCard.getSubTasks().stream().filter(Task::isCompleted).count();
                                 subtaskIndicator.setVisible(true);
