@@ -38,6 +38,10 @@ public class AddCardService {
         appliedTags = new ArrayList<>();
     }
 
+    /**
+     * setter for ip
+     * @param ip ip
+     */
     public void setIP(String ip) {
         server.setIP(ip);
     }

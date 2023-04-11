@@ -24,6 +24,10 @@ public class CardService {
         this.cardListUtils = cardListUtils;
     }
 
+    /**
+     * Setter for ip
+     * @param ip ip
+     */
     public void setIP(String ip) {
         cardListUtils.setIP(ip);
         cardUtils.setIP(ip);

@@ -27,6 +27,10 @@ public class CardUtils {
         this.client = ClientBuilder.newClient(new ClientConfig());
     }
 
+    /**
+     * setter for ip
+     * @param ip
+     */
     public void setIP(String ip) {
         serverUtils.setServer(ip);
     }

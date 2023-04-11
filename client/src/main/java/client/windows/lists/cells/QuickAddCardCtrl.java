@@ -39,6 +39,10 @@ public class QuickAddCardCtrl {
         this.helperMethods = helperMethods;
     }
 
+    /**
+     * Setter for hm
+     * @param helperMethods hm
+     */
     public void setHelperMethods(HelperMethods helperMethods) {
         this.helperMethods = helperMethods;
         service.setIP(helperMethods.getServerIP());
